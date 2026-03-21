@@ -191,6 +191,10 @@ dp.on('ready', () => {
   // Steps
   dp('#wizard').next();
 
+  // Dock (bottom nav)
+  dp('#main-dock').onSelect(({panel}) => showPanel(panel));
+  dp('#main-dock').setActiveByPanel('events');
+
   // Theme
   dp.findAll('.dp-theme-controller')[0].onThemeChange(t => console.log(t));
 });
