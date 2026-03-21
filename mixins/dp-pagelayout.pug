@@ -1,0 +1,21 @@
+mixin dp-pagelayout(opts)
+  - opts = opts || {}
+  - const drawerId = opts.drawerId || 'main-drawer'
+  - const sidebar = opts.sidebar || []
+  - const nav = opts.nav || []
+  - const themes = opts.themes || []
+  +drawer({id: drawerId})
+    +drawer-content
+      +dp-nav(opts.brand || 'App', {items: nav, themes: themes, activeTheme: opts.activeTheme, class: opts.navClass})
+      div.dp-pagelayout-content.p-4
+        block
+    +drawer-side({for: drawerId})
+      +menu({class: 'bg-base-200 min-h-full w-80 p-4'})
+        if opts.brand
+          +menu-title({text: opts.brand})
+        each item in sidebar
+          +menu-item
+            if typeof item === 'string'
+              a= item
+            else
+              a(href=item.href class=item.active && 'menu-active')= item.text

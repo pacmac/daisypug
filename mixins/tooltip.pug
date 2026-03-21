@@ -1,0 +1,5 @@
+mixin tooltip(opts)
+  - opts = opts || {}
+  - const cls = ['dp-tooltip', 'tooltip', opts.color && `tooltip-${opts.color}`, opts.position && `tooltip-${opts.position}`, opts.open && 'tooltip-open', opts.class].filter(Boolean).join(' ')
+  div(class=cls data-tip=opts.tip)&attributes(attributes)
+    block

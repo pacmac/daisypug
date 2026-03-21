@@ -1,0 +1,26 @@
+mixin collapse(opts)
+  - opts = opts || {}
+  - const cls = ['dp-collapse', 'collapse', opts.arrow && 'collapse-arrow', opts.plus && 'collapse-plus', opts.open && 'collapse-open', opts.close && 'collapse-close', opts.class].filter(Boolean).join(' ')
+  div(class=cls tabindex="0")&attributes(attributes)
+    block
+
+mixin collapse-checkbox(opts)
+  - opts = opts || {}
+  - const cls = ['dp-collapse', 'collapse', opts.arrow && 'collapse-arrow', opts.plus && 'collapse-plus', opts.open && 'collapse-open', opts.close && 'collapse-close', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    input(type="checkbox" name=opts.name checked=opts.checked)
+    block
+
+mixin collapse-title(opts)
+  - opts = opts || {}
+  - const cls = ['dp-collapse-title', 'collapse-title', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin collapse-content(opts)
+  - opts = opts || {}
+  - const cls = ['dp-collapse-content', 'collapse-content', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

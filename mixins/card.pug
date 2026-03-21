@@ -1,0 +1,25 @@
+mixin card(opts)
+  - opts = opts || {}
+  - const cls = ['dp-card', 'card', opts.size && `card-${opts.size}`, opts.style && `card-${opts.style}`, opts.side && 'card-side', opts.imageFull && 'image-full', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin card-body(opts)
+  - opts = opts || {}
+  - const cls = ['dp-card-body', 'card-body', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin card-title(opts)
+  - opts = opts || {}
+  - const cls = ['dp-card-title', 'card-title', opts.class].filter(Boolean).join(' ')
+  h2(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin card-actions(opts)
+  - opts = opts || {}
+  - const cls = ['dp-card-actions', 'card-actions', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

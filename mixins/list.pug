@@ -1,0 +1,13 @@
+mixin list(opts)
+  - opts = opts || {}
+  - const cls = ['dp-list', 'list', opts.size && `list-${opts.size}`, opts.class].filter(Boolean).join(' ')
+  ul(class=cls)&attributes(attributes)
+    block
+
+mixin list-row(opts)
+  - opts = opts || {}
+  - const cls = ['dp-list-row', 'list-row', opts.class].filter(Boolean).join(' ')
+  li(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

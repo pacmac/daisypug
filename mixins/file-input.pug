@@ -1,0 +1,4 @@
+mixin file-input(opts)
+  - opts = opts || {}
+  - const cls = ['dp-file-input', 'file-input', opts.color && `file-input-${opts.color}`, opts.size && `file-input-${opts.size}`, opts.style && `file-input-${opts.style}`, opts.class].filter(Boolean).join(' ')
+  input(type="file" class=cls name=opts.name accept=opts.accept)&attributes(attributes)

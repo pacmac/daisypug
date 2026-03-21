@@ -1,0 +1,7 @@
+mixin mockup-phone(opts)
+  - opts = opts || {}
+  - const cls = ['dp-mockup-phone', 'mockup-phone', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    div.camera
+    div.display
+      block

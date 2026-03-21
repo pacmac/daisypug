@@ -1,0 +1,5 @@
+mixin stack(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stack', 'stack', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

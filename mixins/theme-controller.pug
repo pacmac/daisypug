@@ -1,0 +1,14 @@
+mixin theme-controller(opts)
+  - opts = opts || {}
+  - const cls = ['dp-theme-controller', 'theme-controller', opts.as && opts.as, opts.color && `${opts.as || 'toggle'}-${opts.color}`, opts.size && `${opts.as || 'toggle'}-${opts.size}`, opts.class].filter(Boolean).join(' ')
+  - const type = opts.type || (opts.name ? 'radio' : 'checkbox')
+  input(type=type class=cls value=opts.value name=opts.name checked=opts.checked)&attributes(attributes)
+
+//- Convenience: theme radio group
+mixin theme-radios(opts)
+  - opts = opts || {}
+  - const themes = opts.themes || ['light', 'dark']
+  - const name = opts.name || 'theme-radios'
+  - const as = opts.as || 'radio'
+  each theme in themes
+    +theme-controller({type: 'radio', name: name, value: theme, as: as, color: opts.color, size: opts.size, checked: theme === opts.active})(aria-label=theme)

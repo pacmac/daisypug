@@ -1,0 +1,22 @@
+mixin swap(opts)
+  - opts = opts || {}
+  - const cls = ['dp-swap', 'swap', opts.rotate && 'swap-rotate', opts.flip && 'swap-flip', opts.active && 'swap-active', opts.class].filter(Boolean).join(' ')
+  label(class=cls)&attributes(attributes)
+    input(type="checkbox" checked=opts.checked)
+    block
+
+mixin swap-on(opts)
+  - opts = opts || {}
+  - const cls = ['dp-swap-on', 'swap-on', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin swap-off(opts)
+  - opts = opts || {}
+  - const cls = ['dp-swap-off', 'swap-off', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

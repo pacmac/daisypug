@@ -1,0 +1,4 @@
+mixin checkbox(opts)
+  - opts = opts || {}
+  - const cls = ['dp-checkbox', 'checkbox', opts.color && `checkbox-${opts.color}`, opts.size && `checkbox-${opts.size}`, opts.class].filter(Boolean).join(' ')
+  input(type="checkbox" class=cls checked=opts.checked)&attributes(attributes)

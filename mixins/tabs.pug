@@ -1,0 +1,16 @@
+mixin tabs(opts)
+  - opts = opts || {}
+  - const cls = ['dp-tabs', 'tabs', opts.style && `tabs-${opts.style}`, opts.size && `tabs-${opts.size}`, opts.placement && `tabs-${opts.placement}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls role="tablist")&attributes(attributes)
+    block
+
+mixin tab(opts)
+  - opts = opts || {}
+  - const cls = ['dp-tab', 'tab', opts.active && 'tab-active', opts.disabled && 'tab-disabled', opts.class].filter(Boolean).join(' ')
+  input(type="radio" name=opts.name class=cls role="tab" aria-label=opts.label checked=opts.active)&attributes(attributes)
+
+mixin tab-content(opts)
+  - opts = opts || {}
+  - const cls = ['dp-tab-content', 'tab-content', opts.class].filter(Boolean).join(' ')
+  div(class=cls role="tabpanel")&attributes(attributes)
+    block

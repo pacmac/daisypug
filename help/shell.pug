@@ -1,0 +1,219 @@
+//- DaisyPug Help Dashboard — Shell Layout (no hardcoded content)
+
+//- Navbar
++navbar({class: 'bg-base-100 shadow-lg fixed top-0 z-50 w-full'})
+  +navbar-start
+    span.text-xl.font-bold.px-4 DaisyPug Docs
+  +navbar-center
+    +input({class: 'w-64', placeholder: 'Search...'})(id="search-input" type="search" autocomplete="off")
+  +navbar-end
+    +theme-radios({themes: ['light', 'dark', 'cupcake', 'synthwave'], as: 'btn', active: 'light'})
+
+//- Main layout: 25/75 split below navbar
+div(class="flex h-screen pt-16")
+
+  //- West Panel — Card list (25%)
+  aside(class="w-1/4 min-w-[280px] max-w-[360px] border-r border-base-300 overflow-y-auto bg-base-200 p-4" id="west-panel")
+    div(class="flex flex-col gap-2" id="item-list")
+      //- Populated by JS
+      div(class="text-center text-base-content/50 p-8" id="list-loading")
+        +loading({variant: 'spinner', size: 'lg'})
+        p.mt-2 Loading...
+
+  //- East Panel — Tabbed content (75%)
+  main(class="flex-1 overflow-y-auto bg-base-100" id="east-panel")
+
+    //- Empty state
+    div(class="flex items-center justify-center h-full text-base-content/40" id="empty-state")
+      div.text-center
+        div.text-6xl.mb-4 {}
+        h2.text-2xl.font-semibold Select an item
+        p.mt-2 Choose a guide or component from the left
+
+    //- Content area (hidden until selected)
+    div(class="hidden" id="content-area")
+
+      //- Header
+      div(class="p-6 border-b border-base-300 bg-base-100")
+        h1(class="text-3xl font-bold" id="item-name")
+        p(class="text-base-content/60 mt-1" id="item-description")
+        div(class="flex gap-2 mt-3" id="item-meta")
+
+      //- Tabs
+      div(class="p-6")
+        div(class="tabs tabs-box" role="tablist" id="tab-list")
+          input(type="radio" name="doc-tabs" class="tab" role="tab" aria-label="Usage" checked data-tab="usage")
+          div(class="tab-content p-4" role="tabpanel" id="tab-usage")
+            +loading({variant: 'dots', size: 'md'})
+
+          input(type="radio" name="doc-tabs" class="tab" role="tab" aria-label="Code" data-tab="code")
+          div(class="tab-content p-4" role="tabpanel" id="tab-code")
+            +loading({variant: 'dots', size: 'md'})
+
+          input(type="radio" name="doc-tabs" class="tab" role="tab" aria-label="Examples" data-tab="examples")
+          div(class="tab-content p-4" role="tabpanel" id="tab-examples")
+            +loading({variant: 'dots', size: 'md'})
+
+//- Client-side JS
+script.
+  (function() {
+    const listEl = document.getElementById('item-list');
+    const listLoading = document.getElementById('list-loading');
+    const emptyState = document.getElementById('empty-state');
+    const contentArea = document.getElementById('content-area');
+    const nameEl = document.getElementById('item-name');
+    const descEl = document.getElementById('item-description');
+    const metaEl = document.getElementById('item-meta');
+    const tabUsage = document.getElementById('tab-usage');
+    const tabCode = document.getElementById('tab-code');
+    const tabExamples = document.getElementById('tab-examples');
+    const searchInput = document.getElementById('search-input');
+
+    let allItems = []; // {name, title, description, category, type}
+    let activeCard = null;
+
+    // Fetch navigation and populate west panel
+    fetch('/api/nav')
+      .then(r => r.json())
+      .then(nav => {
+        listLoading.remove();
+
+        // Guides first, then components
+        const guideItems = nav.guides.map(g => ({ ...g, type: 'guide' }));
+        const compItems = nav.components.map(c => ({ ...c, type: 'component' }));
+        allItems = [...guideItems, ...compItems];
+
+        renderList(allItems);
+
+        // Deep link
+        const hash = window.location.hash.slice(1);
+        if (hash) {
+          const [type, name] = hash.includes('/') ? hash.split('/') : ['component', hash];
+          selectItem(type, name);
+        }
+      });
+
+    function renderList(items) {
+      listEl.querySelectorAll('.nav-item').forEach(el => el.remove());
+
+      const guides = items.filter(i => i.type === 'guide');
+      const components = items.filter(i => i.type === 'component');
+
+      // Guides section
+      if (guides.length) {
+        addDivider('Guides');
+        guides.forEach(g => addCard(g, 'guide'));
+      }
+
+      // Components grouped by category
+      if (components.length) {
+        const grouped = {};
+        components.forEach(c => {
+          const cat = c.category || 'Other';
+          if (!grouped[cat]) grouped[cat] = [];
+          grouped[cat].push(c);
+        });
+
+        Object.entries(grouped).forEach(([category, comps]) => {
+          addDivider(category);
+          comps.forEach(c => addCard(c, 'component'));
+        });
+      }
+    }
+
+    function addDivider(text) {
+      const div = document.createElement('div');
+      div.className = 'nav-item divider text-xs uppercase opacity-50 my-1';
+      div.textContent = text;
+      listEl.appendChild(div);
+    }
+
+    function addCard(item, type) {
+      const card = document.createElement('div');
+      card.className = 'nav-item card card-border bg-base-100 cursor-pointer hover:border-primary transition-colors';
+      card.dataset.type = type;
+      card.dataset.name = item.name;
+
+      const icon = type === 'guide' ? '<span class="badge badge-sm badge-primary badge-outline">guide</span>' : '';
+      const displayName = item.title || item.name;
+
+      card.innerHTML = `
+        <div class="card-body p-3">
+          <div class="flex items-center justify-between">
+            <h3 class="card-title text-sm">${displayName}</h3>
+            ${icon}
+          </div>
+          <p class="text-xs text-base-content/60">${item.description || ''}</p>
+        </div>
+      `;
+      card.addEventListener('click', () => selectItem(type, item.name));
+      listEl.appendChild(card);
+    }
+
+    function selectItem(type, name) {
+      // Highlight active card
+      if (activeCard) activeCard.classList.remove('border-primary', 'bg-primary/5');
+      const card = listEl.querySelector(`[data-type="${type}"][data-name="${name}"]`);
+      if (card) {
+        card.classList.add('border-primary', 'bg-primary/5');
+        card.scrollIntoView({ block: 'nearest' });
+        activeCard = card;
+      }
+
+      // Show content, hide empty state
+      emptyState.classList.add('hidden');
+      contentArea.classList.remove('hidden');
+
+      // Loading state
+      tabUsage.innerHTML = '<span class="loading loading-dots loading-md"></span>';
+      tabCode.innerHTML = '<span class="loading loading-dots loading-md"></span>';
+      tabExamples.innerHTML = '<span class="loading loading-dots loading-md"></span>';
+
+      // Update URL
+      window.location.hash = type === 'guide' ? `guide/${name}` : name;
+
+      // Fetch data
+      const endpoint = type === 'guide' ? `/api/guide/${name}` : `/api/component/${name}`;
+      fetch(endpoint)
+        .then(r => r.json())
+        .then(data => {
+          nameEl.textContent = data.title || data.name;
+          descEl.textContent = data.description || '';
+
+          const badges = [];
+          if (data.category) badges.push(`<span class="badge badge-sm badge-outline">${data.category}</span>`);
+          if (data.base) badges.push(`<span class="badge badge-sm badge-ghost">.${data.base}</span>`);
+          if (data.type) badges.push(`<span class="badge badge-sm badge-${data.type === 'guide' ? 'primary' : 'secondary'}">${data.type}</span>`);
+          metaEl.innerHTML = badges.join(' ');
+
+          tabUsage.innerHTML = data.tabs.usage || '<p class="text-base-content/40 italic">No usage docs yet.</p>';
+          tabCode.innerHTML = data.tabs.code || '<p class="text-base-content/40 italic">No code examples yet.</p>';
+          tabExamples.innerHTML = data.tabs.examples || '<p class="text-base-content/40 italic">No examples yet.</p>';
+
+          // Reset to Usage tab
+          const usageTab = document.querySelector('input[aria-label="Usage"]');
+          if (usageTab) usageTab.checked = true;
+        });
+    }
+
+    // Search filter
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = q
+        ? allItems.filter(i =>
+            i.name.includes(q) ||
+            (i.title || '').toLowerCase().includes(q) ||
+            (i.description || '').toLowerCase().includes(q))
+        : allItems;
+      renderList(filtered);
+    });
+
+    // Handle back/forward
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const [type, name] = hash.includes('/') ? hash.split('/') : ['component', hash];
+        selectItem(type, name);
+      }
+    });
+  })();

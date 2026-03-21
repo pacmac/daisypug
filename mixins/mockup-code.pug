@@ -1,0 +1,13 @@
+mixin mockup-code(opts)
+  - opts = opts || {}
+  - const cls = ['dp-mockup-code', 'mockup-code', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.lines
+      each line in opts.lines
+        if typeof line === 'string'
+          pre(data-prefix="$")
+            code= line
+        else
+          pre(data-prefix=line.prefix || '$')
+            code= line.text
+    block

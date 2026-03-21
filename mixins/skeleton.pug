@@ -1,0 +1,5 @@
+mixin skeleton(opts)
+  - opts = opts || {}
+  - const cls = ['dp-skeleton', 'skeleton', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

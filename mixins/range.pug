@@ -1,0 +1,4 @@
+mixin range(opts)
+  - opts = opts || {}
+  - const cls = ['dp-range', 'range', opts.color && `range-${opts.color}`, opts.size && `range-${opts.size}`, opts.class].filter(Boolean).join(' ')
+  input(type="range" class=cls min=opts.min || '0' max=opts.max || '100' value=opts.value step=opts.step)&attributes(attributes)

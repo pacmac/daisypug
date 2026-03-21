@@ -1,0 +1,14 @@
+mixin mockup-browser(opts)
+  - opts = opts || {}
+  - const cls = ['dp-mockup-browser', 'mockup-browser', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.url
+      div.mockup-browser-toolbar
+        div.input= opts.url
+    block
+
+mixin mockup-browser-toolbar(opts)
+  - opts = opts || {}
+  - const cls = ['dp-mockup-browser-toolbar', 'mockup-browser-toolbar', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

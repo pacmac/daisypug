@@ -1,0 +1,10 @@
+mixin dp-conversation(messages)
+  - messages = messages || []
+  div.dp-conversation
+    each msg in messages
+      +chat({position: msg.position || 'start'})
+        if msg.from
+          +chat-header({text: msg.from})
+        +chat-bubble({text: msg.text, color: msg.color})
+        if msg.footer
+          +chat-footer({text: msg.footer})

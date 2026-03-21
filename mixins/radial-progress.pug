@@ -1,0 +1,10 @@
+mixin radial-progress(opts)
+  - opts = opts || {}
+  - const cls = ['dp-radial-progress', 'radial-progress', opts.color && `text-${opts.color}`, opts.class].filter(Boolean).join(' ')
+  - const style = `--value:${opts.value || 0}` + (opts.size ? `;--size:${opts.size}` : '') + (opts.thickness ? `;--thickness:${opts.thickness}` : '')
+  div(class=cls style=style role="progressbar")&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    else if opts.value !== undefined
+      | #{opts.value}%
+    block

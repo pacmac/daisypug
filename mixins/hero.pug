@@ -1,0 +1,17 @@
+mixin hero(opts)
+  - opts = opts || {}
+  - const cls = ['dp-hero', 'hero', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin hero-content(opts)
+  - opts = opts || {}
+  - const cls = ['dp-hero-content', 'hero-content', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin hero-overlay(opts)
+  - opts = opts || {}
+  - const cls = ['dp-hero-overlay', 'hero-overlay', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

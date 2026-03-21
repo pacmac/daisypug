@@ -1,0 +1,13 @@
+mixin steps(opts)
+  - opts = opts || {}
+  - const cls = ['dp-steps', 'steps', opts.direction && `steps-${opts.direction}`, opts.class].filter(Boolean).join(' ')
+  ul(class=cls)&attributes(attributes)
+    block
+
+mixin step(opts)
+  - opts = opts || {}
+  - const cls = ['dp-step', 'step', opts.color && `step-${opts.color}`, opts.class].filter(Boolean).join(' ')
+  li(class=cls data-content=opts.icon)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

@@ -1,0 +1,22 @@
+mixin dp-nav(brand, opts)
+  - opts = opts || {}
+  - const items = opts.items || []
+  - const actions = opts.actions || []
+  - const themes = opts.themes || []
+  +navbar({class: opts.class || 'bg-base-100 shadow-sm'})
+    +navbar-start
+      +btn({style: 'ghost', text: brand, class: 'text-xl'})
+    if items.length
+      +navbar-center({class: opts.centerClass || 'hidden lg:flex'})
+        +menu({direction: 'horizontal', class: 'px-1'})
+          each item in items
+            +menu-item
+              if typeof item === 'string'
+                a= item
+              else
+                a(href=item.href)= item.text
+    +navbar-end
+      if themes.length
+        +theme-radios({themes: themes, as: 'btn', active: opts.activeTheme})
+      each action in actions
+        +btn(action)

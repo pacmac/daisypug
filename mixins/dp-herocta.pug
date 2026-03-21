@@ -1,0 +1,14 @@
+mixin dp-herocta(opts)
+  - opts = opts || {}
+  +hero({class: opts.class || 'min-h-[60vh] bg-base-200'})
+    +hero-content({class: 'text-center'})
+      div(class=opts.maxWidth || 'max-w-2xl')
+        if opts.title
+          h1.text-5xl.font-bold= opts.title
+        if opts.subtitle
+          p.py-6.text-lg.text-base-content.opacity-80= opts.subtitle
+        div.flex.gap-4.justify-center
+          if opts.primary
+            +btn(Object.assign({size: 'lg'}, opts.primary))
+          if opts.secondary
+            +btn(Object.assign({size: 'lg', style: opts.secondary.style || 'outline'}, opts.secondary))

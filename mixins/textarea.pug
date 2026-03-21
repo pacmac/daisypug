@@ -1,0 +1,7 @@
+mixin textarea(opts)
+  - opts = opts || {}
+  - const cls = ['dp-textarea', 'textarea', opts.color && `textarea-${opts.color}`, opts.size && `textarea-${opts.size}`, opts.style && `textarea-${opts.style}`, opts.class].filter(Boolean).join(' ')
+  textarea(class=cls placeholder=opts.placeholder name=opts.name rows=opts.rows)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

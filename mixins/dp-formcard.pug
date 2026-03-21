@@ -1,0 +1,14 @@
+mixin dp-formcard(title, opts, fields, actions)
+  - opts = opts || {}
+  - fields = fields || []
+  - actions = actions || {}
+  - const cardCls = ['dp-formcard', 'dp-card', 'card', opts.style && `card-${opts.style}`, opts.class].filter(Boolean).join(' ')
+  div(class=cardCls)&attributes(attributes)
+    div.dp-card-body.card-body
+      +fieldset
+        +fieldset-legend({text: title})
+        each field in fields
+          +dp-formfield(field.label, field, field.labelOpts)
+        if actions.submit
+          div.mt-4
+            +btn({color: opts.color || 'primary', text: actions.submit, block: true})

@@ -1,0 +1,7 @@
+mixin btn(opts)
+  - opts = opts || {}
+  - const cls = ['dp-btn', 'btn', opts.color && `btn-${opts.color}`, opts.size && `btn-${opts.size}`, opts.style && `btn-${opts.style}`, opts.shape && `btn-${opts.shape}`, opts.wide && 'btn-wide', opts.block && 'btn-block', opts.active && 'btn-active', opts.disabled && 'btn-disabled', opts.class].filter(Boolean).join(' ')
+  button(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

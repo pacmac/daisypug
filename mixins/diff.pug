@@ -1,0 +1,17 @@
+mixin diff(opts)
+  - opts = opts || {}
+  - const cls = ['dp-diff', 'diff', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin diff-item-1(opts)
+  - opts = opts || {}
+  - const cls = ['dp-diff-item-1', 'diff-item-1', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin diff-item-2(opts)
+  - opts = opts || {}
+  - const cls = ['dp-diff-item-2', 'diff-item-2', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

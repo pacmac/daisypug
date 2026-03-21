@@ -1,0 +1,4 @@
+mixin progress(opts)
+  - opts = opts || {}
+  - const cls = ['dp-progress', 'progress', opts.color && `progress-${opts.color}`, opts.class].filter(Boolean).join(' ')
+  progress(class=cls value=opts.value max=opts.max || '100')&attributes(attributes)

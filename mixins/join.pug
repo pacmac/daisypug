@@ -1,0 +1,11 @@
+mixin join(opts)
+  - opts = opts || {}
+  - const cls = ['dp-join', 'join', opts.direction && `join-${opts.direction}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin join-item(opts)
+  - opts = opts || {}
+  - const cls = ['dp-join-item', 'join-item', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

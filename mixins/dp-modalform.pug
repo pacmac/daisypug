@@ -1,0 +1,17 @@
+mixin dp-modalform(id, title, opts, fields, actions)
+  - opts = opts || {}
+  - fields = fields || []
+  - actions = actions || {}
+  +modal({id: id})
+    +modal-box
+      h3.text-lg.font-bold= title
+      +fieldset
+        each field in fields
+          +dp-formfield(field.label, field, field.labelOpts)
+      +modal-action
+        form(method="dialog")
+          div.flex.gap-2
+            if actions.cancel
+              +btn({text: actions.cancel, style: 'ghost'})
+            if actions.submit
+              +btn({text: actions.submit, color: opts.color || 'primary'})

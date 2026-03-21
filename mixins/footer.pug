@@ -1,0 +1,13 @@
+mixin footer(opts)
+  - opts = opts || {}
+  - const cls = ['dp-footer', 'footer', opts.center && 'footer-center', opts.class].filter(Boolean).join(' ')
+  footer(class=cls)&attributes(attributes)
+    block
+
+mixin footer-title(opts)
+  - opts = opts || {}
+  - const cls = ['dp-footer-title', 'footer-title', opts.class].filter(Boolean).join(' ')
+  h6(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

@@ -1,0 +1,23 @@
+mixin navbar(opts)
+  - opts = opts || {}
+  - const cls = ['dp-navbar', 'navbar', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin navbar-start(opts)
+  - opts = opts || {}
+  - const cls = ['dp-navbar-start', 'navbar-start', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin navbar-center(opts)
+  - opts = opts || {}
+  - const cls = ['dp-navbar-center', 'navbar-center', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin navbar-end(opts)
+  - opts = opts || {}
+  - const cls = ['dp-navbar-end', 'navbar-end', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

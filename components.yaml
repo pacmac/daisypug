@@ -1,0 +1,519 @@
+# DaisyUI Component Catalog for DaisyPug
+# Source: https://daisyui.com/components/ (v5)
+#
+# Modifier pattern: {component}-{modifier}
+# Common modifier types:
+#   colors: neutral, primary, secondary, accent, info, success, warning, error
+#   sizes:  xs, sm, md (default), lg, xl
+#   styles: outline, dash, soft, ghost, link (not all apply to all components)
+
+actions:
+  button:
+    base: btn
+    url: /components/button/
+    desc: Buttons for actions or choices
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [outline, dash, soft, ghost, link]
+    states: [active, disabled]
+    shapes: [square, circle]
+    layout: [wide, block]
+    element: button
+
+  dropdown:
+    base: dropdown
+    url: /components/dropdown/
+    desc: Opens a menu or element on click
+    parts: [dropdown-content]
+    modifiers: [dropdown-end, dropdown-top, dropdown-bottom, dropdown-left, dropdown-right, dropdown-hover, dropdown-open]
+    element: div
+
+  fab:
+    base: fab
+    url: /components/fab/
+    desc: Floating action button with speed dial
+    parts: [fab-content]
+    modifiers: [fab-top, fab-bottom, fab-start, fab-end]
+    element: div
+
+  modal:
+    base: modal
+    url: /components/modal/
+    desc: Dialog box triggered by button
+    parts: [modal-box, modal-action, modal-backdrop, modal-toggle]
+    modifiers: [modal-top, modal-middle, modal-bottom, modal-start, modal-end, modal-open]
+    element: dialog
+
+  swap:
+    base: swap
+    url: /components/swap/
+    desc: Toggle visibility of two elements
+    parts: [swap-on, swap-off, swap-indeterminate]
+    modifiers: [swap-active, swap-rotate, swap-flip]
+    element: label
+
+  theme-controller:
+    base: theme-controller
+    url: /components/theme-controller/
+    desc: Controls page theme via checkbox/radio
+    element: input
+
+data-display:
+  accordion:
+    base: accordion
+    url: /components/accordion/
+    desc: Show/hide content, one item open at a time
+    parts: [accordion-title, accordion-content]
+    modifiers: [accordion-arrow, accordion-plus]
+    element: div
+
+  avatar:
+    base: avatar
+    url: /components/avatar/
+    desc: Thumbnail representation of user/entity
+    parts: [avatar-group]
+    modifiers: [avatar-online, avatar-offline, avatar-placeholder]
+    element: div
+
+  badge:
+    base: badge
+    url: /components/badge/
+    desc: Status indicators
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [outline, dash, soft, ghost]
+    element: span
+
+  card:
+    base: card
+    url: /components/card/
+    desc: Content grouping container
+    parts: [card-body, card-title, card-actions]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [border, dash]
+    layout: [side, image-full]
+    element: div
+
+  carousel:
+    base: carousel
+    url: /components/carousel/
+    desc: Scrollable image/content area
+    parts: [carousel-item]
+    modifiers: [carousel-center, carousel-end, carousel-vertical]
+    element: div
+
+  chat:
+    base: chat
+    url: /components/chat/
+    desc: Conversation bubbles with author details
+    parts: [chat-image, chat-header, chat-bubble, chat-footer]
+    modifiers: [chat-start, chat-end]
+    bubble_colors: [chat-bubble-neutral, chat-bubble-primary, chat-bubble-secondary, chat-bubble-accent, chat-bubble-info, chat-bubble-success, chat-bubble-warning, chat-bubble-error]
+    element: div
+
+  collapse:
+    base: collapse
+    url: /components/collapse/
+    desc: Show/hide content panel
+    parts: [collapse-title, collapse-content]
+    modifiers: [collapse-arrow, collapse-plus, collapse-open, collapse-close]
+    element: div
+
+  countdown:
+    base: countdown
+    url: /components/countdown/
+    desc: Animated number transitions (0-999)
+    element: span
+    note: Uses --value CSS custom property
+
+  diff:
+    base: diff
+    url: /components/diff/
+    desc: Side-by-side comparison
+    parts: [diff-item-1, diff-item-2, diff-resizer]
+    element: div
+
+  hover-3d:
+    base: hover-3d
+    url: /components/hover-3d/
+    desc: 3D tilt effect on hover
+    element: div
+
+  hover-gallery:
+    base: hover-gallery
+    url: /components/hover-gallery/
+    desc: Image container revealed on interaction
+    element: div
+
+  kbd:
+    base: kbd
+    url: /components/kbd/
+    desc: Keyboard shortcut display
+    sizes: [xs, sm, md, lg, xl]
+    element: kbd
+
+  list:
+    base: list
+    url: /components/list/
+    desc: Vertical layout for information rows
+    parts: [list-row]
+    sizes: [xs, sm, md, lg, xl]
+    element: ul
+
+  stat:
+    base: stat
+    url: /components/stat/
+    desc: Numbers and data blocks
+    parts: [stats, stat-title, stat-value, stat-desc, stat-figure, stat-actions]
+    modifiers: [stats-vertical, stats-horizontal]
+    element: div
+
+  status:
+    base: status
+    url: /components/status/
+    desc: Small status icon (online/offline)
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    element: div
+
+  table:
+    base: table
+    url: /components/table/
+    desc: Data in table format
+    sizes: [xs, sm, md, lg, xl]
+    modifiers: [table-zebra, table-pin-rows, table-pin-cols]
+    element: table
+
+  text-rotate:
+    base: text-rotate
+    url: /components/text-rotate/
+    desc: Rotating text animation
+    element: span
+
+  timeline:
+    base: timeline
+    url: /components/timeline/
+    desc: Chronological event list
+    parts: [timeline-start, timeline-middle, timeline-end]
+    modifiers: [timeline-vertical, timeline-horizontal, timeline-snap-icon, timeline-compact]
+    element: ul
+
+navigation:
+  breadcrumbs:
+    base: breadcrumbs
+    url: /components/breadcrumbs/
+    desc: Navigation path trail
+    element: div
+
+  dock:
+    base: dock
+    url: /components/dock/
+    desc: Bottom navigation bar
+    parts: [dock-label]
+    sizes: [xs, sm, md, lg, xl]
+    element: div
+
+  link:
+    base: link
+    url: /components/link/
+    desc: Styled underline links
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    modifiers: [link-hover]
+    element: a
+
+  menu:
+    base: menu
+    url: /components/menu/
+    desc: Vertical or horizontal link list
+    parts: [menu-title, menu-dropdown, menu-dropdown-toggle, menu-dropdown-show]
+    sizes: [xs, sm, md, lg, xl]
+    states: [menu-active, menu-focus, menu-disabled]
+    direction: [menu-vertical, menu-horizontal]
+    element: ul
+
+  navbar:
+    base: navbar
+    url: /components/navbar/
+    desc: Top navigation bar
+    parts: [navbar-start, navbar-center, navbar-end]
+    element: div
+
+  pagination:
+    base: join
+    url: /components/pagination/
+    desc: Button group for page navigation
+    note: Uses join component with btn children
+    element: div
+
+  steps:
+    base: steps
+    url: /components/steps/
+    desc: Process step indicators
+    parts: [step]
+    colors: [step-neutral, step-primary, step-secondary, step-accent, step-info, step-success, step-warning, step-error]
+    modifiers: [steps-vertical, steps-horizontal]
+    element: ul
+
+  tabs:
+    base: tabs
+    url: /components/tab/
+    desc: Tabbed link format
+    parts: [tab, tab-content]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [tabs-box, tabs-border, tabs-lift]
+    states: [tab-active, tab-disabled]
+    placement: [tabs-top, tabs-bottom]
+    element: div
+
+feedback:
+  alert:
+    base: alert
+    url: /components/alert/
+    desc: Important event notifications
+    colors: [info, success, warning, error]
+    styles: [outline, dash, soft]
+    direction: [alert-vertical, alert-horizontal]
+    element: div
+
+  loading:
+    base: loading
+    url: /components/loading/
+    desc: Loading animation indicator
+    modifiers: [loading-spinner, loading-dots, loading-ring, loading-ball, loading-bars, loading-infinity]
+    sizes: [xs, sm, md, lg, xl]
+    element: span
+
+  progress:
+    base: progress
+    url: /components/progress/
+    desc: Task progress bar
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    element: progress
+
+  radial-progress:
+    base: radial-progress
+    url: /components/radial-progress/
+    desc: Circular progress indicator
+    note: Uses --value and --size CSS custom properties
+    element: div
+
+  skeleton:
+    base: skeleton
+    url: /components/skeleton/
+    desc: Loading placeholder
+    element: div
+
+  toast:
+    base: toast
+    url: /components/toast/
+    desc: Corner-positioned element stack
+    modifiers: [toast-start, toast-center, toast-end, toast-top, toast-middle, toast-bottom]
+    element: div
+
+  tooltip:
+    base: tooltip
+    url: /components/tooltip/
+    desc: Hover message display
+    colors: [tooltip-neutral, tooltip-primary, tooltip-secondary, tooltip-accent, tooltip-info, tooltip-success, tooltip-warning, tooltip-error]
+    modifiers: [tooltip-open, tooltip-top, tooltip-bottom, tooltip-left, tooltip-right]
+    element: div
+
+data-input:
+  calendar:
+    base: calendar
+    url: /components/calendar/
+    desc: Calendar library styles
+    element: div
+    note: Styles for third-party calendar libraries
+
+  checkbox:
+    base: checkbox
+    url: /components/checkbox/
+    desc: Select/deselect a value
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    element: input
+
+  fieldset:
+    base: fieldset
+    url: /components/fieldset/
+    desc: Group related form elements
+    parts: [fieldset-legend, fieldset-label]
+    element: fieldset
+
+  file-input:
+    base: file-input
+    url: /components/file-input/
+    desc: File upload input
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [ghost]
+    element: input
+
+  filter:
+    base: filter
+    url: /components/filter/
+    desc: Radio button group for filtering
+    parts: [filter-reset]
+    element: div
+
+  label:
+    base: label
+    url: /components/label/
+    desc: Input field name/title
+    element: label
+
+  radio:
+    base: radio
+    url: /components/radio/
+    desc: Select one option from a set
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    element: input
+
+  range:
+    base: range
+    url: /components/range/
+    desc: Slider for value selection
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    element: input
+
+  rating:
+    base: rating
+    url: /components/rating/
+    desc: Star/icon rating input
+    parts: [rating-hidden]
+    sizes: [xs, sm, md, lg, xl]
+    modifiers: [rating-half]
+    element: div
+
+  select:
+    base: select
+    url: /components/select/
+    desc: Dropdown option picker
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [ghost]
+    element: select
+
+  input:
+    base: input
+    url: /components/input/
+    desc: Text input field
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [ghost]
+    element: input
+
+  textarea:
+    base: textarea
+    url: /components/textarea/
+    desc: Multi-line text input
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    styles: [ghost]
+    element: textarea
+
+  toggle:
+    base: toggle
+    url: /components/toggle/
+    desc: Switch-style checkbox
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    sizes: [xs, sm, md, lg, xl]
+    element: input
+
+  validator:
+    base: validator
+    url: /components/validator/
+    desc: Validation state styling
+    element: div
+    note: Changes form element colors based on validation
+
+layout:
+  divider:
+    base: divider
+    url: /components/divider/
+    desc: Content separator
+    colors: [neutral, primary, secondary, accent, info, success, warning, error]
+    modifiers: [divider-vertical, divider-horizontal, divider-start, divider-end]
+    element: div
+
+  drawer:
+    base: drawer
+    url: /components/drawer/
+    desc: Sidebar grid layout
+    parts: [drawer-toggle, drawer-content, drawer-side, drawer-overlay]
+    modifiers: [drawer-open, drawer-end]
+    element: div
+
+  footer:
+    base: footer
+    url: /components/footer/
+    desc: Page footer with links
+    parts: [footer-title]
+    modifiers: [footer-center]
+    element: footer
+
+  hero:
+    base: hero
+    url: /components/hero/
+    desc: Large display box with title
+    parts: [hero-content, hero-overlay]
+    element: div
+
+  indicator:
+    base: indicator
+    url: /components/indicator/
+    desc: Corner element placement
+    parts: [indicator-item]
+    modifiers: [indicator-start, indicator-center, indicator-end, indicator-top, indicator-middle, indicator-bottom]
+    element: div
+
+  join:
+    base: join
+    url: /components/join/
+    desc: Group items together
+    parts: [join-item]
+    modifiers: [join-vertical, join-horizontal]
+    element: div
+
+  mask:
+    base: mask
+    url: /components/mask/
+    desc: Shape-crop element content
+    modifiers: [mask-squircle, mask-heart, mask-hexagon, mask-hexagon-2, mask-decagon, mask-pentagon, mask-diamond, mask-square, mask-circle, mask-parallelogram, mask-parallelogram-2, mask-parallelogram-3, mask-parallelogram-4, mask-star, mask-star-2, mask-triangle, mask-triangle-2, mask-triangle-3, mask-triangle-4, mask-half-1, mask-half-2]
+    element: div
+
+  stack:
+    base: stack
+    url: /components/stack/
+    desc: Visually stacked elements
+    element: div
+
+mockup:
+  browser:
+    base: mockup-browser
+    url: /components/mockup-browser/
+    desc: Browser window mockup
+    parts: [mockup-browser-toolbar]
+    element: div
+
+  code:
+    base: mockup-code
+    url: /components/mockup-code/
+    desc: Code editor mockup
+    note: Uses data-prefix attribute for line numbers
+    element: div
+
+  phone:
+    base: mockup-phone
+    url: /components/mockup-phone/
+    desc: iPhone mockup
+    element: div
+
+  window:
+    base: mockup-window
+    url: /components/mockup-window/
+    desc: OS window mockup
+    element: div

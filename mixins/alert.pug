@@ -1,0 +1,7 @@
+mixin alert(opts)
+  - opts = opts || {}
+  - const cls = ['dp-alert', 'alert', opts.color && `alert-${opts.color}`, opts.style && `alert-${opts.style}`, opts.direction && `alert-${opts.direction}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls role="alert")&attributes(attributes)
+    if opts.text
+      span= opts.text
+    block

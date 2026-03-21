@@ -1,0 +1,35 @@
+mixin timeline(opts)
+  - opts = opts || {}
+  - const cls = ['dp-timeline', 'timeline', opts.direction && `timeline-${opts.direction}`, opts.snap && 'timeline-snap-icon', opts.compact && 'timeline-compact', opts.class].filter(Boolean).join(' ')
+  ul(class=cls)&attributes(attributes)
+    block
+
+mixin timeline-item(opts)
+  - opts = opts || {}
+  li&attributes(attributes)
+    block
+
+mixin timeline-start(opts)
+  - opts = opts || {}
+  - const cls = ['dp-timeline-start', 'timeline-start', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin timeline-middle(opts)
+  - opts = opts || {}
+  - const cls = ['dp-timeline-middle', 'timeline-middle', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin timeline-end(opts)
+  - opts = opts || {}
+  - const cls = ['dp-timeline-end', 'timeline-end', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin timeline-hr(opts)
+  hr

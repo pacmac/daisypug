@@ -1,0 +1,4 @@
+mixin input(opts)
+  - opts = opts || {}
+  - const cls = ['dp-input', 'input', opts.color && `input-${opts.color}`, opts.size && `input-${opts.size}`, opts.style && `input-${opts.style}`, opts.class].filter(Boolean).join(' ')
+  input(type=opts.type || 'text' class=cls placeholder=opts.placeholder value=opts.value name=opts.name)&attributes(attributes)

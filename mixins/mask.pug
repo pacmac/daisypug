@@ -1,0 +1,5 @@
+mixin mask(opts)
+  - opts = opts || {}
+  - const cls = ['dp-mask', 'mask', opts.shape && `mask-${opts.shape}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

@@ -1,0 +1,5 @@
+mixin mockup-window(opts)
+  - opts = opts || {}
+  - const cls = ['dp-mockup-window', 'mockup-window', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

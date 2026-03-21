@@ -1,0 +1,11 @@
+mixin carousel(opts)
+  - opts = opts || {}
+  - const cls = ['dp-carousel', 'carousel', opts.center && 'carousel-center', opts.end && 'carousel-end', opts.vertical && 'carousel-vertical', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin carousel-item(opts)
+  - opts = opts || {}
+  - const cls = ['dp-carousel-item', 'carousel-item', opts.class].filter(Boolean).join(' ')
+  div(class=cls id=opts.id)&attributes(attributes)
+    block

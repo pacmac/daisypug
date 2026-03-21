@@ -1,0 +1,47 @@
+mixin stats(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stats', 'stats', opts.direction && `stats-${opts.direction}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin stat(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stat', 'stat', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin stat-figure(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stat-figure', 'stat-figure', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin stat-title(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stat-title', 'stat-title', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin stat-value(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stat-value', 'stat-value', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin stat-desc(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stat-desc', 'stat-desc', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin stat-actions(opts)
+  - opts = opts || {}
+  - const cls = ['dp-stat-actions', 'stat-actions', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

@@ -1,0 +1,21 @@
+mixin fieldset(opts)
+  - opts = opts || {}
+  - const cls = ['dp-fieldset', 'fieldset', opts.class].filter(Boolean).join(' ')
+  fieldset(class=cls)&attributes(attributes)
+    block
+
+mixin fieldset-legend(opts)
+  - opts = opts || {}
+  - const cls = ['dp-fieldset-legend', 'fieldset-legend', opts.class].filter(Boolean).join(' ')
+  legend(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin fieldset-label(opts)
+  - opts = opts || {}
+  - const cls = ['dp-fieldset-label', 'fieldset-label', opts.class].filter(Boolean).join(' ')
+  label(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

@@ -1,0 +1,13 @@
+mixin select(opts)
+  - opts = opts || {}
+  - const cls = ['dp-select', 'select', opts.color && `select-${opts.color}`, opts.size && `select-${opts.size}`, opts.style && `select-${opts.style}`, opts.class].filter(Boolean).join(' ')
+  select(class=cls name=opts.name)&attributes(attributes)
+    if opts.placeholder
+      option(disabled selected)= opts.placeholder
+    if opts.options
+      each opt in opts.options
+        if typeof opt === 'string'
+          option= opt
+        else
+          option(value=opt.value selected=opt.selected)= opt.label || opt.value
+    block

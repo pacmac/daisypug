@@ -1,0 +1,18 @@
+mixin dropdown(opts)
+  - opts = opts || {}
+  - const cls = ['dp-dropdown', 'dropdown', opts.position && `dropdown-${opts.position}`, opts.hover && 'dropdown-hover', opts.open && 'dropdown-open', opts.end && 'dropdown-end', opts.class].filter(Boolean).join(' ')
+  details(class=cls)&attributes(attributes)
+    block
+
+mixin dropdown-trigger(opts)
+  - opts = opts || {}
+  summary(class=opts.class)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin dropdown-content(opts)
+  - opts = opts || {}
+  - const cls = ['dp-dropdown-content', 'dropdown-content', opts.class].filter(Boolean).join(' ')
+  ul(class=cls tabindex="0")&attributes(attributes)
+    block

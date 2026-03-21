@@ -1,0 +1,7 @@
+mixin divider(opts)
+  - opts = opts || {}
+  - const cls = ['dp-divider', 'divider', opts.color && `divider-${opts.color}`, opts.direction && `divider-${opts.direction}`, opts.position && `divider-${opts.position}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

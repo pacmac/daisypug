@@ -1,0 +1,7 @@
+mixin link(opts)
+  - opts = opts || {}
+  - const cls = ['dp-link', 'link', opts.color && `link-${opts.color}`, opts.hover && 'link-hover', opts.class].filter(Boolean).join(' ')
+  a(class=cls href=opts.href)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

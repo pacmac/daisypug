@@ -1,0 +1,16 @@
+mixin table(opts)
+  - opts = opts || {}
+  - const cls = ['dp-table', 'table', opts.size && `table-${opts.size}`, opts.zebra && 'table-zebra', opts.pinRows && 'table-pin-rows', opts.pinCols && 'table-pin-cols', opts.class].filter(Boolean).join(' ')
+  table(class=cls)&attributes(attributes)
+    if opts.headers
+      thead
+        tr
+          each header in opts.headers
+            th= header
+    block
+    if opts.rows
+      tbody
+        each row in opts.rows
+          tr
+            each cell in row
+              td= cell

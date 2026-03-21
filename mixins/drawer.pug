@@ -1,0 +1,29 @@
+mixin drawer(opts)
+  - opts = opts || {}
+  - const id = opts.id || 'drawer-toggle'
+  - const cls = ['dp-drawer', 'drawer', opts.end && 'drawer-end', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    input(id=id type="checkbox" class="drawer-toggle")
+    block
+
+mixin drawer-content(opts)
+  - opts = opts || {}
+  - const cls = ['dp-drawer-content', 'drawer-content', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin drawer-side(opts)
+  - opts = opts || {}
+  - const cls = ['dp-drawer-side', 'drawer-side', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.for
+      label(for=opts.for aria-label="close sidebar" class="drawer-overlay")
+    block
+
+mixin drawer-button(opts)
+  - opts = opts || {}
+  - const cls = ['btn drawer-button', opts.class].filter(Boolean).join(' ')
+  label(for=opts.for class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

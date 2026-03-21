@@ -1,0 +1,7 @@
+mixin kbd(opts)
+  - opts = opts || {}
+  - const cls = ['dp-kbd', 'kbd', opts.size && `kbd-${opts.size}`, opts.class].filter(Boolean).join(' ')
+  kbd(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

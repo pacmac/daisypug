@@ -1,0 +1,372 @@
+# DaisyPug Showcase — Same page as showcase.pug, expressed in YAML
+
+# ===== NAVBAR =====
+- navbar:
+    opts:
+      class: bg-base-100 shadow-lg sticky top-0 z-50
+    children:
+      - navbar-start:
+          children:
+            - btn:
+                style: ghost
+                class: text-xl font-bold
+                text: DaisyPug
+      - navbar-center:
+          opts:
+            class: hidden lg:flex
+          children:
+            - menu:
+                opts:
+                  direction: horizontal
+                  class: px-1
+                children:
+                  - menu-item:
+                      children:
+                        - a:
+                            href: "#features"
+                            text: Features
+                  - menu-item:
+                      children:
+                        - a:
+                            href: "#stats"
+                            text: Stats
+                  - menu-item:
+                      children:
+                        - a:
+                            href: "#demo"
+                            text: Demo
+                  - menu-item:
+                      children:
+                        - a:
+                            href: "#contact"
+                            text: Contact
+      - navbar-end:
+          children:
+            - theme-radios:
+                themes:
+                  - light
+                  - dark
+                  - cupcake
+                  - synthwave
+                  - retro
+                as: btn
+                active: light
+
+# ===== HERO =====
+- hero:
+    opts:
+      class: min-h-[70vh] bg-base-200
+    children:
+      - hero-content:
+          opts:
+            class: text-center
+          children:
+            - div:
+                class: max-w-2xl
+                children:
+                  - h1:
+                      class: text-5xl font-bold
+                      text: DaisyUI meets Pug
+                  - p:
+                      class: py-6 text-lg text-base-content opacity-80
+                      text: "Build beautiful, theme-aware pages with clean component mixins. Write Pug or YAML \u2014 get production-ready HTML."
+                  - div:
+                      class: flex gap-4 justify-center
+                      children:
+                        - btn:
+                            color: primary
+                            size: lg
+                            text: Get Started
+                        - btn:
+                            style: outline
+                            size: lg
+                            text: View Docs
+
+# ===== FEATURES =====
+- div:
+    class: py-16 px-4 bg-base-100
+    id: features
+    children:
+      - div:
+          class: max-w-6xl mx-auto
+          children:
+            - h2:
+                class: text-3xl font-bold text-center mb-12
+                text: Features
+            - div:
+                class: grid grid-cols-1 md:grid-cols-3 gap-6
+                children:
+                  - card:
+                      opts:
+                        class: bg-base-200 shadow-xl
+                      children:
+                        - card-body:
+                            opts:
+                              class: items-center text-center
+                            children:
+                              - div:
+                                  class: text-4xl mb-4
+                                  text: "~"
+                              - card-title:
+                                  text: Pug Mixins
+                              - p: Every DaisyUI component as a clean, composable Pug mixin with full modifier support.
+
+                  - card:
+                      opts:
+                        class: bg-base-200 shadow-xl
+                      children:
+                        - card-body:
+                            opts:
+                              class: items-center text-center
+                            children:
+                              - div:
+                                  class: text-4xl mb-4
+                                  text: "{}"
+                              - card-title:
+                                  text: YAML Input
+                              - p: Describe pages declaratively in YAML. The engine converts to Pug and renders automatically.
+
+                  - card:
+                      opts:
+                        class: bg-base-200 shadow-xl
+                      children:
+                        - card-body:
+                            opts:
+                              class: items-center text-center
+                            children:
+                              - div:
+                                  class: text-4xl mb-4
+                                  text: "@"
+                              - card-title:
+                                  text: Theme Ready
+                              - p: All components use semantic DaisyUI colors. Switch themes instantly — zero code changes.
+
+# ===== STATS =====
+- div:
+    class: py-16 px-4 bg-base-200
+    id: stats
+    children:
+      - div:
+          class: max-w-4xl mx-auto
+          children:
+            - h2:
+                class: text-3xl font-bold text-center mb-12
+                text: By the Numbers
+            - stats:
+                opts:
+                  class: shadow-lg w-full stats-horizontal
+                children:
+                  - stat:
+                      opts:
+                        class: place-items-center
+                      children:
+                        - stat-title:
+                            text: Components
+                        - stat-value:
+                            text: "62"
+                        - stat-desc:
+                            text: Every DaisyUI component
+                  - stat:
+                      opts:
+                        class: place-items-center
+                      children:
+                        - stat-title:
+                            text: Mixins
+                        - stat-value:
+                            text: 100+
+                        - stat-desc:
+                            text: Including sub-components
+                  - stat:
+                      opts:
+                        class: place-items-center
+                      children:
+                        - stat-title:
+                            text: Themes
+                        - stat-value:
+                            text: 30+
+                        - stat-desc:
+                            text: DaisyUI built-in themes
+                  - stat:
+                      opts:
+                        class: place-items-center
+                      children:
+                        - stat-title:
+                            text: Input Formats
+                        - stat-value:
+                            text: "2"
+                        - stat-desc:
+                            text: Pug + YAML
+
+# ===== COMPONENT DEMO =====
+- div:
+    class: py-16 px-4 bg-base-100
+    id: demo
+    children:
+      - div:
+          class: max-w-6xl mx-auto
+          children:
+            - h2:
+                class: text-3xl font-bold text-center mb-12
+                text: Component Demo
+
+            # Buttons
+            - div:
+                class: mb-12
+                children:
+                  - h3:
+                      class: text-xl font-semibold mb-4
+                      text: Buttons
+                  - div:
+                      class: flex flex-wrap gap-3
+                      children:
+                        - btn: {color: primary, text: Primary}
+                        - btn: {color: secondary, text: Secondary}
+                        - btn: {color: accent, text: Accent}
+                        - btn: {style: outline, color: info, text: Info}
+                        - btn: {style: soft, color: success, text: Success}
+                        - btn: {style: dash, color: warning, text: Warning}
+                        - btn: {style: ghost, text: Ghost}
+                        - btn: {color: error, shape: circle, text: X}
+
+            - divider: {}
+
+            # Badges
+            - div:
+                class: mb-12
+                children:
+                  - h3:
+                      class: text-xl font-semibold mb-4
+                      text: Badges
+                  - div:
+                      class: flex flex-wrap gap-3 items-center
+                      children:
+                        - badge: {color: primary, text: Primary}
+                        - badge: {color: secondary, style: outline, text: Outline}
+                        - badge: {color: accent, style: soft, text: Soft}
+                        - badge: {color: info, text: Info, size: lg}
+                        - badge: {color: success, style: dash, text: Dash}
+                        - badge: {color: warning, text: Warning}
+                        - badge: {color: error, text: Error}
+
+            - divider: {}
+
+            # Chat
+            - div:
+                class: mb-12
+                children:
+                  - h3:
+                      class: text-xl font-semibold mb-4
+                      text: Chat
+                  - chat:
+                      position: start
+                      children:
+                        - chat-header: {text: Alice}
+                        - chat-bubble: {color: primary, text: "Hey! Have you tried DaisyPug yet?"}
+                        - chat-footer: {text: Delivered}
+                  - chat:
+                      position: end
+                      children:
+                        - chat-header: {text: Bob}
+                        - chat-bubble: {text: "Yes! The Pug mixins are incredibly clean."}
+                        - chat-footer: {text: "Seen at 12:46"}
+                  - chat:
+                      position: start
+                      children:
+                        - chat-header: {text: Alice}
+                        - chat-bubble: {color: primary, text: "Right? And it works with YAML too!"}
+
+            - divider: {}
+
+            # Steps
+            - div:
+                class: mb-12
+                children:
+                  - h3:
+                      class: text-xl font-semibold mb-4
+                      text: Steps
+                  - steps:
+                      children:
+                        - step: {color: primary, text: Install}
+                        - step: {color: primary, text: Configure}
+                        - step: {color: primary, text: Build}
+                        - step: {text: Deploy}
+
+            - divider: {}
+
+            # Code mockup
+            - div:
+                class: mb-12
+                children:
+                  - h3:
+                      class: text-xl font-semibold mb-4
+                      text: Quick Start
+                  - mockup-code:
+                      opts:
+                        class: bg-neutral text-neutral-content
+                        lines:
+                          - {prefix: "$", text: "pnpm add daisypug"}
+                          - {prefix: "$", text: "daisypug render page.pug --theme dark"}
+                          - {prefix: ">", text: "Written to output.html"}
+
+# ===== CONTACT FORM =====
+- div:
+    class: py-16 px-4 bg-base-200
+    id: contact
+    children:
+      - div:
+          class: max-w-xl mx-auto
+          children:
+            - h2:
+                class: text-3xl font-bold text-center mb-8
+                text: Get in Touch
+            - card:
+                opts:
+                  class: bg-base-100 shadow-xl
+                children:
+                  - card-body:
+                      children:
+                        - fieldset:
+                            children:
+                              - fieldset-legend: {text: Contact Form}
+                              - fieldset-label: {text: Name}
+                              - input: {color: primary, class: w-full, attrs: {placeholder: Your name}}
+                              - fieldset-label: {text: Email}
+                              - input: {color: primary, class: w-full, attrs: {placeholder: "you@example.com", type: email}}
+                              - fieldset-label: {text: Subject}
+                              - select:
+                                  color: primary
+                                  class: w-full
+                                  opts:
+                                    placeholder: Choose a topic
+                                    options:
+                                      - General
+                                      - Bug Report
+                                      - Feature Request
+                                      - Partnership
+                              - fieldset-label: {text: Message}
+                              - textarea: {color: primary, class: w-full, attrs: {placeholder: "Tell us what you think...", rows: "4"}}
+                              - div:
+                                  class: mt-4
+                                  children:
+                                    - btn: {color: primary, text: Send Message, block: true}
+
+# ===== FOOTER =====
+- footer:
+    opts:
+      center: true
+      class: p-10 bg-base-300 text-base-content
+    children:
+      - nav:
+          children:
+            - footer-title: {text: DaisyPug}
+            - p:
+                class: mt-2
+                text: Built with DaisyUI + Pug + Node.js
+            - p:
+                class: opacity-60
+                text: "62 components. 30+ themes. 2 input formats. 1 CLI."
+            - div:
+                class: mt-4 flex gap-2
+                children:
+                  - badge: {style: outline, text: MIT License}
+                  - badge: {style: outline, text: v1.0.0}

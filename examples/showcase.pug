@@ -1,0 +1,211 @@
+//- DaisyPug Showcase — A beautiful demo page using all component tiers
+
+//- ===== NAVBAR =====
++navbar({class: 'bg-base-100 shadow-lg sticky top-0 z-50'})
+  +navbar-start
+    +btn({style: 'ghost', class: 'text-xl font-bold'})
+      | DaisyPug
+  +navbar-center({class: 'hidden lg:flex'})
+    +menu({direction: 'horizontal', class: 'px-1'})
+      +menu-item
+        a(href="#features") Features
+      +menu-item
+        a(href="#stats") Stats
+      +menu-item
+        a(href="#demo") Demo
+      +menu-item
+        a(href="#contact") Contact
+  +navbar-end
+    +theme-radios({themes: ['light', 'dark', 'cupcake', 'synthwave', 'retro'], as: 'btn', active: 'light'})
+
+//- ===== HERO =====
++hero({class: 'min-h-[70vh] bg-base-200'})
+  +hero-content({class: 'text-center'})
+    div.max-w-2xl
+      h1.text-5xl.font-bold DaisyUI meets Pug
+      p.py-6.text-lg.text-base-content.opacity-80
+        | Build beautiful, theme-aware pages with clean component mixins.
+        | Write Pug or YAML — get production-ready HTML.
+      div.flex.gap-4.justify-center
+        +btn({color: 'primary', size: 'lg'})
+          | Get Started
+        +btn({style: 'outline', size: 'lg'})
+          | View Docs
+
+//- ===== FEATURES =====
+div.py-16.px-4.bg-base-100#features
+  div.max-w-6xl.mx-auto
+    h2.text-3xl.font-bold.text-center.mb-12 Features
+    div(class="grid grid-cols-1 md:grid-cols-3 gap-6")
+
+      +card({class: 'bg-base-200 shadow-xl'})
+        +card-body({class: 'items-center text-center'})
+          div.text-4xl.mb-4 ~
+          +card-title({text: 'Pug Mixins'})
+          p Every DaisyUI component as a clean, composable Pug mixin with full modifier support.
+
+      +card({class: 'bg-base-200 shadow-xl'})
+        +card-body({class: 'items-center text-center'})
+          div.text-4xl.mb-4 {}
+          +card-title({text: 'YAML Input'})
+          p Describe pages declaratively in YAML. The engine converts to Pug and renders automatically.
+
+      +card({class: 'bg-base-200 shadow-xl'})
+        +card-body({class: 'items-center text-center'})
+          div.text-4xl.mb-4 @
+          +card-title({text: 'Theme Ready'})
+          p All components use semantic DaisyUI colors. Switch themes instantly — zero code changes.
+
+//- ===== STATS =====
+div.py-16.px-4.bg-base-200#stats
+  div.max-w-4xl.mx-auto
+    h2.text-3xl.font-bold.text-center.mb-12 By the Numbers
+    +stats({class: 'shadow-lg w-full stats-horizontal'})
+      +stat({class: 'place-items-center'})
+        +stat-title({text: 'Components'})
+        +stat-value({text: '62'})
+        +stat-desc({text: 'Every DaisyUI component'})
+      +stat({class: 'place-items-center'})
+        +stat-title({text: 'Mixins'})
+        +stat-value({text: '100+'})
+        +stat-desc({text: 'Including sub-components'})
+      +stat({class: 'place-items-center'})
+        +stat-title({text: 'Themes'})
+        +stat-value({text: '30+'})
+        +stat-desc({text: 'DaisyUI built-in themes'})
+      +stat({class: 'place-items-center'})
+        +stat-title({text: 'Input Formats'})
+        +stat-value({text: '2'})
+        +stat-desc({text: 'Pug + YAML'})
+
+//- ===== COMPONENT DEMO =====
+div.py-16.px-4.bg-base-100#demo
+  div.max-w-6xl.mx-auto
+    h2.text-3xl.font-bold.text-center.mb-12 Component Demo
+
+    //- Buttons
+    div.mb-12
+      h3.text-xl.font-semibold.mb-4 Buttons
+      div.flex.flex-wrap.gap-3
+        +btn({color: 'primary', text: 'Primary'})
+        +btn({color: 'secondary', text: 'Secondary'})
+        +btn({color: 'accent', text: 'Accent'})
+        +btn({style: 'outline', color: 'info', text: 'Info'})
+        +btn({style: 'soft', color: 'success', text: 'Success'})
+        +btn({style: 'dash', color: 'warning', text: 'Warning'})
+        +btn({style: 'ghost', text: 'Ghost'})
+        +btn({color: 'error', shape: 'circle', text: 'X'})
+
+    +divider
+
+    //- Badges
+    div.mb-12
+      h3.text-xl.font-semibold.mb-4 Badges
+      div.flex.flex-wrap.gap-3.items-center
+        +badge({color: 'primary', text: 'Primary'})
+        +badge({color: 'secondary', style: 'outline', text: 'Outline'})
+        +badge({color: 'accent', style: 'soft', text: 'Soft'})
+        +badge({color: 'info', text: 'Info', size: 'lg'})
+        +badge({color: 'success', style: 'dash', text: 'Dash'})
+        +badge({color: 'warning', text: 'Warning'})
+        +badge({color: 'error', text: 'Error'})
+
+    +divider
+
+    //- Chat
+    div.mb-12
+      h3.text-xl.font-semibold.mb-4 Chat
+      +chat({position: 'start'})
+        +chat-header({text: 'Alice'})
+        +chat-bubble({color: 'primary', text: 'Hey! Have you tried DaisyPug yet?'})
+        +chat-footer({text: 'Delivered'})
+      +chat({position: 'end'})
+        +chat-header({text: 'Bob'})
+        +chat-bubble({text: 'Yes! The Pug mixins are incredibly clean.'})
+        +chat-footer({text: 'Seen at 12:46'})
+      +chat({position: 'start'})
+        +chat-header({text: 'Alice'})
+        +chat-bubble({color: 'primary', text: 'Right? And it works with YAML too!'})
+
+    +divider
+
+    //- Timeline
+    div.mb-12
+      h3.text-xl.font-semibold.mb-4 Timeline
+      +timeline({direction: 'vertical'})
+        +timeline-item
+          +timeline-start({text: 'Design'})
+          +timeline-middle
+          +timeline-end({text: 'Catalog all 62 DaisyUI components'})
+          +timeline-hr
+        +timeline-item
+          +timeline-hr
+          +timeline-start({text: 'Build'})
+          +timeline-middle
+          +timeline-end({text: 'Create Pug mixins for every component'})
+          +timeline-hr
+        +timeline-item
+          +timeline-hr
+          +timeline-start({text: 'Ship'})
+          +timeline-middle
+          +timeline-end({text: 'CLI + YAML support + theme switching'})
+
+    +divider
+
+    //- Steps
+    div.mb-12
+      h3.text-xl.font-semibold.mb-4 Steps
+      +steps
+        +step({color: 'primary', text: 'Install'})
+        +step({color: 'primary', text: 'Configure'})
+        +step({color: 'primary', text: 'Build'})
+        +step({text: 'Deploy'})
+
+    +divider
+
+    //- Code mockup
+    div.mb-12
+      h3.text-xl.font-semibold.mb-4 Quick Start
+      +mockup-code({class: 'bg-neutral text-neutral-content', lines: [{prefix: '$', text: 'pnpm add daisypug'}, {prefix: '$', text: 'daisypug render page.pug --theme dark'}, {prefix: '>', text: 'Written to output.html'}]})
+
+    +divider
+
+    //- Tabs
+    div.mb-12
+      h3.text-xl.font-semibold.mb-4 Input Formats
+      +tabs({style: 'lift', size: 'lg'})
+        +tab({name: 'format-tabs', label: 'Pug', active: true})
+        +tab-content({class: 'bg-base-200 p-6 rounded-box'})
+          +mockup-code({lines: [{prefix: ' ', text: "+btn({color: 'primary', text: 'Click'})"}, {prefix: ' ', text: '+card({style: "border"})'}, {prefix: ' ', text: '  +card-body'}, {prefix: ' ', text: '    +card-title({text: "Hello"})'}]})
+        +tab({name: 'format-tabs', label: 'YAML'})
+        +tab-content({class: 'bg-base-200 p-6 rounded-box'})
+          +mockup-code({lines: [{prefix: ' ', text: '- btn:'}, {prefix: ' ', text: '    color: primary'}, {prefix: ' ', text: '    text: Click'}, {prefix: ' ', text: '- card:'}, {prefix: ' ', text: '    opts: {style: border}'}]})
+
+//- ===== CONTACT FORM =====
+div.py-16.px-4.bg-base-200#contact
+  div.max-w-xl.mx-auto
+    h2.text-3xl.font-bold.text-center.mb-8 Get in Touch
+    +card({class: 'bg-base-100 shadow-xl'})
+      +card-body
+        +fieldset
+          +fieldset-legend({text: 'Contact Form'})
+          +fieldset-label({text: 'Name'})
+          +input({color: 'primary', placeholder: 'Your name', class: 'w-full'})
+          +fieldset-label({text: 'Email'})
+          +input({color: 'primary', placeholder: 'you@example.com', class: 'w-full'})(type="email")
+          +fieldset-label({text: 'Subject'})
+          +select({color: 'primary', placeholder: 'Choose a topic', options: ['General', 'Bug Report', 'Feature Request', 'Partnership'], class: 'w-full'})
+          +fieldset-label({text: 'Message'})
+          +textarea({color: 'primary', placeholder: 'Tell us what you think...', class: 'w-full'})(rows="4")
+          div.mt-4
+            +btn({color: 'primary', text: 'Send Message', block: true})
+
+//- ===== FOOTER =====
++footer({center: true, class: 'p-10 bg-base-300 text-base-content'})
+  nav
+    +footer-title({text: 'DaisyPug'})
+    p.mt-2 Built with DaisyUI + Pug + Node.js
+    p.opacity-60 62 components. 30+ themes. 2 input formats. 1 CLI.
+    div.mt-4.flex.gap-2
+      +badge({style: 'outline', text: 'MIT License'})
+      +badge({style: 'outline', text: 'v1.0.0'})

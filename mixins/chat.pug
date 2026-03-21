@@ -1,0 +1,35 @@
+mixin chat(opts)
+  - opts = opts || {}
+  - const cls = ['dp-chat', 'chat', opts.position && `chat-${opts.position}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin chat-image(opts)
+  - opts = opts || {}
+  - const cls = ['dp-chat-image', 'chat-image', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin chat-header(opts)
+  - opts = opts || {}
+  - const cls = ['dp-chat-header', 'chat-header', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin chat-bubble(opts)
+  - opts = opts || {}
+  - const cls = ['dp-chat-bubble', 'chat-bubble', opts.color && `chat-bubble-${opts.color}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin chat-footer(opts)
+  - opts = opts || {}
+  - const cls = ['dp-chat-footer', 'chat-footer', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

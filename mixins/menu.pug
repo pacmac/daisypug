@@ -1,0 +1,27 @@
+mixin menu(opts)
+  - opts = opts || {}
+  - const cls = ['dp-menu', 'menu', opts.size && `menu-${opts.size}`, opts.direction && `menu-${opts.direction}`, opts.class].filter(Boolean).join(' ')
+  ul(class=cls)&attributes(attributes)
+    block
+
+mixin menu-title(opts)
+  - opts = opts || {}
+  - const cls = ['dp-menu-title', 'menu-title', opts.class].filter(Boolean).join(' ')
+  li(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block
+
+mixin menu-item(opts)
+  - opts = opts || {}
+  - const cls = [opts.active && 'menu-active', opts.focus && 'menu-focus', opts.disabled && 'menu-disabled', opts.class].filter(Boolean).join(' ') || undefined
+  li(class=cls)&attributes(attributes)
+    block
+
+mixin menu-dropdown(opts)
+  - opts = opts || {}
+  li
+    details(open=opts.open)
+      summary= opts.text || ''
+      ul(class=opts.class)&attributes(attributes)
+        block

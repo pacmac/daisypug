@@ -1,0 +1,20 @@
+mixin modal(opts)
+  - opts = opts || {}
+  - const cls = ['dp-modal', 'modal', opts.position && `modal-${opts.position}`, opts.open && 'modal-open', opts.class].filter(Boolean).join(' ')
+  dialog(id=opts.id class=cls)&attributes(attributes)
+    block
+    if opts.backdrop !== false
+      form(method="dialog" class="modal-backdrop")
+        button close
+
+mixin modal-box(opts)
+  - opts = opts || {}
+  - const cls = ['dp-modal-box', 'modal-box', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block
+
+mixin modal-action(opts)
+  - opts = opts || {}
+  - const cls = ['dp-modal-action', 'modal-action', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

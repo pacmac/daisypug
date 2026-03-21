@@ -1,0 +1,10 @@
+mixin filter(opts)
+  - opts = opts || {}
+  - const cls = ['dp-filter', 'filter', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.reset
+      input(type="radio" name=opts.name class="btn filter-reset" aria-label=opts.reset checked)
+    if opts.items
+      each item in opts.items
+        input(type="radio" name=opts.name class="btn" aria-label=item)
+    block

@@ -1,0 +1,26 @@
+{
+  "name": "daisypug",
+  "version": "1.0.0",
+  "description": "DaisyUI component render engine — Pug mixins + YAML declarative input → HTML",
+  "main": "index.js",
+  "bin": {
+    "daisypug": "./bin/daisypug.js"
+  },
+  "scripts": {
+    "test": "node test/test-prototypes.js && node test/test-themes.js && node test/test-tier1.js && node test/test-tier2.js && node test/test-tier3.js && node test/test-audit.js && node test/test-yaml-pipeline.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.32.1",
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "commander": "^14.0.3",
+    "daisyui": "^5.5.19",
+    "js-yaml": "^4.1.1",
+    "marked": "^17.0.4",
+    "postcss": "^8.5.8",
+    "pug": "^3.0.4",
+    "tailwindcss": "^4.2.2"
+  }
+}

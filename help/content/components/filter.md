@@ -1,0 +1,45 @@
+---
+name: filter
+description: Radio button group for filtering
+category: Data Input
+base: filter
+---
+
+## Usage
+
+The `filter` mixin renders a `<div>` element with DaisyUI `filter` classes.
+
+### Options
+
+| Option | Type | Values | Description |
+|--------|------|--------|-------------|
+| `class` | string | | Additional CSS classes |
+| `text` | string | | Text content |
+
+### Sub-mixins
+
+- `+filter-reset(opts)`
+
+## Code
+
+### Pug
+
+```pug
++filter({})
+  +filter-reset
+```
+
+### YAML
+
+```yaml
+- filter:
+
+
+    text: Example
+```
+
+## Examples
+
+<div class="flex flex-wrap gap-3 p-4 bg-base-200 rounded-box">
+  <div class="filter">Example</div>
+</div>

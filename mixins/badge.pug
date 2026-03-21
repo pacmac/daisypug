@@ -1,0 +1,7 @@
+mixin badge(opts)
+  - opts = opts || {}
+  - const cls = ['dp-badge', 'badge', opts.color && `badge-${opts.color}`, opts.size && `badge-${opts.size}`, opts.style && `badge-${opts.style}`, opts.class].filter(Boolean).join(' ')
+  span(class=cls)&attributes(attributes)
+    if opts.text
+      | #{opts.text}
+    block

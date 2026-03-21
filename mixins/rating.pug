@@ -1,0 +1,16 @@
+mixin rating(opts)
+  - opts = opts || {}
+  - const cls = ['dp-rating', 'rating', opts.size && `rating-${opts.size}`, opts.half && 'rating-half', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    if opts.hidden
+      input(type="radio" name=opts.name class="rating-hidden" checked=opts.value === 0)
+    if opts.stars
+      - const n = opts.stars || 5
+      - const colorCls = opts.color ? `bg-${opts.color}` : ''
+      - for (let i = 1; i <= n; i++)
+        if opts.half
+          input(type="radio" name=opts.name class=`mask mask-star-2 mask-half-1 ${colorCls}`.trim() checked=opts.value === i - 0.5)
+          input(type="radio" name=opts.name class=`mask mask-star-2 mask-half-2 ${colorCls}`.trim() checked=opts.value === i)
+        else
+          input(type="radio" name=opts.name class=`mask mask-star-2 ${colorCls}`.trim() checked=opts.value === i)
+    block

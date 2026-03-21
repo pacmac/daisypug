@@ -1,0 +1,40 @@
+mixin dp-formfield(label, inputOpts, labelOpts)
+  - inputOpts = inputOpts || {}
+  - labelOpts = labelOpts || {}
+  - const as = inputOpts.as || 'input'
+  - const labelCls = ['dp-formfield-label', 'fieldset-label', labelOpts.class].filter(Boolean).join(' ')
+  label(class=labelCls)&attributes(labelOpts)
+    | #{label}
+    if inputOpts.required
+      span.text-error *
+  if as === 'select'
+    - const cls = ['dp-select', 'select', inputOpts.color && `select-${inputOpts.color}`, inputOpts.size && `select-${inputOpts.size}`, inputOpts.style && `select-${inputOpts.style}`, 'w-full', inputOpts.class].filter(Boolean).join(' ')
+    select(class=cls name=inputOpts.name)&attributes(inputOpts.attrs || {})
+      if inputOpts.placeholder
+        option(disabled selected)= inputOpts.placeholder
+      if inputOpts.options
+        each opt in inputOpts.options
+          if typeof opt === 'string'
+            option= opt
+          else
+            option(value=opt.value selected=opt.selected)= opt.label || opt.value
+  else if as === 'textarea'
+    - const cls = ['dp-textarea', 'textarea', inputOpts.color && `textarea-${inputOpts.color}`, inputOpts.size && `textarea-${inputOpts.size}`, inputOpts.style && `textarea-${inputOpts.style}`, 'w-full', inputOpts.class].filter(Boolean).join(' ')
+    textarea(class=cls placeholder=inputOpts.placeholder name=inputOpts.name rows=inputOpts.rows)&attributes(inputOpts.attrs || {})
+  else if as === 'file-input'
+    - const cls = ['dp-file-input', 'file-input', inputOpts.color && `file-input-${inputOpts.color}`, inputOpts.size && `file-input-${inputOpts.size}`, 'w-full', inputOpts.class].filter(Boolean).join(' ')
+    input(type="file" class=cls name=inputOpts.name accept=inputOpts.accept)&attributes(inputOpts.attrs || {})
+  else if as === 'toggle'
+    - const cls = ['dp-toggle', 'toggle', inputOpts.color && `toggle-${inputOpts.color}`, inputOpts.size && `toggle-${inputOpts.size}`, inputOpts.class].filter(Boolean).join(' ')
+    input(type="checkbox" class=cls name=inputOpts.name checked=inputOpts.checked)&attributes(inputOpts.attrs || {})
+  else if as === 'checkbox'
+    - const cls = ['dp-checkbox', 'checkbox', inputOpts.color && `checkbox-${inputOpts.color}`, inputOpts.size && `checkbox-${inputOpts.size}`, inputOpts.class].filter(Boolean).join(' ')
+    input(type="checkbox" class=cls name=inputOpts.name checked=inputOpts.checked)&attributes(inputOpts.attrs || {})
+  else if as === 'radio'
+    - const cls = ['dp-radio', 'radio', inputOpts.color && `radio-${inputOpts.color}`, inputOpts.size && `radio-${inputOpts.size}`, inputOpts.class].filter(Boolean).join(' ')
+    input(type="radio" class=cls name=inputOpts.name value=inputOpts.value checked=inputOpts.checked)&attributes(inputOpts.attrs || {})
+  else
+    - const cls = ['dp-input', 'input', inputOpts.color && `input-${inputOpts.color}`, inputOpts.size && `input-${inputOpts.size}`, inputOpts.style && `input-${inputOpts.style}`, 'w-full', inputOpts.class].filter(Boolean).join(' ')
+    input(type=inputOpts.type || 'text' class=cls placeholder=inputOpts.placeholder name=inputOpts.name value=inputOpts.value)&attributes(inputOpts.attrs || {})
+  if inputOpts.help
+    p.text-xs.text-base-content/60.mt-1= inputOpts.help

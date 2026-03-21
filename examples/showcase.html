@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaisyPug Showcase</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="navbar bg-base-100 shadow-lg sticky top-0 z-50">
+      <div class="navbar-start">
+        <button class="btn btn-ghost text-xl font-bold">DaisyPug
+        </button>
+      </div>
+      <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
+          <li><a href="#features">Features</a>
+          </li>
+          <li><a href="#stats">Stats</a>
+          </li>
+          <li><a href="#demo">Demo</a>
+          </li>
+          <li><a href="#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+      <div class="navbar-end">
+        <input class="theme-controller btn" type="radio" value="light" name="theme-radios" checked="checked" aria-label="light"/>
+        <input class="theme-controller btn" type="radio" value="dark" name="theme-radios" aria-label="dark"/>
+        <input class="theme-controller btn" type="radio" value="cupcake" name="theme-radios" aria-label="cupcake"/>
+        <input class="theme-controller btn" type="radio" value="synthwave" name="theme-radios" aria-label="synthwave"/>
+        <input class="theme-controller btn" type="radio" value="retro" name="theme-radios" aria-label="retro"/>
+      </div>
+    </div>
+    <div class="hero min-h-[70vh] bg-base-200">
+      <div class="hero-content text-center">
+        <div class="max-w-2xl">
+          <h1 class="text-5xl font-bold">DaisyUI meets Pug</h1>
+          <p class="py-6 text-lg text-base-content opacity-80">
+            Build beautiful, theme-aware pages with clean component mixins.
+            Write Pug or YAML — get production-ready HTML.
+          </p>
+          <div class="flex gap-4 justify-center">
+            <button class="btn btn-primary btn-lg">Get Started
+            </button>
+            <button class="btn btn-lg btn-outline">View Docs
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-100" id="features">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card bg-base-200 shadow-xl">
+            <div class="card-body items-center text-center">
+              <div class="text-4xl mb-4">~</div>
+              <h2 class="card-title">Pug Mixins
+              </h2>
+              <p>Every DaisyUI component as a clean, composable Pug mixin with full modifier support.</p>
+            </div>
+          </div>
+          <div class="card bg-base-200 shadow-xl">
+            <div class="card-body items-center text-center">
+              <div class="text-4xl mb-4">{}</div>
+              <h2 class="card-title">YAML Input
+              </h2>
+              <p>Describe pages declaratively in YAML. The engine converts to Pug and renders automatically.</p>
+            </div>
+          </div>
+          <div class="card bg-base-200 shadow-xl">
+            <div class="card-body items-center text-center">
+              <div class="text-4xl mb-4">@</div>
+              <h2 class="card-title">Theme Ready
+              </h2>
+              <p>All components use semantic DaisyUI colors. Switch themes instantly — zero code changes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-200" id="stats">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">By the Numbers</h2>
+        <div class="stats shadow-lg w-full stats-horizontal">
+          <div class="stat place-items-center">
+            <div class="stat-title">Components
+            </div>
+            <div class="stat-value">62
+            </div>
+            <div class="stat-desc">Every DaisyUI component
+            </div>
+          </div>
+          <div class="stat place-items-center">
+            <div class="stat-title">Mixins
+            </div>
+            <div class="stat-value">100+
+            </div>
+            <div class="stat-desc">Including sub-components
+            </div>
+          </div>
+          <div class="stat place-items-center">
+            <div class="stat-title">Themes
+            </div>
+            <div class="stat-value">30+
+            </div>
+            <div class="stat-desc">DaisyUI built-in themes
+            </div>
+          </div>
+          <div class="stat place-items-center">
+            <div class="stat-title">Input Formats
+            </div>
+            <div class="stat-value">2
+            </div>
+            <div class="stat-desc">Pug + YAML
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-100" id="demo">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">Component Demo</h2>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Buttons</h3>
+          <div class="flex flex-wrap gap-3">
+            <button class="btn btn-primary">Primary
+            </button>
+            <button class="btn btn-secondary">Secondary
+            </button>
+            <button class="btn btn-accent">Accent
+            </button>
+            <button class="btn btn-info btn-outline">Info
+            </button>
+            <button class="btn btn-success btn-soft">Success
+            </button>
+            <button class="btn btn-warning btn-dash">Warning
+            </button>
+            <button class="btn btn-ghost">Ghost
+            </button>
+            <button class="btn btn-error btn-circle">X
+            </button>
+          </div>
+        </div>
+        <div class="divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Badges</h3>
+          <div class="flex flex-wrap gap-3 items-center"><span class="badge badge-primary">Primary</span><span class="badge badge-secondary badge-outline">Outline</span><span class="badge badge-accent badge-soft">Soft</span><span class="badge badge-info badge-lg">Info</span><span class="badge badge-success badge-dash">Dash</span><span class="badge badge-warning">Warning</span><span class="badge badge-error">Error</span>
+          </div>
+        </div>
+        <div class="divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Chat</h3>
+          <div class="chat chat-start">
+            <div class="chat-header">Alice
+            </div>
+            <div class="chat-bubble chat-bubble-primary">Hey! Have you tried DaisyPug yet?
+            </div>
+            <div class="chat-footer">Delivered
+            </div>
+          </div>
+          <div class="chat chat-end">
+            <div class="chat-header">Bob
+            </div>
+            <div class="chat-bubble">Yes! The Pug mixins are incredibly clean.
+            </div>
+            <div class="chat-footer">Seen at 12:46
+            </div>
+          </div>
+          <div class="chat chat-start">
+            <div class="chat-header">Alice
+            </div>
+            <div class="chat-bubble chat-bubble-primary">Right? And it works with YAML too!
+            </div>
+          </div>
+        </div>
+        <div class="divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Timeline</h3>
+          <ul class="timeline timeline-vertical">
+            <li>
+              <div class="timeline-start">Design
+              </div>
+              <div class="timeline-middle">
+              </div>
+              <div class="timeline-end">Catalog all 62 DaisyUI components
+              </div>
+              <hr/>
+            </li>
+            <li>
+              <hr/>
+              <div class="timeline-start">Build
+              </div>
+              <div class="timeline-middle">
+              </div>
+              <div class="timeline-end">Create Pug mixins for every component
+              </div>
+              <hr/>
+            </li>
+            <li>
+              <hr/>
+              <div class="timeline-start">Ship
+              </div>
+              <div class="timeline-middle">
+              </div>
+              <div class="timeline-end">CLI + YAML support + theme switching
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Steps</h3>
+          <ul class="steps">
+            <li class="step step-primary">Install
+            </li>
+            <li class="step step-primary">Configure
+            </li>
+            <li class="step step-primary">Build
+            </li>
+            <li class="step">Deploy
+            </li>
+          </ul>
+        </div>
+        <div class="divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Quick Start</h3>
+          <div class="mockup-code bg-neutral text-neutral-content">
+            <pre data-prefix="$"><code>pnpm add daisypug</code></pre>
+            <pre data-prefix="$"><code>daisypug render page.pug --theme dark</code></pre>
+            <pre data-prefix="&gt;"><code>Written to output.html</code></pre>
+          </div>
+        </div>
+        <div class="divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Input Formats</h3>
+          <div class="tabs tabs-lift tabs-lg" role="tablist">
+            <input class="tab tab-active" type="radio" name="format-tabs" role="tab" aria-label="Pug" checked="checked"/>
+            <div class="tab-content bg-base-200 p-6 rounded-box" role="tabpanel">
+              <div class="mockup-code">
+                <pre data-prefix=" "><code>+btn({color: 'primary', text: 'Click'})</code></pre>
+                <pre data-prefix=" "><code>+card({style: &quot;border&quot;})</code></pre>
+                <pre data-prefix=" "><code>  +card-body</code></pre>
+                <pre data-prefix=" "><code>    +card-title({text: &quot;Hello&quot;})</code></pre>
+              </div>
+            </div>
+            <input class="tab" type="radio" name="format-tabs" role="tab" aria-label="YAML"/>
+            <div class="tab-content bg-base-200 p-6 rounded-box" role="tabpanel">
+              <div class="mockup-code">
+                <pre data-prefix=" "><code>- btn:</code></pre>
+                <pre data-prefix=" "><code>    color: primary</code></pre>
+                <pre data-prefix=" "><code>    text: Click</code></pre>
+                <pre data-prefix=" "><code>- card:</code></pre>
+                <pre data-prefix=" "><code>    opts: {style: border}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-200" id="contact">
+      <div class="max-w-xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-8">Get in Touch</h2>
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Contact Form
+              </legend>
+              <label class="fieldset-label">Name
+              </label>
+              <input class="input input-primary w-full" type="text" placeholder="Your name"/>
+              <label class="fieldset-label">Email
+              </label>
+              <input class="input input-primary w-full" type="email" placeholder="you@example.com"/>
+              <label class="fieldset-label">Subject
+              </label>
+              <select class="select select-primary w-full">
+                <option disabled="disabled" selected="selected">Choose a topic</option>
+                <option>General</option>
+                <option>Bug Report</option>
+                <option>Feature Request</option>
+                <option>Partnership</option>
+              </select>
+              <label class="fieldset-label">Message
+              </label>
+              <textarea class="textarea textarea-primary w-full" placeholder="Tell us what you think..." rows="4"></textarea>
+              <div class="mt-4">
+                <button class="btn btn-primary btn-block">Send Message
+                </button>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer footer-center p-10 bg-base-300 text-base-content">
+      <nav>
+        <h6 class="footer-title">DaisyPug
+        </h6>
+        <p class="mt-2">Built with DaisyUI + Pug + Node.js</p>
+        <p class="opacity-60">62 components. 30+ themes. 2 input formats. 1 CLI.</p>
+        <div class="mt-4 flex gap-2"><span class="badge badge-outline">MIT License</span><span class="badge badge-outline">v1.0.0</span>
+        </div>
+      </nav>
+    </footer>
+  </body>
+</html>

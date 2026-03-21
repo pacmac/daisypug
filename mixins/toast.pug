@@ -1,0 +1,6 @@
+mixin toast(opts)
+  - opts = opts || {}
+  - const positions = (opts.position || '').split(' ').filter(Boolean).map(p => `toast-${p}`)
+  - const cls = ['dp-toast', 'toast', ...positions, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

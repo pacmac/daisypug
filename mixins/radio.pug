@@ -1,0 +1,4 @@
+mixin radio(opts)
+  - opts = opts || {}
+  - const cls = ['dp-radio', 'radio', opts.color && `radio-${opts.color}`, opts.size && `radio-${opts.size}`, opts.class].filter(Boolean).join(' ')
+  input(type="radio" class=cls name=opts.name value=opts.value checked=opts.checked)&attributes(attributes)

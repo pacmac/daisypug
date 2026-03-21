@@ -1,0 +1,13 @@
+mixin breadcrumbs(opts)
+  - opts = opts || {}
+  - const cls = ['dp-breadcrumbs', 'breadcrumbs', opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    ul
+      if opts.items
+        each item in opts.items
+          li
+            if typeof item === 'string'
+              | #{item}
+            else
+              a(href=item.href)= item.text
+      block

@@ -1,0 +1,5 @@
+mixin accordion(opts)
+  - opts = opts || {}
+  - const name = opts.name || 'accordion-' + Math.random().toString(36).slice(2,8)
+  div&attributes(attributes)
+    block
