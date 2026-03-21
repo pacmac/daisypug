@@ -242,6 +242,42 @@ form.toQueryString();                // URL params
 form.serialize() / form.deserialize(json);
 ```
 
+### Table Pagination
+
+Client-side or server-side, with built-in parsers for common API response formats:
+
+```js
+// Client-side: all data in browser, pages sliced locally
+const table = dp('.dp-datatable');
+table.paginate({ pageSize: 20 });
+
+// Server-side: fetch each page from API
+table.loadData('/api/users', {
+  pagination: true,
+  pageSize: 20,
+});
+// → GET /api/users?page=1&limit=20
+
+// Custom response format: { total: 500, rows: [...] }
+table.loadData('/api/users', {
+  pagination: true,
+  parse: (data) => ({ rows: data.items, total: data.totalCount }),
+});
+
+// Built-in parsers for common API formats
+table.paginate({ url: '/api/users', parse: DpDataTable.parsers.default }); // {rows, total}
+table.paginate({ url: '/api/users', parse: DpDataTable.parsers.meta });    // {data, meta:{total}}
+table.paginate({ url: '/api/users', parse: DpDataTable.parsers.spring });  // {content, totalElements}
+table.paginate({ url: '/api/users', parse: DpDataTable.parsers.array });   // [] + x-total header
+
+// Navigation
+table.nextPage() / table.prevPage();
+table.setPage(3) / table.firstPage() / table.lastPage();
+table.getPageCount() / table.getTotalRows();
+table.setPageSize(50);
+table.onPageChange(({page, total}) => console.log(page));
+```
+
 ### Ajax
 
 ```js

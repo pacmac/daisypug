@@ -88,6 +88,13 @@ dp('#my-form').submit('/api/save')
 dp('#users-table').loadData('/api/users')
 // → objects auto-mapped to headers + rows
 
+// Table: server-side pagination
+dp('#users-table').loadData('/api/users', {
+  pagination: true,
+  pageSize: 20,
+  parse: (data) => ({ rows: data.rows, total: data.total }),
+})
+
 // FormCard: submit form data
 dp('#contact').submitTo('/api/contact')
 ```
