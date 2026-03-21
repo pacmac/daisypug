@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="dp-navbar navbar bg-base-100 shadow-lg sticky top-0 z-50">
+      <div class="dp-navbar-start navbar-start">
+        <button class="dp-btn btn btn-ghost text-xl font-bold">DaisyPug
+        </button>
+      </div>
+      <div class="dp-navbar-center navbar-center hidden lg:flex">
+        <ul class="dp-menu menu menu-horizontal px-1">
+          <li><a href="#features">Features</a>
+          </li>
+          <li><a href="#stats">Stats</a>
+          </li>
+          <li><a href="#demo">Demo</a>
+          </li>
+          <li><a href="#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+      <div class="dp-navbar-end navbar-end">
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="light" name="theme-radios" checked="checked" aria-label="light"/>
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="dark" name="theme-radios" aria-label="dark"/>
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="cupcake" name="theme-radios" aria-label="cupcake"/>
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="synthwave" name="theme-radios" aria-label="synthwave"/>
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="retro" name="theme-radios" aria-label="retro"/>
+      </div>
+    </div>
+    <div class="dp-hero hero min-h-[70vh] bg-base-200">
+      <div class="dp-hero-content hero-content text-center">
+        <div class="max-w-2xl">
+          <h1 class="text-5xl font-bold">DaisyUI meets Pug</h1>
+          <p class="py-6 text-lg text-base-content opacity-80">
+            Build beautiful, theme-aware pages with clean component mixins.
+            Write Pug or YAML — get production-ready HTML.
+          </p>
+          <div class="flex gap-4 justify-center">
+            <button class="dp-btn btn btn-primary btn-lg">Get Started
+            </button>
+            <button class="dp-btn btn btn-lg btn-outline">View Docs
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-100" id="features">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="dp-card card bg-base-200 shadow-xl">
+            <div class="dp-card-body card-body items-center text-center">
+              <div class="text-4xl mb-4">~</div>
+              <h2 class="dp-card-title card-title">Pug Mixins
+              </h2>
+              <p>Every DaisyUI component as a clean, composable Pug mixin with full modifier support.</p>
+            </div>
+          </div>
+          <div class="dp-card card bg-base-200 shadow-xl">
+            <div class="dp-card-body card-body items-center text-center">
+              <div class="text-4xl mb-4">{}</div>
+              <h2 class="dp-card-title card-title">YAML Input
+              </h2>
+              <p>Describe pages declaratively in YAML. The engine converts to Pug and renders automatically.</p>
+            </div>
+          </div>
+          <div class="dp-card card bg-base-200 shadow-xl">
+            <div class="dp-card-body card-body items-center text-center">
+              <div class="text-4xl mb-4">@</div>
+              <h2 class="dp-card-title card-title">Theme Ready
+              </h2>
+              <p>All components use semantic DaisyUI colors. Switch themes instantly — zero code changes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-200" id="stats">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">By the Numbers</h2>
+        <div class="dp-stats stats shadow-lg w-full stats-horizontal">
+          <div class="dp-stat stat place-items-center">
+            <div class="dp-stat-title stat-title">Components
+            </div>
+            <div class="dp-stat-value stat-value">62
+            </div>
+            <div class="dp-stat-desc stat-desc">Every DaisyUI component
+            </div>
+          </div>
+          <div class="dp-stat stat place-items-center">
+            <div class="dp-stat-title stat-title">Mixins
+            </div>
+            <div class="dp-stat-value stat-value">100+
+            </div>
+            <div class="dp-stat-desc stat-desc">Including sub-components
+            </div>
+          </div>
+          <div class="dp-stat stat place-items-center">
+            <div class="dp-stat-title stat-title">Themes
+            </div>
+            <div class="dp-stat-value stat-value">30+
+            </div>
+            <div class="dp-stat-desc stat-desc">DaisyUI built-in themes
+            </div>
+          </div>
+          <div class="dp-stat stat place-items-center">
+            <div class="dp-stat-title stat-title">Input Formats
+            </div>
+            <div class="dp-stat-value stat-value">2
+            </div>
+            <div class="dp-stat-desc stat-desc">Pug + YAML
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-100" id="demo">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">Component Demo</h2>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Buttons</h3>
+          <div class="flex flex-wrap gap-3">
+            <button class="dp-btn btn btn-primary">Primary
+            </button>
+            <button class="dp-btn btn btn-secondary">Secondary
+            </button>
+            <button class="dp-btn btn btn-accent">Accent
+            </button>
+            <button class="dp-btn btn btn-info btn-outline">Info
+            </button>
+            <button class="dp-btn btn btn-success btn-soft">Success
+            </button>
+            <button class="dp-btn btn btn-warning btn-dash">Warning
+            </button>
+            <button class="dp-btn btn btn-ghost">Ghost
+            </button>
+            <button class="dp-btn btn btn-error btn-circle">X
+            </button>
+          </div>
+        </div>
+        <div class="dp-divider divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Badges</h3>
+          <div class="flex flex-wrap gap-3 items-center"><span class="dp-badge badge badge-primary">Primary</span><span class="dp-badge badge badge-secondary badge-outline">Outline</span><span class="dp-badge badge badge-accent badge-soft">Soft</span><span class="dp-badge badge badge-info badge-lg">Info</span><span class="dp-badge badge badge-success badge-dash">Dash</span><span class="dp-badge badge badge-warning">Warning</span><span class="dp-badge badge badge-error">Error</span>
+          </div>
+        </div>
+        <div class="dp-divider divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Chat</h3>
+          <div class="dp-chat chat chat-start">
+            <div class="dp-chat-header chat-header">Alice
+            </div>
+            <div class="dp-chat-bubble chat-bubble chat-bubble-primary">Hey! Have you tried DaisyPug yet?
+            </div>
+            <div class="dp-chat-footer chat-footer">Delivered
+            </div>
+          </div>
+          <div class="dp-chat chat chat-end">
+            <div class="dp-chat-header chat-header">Bob
+            </div>
+            <div class="dp-chat-bubble chat-bubble">Yes! The Pug mixins are incredibly clean.
+            </div>
+            <div class="dp-chat-footer chat-footer">Seen at 12:46
+            </div>
+          </div>
+          <div class="dp-chat chat chat-start">
+            <div class="dp-chat-header chat-header">Alice
+            </div>
+            <div class="dp-chat-bubble chat-bubble chat-bubble-primary">Right? And it works with YAML too!
+            </div>
+          </div>
+        </div>
+        <div class="dp-divider divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Timeline</h3>
+          <ul class="dp-timeline timeline timeline-vertical">
+            <li>
+              <div class="dp-timeline-start timeline-start">Design
+              </div>
+              <div class="dp-timeline-middle timeline-middle">
+              </div>
+              <div class="dp-timeline-end timeline-end">Catalog all 62 DaisyUI components
+              </div>
+              <hr/>
+            </li>
+            <li>
+              <hr/>
+              <div class="dp-timeline-start timeline-start">Build
+              </div>
+              <div class="dp-timeline-middle timeline-middle">
+              </div>
+              <div class="dp-timeline-end timeline-end">Create Pug mixins for every component
+              </div>
+              <hr/>
+            </li>
+            <li>
+              <hr/>
+              <div class="dp-timeline-start timeline-start">Ship
+              </div>
+              <div class="dp-timeline-middle timeline-middle">
+              </div>
+              <div class="dp-timeline-end timeline-end">CLI + YAML support + theme switching
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="dp-divider divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Steps</h3>
+          <ul class="dp-steps steps">
+            <li class="dp-step step step-primary">Install
+            </li>
+            <li class="dp-step step step-primary">Configure
+            </li>
+            <li class="dp-step step step-primary">Build
+            </li>
+            <li class="dp-step step">Deploy
+            </li>
+          </ul>
+        </div>
+        <div class="dp-divider divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Quick Start</h3>
+          <div class="dp-mockup-code mockup-code bg-neutral text-neutral-content">
+            <pre data-prefix="$"><code>pnpm add daisypug</code></pre>
+            <pre data-prefix="$"><code>daisypug render page.pug --theme dark</code></pre>
+            <pre data-prefix="&gt;"><code>Written to output.html</code></pre>
+          </div>
+        </div>
+        <div class="dp-divider divider">
+        </div>
+        <div class="mb-12">
+          <h3 class="text-xl font-semibold mb-4">Input Formats</h3>
+          <div class="dp-tabs tabs tabs-lift tabs-lg" role="tablist">
+            <input class="dp-tab tab tab-active" type="radio" name="format-tabs" role="tab" aria-label="Pug" checked="checked"/>
+            <div class="dp-tab-content tab-content bg-base-200 p-6 rounded-box" role="tabpanel">
+              <div class="dp-mockup-code mockup-code">
+                <pre data-prefix=" "><code>+btn({color: 'primary', text: 'Click'})</code></pre>
+                <pre data-prefix=" "><code>+card({style: &quot;border&quot;})</code></pre>
+                <pre data-prefix=" "><code>  +card-body</code></pre>
+                <pre data-prefix=" "><code>    +card-title({text: &quot;Hello&quot;})</code></pre>
+              </div>
+            </div>
+            <input class="dp-tab tab" type="radio" name="format-tabs" role="tab" aria-label="YAML"/>
+            <div class="dp-tab-content tab-content bg-base-200 p-6 rounded-box" role="tabpanel">
+              <div class="dp-mockup-code mockup-code">
+                <pre data-prefix=" "><code>- btn:</code></pre>
+                <pre data-prefix=" "><code>    color: primary</code></pre>
+                <pre data-prefix=" "><code>    text: Click</code></pre>
+                <pre data-prefix=" "><code>- card:</code></pre>
+                <pre data-prefix=" "><code>    opts: {style: border}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-16 px-4 bg-base-200" id="contact">
+      <div class="max-w-xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-8">Get in Touch</h2>
+        <div class="dp-card card bg-base-100 shadow-xl">
+          <div class="dp-card-body card-body">
+            <fieldset class="dp-fieldset fieldset">
+              <legend class="dp-fieldset-legend fieldset-legend">Contact Form
+              </legend>
+              <label class="dp-fieldset-label fieldset-label">Name
+              </label>
+              <input class="dp-input input input-primary w-full" type="text" placeholder="Your name"/>
+              <label class="dp-fieldset-label fieldset-label">Email
+              </label>
+              <input class="dp-input input input-primary w-full" type="email" placeholder="you@example.com"/>
+              <label class="dp-fieldset-label fieldset-label">Subject
+              </label>
+              <select class="dp-select select select-primary w-full">
+                <option disabled="disabled" selected="selected">Choose a topic</option>
+                <option>General</option>
+                <option>Bug Report</option>
+                <option>Feature Request</option>
+                <option>Partnership</option>
+              </select>
+              <label class="dp-fieldset-label fieldset-label">Message
+              </label>
+              <textarea class="dp-textarea textarea textarea-primary w-full" placeholder="Tell us what you think..." rows="4"></textarea>
+              <div class="mt-4">
+                <button class="dp-btn btn btn-primary btn-block">Send Message
+                </button>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="dp-footer footer footer-center p-10 bg-base-300 text-base-content">
+      <nav>
+        <h6 class="dp-footer-title footer-title">DaisyPug
+        </h6>
+        <p class="mt-2">Built with DaisyUI + Pug + Node.js</p>
+        <p class="opacity-60">62 components. 30+ themes. 2 input formats. 1 CLI.</p>
+        <div class="mt-4 flex gap-2"><span class="dp-badge badge badge-outline">MIT License</span><span class="dp-badge badge badge-outline">v1.0.0</span>
+        </div>
+      </nav>
+    </footer>
+    <script>/**
+ * DaisyPug Component API — dp.js
+ * Zero-dependency client-side API for interacting with DaisyPug components.
+ * Auto-discovers components via dp-{name} CSS class hooks.
+ */
+(function(global) {
+  'use strict';
+
+  // ============================================================
+  // DpComponent — Base class for all components
+  // ============================================================
+
+  class DpComponent {
+    constructor(el) {
+      this.el = el;
+      this._listeners = new Map();
+      this._subCache = {};
+    }
+
+    // --- Properties ---
+    get id() { return this.el.id; }
+    get type() { return this._dpType(); }
+    get classes() { return this.el.classList; }
+
+    _dpType() {
+      for (const cls of this.el.classList) {
+        if (cls.startsWith('dp-') && cls !== 'dp-') return cls.slice(3);
+      }
+      return 'component';
+    }
+
+    // --- Event system ---
+    _on(event, fn, opts) {
+      const wrapper = (e) => fn(e, this);
+      wrapper._orig = fn;
+      this.el.addEventListener(event, wrapper, opts);
+      if (!this._listeners.has(event)) this._listeners.set(event, []);
+      this._listeners.get(event).push(wrapper);
+      return this;
+    }
+
+    _off(event, fn) {
+      const list = this._listeners.get(event) || [];
+      if (fn) {
+        const idx = list.findIndex(w => w._orig === fn);
+        if (idx >= 0) {
+          this.el.removeEventListener(event, list[idx]);
+          list.splice(idx, 1);
+        }
+      } else {
+        list.forEach(w => this.el.removeEventListener(event, w));
+        this._listeners.set(event, []);
+      }
+      return this;
+    }
+
+    onClick(fn, opts) { return this._on('click', fn, opts); }
+    offClick(fn) { return this._off('click', fn); }
+    onDblClick(fn, opts) { return this._on('dblclick', fn, opts); }
+    offDblClick(fn) { return this._off('dblclick', fn); }
+    onMouseEnter(fn, opts) { return this._on('mouseenter', fn, opts); }
+    offMouseEnter(fn) { return this._off('mouseenter', fn); }
+    onMouseLeave(fn, opts) { return this._on('mouseleave', fn, opts); }
+    offMouseLeave(fn) { return this._off('mouseleave', fn); }
+    onFocus(fn, opts) { return this._on('focus', fn, opts); }
+    offFocus(fn) { return this._off('focus', fn); }
+    onBlur(fn, opts) { return this._on('blur', fn, opts); }
+    offBlur(fn) { return this._off('blur', fn); }
+    onKeyDown(fn, opts) { return this._on('keydown', fn, opts); }
+    offKeyDown(fn) { return this._off('keydown', fn); }
+    onKeyUp(fn, opts) { return this._on('keyup', fn, opts); }
+    offKeyUp(fn) { return this._off('keyup', fn); }
+    onContextMenu(fn, opts) { return this._on('contextmenu', fn, opts); }
+    offContextMenu(fn) { return this._off('contextmenu', fn); }
+
+    // --- Visibility ---
+    show() { this.el.style.display = ''; return this; }
+    hide() { this.el.style.display = 'none'; return this; }
+    toggle() { return this.isVisible() ? this.hide() : this.show(); }
+    isVisible() { return this.el.style.display !== 'none' && !this.el.hidden; }
+
+    // --- Enable/Disable ---
+    enable() { this.el.disabled = false; this.el.classList.remove('btn-disabled'); return this; }
+    disable() { this.el.disabled = true; this.el.classList.add('btn-disabled'); return this; }
+    isEnabled() { return !this.el.disabled; }
+
+    // --- CSS Classes ---
+    addClass(cls) { this.el.classList.add(cls); return this; }
+    removeClass(cls) { this.el.classList.remove(cls); return this; }
+    toggleClass(cls) { this.el.classList.toggle(cls); return this; }
+    hasClass(cls) { return this.el.classList.contains(cls); }
+
+    // --- Attributes ---
+    getAttr(name) { return this.el.getAttribute(name); }
+    setAttr(name, val) { this.el.setAttribute(name, val); return this; }
+    removeAttr(name) { this.el.removeAttribute(name); return this; }
+    getData(key) { return this.el.dataset[key]; }
+    setData(key, val) { this.el.dataset[key] = val; return this; }
+
+    // --- Styles ---
+    getStyle(prop) { return getComputedStyle(this.el)[prop]; }
+    setStyle(prop, val) { this.el.style[prop] = val; return this; }
+
+    // --- DOM ---
+    remove() { this.el.remove(); }
+    clone() { return _wrap(this.el.cloneNode(true)); }
+
+    parent() {
+      let p = this.el.parentElement;
+      while (p) {
+        for (const cls of p.classList) {
+          if (cls.startsWith('dp-')) return _wrap(p);
+        }
+        p = p.parentElement;
+      }
+      return null;
+    }
+
+    find(sel) {
+      const el = this.el.querySelector(sel);
+      return el ? _wrap(el) : null;
+    }
+
+    findAll(sel) {
+      return Array.from(this.el.querySelectorAll(sel)).map(el => _wrap(el));
+    }
+
+    // --- Custom Events ---
+    emit(name, detail) {
+      this.el.dispatchEvent(new CustomEvent(name, { detail, bubbles: true }));
+      return this;
+    }
+
+    on(name, fn) {
+      return this._on(name, (e, comp) => fn(e.detail, e, comp));
+    }
+
+    off(name, fn) { return this._off(name, fn); }
+
+    // --- Sub-element access (lazy cached) ---
+    _sub(dpClass) {
+      if (!this._subCache[dpClass]) {
+        const el = this.el.querySelector(`.dp-${dpClass}`);
+        this._subCache[dpClass] = el ? _wrap(el) : null;
+      }
+      return this._subCache[dpClass];
+    }
+  }
+
+  // ============================================================
+  // DpInput — Text input (THE reference class)
+  // ============================================================
+
+  class DpInput extends DpComponent {
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.getValue(), e, comp), opts);
+    }
+    offChange(fn) { return this._off('change', fn); }
+
+    onInput(fn, opts) {
+      return this._on('input', (e, comp) => fn(comp.getValue(), e, comp), opts);
+    }
+    offInput(fn) { return this._off('input', fn); }
+
+    onKeyPress(fn, opts) {
+      return this._on('keypress', (e, comp) => fn(e.key, e, comp), opts);
+    }
+
+    onEnter(fn) {
+      return this._on('keydown', (e, comp) => {
+        if (e.key === 'Enter') fn(comp.getValue(), e, comp);
+      });
+    }
+
+    onEscape(fn) {
+      return this._on('keydown', (e, comp) => {
+        if (e.key === 'Escape') fn(e, comp);
+      });
+    }
+
+    getText() { return this.el.value; }
+    setText(str) { this.el.value = str; return this; }
+    getValue() { return this.el.value; }
+    setValue(val) { this.el.value = val; return this; }
+    clear() { this.el.value = ''; return this; }
+
+    focus() { this.el.focus(); return this; }
+    blur() { this.el.blur(); return this; }
+    select() { this.el.select(); return this; }
+
+    getPlaceholder() { return this.el.placeholder; }
+    setPlaceholder(str) { this.el.placeholder = str; return this; }
+
+    isRequired() { return this.el.required; }
+    setRequired(bool) { this.el.required = bool; return this; }
+
+    isReadOnly() { return this.el.readOnly; }
+    setReadOnly(bool) { this.el.readOnly = bool; return this; }
+
+    getType() { return this.el.type; }
+    setType(str) { this.el.type = str; return this; }
+
+    getName() { return this.el.name; }
+    setName(str) { this.el.name = str; return this; }
+  }
+
+  // ============================================================
+  // DpSelect
+  // ============================================================
+
+  class DpSelect extends DpInput {
+    getOptions() {
+      return Array.from(this.el.options).map(o => ({
+        value: o.value, text: o.text, selected: o.selected
+      }));
+    }
+
+    setOptions(arr) {
+      this.el.innerHTML = '';
+      arr.forEach(opt => this.addOption(
+        typeof opt === 'string' ? opt : opt.value,
+        typeof opt === 'string' ? opt : opt.text
+      ));
+      return this;
+    }
+
+    addOption(val, text) {
+      const o = document.createElement('option');
+      o.value = val;
+      o.textContent = text || val;
+      this.el.appendChild(o);
+      return this;
+    }
+
+    removeOption(val) {
+      const o = this.el.querySelector(`option[value="${val}"]`);
+      if (o) o.remove();
+      return this;
+    }
+
+    getSelectedIndex() { return this.el.selectedIndex; }
+    setSelectedIndex(n) { this.el.selectedIndex = n; return this; }
+    getSelectedText() { return this.el.options[this.el.selectedIndex]?.text || ''; }
+    getSelectedValue() { return this.el.value; }
+  }
+
+  // ============================================================
+  // DpTextarea
+  // ============================================================
+
+  class DpTextarea extends DpInput {
+    getRows() { return parseInt(this.el.rows) || 0; }
+    setRows(n) { this.el.rows = n; return this; }
+    getCols() { return parseInt(this.el.cols) || 0; }
+    setCols(n) { this.el.cols = n; return this; }
+    getLength() { return this.el.value.length; }
+    getLineCount() { return (this.el.value.match(/\n/g) || []).length + 1; }
+  }
+
+  // ============================================================
+  // DpCheckbox / DpToggle
+  // ============================================================
+
+  class DpCheckbox extends DpInput {
+    isChecked() { return this.el.checked; }
+    setChecked(bool) { this.el.checked = bool; return this; }
+    toggle() { this.el.checked = !this.el.checked; return this; }
+    getValue() { return this.el.checked; }
+    setValue(val) { this.el.checked = !!val; return this; }
+
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.isChecked(), e, comp), opts);
+    }
+  }
+
+  class DpToggle extends DpCheckbox {}
+
+  // ============================================================
+  // DpRadio
+  // ============================================================
+
+  class DpRadio extends DpInput {
+    isSelected() { return this.el.checked; }
+    select() { this.el.checked = true; return this; }
+
+    getGroup() {
+      if (!this.el.name) return [this];
+      return Array.from(document.querySelectorAll(`input[name="${this.el.name}"].dp-radio`))
+        .map(el => _wrap(el));
+    }
+
+    getGroupValue() {
+      const checked = this.getGroup().find(r => r.el.checked);
+      return checked ? checked.el.value : null;
+    }
+
+    setGroupValue(val) {
+      this.getGroup().forEach(r => { r.el.checked = r.el.value === val; });
+      return this;
+    }
+
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.el.value, e, comp), opts);
+    }
+  }
+
+  // ============================================================
+  // DpRange
+  // ============================================================
+
+  class DpRange extends DpInput {
+    getValue() { return parseFloat(this.el.value); }
+    setValue(n) { this.el.value = n; return this; }
+    getMin() { return parseFloat(this.el.min) || 0; }
+    setMin(n) { this.el.min = n; return this; }
+    getMax() { return parseFloat(this.el.max) || 100; }
+    setMax(n) { this.el.max = n; return this; }
+    getStep() { return parseFloat(this.el.step) || 1; }
+    setStep(n) { this.el.step = n; return this; }
+
+    getPercent() {
+      const min = this.getMin(), max = this.getMax();
+      return ((this.getValue() - min) / (max - min)) * 100;
+    }
+
+    onSlide(fn) {
+      return this._on('input', (e, comp) => fn(comp.getValue(), comp.getPercent(), e));
+    }
+  }
+
+  // ============================================================
+  // DpFileInput
+  // ============================================================
+
+  class DpFileInput extends DpInput {
+    getFiles() { return this.el.files; }
+    getFileNames() { return Array.from(this.el.files).map(f => f.name); }
+    getFileCount() { return this.el.files.length; }
+    clear() { this.el.value = ''; return this; }
+    getAccept() { return this.el.accept; }
+    setAccept(str) { this.el.accept = str; return this; }
+    isMultiple() { return this.el.multiple; }
+    setMultiple(bool) { this.el.multiple = bool; return this; }
+
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.getFiles(), e, comp), opts);
+    }
+  }
+
+  // ============================================================
+  // DpContainer — Base for components with children
+  // ============================================================
+
+  class DpContainer extends DpComponent {
+    getChildren() {
+      return Array.from(this.el.children)
+        .filter(c => Array.from(c.classList).some(cls => cls.startsWith('dp-')))
+        .map(c => _wrap(c));
+    }
+
+    getContent() { return this.el.innerHTML; }
+    setContent(html) { this.el.innerHTML = html; return this; }
+
+    append(child) {
+      if (typeof child === 'string') {
+        this.el.insertAdjacentHTML('beforeend', child);
+      } else if (child instanceof DpComponent) {
+        this.el.appendChild(child.el);
+      } else {
+        this.el.appendChild(child);
+      }
+      return this;
+    }
+
+    prepend(child) {
+      if (typeof child === 'string') {
+        this.el.insertAdjacentHTML('afterbegin', child);
+      } else if (child instanceof DpComponent) {
+        this.el.prepend(child.el);
+      } else {
+        this.el.prepend(child);
+      }
+      return this;
+    }
+
+    clear() { this.el.innerHTML = ''; return this; }
+    getChildCount() { return this.el.children.length; }
+  }
+
+  // ============================================================
+  // DpToggleable — open/close behavior
+  // ============================================================
+
+  class DpToggleable extends DpContainer {
+    open() { this._setOpen(true); return this; }
+    close() { this._setOpen(false); return this; }
+    toggle() { this._setOpen(!this.isOpen()); return this; }
+    isOpen() { return false; } // overridden
+
+    _setOpen(state) {} // overridden
+
+    onOpen(fn) { return this.on('dp:open', fn); }
+    onClose(fn) { return this.on('dp:close', fn); }
+    onToggle(fn) { return this.on('dp:toggle', fn); }
+
+    _fireToggle(isOpen) {
+      this.emit(isOpen ? 'dp:open' : 'dp:close');
+      this.emit('dp:toggle', isOpen);
+    }
+  }
+
+  // ============================================================
+  // DpCard
+  // ============================================================
+
+  class DpCard extends DpContainer {
+    get body() { return this._sub('card-body'); }
+    get title() { return this._sub('card-title'); }
+    get actions() { return this._sub('card-actions'); }
+
+    getTitle() { return this.title?.el.textContent.trim() || ''; }
+    setTitle(str) { if (this.title) this.title.el.textContent = str; return this; }
+  }
+
+  // ============================================================
+  // DpAlert
+  // ============================================================
+
+  class DpAlert extends DpContainer {
+    getMessage() { return this.el.textContent.trim(); }
+    setMessage(str) {
+      const span = this.el.querySelector('span');
+      if (span) span.textContent = str;
+      else this.el.textContent = str;
+      return this;
+    }
+
+    getColor() {
+      for (const cls of this.el.classList) {
+        const m = cls.match(/^alert-(\w+)$/);
+        if (m && !['vertical', 'horizontal', 'outline', 'dash', 'soft'].includes(m[1])) return m[1];
+      }
+      return null;
+    }
+
+    setColor(color) {
+      const old = this.getColor();
+      if (old) this.el.classList.remove(`alert-${old}`);
+      this.el.classList.add(`alert-${color}`);
+      return this;
+    }
+
+    dismiss() {
+      this.el.style.transition = 'opacity 0.3s';
+      this.el.style.opacity = '0';
+      setTimeout(() => this.remove(), 300);
+      this.emit('dp:dismiss');
+      return this;
+    }
+
+    onDismiss(fn) { return this.on('dp:dismiss', fn); }
+  }
+
+  // ============================================================
+  // DpCollapse
+  // ============================================================
+
+  class DpCollapse extends DpToggleable {
+    get title() { return this._sub('collapse-title'); }
+    get content() { return this._sub('collapse-content'); }
+
+    isOpen() {
+      const cb = this.el.querySelector('input[type="checkbox"], input[type="radio"]');
+      if (cb) return cb.checked;
+      return this.el.classList.contains('collapse-open');
+    }
+
+    _setOpen(state) {
+      const cb = this.el.querySelector('input[type="checkbox"], input[type="radio"]');
+      if (cb) cb.checked = state;
+      else {
+        this.el.classList.toggle('collapse-open', state);
+        this.el.classList.toggle('collapse-close', !state);
+      }
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpModal
+  // ============================================================
+
+  class DpModal extends DpToggleable {
+    get box() { return this._sub('modal-box'); }
+    get actions() { return this._sub('modal-action'); }
+
+    isOpen() { return this.el.open; }
+
+    open() {
+      this.el.showModal();
+      this._fireToggle(true);
+      return this;
+    }
+
+    close() {
+      this.el.close();
+      this._fireToggle(false);
+      return this;
+    }
+
+    _setOpen(state) { state ? this.open() : this.close(); }
+  }
+
+  // ============================================================
+  // DpDropdown
+  // ============================================================
+
+  class DpDropdown extends DpToggleable {
+    get trigger() {
+      const s = this.el.querySelector('summary');
+      return s ? _wrap(s) : null;
+    }
+    get content() { return this._sub('dropdown-content'); }
+
+    isOpen() { return this.el.open; }
+    _setOpen(state) {
+      this.el.open = state;
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpDrawer
+  // ============================================================
+
+  class DpDrawer extends DpToggleable {
+    get content() { return this._sub('drawer-content'); }
+    get side() { return this._sub('drawer-side'); }
+
+    _getToggle() { return this.el.querySelector('.drawer-toggle'); }
+
+    isOpen() { return this._getToggle()?.checked || false; }
+    _setOpen(state) {
+      const cb = this._getToggle();
+      if (cb) cb.checked = state;
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpSwap
+  // ============================================================
+
+  class DpSwap extends DpToggleable {
+    get on() { return this._sub('swap-on'); }
+    get off() { return this._sub('swap-off'); }
+
+    isOpen() {
+      const cb = this.el.querySelector('input[type="checkbox"]');
+      return cb?.checked || false;
+    }
+
+    _setOpen(state) {
+      const cb = this.el.querySelector('input[type="checkbox"]');
+      if (cb) cb.checked = state;
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpTabs
+  // ============================================================
+
+  class DpTabs extends DpContainer {
+    _getTabs() { return Array.from(this.el.querySelectorAll('.dp-tab, .tab[role="tab"]')); }
+
+    getActive() {
+      return this._getTabs().findIndex(t => t.checked);
+    }
+
+    setActive(n) {
+      const tabs = this._getTabs();
+      if (tabs[n]) { tabs[n].checked = true; this.emit('dp:tabchange', { index: n, label: tabs[n].getAttribute('aria-label') }); }
+      return this;
+    }
+
+    getActiveLabel() {
+      const tabs = this._getTabs();
+      const active = tabs.find(t => t.checked);
+      return active?.getAttribute('aria-label') || '';
+    }
+
+    getTabCount() { return this._getTabs().length; }
+
+    getTabLabels() {
+      return this._getTabs().map(t => t.getAttribute('aria-label') || '');
+    }
+
+    onTabChange(fn) { return this.on('dp:tabchange', fn); }
+  }
+
+  // ============================================================
+  // DpTooltip
+  // ============================================================
+
+  class DpTooltip extends DpContainer {
+    getTip() { return this.el.dataset.tip || ''; }
+    setTip(str) { this.el.dataset.tip = str; return this; }
+  }
+
+  // ============================================================
+  // DpTable
+  // ============================================================
+
+  class DpTable extends DpComponent {
+    _thead() { return this.el.querySelector('thead'); }
+    _tbody() { return this.el.querySelector('tbody'); }
+    _rows() { return Array.from((this._tbody() || this.el).querySelectorAll('tr')); }
+
+    getHeaders() {
+      const thead = this._thead();
+      if (!thead) return [];
+      return Array.from(thead.querySelectorAll('th')).map(th => th.textContent.trim());
+    }
+
+    setHeaders(arr) {
+      let thead = this._thead();
+      if (!thead) { thead = document.createElement('thead'); this.el.prepend(thead); }
+      thead.innerHTML = '<tr>' + arr.map(h => `<th>${h}</th>`).join('') + '</tr>';
+      return this;
+    }
+
+    getColCount() { return this.getHeaders().length || (this._rows()[0]?.children.length || 0); }
+    getRowCount() { return this._rows().length; }
+
+    getData() {
+      return this._rows().map(tr =>
+        Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim())
+      );
+    }
+
+    setData(rows) {
+      let tbody = this._tbody();
+      if (!tbody) { tbody = document.createElement('tbody'); this.el.appendChild(tbody); }
+      tbody.innerHTML = rows.map(row =>
+        '<tr>' + row.map(cell => `<td>${cell}</td>`).join('') + '</tr>'
+      ).join('');
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    getRow(n) {
+      const row = this._rows()[n];
+      return row ? Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim()) : null;
+    }
+
+    addRow(data, idx) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = data.map(cell => `<td>${cell}</td>`).join('');
+      let tbody = this._tbody();
+      if (!tbody) { tbody = document.createElement('tbody'); this.el.appendChild(tbody); }
+      if (idx !== undefined && tbody.children[idx]) {
+        tbody.children[idx].before(tr);
+      } else {
+        tbody.appendChild(tr);
+      }
+      this._bindRowEvents(tr);
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    removeRow(n) {
+      const rows = this._rows();
+      if (rows[n]) rows[n].remove();
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    updateRow(n, data) {
+      const rows = this._rows();
+      if (rows[n]) rows[n].innerHTML = data.map(cell => `<td>${cell}</td>`).join('');
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    getCell(row, col) {
+      const r = this._rows()[row];
+      return r?.children[col]?.textContent.trim() || null;
+    }
+
+    setCell(row, col, val) {
+      const r = this._rows()[row];
+      if (r?.children[col]) r.children[col].textContent = val;
+      return this;
+    }
+
+    selectRow(n) {
+      this._rows().forEach((tr, i) => {
+        tr.classList.toggle('bg-primary/10', i === n);
+        tr.classList.toggle('dp-selected', i === n);
+      });
+      this._selectedIndex = n;
+      this.emit('dp:rowselect', { data: this.getRow(n), index: n });
+      return this;
+    }
+
+    deselectRow() {
+      this._rows().forEach(tr => {
+        tr.classList.remove('bg-primary/10', 'dp-selected');
+      });
+      this._selectedIndex = -1;
+      return this;
+    }
+
+    getSelectedRow() {
+      return this._selectedIndex >= 0 ? this.getRow(this._selectedIndex) : null;
+    }
+
+    getSelectedIndex() { return this._selectedIndex ?? -1; }
+
+    sort(col, dir = 'asc') {
+      const data = this.getData();
+      data.sort((a, b) => {
+        const va = a[col], vb = b[col];
+        const cmp = isNaN(va) ? va.localeCompare(vb) : parseFloat(va) - parseFloat(vb);
+        return dir === 'desc' ? -cmp : cmp;
+      });
+      this.setData(data);
+      this.emit('dp:sort', { col, dir });
+      return this;
+    }
+
+    filter(fn) {
+      if (!this._origData) this._origData = this.getData();
+      this.setData(this._origData.filter(fn));
+      return this;
+    }
+
+    clearFilter() {
+      if (this._origData) { this.setData(this._origData); this._origData = null; }
+      return this;
+    }
+
+    search(query) {
+      const q = query.toLowerCase();
+      return this.filter(row => row.some(cell => cell.toLowerCase().includes(q)));
+    }
+
+    clearSearch() { return this.clearFilter(); }
+
+    toCSV() {
+      const headers = this.getHeaders();
+      const rows = this.getData();
+      const lines = [];
+      if (headers.length) lines.push(headers.join(','));
+      rows.forEach(r => lines.push(r.join(',')));
+      return lines.join('\n');
+    }
+
+    toJSON() {
+      const headers = this.getHeaders();
+      return this.getData().map(row => {
+        const obj = {};
+        row.forEach((cell, i) => { obj[headers[i] || `col${i}`] = cell; });
+        return obj;
+      });
+    }
+
+    _bindRowEvents(tr) {
+      // Row events bound during discovery
+    }
+
+    onRowClick(fn) { return this.on('dp:rowclick', fn); }
+    onRowDblClick(fn) { return this.on('dp:rowdblclick', fn); }
+    onRowSelect(fn) { return this.on('dp:rowselect', fn); }
+    onCellClick(fn) { return this.on('dp:cellclick', fn); }
+    onSort(fn) { return this.on('dp:sort', fn); }
+    onDataChange(fn) { return this.on('dp:datachange', fn); }
+
+    _initTableEvents() {
+      this._selectedIndex = -1;
+      (this._tbody() || this.el).addEventListener('click', (e) => {
+        const td = e.target.closest('td');
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        const rowIdx = this._rows().indexOf(tr);
+        const rowData = this.getRow(rowIdx);
+        if (td) {
+          const colIdx = Array.from(tr.children).indexOf(td);
+          this.emit('dp:cellclick', { value: td.textContent.trim(), rowIdx, colIdx });
+        }
+        this.emit('dp:rowclick', { data: rowData, index: rowIdx });
+      });
+
+      (this._tbody() || this.el).addEventListener('dblclick', (e) => {
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        const rowIdx = this._rows().indexOf(tr);
+        this.emit('dp:rowdblclick', { data: this.getRow(rowIdx), index: rowIdx });
+      });
+    }
+  }
+
+  // ============================================================
+  // DpList
+  // ============================================================
+
+  class DpList extends DpComponent {
+    getItems() {
+      return Array.from(this.el.querySelectorAll('.dp-list-row, li')).map(el => _wrap(el));
+    }
+    getItemCount() { return this.getItems().length; }
+    addItem(html) { this.el.insertAdjacentHTML('beforeend', `<li class="dp-list-row list-row">${html}</li>`); return this; }
+    removeItem(n) { const items = this.el.querySelectorAll('.dp-list-row, li'); if (items[n]) items[n].remove(); return this; }
+    getItem(n) { const items = this.getItems(); return items[n] || null; }
+    clear() { this.el.innerHTML = ''; return this; }
+    onItemClick(fn) {
+      this.el.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+        const idx = Array.from(this.el.children).indexOf(li);
+        fn(_wrap(li), idx, e);
+      });
+      return this;
+    }
+  }
+
+  // ============================================================
+  // DpMenu
+  // ============================================================
+
+  class DpMenu extends DpComponent {
+    getItems() {
+      return Array.from(this.el.querySelectorAll('li:not(.dp-menu-title)')).map(el => _wrap(el));
+    }
+    getActive() {
+      const a = this.el.querySelector('.menu-active');
+      return a ? _wrap(a) : null;
+    }
+    getActiveIndex() {
+      const items = this.getItems();
+      return items.findIndex(item => item.hasClass('menu-active'));
+    }
+    setActive(n) {
+      this.getItems().forEach((item, i) => {
+        item.el.classList.toggle('menu-active', i === n);
+      });
+      return this;
+    }
+    onSelect(fn) {
+      this.el.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li || li.classList.contains('dp-menu-title')) return;
+        const idx = this.getItems().findIndex(item => item.el === li);
+        fn(_wrap(li), idx, e);
+      });
+      return this;
+    }
+  }
+
+  // ============================================================
+  // DpSteps
+  // ============================================================
+
+  class DpSteps extends DpComponent {
+    _steps() { return Array.from(this.el.querySelectorAll('.dp-step')); }
+
+    getActive() {
+      const steps = this._steps();
+      for (let i = steps.length - 1; i >= 0; i--) {
+        if (Array.from(steps[i].classList).some(c => c.startsWith('step-') && c !== 'step')) return i;
+      }
+      return -1;
+    }
+
+    setActive(n, color = 'primary') {
+      this._steps().forEach((step, i) => {
+        // Remove existing step-* color classes
+        Array.from(step.classList).filter(c => c.startsWith('step-')).forEach(c => step.classList.remove(c));
+        if (i <= n) step.classList.add(`step-${color}`);
+      });
+      this.emit('dp:stepchange', n);
+      return this;
+    }
+
+    getStepCount() { return this._steps().length; }
+    next() { return this.setActive(Math.min(this.getActive() + 1, this.getStepCount() - 1)); }
+    prev() { return this.setActive(Math.max(this.getActive() - 1, 0)); }
+    reset() { return this.setActive(-1); }
+    onStepChange(fn) { return this.on('dp:stepchange', fn); }
+  }
+
+  // ============================================================
+  // DpCarousel
+  // ============================================================
+
+  class DpCarousel extends DpComponent {
+    _items() { return Array.from(this.el.querySelectorAll('.dp-carousel-item')); }
+    getSlideCount() { return this._items().length; }
+    getActive() { return this._activeIdx || 0; }
+    setActive(n) {
+      const items = this._items();
+      if (items[n]) { items[n].scrollIntoView({ behavior: 'smooth', inline: 'center' }); this._activeIdx = n; this.emit('dp:slidechange', n); }
+      return this;
+    }
+    next() { return this.setActive(Math.min(this.getActive() + 1, this.getSlideCount() - 1)); }
+    prev() { return this.setActive(Math.max(this.getActive() - 1, 0)); }
+    onSlideChange(fn) { return this.on('dp:slidechange', fn); }
+  }
+
+  // ============================================================
+  // DpRating
+  // ============================================================
+
+  class DpRating extends DpComponent {
+    _inputs() { return Array.from(this.el.querySelectorAll('input[type="radio"]')); }
+    getValue() {
+      const checked = this._inputs().findIndex(i => i.checked);
+      return checked >= 0 ? checked + 1 : 0;
+    }
+    setValue(n) {
+      const inputs = this._inputs();
+      if (inputs[n - 1]) inputs[n - 1].checked = true;
+      return this;
+    }
+    getMax() { return this._inputs().length; }
+    onChange(fn) {
+      this.el.addEventListener('change', () => fn(this.getValue(), this));
+      return this;
+    }
+  }
+
+  // ============================================================
+  // DpChat
+  // ============================================================
+
+  class DpChat extends DpContainer {
+    getMessages() {
+      return Array.from(this.el.querySelectorAll('.dp-chat')).map(el => ({
+        from: el.querySelector('.dp-chat-header')?.textContent.trim() || '',
+        text: el.querySelector('.dp-chat-bubble')?.textContent.trim() || '',
+        position: el.classList.contains('chat-start') ? 'start' : 'end',
+      }));
+    }
+  }
+
+  // ============================================================
+  // DpCountdown
+  // ============================================================
+
+  class DpCountdown extends DpComponent {
+    getValue() {
+      const span = this.el.querySelector('span[style]');
+      const m = span?.style.cssText.match(/--value:\s*(\d+)/);
+      return m ? parseInt(m[1]) : 0;
+    }
+    setValue(n) {
+      const span = this.el.querySelector('span[style]');
+      if (span) span.style.setProperty('--value', n);
+      return this;
+    }
+    start(from, interval = 1000) {
+      this.setValue(from);
+      this._timer = setInterval(() => {
+        const v = this.getValue() - 1;
+        this.setValue(v);
+        this.emit('dp:tick', v);
+        if (v <= 0) { this.stop(); this.emit('dp:complete'); }
+      }, interval);
+      return this;
+    }
+    stop() { clearInterval(this._timer); return this; }
+    onComplete(fn) { return this.on('dp:complete', fn); }
+    onTick(fn) { return this.on('dp:tick', fn); }
+  }
+
+  // ============================================================
+  // DpRadialProgress
+  // ============================================================
+
+  class DpRadialProgress extends DpComponent {
+    getValue() {
+      const m = this.el.style.cssText.match(/--value:\s*(\d+)/);
+      return m ? parseInt(m[1]) : 0;
+    }
+    setValue(n) {
+      this.el.style.setProperty('--value', n);
+      this.el.textContent = n + '%';
+      return this;
+    }
+    animate(to, duration = 500) {
+      const from = this.getValue();
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / duration, 1);
+        this.setValue(Math.round(from + (to - from) * p));
+        if (p < 1) requestAnimationFrame(tick);
+        else this.emit('dp:change', to);
+      };
+      requestAnimationFrame(tick);
+      return this;
+    }
+    onChange(fn) { return this.on('dp:change', fn); }
+  }
+
+  // ============================================================
+  // DpThemeController
+  // ============================================================
+
+  class DpThemeController extends DpComponent {
+    getTheme() { return this.el.value; }
+    setTheme(str) { this.el.value = str; this.el.checked = true; return this; }
+    getThemes() {
+      if (!this.el.name) return [this.el.value];
+      return Array.from(document.querySelectorAll(`input[name="${this.el.name}"]`))
+        .map(el => el.value);
+    }
+    onThemeChange(fn) {
+      return this._on('change', (e, comp) => fn(comp.getTheme(), comp));
+    }
+  }
+
+  // ============================================================
+  // Simple container classes (no extra methods)
+  // ============================================================
+
+  class DpHero extends DpContainer {
+    get content() { return this._sub('hero-content'); }
+    get overlay() { return this._sub('hero-overlay'); }
+  }
+
+  class DpToast extends DpContainer {}
+  class DpStack extends DpContainer {}
+  class DpJoin extends DpContainer {}
+  class DpIndicator extends DpContainer {}
+  class DpDiff extends DpContainer {}
+  class DpFieldset extends DpContainer {}
+  class DpBreadcrumbs extends DpComponent {}
+  class DpTimeline extends DpComponent {}
+  class DpMockup extends DpContainer {}
+  class DpButton extends DpComponent {}
+  class DpBadge extends DpComponent {}
+  class DpLink extends DpComponent {}
+  class DpKbd extends DpComponent {}
+  class DpLoading extends DpComponent {}
+  class DpProgress extends DpComponent {}
+  class DpStatus extends DpComponent {}
+  class DpDivider extends DpComponent {}
+  class DpSkeleton extends DpComponent {}
+
+  // ============================================================
+  // DpNavbar (for sub-element access)
+  // ============================================================
+
+  class DpNavbar extends DpContainer {
+    get start() { return this._sub('navbar-start'); }
+    get center() { return this._sub('navbar-center'); }
+    get end() { return this._sub('navbar-end'); }
+  }
+
+  // ============================================================
+  // Composite classes
+  // ============================================================
+
+  class DpFormField extends DpComponent {
+    getInput() {
+      const input = this.el.querySelector('.dp-input, .dp-select, .dp-textarea, .dp-checkbox, .dp-toggle, .dp-radio, .dp-range, .dp-file-input');
+      return input ? _wrap(input) : null;
+    }
+    getValue() { return this.getInput()?.getValue(); }
+    setValue(val) { this.getInput()?.setValue(val); return this; }
+    getLabel() {
+      const lbl = this.el.querySelector('.dp-formfield-label');
+      return lbl?.textContent.trim() || '';
+    }
+    setLabel(str) {
+      const lbl = this.el.querySelector('.dp-formfield-label');
+      if (lbl) lbl.textContent = str;
+      return this;
+    }
+    onChange(fn) { this.getInput()?.onChange(fn); return this; }
+  }
+
+  class DpFormCard extends DpContainer {
+    getFields() {
+      return Array.from(this.el.querySelectorAll('.dp-formfield-label')).map(lbl => {
+        // Walk to next sibling input
+        const parent = lbl.parentElement;
+        return _wrap(parent) instanceof DpFormField ? _wrap(parent) : new DpFormField(parent);
+      });
+    }
+    getData() {
+      const data = {};
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea, .dp-checkbox, .dp-toggle').forEach(el => {
+        const comp = _wrap(el);
+        const name = el.name || el.getAttribute('placeholder') || '';
+        data[name] = comp.getValue();
+      });
+      return data;
+    }
+    setData(obj) {
+      Object.entries(obj).forEach(([key, val]) => {
+        const el = this.el.querySelector(`[name="${key}"]`);
+        if (el) _wrap(el).setValue(val);
+      });
+      return this;
+    }
+    reset() {
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea').forEach(el => {
+        _wrap(el).clear();
+      });
+      return this;
+    }
+    onSubmit(fn) {
+      const btn = this.el.querySelector('.dp-btn');
+      if (btn) btn.addEventListener('click', (e) => { e.preventDefault(); fn(this.getData(), this); });
+      return this;
+    }
+  }
+
+  class DpConversation extends DpContainer {
+    getMessages() {
+      return Array.from(this.el.querySelectorAll('.dp-chat')).map(el => ({
+        from: el.querySelector('.dp-chat-header')?.textContent.trim() || '',
+        text: el.querySelector('.dp-chat-bubble')?.textContent.trim() || '',
+        position: el.classList.contains('chat-start') ? 'start' : 'end',
+      }));
+    }
+    addMessage(opts) {
+      const pos = opts.position || 'start';
+      const color = opts.color ? ` chat-bubble-${opts.color}` : '';
+      const html = `<div class="dp-chat chat chat-${pos}">` +
+        (opts.from ? `<div class="dp-chat-header chat-header">${opts.from}</div>` : '') +
+        `<div class="dp-chat-bubble chat-bubble${color}">${opts.text}</div>` +
+        (opts.footer ? `<div class="dp-chat-footer chat-footer">${opts.footer}</div>` : '') +
+        `</div>`;
+      this.el.insertAdjacentHTML('beforeend', html);
+      this.emit('dp:message', opts);
+      return this;
+    }
+    getMessageCount() { return this.el.querySelectorAll('.dp-chat').length; }
+    clear() { this.el.innerHTML = ''; return this; }
+    scrollToBottom() { this.el.scrollTop = this.el.scrollHeight; return this; }
+    onMessage(fn) { return this.on('dp:message', fn); }
+  }
+
+  class DpModalForm extends DpModal {
+    getData() {
+      const data = {};
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea, .dp-checkbox, .dp-toggle').forEach(el => {
+        const comp = _wrap(el);
+        data[el.name || el.placeholder || ''] = comp.getValue();
+      });
+      return data;
+    }
+    setData(obj) {
+      Object.entries(obj).forEach(([key, val]) => {
+        const el = this.el.querySelector(`[name="${key}"]`);
+        if (el) _wrap(el).setValue(val);
+      });
+      return this;
+    }
+    reset() {
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea').forEach(el => _wrap(el).clear());
+      return this;
+    }
+    onSubmit(fn) {
+      const btn = this.el.querySelector('.dp-btn[class*="primary"], .dp-btn:last-child');
+      if (btn) btn.addEventListener('click', (e) => { e.preventDefault(); fn(this.getData(), this); });
+      return this;
+    }
+  }
+
+  class DpHeroCta extends DpContainer {
+    getTitle() { return this.el.querySelector('h1')?.textContent.trim() || ''; }
+    setTitle(str) { const h = this.el.querySelector('h1'); if (h) h.textContent = str; return this; }
+    getSubtitle() { return this.el.querySelector('p')?.textContent.trim() || ''; }
+    setSubtitle(str) { const p = this.el.querySelector('p'); if (p) p.textContent = str; return this; }
+    onPrimaryClick(fn) {
+      const btn = this.el.querySelector('.dp-btn');
+      if (btn) btn.addEventListener('click', fn);
+      return this;
+    }
+  }
+
+  class DpPageLayout extends DpContainer {
+    _drawer() { return this.el.querySelector('.dp-drawer') ? _wrap(this.el.querySelector('.dp-drawer')) : null; }
+    isSidebarOpen() { return this._drawer()?.isOpen() || false; }
+    toggleSidebar() { this._drawer()?.toggle(); return this; }
+    openSidebar() { this._drawer()?.open(); return this; }
+    closeSidebar() { this._drawer()?.close(); return this; }
+    getNav() { const el = this.el.querySelector('.dp-navbar'); return el ? _wrap(el) : null; }
+    getContent() { return this._sub('pagelayout-content'); }
+  }
+
+  class DpDataTable extends DpTable {
+    // Pagination on top of DpTable
+    _pageSize = 10;
+    _currentPage = 1;
+
+    getPage() { return this._currentPage; }
+    setPage(n) { this._currentPage = Math.max(1, Math.min(n, this.getPageCount())); this._renderPage(); return this; }
+    getPageCount() { return Math.ceil((this._allData || this.getData()).length / this._pageSize); }
+    getPageSize() { return this._pageSize; }
+    setPageSize(n) { this._pageSize = n; this._currentPage = 1; this._renderPage(); return this; }
+    nextPage() { return this.setPage(this._currentPage + 1); }
+    prevPage() { return this.setPage(this._currentPage - 1); }
+    firstPage() { return this.setPage(1); }
+    lastPage() { return this.setPage(this.getPageCount()); }
+    onPageChange(fn) { return this.on('dp:pagechange', fn); }
+
+    _renderPage() {
+      if (!this._allData) this._allData = this.getData();
+      const start = (this._currentPage - 1) * this._pageSize;
+      const page = this._allData.slice(start, start + this._pageSize);
+      this.setData(page);
+      this.emit('dp:pagechange', this._currentPage);
+    }
+  }
+
+  class DpNavComposite extends DpContainer {
+    getBrand() {
+      const btn = this.el.querySelector('.dp-navbar-start .dp-btn');
+      return btn?.textContent.trim() || '';
+    }
+    setBrand(str) {
+      const btn = this.el.querySelector('.dp-navbar-start .dp-btn');
+      if (btn) btn.textContent = str;
+      return this;
+    }
+    onNavigate(fn) {
+      this.el.querySelectorAll('.dp-menu-item, .dp-navbar-center a').forEach((el, i) => {
+        el.addEventListener('click', (e) => fn(el.textContent.trim(), i, e));
+      });
+      return this;
+    }
+  }
+
+  // ============================================================
+  // Component Registry — maps dp- class to API class
+  // ============================================================
+
+  const REGISTRY = {
+    'btn': DpButton, 'badge': DpBadge, 'link': DpLink, 'kbd': DpKbd,
+    'loading': DpLoading, 'progress': DpProgress, 'status': DpStatus,
+    'divider': DpDivider, 'skeleton': DpSkeleton,
+    'input': DpInput, 'select': DpSelect, 'textarea': DpTextarea,
+    'checkbox': DpCheckbox, 'toggle': DpToggle, 'radio': DpRadio,
+    'range': DpRange, 'file-input': DpFileInput,
+    'card': DpCard, 'alert': DpAlert, 'hero': DpHero,
+    'toast': DpToast, 'stack': DpStack, 'join': DpJoin,
+    'indicator': DpIndicator, 'diff': DpDiff, 'fieldset': DpFieldset,
+    'collapse': DpCollapse, 'modal': DpModal, 'dropdown': DpDropdown,
+    'drawer': DpDrawer, 'swap': DpSwap, 'tabs': DpTabs,
+    'tooltip': DpTooltip, 'navbar': DpNavbar,
+    'table': DpTable, 'list': DpList, 'menu': DpMenu,
+    'steps': DpSteps, 'timeline': DpTimeline, 'breadcrumbs': DpBreadcrumbs,
+    'carousel': DpCarousel, 'rating': DpRating, 'chat': DpChat,
+    'countdown': DpCountdown, 'radial-progress': DpRadialProgress,
+    'theme-controller': DpThemeController,
+    'mockup-browser': DpMockup, 'mockup-code': DpMockup,
+    'mockup-window': DpMockup, 'mockup-phone': DpMockup,
+    // Composites
+    'formfield': DpFormField, 'formcard': DpFormCard,
+    'datatable': DpDataTable, 'conversation': DpConversation,
+    'modalform': DpModalForm, 'herocta': DpHeroCta,
+    'pagelayout': DpPageLayout, 'nav': DpNavComposite,
+  };
+
+  // ============================================================
+  // Factory: _wrap(el) → appropriate component instance
+  // ============================================================
+
+  const _cache = new WeakMap();
+
+  function _wrap(el) {
+    if (!el) return null;
+    if (_cache.has(el)) return _cache.get(el);
+
+    let Cls = DpComponent;
+    for (const cls of el.classList) {
+      if (cls.startsWith('dp-')) {
+        const name = cls.slice(3);
+        if (REGISTRY[name]) { Cls = REGISTRY[name]; break; }
+      }
+    }
+
+    const comp = new Cls(el);
+
+    // Post-init hooks
+    if (comp instanceof DpTable && !(comp instanceof DpDataTable)) {
+      comp._initTableEvents();
+    }
+
+    _cache.set(el, comp);
+    return comp;
+  }
+
+  // ============================================================
+  // dp() — main factory function
+  // ============================================================
+
+  function dp(selector) {
+    if (selector instanceof Element) return _wrap(selector);
+    if (typeof selector === 'string') {
+      const el = document.querySelector(selector);
+      return el ? _wrap(el) : null;
+    }
+    return null;
+  }
+
+  dp.findAll = function(selector) {
+    return Array.from(document.querySelectorAll(selector)).map(el => _wrap(el));
+  };
+
+  dp.create = function(type, opts) {
+    // Future: render component and return wrapped instance
+    console.warn('dp.create() not yet implemented — render via DaisyPug engine instead');
+    return null;
+  };
+
+  // Ready system
+  const _readyCallbacks = [];
+  let _isReady = false;
+
+  dp.on = function(event, fn) {
+    if (event === 'ready') {
+      if (_isReady) fn();
+      else _readyCallbacks.push(fn);
+    }
+  };
+
+  dp.registry = _cache;
+  dp.version = '1.0.0';
+
+  // Expose classes for instanceof checks
+  dp.DpComponent = DpComponent;
+  dp.DpInput = DpInput;
+  dp.DpSelect = DpSelect;
+  dp.DpTextarea = DpTextarea;
+  dp.DpCheckbox = DpCheckbox;
+  dp.DpToggle = DpToggle;
+  dp.DpRadio = DpRadio;
+  dp.DpRange = DpRange;
+  dp.DpFileInput = DpFileInput;
+  dp.DpContainer = DpContainer;
+  dp.DpToggleable = DpToggleable;
+  dp.DpCard = DpCard;
+  dp.DpAlert = DpAlert;
+  dp.DpModal = DpModal;
+  dp.DpDrawer = DpDrawer;
+  dp.DpTabs = DpTabs;
+  dp.DpTable = DpTable;
+  dp.DpList = DpList;
+  dp.DpMenu = DpMenu;
+  dp.DpSteps = DpSteps;
+  dp.REGISTRY = REGISTRY;
+
+  // ============================================================
+  // Auto-discovery
+  // ============================================================
+
+  function _discover() {
+    document.querySelectorAll('[class*="dp-"]').forEach(el => _wrap(el));
+    _isReady = true;
+    _readyCallbacks.forEach(fn => fn());
+    _readyCallbacks.length = 0;
+  }
+
+  // MutationObserver for dynamic elements
+  function _observe() {
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1) {
+            if (Array.from(node.classList || []).some(c => c.startsWith('dp-'))) _wrap(node);
+            node.querySelectorAll?.('[class*="dp-"]').forEach(el => _wrap(el));
+          }
+        });
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { _discover(); _observe(); });
+  } else {
+    _discover();
+    _observe();
+  }
+
+  // ============================================================
+  // Export
+  // ============================================================
+
+  global.dp = dp;
+
+})(typeof window !== 'undefined' ? window : this);
+</script>
+  </body>
+</html>
