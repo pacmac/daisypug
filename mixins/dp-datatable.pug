@@ -4,7 +4,7 @@ mixin dp-datatable(opts)
   - const rows = opts.rows || []
   - const pagination = opts.pagination
   div.dp-datatable
-    +table({zebra: opts.zebra, size: opts.size, pinRows: opts.pinRows, pinCols: opts.pinCols, class: opts.class})
+    +table({zebra: opts.zebra, size: opts.size, pinRows: opts.pinRows, pinCols: opts.pinCols, autoWidth: opts.autoWidth, class: opts.class})
       if headers.length
         thead
           tr
@@ -15,8 +15,8 @@ mixin dp-datatable(opts)
           tr
             each cell in row
               td= cell
-    if pagination
-      div.flex.justify-center.mt-4
+    div.dp-datatable-pagination.flex.justify-center.mt-4
+      if pagination
         +join
           - const total = pagination.total || 1
           - const current = pagination.current || 1
