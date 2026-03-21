@@ -1,11 +1,19 @@
 {
   "name": "daisypug",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "DaisyUI component render engine — Pug mixins + YAML declarative input → HTML",
   "main": "index.js",
   "bin": {
     "daisypug": "./bin/daisypug.js"
   },
+  "files": [
+    "index.js",
+    "lib/",
+    "bin/",
+    "mixins/",
+    "layouts/",
+    "components.yaml"
+  ],
   "scripts": {
     "test": "node test/test-prototypes.js && node test/test-themes.js && node test/test-tier1.js && node test/test-tier2.js && node test/test-tier3.js && node test/test-audit.js && node test/test-yaml-pipeline.js"
   },
