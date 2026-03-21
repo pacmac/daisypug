@@ -1,0 +1,468 @@
+//- DaisyPug API Test Page — exercises dp.js in browser
+
++navbar({class: 'bg-base-100 shadow-sm'})
+  +navbar-start
+    span.text-xl.font-bold.px-4 dp.js API Test
+  +navbar-end
+    +theme-radios({themes: ['light', 'dark', 'cupcake'], as: 'btn', active: 'light'})
+
+div.p-6.max-w-6xl.mx-auto
+
+  //- Test output console
+  div.mb-6
+    h2.text-2xl.font-bold Test Results
+    div#test-output.mockup-code.bg-neutral.text-neutral-content.max-h-96.overflow-y-auto
+      pre(data-prefix="~")
+        code Running tests...
+
+  +divider({text: 'Button'})
+  div.flex.gap-3.mb-6
+    +btn({text: 'Click Me', color: 'primary'})(id="test-btn")
+    +btn({text: 'Disable Me', color: 'secondary'})(id="test-btn-disable")
+
+  +divider({text: 'Form Inputs'})
+  div.flex.flex-col.gap-3.max-w-md.mb-6
+    +input({color: 'primary', placeholder: 'Type here...'})(id="test-input" name="email")
+    +select({color: 'primary', placeholder: 'Choose...', options: ['Apple', 'Banana', 'Cherry']})(id="test-select" name="fruit")
+    +textarea({color: 'primary', placeholder: 'Write something...'})(id="test-textarea" name="message" rows="2")
+    div.flex.gap-4.items-center
+      +checkbox({color: 'primary'})(id="test-checkbox" name="agree")
+      label(for="test-checkbox") Agree
+      +toggle({color: 'secondary'})(id="test-toggle")
+      label(for="test-toggle") Dark mode
+    +range({color: 'accent', value: '50'})(id="test-range")
+
+  +divider({text: 'Card'})
+  +card({style: 'border', class: 'w-96 mb-6'})(id="test-card")
+    +card-body
+      +card-title({text: 'Original Title'})
+      p Card content here
+      +card-actions({class: 'justify-end'})
+        +btn({text: 'Card Action', color: 'primary', size: 'sm'})
+
+  +divider({text: 'Alert'})
+  div.flex.flex-col.gap-2.mb-6
+    +alert({color: 'info', text: 'This is an info alert'})(id="test-alert")
+    +btn({text: 'Dismiss Alert', color: 'error', size: 'sm'})(id="dismiss-alert-btn")
+
+  +divider({text: 'Modal'})
+  +btn({text: 'Open Modal', color: 'primary'})(id="open-modal-btn")
+  +modal({id: 'test-modal'})
+    +modal-box
+      h3.text-lg.font-bold Modal Title
+      p#modal-content Modal content here
+      +modal-action
+        form(method="dialog")
+          +btn({text: 'Close'})
+
+  +divider({text: 'Collapse'})
+  +collapse({arrow: true, class: 'bg-base-200 border border-base-300 mb-6'})(id="test-collapse")
+    input(type="checkbox")
+    +collapse-title({text: 'Click to expand'})
+    +collapse-content
+      p Hidden content revealed!
+
+  +divider({text: 'Tabs'})
+  +tabs({style: 'box', class: 'mb-6'})(id="test-tabs")
+    +tab({name: 'test-tabs', label: 'Tab A', active: true})
+    +tab-content({class: 'p-4'})
+      p Content A
+    +tab({name: 'test-tabs', label: 'Tab B'})
+    +tab-content({class: 'p-4'})
+      p Content B
+    +tab({name: 'test-tabs', label: 'Tab C'})
+    +tab-content({class: 'p-4'})
+      p Content C
+
+  +divider({text: 'Table'})
+  +table({zebra: true, headers: ['Name', 'Age', 'Role'], rows: [['Alice', '30', 'Admin'], ['Bob', '25', 'User'], ['Carol', '28', 'Editor']]})(id="test-table")
+
+  +divider({text: 'Steps'})
+  +steps()(id="test-steps")
+    +step({color: 'primary', text: 'Register'})
+    +step({color: 'primary', text: 'Choose plan'})
+    +step({text: 'Payment'})
+    +step({text: 'Complete'})
+  div.mt-2.flex.gap-2
+    +btn({text: 'Prev Step', size: 'sm'})(id="step-prev")
+    +btn({text: 'Next Step', size: 'sm', color: 'primary'})(id="step-next")
+
+  +divider({text: 'Radial Progress'})
+  div.flex.gap-4.items-center.mb-6
+    +radial-progress({value: 0})(id="test-progress")
+    +btn({text: 'Animate to 75%', color: 'primary', size: 'sm'})(id="animate-progress")
+
+  +divider({text: 'Tooltip'})
+  +tooltip({tip: 'Original tip', color: 'primary'})(id="test-tooltip")
+    +btn({text: 'Hover me', style: 'outline'})
+
+  +divider({text: 'Rating'})
+  +rating({name: 'test-rating', stars: 5, value: 3})(id="test-rating")
+
+//- Test script
+script.
+  dp.on('ready', function() {
+    const output = document.getElementById('test-output');
+    let passed = 0, failed = 0;
+
+    function log(msg) {
+      const pre = document.createElement('pre');
+      pre.setAttribute('data-prefix', msg.startsWith('PASS') ? '✓' : msg.startsWith('FAIL') ? '✗' : '>');
+      const code = document.createElement('code');
+      code.textContent = msg;
+      if (msg.startsWith('FAIL')) code.style.color = '#f87171';
+      if (msg.startsWith('PASS')) code.style.color = '#4ade80';
+      pre.appendChild(code);
+      output.appendChild(pre);
+    }
+
+    function test(name, fn) {
+      try {
+        fn();
+        log('PASS: ' + name);
+        passed++;
+      } catch(e) {
+        log('FAIL: ' + name + ' — ' + e.message);
+        failed++;
+      }
+    }
+
+    function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); }
+
+    // Clear initial message
+    output.innerHTML = '';
+
+    log('> dp.js API Test Suite');
+    log('> dp.version: ' + dp.version);
+    log('');
+
+    // --- Factory ---
+    test('dp() finds by ID', function() {
+      const btn = dp('#test-btn');
+      assert(btn, 'btn not found');
+      assert(btn.el.id === 'test-btn', 'wrong element');
+    });
+
+    test('dp() returns correct type', function() {
+      assert(dp('#test-btn') instanceof dp.DpComponent, 'not DpComponent');
+      assert(dp('#test-input') instanceof dp.DpInput, 'not DpInput');
+      assert(dp('#test-select') instanceof dp.DpSelect, 'not DpSelect');
+      assert(dp('#test-card') instanceof dp.DpCard, 'not DpCard');
+      assert(dp('#test-table') instanceof dp.DpTable, 'not DpTable');
+    });
+
+    test('dp.findAll() returns array', function() {
+      const btns = dp.findAll('.dp-btn');
+      assert(Array.isArray(btns), 'not array');
+      assert(btns.length > 0, 'empty');
+    });
+
+    // --- DpComponent base ---
+    test('show/hide/toggle', function() {
+      const btn = dp('#test-btn');
+      btn.hide();
+      assert(!btn.isVisible(), 'should be hidden');
+      btn.show();
+      assert(btn.isVisible(), 'should be visible');
+    });
+
+    test('addClass/removeClass/hasClass', function() {
+      const btn = dp('#test-btn');
+      btn.addClass('test-class');
+      assert(btn.hasClass('test-class'), 'should have class');
+      btn.removeClass('test-class');
+      assert(!btn.hasClass('test-class'), 'should not have class');
+    });
+
+    test('getAttr/setAttr', function() {
+      const btn = dp('#test-btn');
+      btn.setAttr('data-test', 'hello');
+      assert(btn.getAttr('data-test') === 'hello', 'attr not set');
+      btn.removeAttr('data-test');
+    });
+
+    test('enable/disable', function() {
+      const btn = dp('#test-btn-disable');
+      btn.disable();
+      assert(!btn.isEnabled(), 'should be disabled');
+      btn.enable();
+      assert(btn.isEnabled(), 'should be enabled');
+    });
+
+    test('onClick chains', function() {
+      let clicked = false;
+      const btn = dp('#test-btn');
+      const ret = btn.onClick(function() { clicked = true; });
+      assert(ret === btn, 'should return this');
+      btn.el.click();
+      assert(clicked, 'click handler not called');
+    });
+
+    // --- DpInput ---
+    test('getText/setText', function() {
+      const input = dp('#test-input');
+      input.setText('hello@test.com');
+      assert(input.getText() === 'hello@test.com', 'text not set');
+      input.clear();
+      assert(input.getText() === '', 'not cleared');
+    });
+
+    test('getValue/setValue alias', function() {
+      const input = dp('#test-input');
+      input.setValue('test');
+      assert(input.getValue() === 'test', 'value not set');
+      input.clear();
+    });
+
+    test('getPlaceholder/setPlaceholder', function() {
+      const input = dp('#test-input');
+      const orig = input.getPlaceholder();
+      input.setPlaceholder('New placeholder');
+      assert(input.getPlaceholder() === 'New placeholder', 'placeholder not set');
+      input.setPlaceholder(orig);
+    });
+
+    test('getName', function() {
+      assert(dp('#test-input').getName() === 'email', 'wrong name');
+    });
+
+    // --- DpSelect ---
+    test('DpSelect getOptions', function() {
+      const sel = dp('#test-select');
+      const opts = sel.getOptions();
+      assert(opts.length >= 3, 'should have options: ' + opts.length);
+    });
+
+    test('DpSelect setValue/getValue', function() {
+      const sel = dp('#test-select');
+      sel.setValue('Banana');
+      assert(sel.getValue() === 'Banana', 'value not set');
+    });
+
+    test('DpSelect getSelectedText', function() {
+      const sel = dp('#test-select');
+      sel.setValue('Cherry');
+      assert(sel.getSelectedText() === 'Cherry', 'wrong text: ' + sel.getSelectedText());
+    });
+
+    test('DpSelect addOption/removeOption', function() {
+      const sel = dp('#test-select');
+      const before = sel.getOptions().length;
+      sel.addOption('Dragonfruit', 'Dragonfruit');
+      assert(sel.getOptions().length === before + 1, 'not added');
+      sel.removeOption('Dragonfruit');
+      assert(sel.getOptions().length === before, 'not removed');
+    });
+
+    // --- DpTextarea ---
+    test('DpTextarea setText/getLength', function() {
+      const ta = dp('#test-textarea');
+      ta.setText('Line 1\nLine 2\nLine 3');
+      assert(ta.getLength() > 0, 'empty');
+      assert(ta.getLineCount() === 3, 'wrong lines: ' + ta.getLineCount());
+      ta.clear();
+    });
+
+    // --- DpCheckbox ---
+    test('DpCheckbox isChecked/setChecked/toggle', function() {
+      const cb = dp('#test-checkbox');
+      cb.setChecked(true);
+      assert(cb.isChecked(), 'should be checked');
+      assert(cb.getValue() === true, 'getValue should be true');
+      cb.toggle();
+      assert(!cb.isChecked(), 'should be unchecked');
+    });
+
+    // --- DpToggle ---
+    test('DpToggle', function() {
+      const t = dp('#test-toggle');
+      assert(t instanceof dp.DpToggle, 'not DpToggle');
+      t.setChecked(true);
+      assert(t.isChecked(), 'should be checked');
+      t.setChecked(false);
+    });
+
+    // --- DpRange ---
+    test('DpRange getValue/getMin/getMax/getPercent', function() {
+      const r = dp('#test-range');
+      assert(r.getValue() === 50, 'wrong value: ' + r.getValue());
+      assert(r.getMin() === 0, 'wrong min');
+      assert(r.getMax() === 100, 'wrong max');
+      assert(r.getPercent() === 50, 'wrong percent');
+      r.setValue(75);
+      assert(r.getValue() === 75, 'setValue failed');
+    });
+
+    // --- DpCard ---
+    test('DpCard sub-elements', function() {
+      const card = dp('#test-card');
+      assert(card.body, 'no body');
+      assert(card.title, 'no title');
+      assert(card.actions, 'no actions');
+    });
+
+    test('DpCard getTitle/setTitle', function() {
+      const card = dp('#test-card');
+      assert(card.getTitle() === 'Original Title', 'wrong title: ' + card.getTitle());
+      card.setTitle('New Title');
+      assert(card.getTitle() === 'New Title', 'title not changed');
+      card.setTitle('Original Title');
+    });
+
+    // --- DpAlert ---
+    test('DpAlert getColor/setColor', function() {
+      const alert = dp('#test-alert');
+      assert(alert.getColor() === 'info', 'wrong color: ' + alert.getColor());
+      alert.setColor('success');
+      assert(alert.getColor() === 'success', 'color not changed');
+      alert.setColor('info');
+    });
+
+    // --- DpModal ---
+    test('DpModal open/close', function() {
+      const modal = dp('#test-modal');
+      assert(!modal.isOpen(), 'should start closed');
+      modal.open();
+      assert(modal.isOpen(), 'should be open');
+      modal.close();
+      assert(!modal.isOpen(), 'should be closed');
+    });
+
+    test('DpModal sub-elements', function() {
+      const modal = dp('#test-modal');
+      assert(modal.box, 'no box');
+      assert(modal.actions, 'no actions');
+    });
+
+    // --- DpCollapse ---
+    test('DpCollapse open/close/toggle', function() {
+      const c = dp('#test-collapse');
+      c.open();
+      assert(c.isOpen(), 'should be open');
+      c.close();
+      assert(!c.isOpen(), 'should be closed');
+      c.toggle();
+      assert(c.isOpen(), 'should be open after toggle');
+      c.close();
+    });
+
+    // --- DpTabs ---
+    test('DpTabs getActive/setActive', function() {
+      const tabs = dp('#test-tabs');
+      assert(tabs.getActive() === 0, 'should start at 0');
+      assert(tabs.getTabCount() === 3, 'wrong count: ' + tabs.getTabCount());
+      tabs.setActive(1);
+      assert(tabs.getActive() === 1, 'should be 1');
+      tabs.setActive(0);
+    });
+
+    test('DpTabs getTabLabels', function() {
+      const tabs = dp('#test-tabs');
+      const labels = tabs.getTabLabels();
+      assert(labels.length === 3, 'wrong count');
+      assert(labels[0] === 'Tab A', 'wrong label: ' + labels[0]);
+    });
+
+    // --- DpTable ---
+    test('DpTable getHeaders', function() {
+      const table = dp('#test-table');
+      const h = table.getHeaders();
+      assert(h.length === 3, 'wrong headers');
+      assert(h[0] === 'Name', 'wrong header: ' + h[0]);
+    });
+
+    test('DpTable getData/getRow', function() {
+      const table = dp('#test-table');
+      const data = table.getData();
+      assert(data.length === 3, 'wrong rows: ' + data.length);
+      assert(data[0][0] === 'Alice', 'wrong data');
+      const row = table.getRow(1);
+      assert(row[0] === 'Bob', 'wrong row');
+    });
+
+    test('DpTable addRow/removeRow', function() {
+      const table = dp('#test-table');
+      const before = table.getRowCount();
+      table.addRow(['Dave', '35', 'Viewer']);
+      assert(table.getRowCount() === before + 1, 'not added');
+      table.removeRow(table.getRowCount() - 1);
+      assert(table.getRowCount() === before, 'not removed');
+    });
+
+    test('DpTable selectRow/getSelectedRow', function() {
+      const table = dp('#test-table');
+      table.selectRow(1);
+      assert(table.getSelectedIndex() === 1, 'wrong index');
+      const sel = table.getSelectedRow();
+      assert(sel[0] === 'Bob', 'wrong selection');
+      table.deselectRow();
+    });
+
+    test('DpTable sort', function() {
+      const table = dp('#test-table');
+      table.sort(0, 'asc');
+      assert(table.getRow(0)[0] === 'Alice', 'sort asc failed');
+      table.sort(0, 'desc');
+      assert(table.getRow(0)[0] === 'Carol', 'sort desc failed');
+      table.sort(0, 'asc');
+    });
+
+    test('DpTable toCSV', function() {
+      const csv = dp('#test-table').toCSV();
+      assert(csv.includes('Name,Age,Role'), 'no headers');
+      assert(csv.includes('Alice'), 'no data');
+    });
+
+    test('DpTable toJSON', function() {
+      const json = dp('#test-table').toJSON();
+      assert(json.length === 3, 'wrong count');
+      assert(json[0].Name === 'Alice', 'wrong json');
+    });
+
+    // --- DpSteps ---
+    test('DpSteps getActive/next/prev', function() {
+      const steps = dp('#test-steps');
+      assert(steps.getStepCount() === 4, 'wrong count');
+      steps.setActive(0);
+      steps.next();
+      assert(steps.getActive() === 1, 'next failed');
+      steps.prev();
+      assert(steps.getActive() === 0, 'prev failed');
+    });
+
+    // --- DpRadialProgress ---
+    test('DpRadialProgress getValue/setValue', function() {
+      const p = dp('#test-progress');
+      p.setValue(42);
+      assert(p.getValue() === 42, 'wrong value');
+    });
+
+    // --- DpTooltip ---
+    test('DpTooltip getTip/setTip', function() {
+      const tt = dp('#test-tooltip');
+      assert(tt.getTip() === 'Original tip', 'wrong tip');
+      tt.setTip('New tip');
+      assert(tt.getTip() === 'New tip', 'tip not changed');
+    });
+
+    // --- DpRating ---
+    test('DpRating getValue/setValue', function() {
+      const r = dp('#test-rating');
+      assert(r.getValue() === 3, 'wrong initial: ' + r.getValue());
+      r.setValue(5);
+      assert(r.getValue() === 5, 'setValue failed');
+      r.setValue(3);
+    });
+
+    // --- Interactive hooks ---
+    dp('#open-modal-btn').onClick(function() { dp('#test-modal').open(); });
+    dp('#dismiss-alert-btn').onClick(function() { dp('#test-alert').dismiss(); });
+    dp('#step-next').onClick(function() { dp('#test-steps').next(); });
+    dp('#step-prev').onClick(function() { dp('#test-steps').prev(); });
+    dp('#animate-progress').onClick(function() { dp('#test-progress').animate(75, 1000); });
+
+    // --- Summary ---
+    log('');
+    log('> ' + passed + ' passed, ' + failed + ' failed');
+    if (failed === 0) log('> ALL TESTS PASSED');
+  });

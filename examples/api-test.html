@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dp.js API Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="dp-navbar navbar bg-base-100 shadow-sm">
+      <div class="dp-navbar-start navbar-start"><span class="text-xl font-bold px-4">dp.js API Test</span>
+      </div>
+      <div class="dp-navbar-end navbar-end">
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="light" name="theme-radios" checked="checked" aria-label="light"/>
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="dark" name="theme-radios" aria-label="dark"/>
+        <input class="dp-theme-controller theme-controller btn" type="radio" value="cupcake" name="theme-radios" aria-label="cupcake"/>
+      </div>
+    </div>
+    <div class="p-6 max-w-6xl mx-auto">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold">Test Results</h2>
+        <div class="mockup-code bg-neutral text-neutral-content max-h-96 overflow-y-auto" id="test-output">
+          <pre data-prefix="~"><code>Running tests...</code></pre>
+        </div>
+      </div>
+      <div class="dp-divider divider">Button
+      </div>
+      <div class="flex gap-3 mb-6">
+        <button class="dp-btn btn btn-primary" id="test-btn">Click Me
+        </button>
+        <button class="dp-btn btn btn-secondary" id="test-btn-disable">Disable Me
+        </button>
+      </div>
+      <div class="dp-divider divider">Form Inputs
+      </div>
+      <div class="flex flex-col gap-3 max-w-md mb-6">
+        <input class="dp-input input input-primary" type="text" placeholder="Type here..." name="email" id="test-input"/>
+        <select class="dp-select select select-primary" name="fruit" id="test-select">
+          <option disabled="disabled" selected="selected">Choose...</option>
+          <option>Apple</option>
+          <option>Banana</option>
+          <option>Cherry</option>
+        </select>
+        <textarea class="dp-textarea textarea textarea-primary" placeholder="Write something..." name="message" rows="2" id="test-textarea"></textarea>
+        <div class="flex gap-4 items-center">
+          <input class="dp-checkbox checkbox checkbox-primary" type="checkbox" id="test-checkbox" name="agree"/>
+          <label for="test-checkbox">Agree</label>
+          <input class="dp-toggle toggle toggle-secondary" type="checkbox" id="test-toggle"/>
+          <label for="test-toggle">Dark mode</label>
+        </div>
+        <input class="dp-range range range-accent" type="range" min="0" max="100" value="50" id="test-range"/>
+      </div>
+      <div class="dp-divider divider">Card
+      </div>
+      <div class="dp-card card card-border w-96 mb-6" id="test-card">
+        <div class="dp-card-body card-body">
+          <h2 class="dp-card-title card-title">Original Title
+          </h2>
+          <p>Card content here</p>
+          <div class="dp-card-actions card-actions justify-end">
+            <button class="dp-btn btn btn-primary btn-sm">Card Action
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="dp-divider divider">Alert
+      </div>
+      <div class="flex flex-col gap-2 mb-6">
+        <div class="dp-alert alert alert-info" role="alert" id="test-alert"><span>This is an info alert</span>
+        </div>
+        <button class="dp-btn btn btn-error btn-sm" id="dismiss-alert-btn">Dismiss Alert
+        </button>
+      </div>
+      <div class="dp-divider divider">Modal
+      </div>
+      <button class="dp-btn btn btn-primary" id="open-modal-btn">Open Modal
+      </button>
+      <dialog class="dp-modal modal" id="test-modal">
+        <div class="dp-modal-box modal-box">
+          <h3 class="text-lg font-bold">Modal Title</h3>
+          <p id="modal-content">Modal content here</p>
+          <div class="dp-modal-action modal-action">
+            <form method="dialog">
+              <button class="dp-btn btn">Close
+              </button>
+            </form>
+          </div>
+        </div>
+        <form class="modal-backdrop" method="dialog">
+          <button>close</button>
+        </form>
+      </dialog>
+      <div class="dp-divider divider">Collapse
+      </div>
+      <div class="dp-collapse collapse collapse-arrow bg-base-200 border border-base-300 mb-6" tabindex="0" id="test-collapse">
+        <input type="checkbox">
+        <div class="dp-collapse-title collapse-title">Click to expand
+        </div>
+        <div class="dp-collapse-content collapse-content">
+          <p>Hidden content revealed!</p>
+        </div>
+      </div>
+      <div class="dp-divider divider">Tabs
+      </div>
+      <div class="dp-tabs tabs tabs-box mb-6" role="tablist" id="test-tabs">
+        <input class="dp-tab tab tab-active" type="radio" name="test-tabs" role="tab" aria-label="Tab A" checked="checked"/>
+        <div class="dp-tab-content tab-content p-4" role="tabpanel">
+          <p>Content A</p>
+        </div>
+        <input class="dp-tab tab" type="radio" name="test-tabs" role="tab" aria-label="Tab B"/>
+        <div class="dp-tab-content tab-content p-4" role="tabpanel">
+          <p>Content B</p>
+        </div>
+        <input class="dp-tab tab" type="radio" name="test-tabs" role="tab" aria-label="Tab C"/>
+        <div class="dp-tab-content tab-content p-4" role="tabpanel">
+          <p>Content C</p>
+        </div>
+      </div>
+      <div class="dp-divider divider">Table
+      </div>
+      <table class="dp-table table table-zebra" id="test-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alice</td>
+            <td>30</td>
+            <td>Admin</td>
+          </tr>
+          <tr>
+            <td>Bob</td>
+            <td>25</td>
+            <td>User</td>
+          </tr>
+          <tr>
+            <td>Carol</td>
+            <td>28</td>
+            <td>Editor</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="dp-divider divider">Steps
+      </div>
+      <ul class="dp-steps steps" id="test-steps">
+        <li class="dp-step step step-primary">Register
+        </li>
+        <li class="dp-step step step-primary">Choose plan
+        </li>
+        <li class="dp-step step">Payment
+        </li>
+        <li class="dp-step step">Complete
+        </li>
+      </ul>
+      <div class="mt-2 flex gap-2">
+        <button class="dp-btn btn btn-sm" id="step-prev">Prev Step
+        </button>
+        <button class="dp-btn btn btn-primary btn-sm" id="step-next">Next Step
+        </button>
+      </div>
+      <div class="dp-divider divider">Radial Progress
+      </div>
+      <div class="flex gap-4 items-center mb-6">
+        <div class="dp-radial-progress radial-progress" style="--value:0" role="progressbar" id="test-progress">0%
+        </div>
+        <button class="dp-btn btn btn-primary btn-sm" id="animate-progress">Animate to 75%
+        </button>
+      </div>
+      <div class="dp-divider divider">Tooltip
+      </div>
+      <div class="dp-tooltip tooltip tooltip-primary" data-tip="Original tip" id="test-tooltip">
+        <button class="dp-btn btn btn-outline">Hover me
+        </button>
+      </div>
+      <div class="dp-divider divider">Rating
+      </div>
+      <div class="dp-rating rating" id="test-rating">
+        <input class="mask mask-star-2" type="radio" name="test-rating"/>
+        <input class="mask mask-star-2" type="radio" name="test-rating"/>
+        <input class="mask mask-star-2" type="radio" name="test-rating" checked="checked"/>
+        <input class="mask mask-star-2" type="radio" name="test-rating"/>
+        <input class="mask mask-star-2" type="radio" name="test-rating"/>
+      </div>
+    </div>
+    <script>
+      dp.on('ready', function() {
+        const output = document.getElementById('test-output');
+        let passed = 0, failed = 0;
+      
+        function log(msg) {
+          const pre = document.createElement('pre');
+          pre.setAttribute('data-prefix', msg.startsWith('PASS') ? '✓' : msg.startsWith('FAIL') ? '✗' : '>');
+          const code = document.createElement('code');
+          code.textContent = msg;
+          if (msg.startsWith('FAIL')) code.style.color = '#f87171';
+          if (msg.startsWith('PASS')) code.style.color = '#4ade80';
+          pre.appendChild(code);
+          output.appendChild(pre);
+        }
+      
+        function test(name, fn) {
+          try {
+            fn();
+            log('PASS: ' + name);
+            passed++;
+          } catch(e) {
+            log('FAIL: ' + name + ' — ' + e.message);
+            failed++;
+          }
+        }
+      
+        function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); }
+      
+        // Clear initial message
+        output.innerHTML = '';
+      
+        log('> dp.js API Test Suite');
+        log('> dp.version: ' + dp.version);
+        log('');
+      
+        // --- Factory ---
+        test('dp() finds by ID', function() {
+          const btn = dp('#test-btn');
+          assert(btn, 'btn not found');
+          assert(btn.el.id === 'test-btn', 'wrong element');
+        });
+      
+        test('dp() returns correct type', function() {
+          assert(dp('#test-btn') instanceof dp.DpComponent, 'not DpComponent');
+          assert(dp('#test-input') instanceof dp.DpInput, 'not DpInput');
+          assert(dp('#test-select') instanceof dp.DpSelect, 'not DpSelect');
+          assert(dp('#test-card') instanceof dp.DpCard, 'not DpCard');
+          assert(dp('#test-table') instanceof dp.DpTable, 'not DpTable');
+        });
+      
+        test('dp.findAll() returns array', function() {
+          const btns = dp.findAll('.dp-btn');
+          assert(Array.isArray(btns), 'not array');
+          assert(btns.length > 0, 'empty');
+        });
+      
+        // --- DpComponent base ---
+        test('show/hide/toggle', function() {
+          const btn = dp('#test-btn');
+          btn.hide();
+          assert(!btn.isVisible(), 'should be hidden');
+          btn.show();
+          assert(btn.isVisible(), 'should be visible');
+        });
+      
+        test('addClass/removeClass/hasClass', function() {
+          const btn = dp('#test-btn');
+          btn.addClass('test-class');
+          assert(btn.hasClass('test-class'), 'should have class');
+          btn.removeClass('test-class');
+          assert(!btn.hasClass('test-class'), 'should not have class');
+        });
+      
+        test('getAttr/setAttr', function() {
+          const btn = dp('#test-btn');
+          btn.setAttr('data-test', 'hello');
+          assert(btn.getAttr('data-test') === 'hello', 'attr not set');
+          btn.removeAttr('data-test');
+        });
+      
+        test('enable/disable', function() {
+          const btn = dp('#test-btn-disable');
+          btn.disable();
+          assert(!btn.isEnabled(), 'should be disabled');
+          btn.enable();
+          assert(btn.isEnabled(), 'should be enabled');
+        });
+      
+        test('onClick chains', function() {
+          let clicked = false;
+          const btn = dp('#test-btn');
+          const ret = btn.onClick(function() { clicked = true; });
+          assert(ret === btn, 'should return this');
+          btn.el.click();
+          assert(clicked, 'click handler not called');
+        });
+      
+        // --- DpInput ---
+        test('getText/setText', function() {
+          const input = dp('#test-input');
+          input.setText('hello@test.com');
+          assert(input.getText() === 'hello@test.com', 'text not set');
+          input.clear();
+          assert(input.getText() === '', 'not cleared');
+        });
+      
+        test('getValue/setValue alias', function() {
+          const input = dp('#test-input');
+          input.setValue('test');
+          assert(input.getValue() === 'test', 'value not set');
+          input.clear();
+        });
+      
+        test('getPlaceholder/setPlaceholder', function() {
+          const input = dp('#test-input');
+          const orig = input.getPlaceholder();
+          input.setPlaceholder('New placeholder');
+          assert(input.getPlaceholder() === 'New placeholder', 'placeholder not set');
+          input.setPlaceholder(orig);
+        });
+      
+        test('getName', function() {
+          assert(dp('#test-input').getName() === 'email', 'wrong name');
+        });
+      
+        // --- DpSelect ---
+        test('DpSelect getOptions', function() {
+          const sel = dp('#test-select');
+          const opts = sel.getOptions();
+          assert(opts.length >= 3, 'should have options: ' + opts.length);
+        });
+      
+        test('DpSelect setValue/getValue', function() {
+          const sel = dp('#test-select');
+          sel.setValue('Banana');
+          assert(sel.getValue() === 'Banana', 'value not set');
+        });
+      
+        test('DpSelect getSelectedText', function() {
+          const sel = dp('#test-select');
+          sel.setValue('Cherry');
+          assert(sel.getSelectedText() === 'Cherry', 'wrong text: ' + sel.getSelectedText());
+        });
+      
+        test('DpSelect addOption/removeOption', function() {
+          const sel = dp('#test-select');
+          const before = sel.getOptions().length;
+          sel.addOption('Dragonfruit', 'Dragonfruit');
+          assert(sel.getOptions().length === before + 1, 'not added');
+          sel.removeOption('Dragonfruit');
+          assert(sel.getOptions().length === before, 'not removed');
+        });
+      
+        // --- DpTextarea ---
+        test('DpTextarea setText/getLength', function() {
+          const ta = dp('#test-textarea');
+          ta.setText('Line 1\nLine 2\nLine 3');
+          assert(ta.getLength() > 0, 'empty');
+          assert(ta.getLineCount() === 3, 'wrong lines: ' + ta.getLineCount());
+          ta.clear();
+        });
+      
+        // --- DpCheckbox ---
+        test('DpCheckbox isChecked/setChecked/toggle', function() {
+          const cb = dp('#test-checkbox');
+          cb.setChecked(true);
+          assert(cb.isChecked(), 'should be checked');
+          assert(cb.getValue() === true, 'getValue should be true');
+          cb.toggle();
+          assert(!cb.isChecked(), 'should be unchecked');
+        });
+      
+        // --- DpToggle ---
+        test('DpToggle', function() {
+          const t = dp('#test-toggle');
+          assert(t instanceof dp.DpToggle, 'not DpToggle');
+          t.setChecked(true);
+          assert(t.isChecked(), 'should be checked');
+          t.setChecked(false);
+        });
+      
+        // --- DpRange ---
+        test('DpRange getValue/getMin/getMax/getPercent', function() {
+          const r = dp('#test-range');
+          assert(r.getValue() === 50, 'wrong value: ' + r.getValue());
+          assert(r.getMin() === 0, 'wrong min');
+          assert(r.getMax() === 100, 'wrong max');
+          assert(r.getPercent() === 50, 'wrong percent');
+          r.setValue(75);
+          assert(r.getValue() === 75, 'setValue failed');
+        });
+      
+        // --- DpCard ---
+        test('DpCard sub-elements', function() {
+          const card = dp('#test-card');
+          assert(card.body, 'no body');
+          assert(card.title, 'no title');
+          assert(card.actions, 'no actions');
+        });
+      
+        test('DpCard getTitle/setTitle', function() {
+          const card = dp('#test-card');
+          assert(card.getTitle() === 'Original Title', 'wrong title: ' + card.getTitle());
+          card.setTitle('New Title');
+          assert(card.getTitle() === 'New Title', 'title not changed');
+          card.setTitle('Original Title');
+        });
+      
+        // --- DpAlert ---
+        test('DpAlert getColor/setColor', function() {
+          const alert = dp('#test-alert');
+          assert(alert.getColor() === 'info', 'wrong color: ' + alert.getColor());
+          alert.setColor('success');
+          assert(alert.getColor() === 'success', 'color not changed');
+          alert.setColor('info');
+        });
+      
+        // --- DpModal ---
+        test('DpModal open/close', function() {
+          const modal = dp('#test-modal');
+          assert(!modal.isOpen(), 'should start closed');
+          modal.open();
+          assert(modal.isOpen(), 'should be open');
+          modal.close();
+          assert(!modal.isOpen(), 'should be closed');
+        });
+      
+        test('DpModal sub-elements', function() {
+          const modal = dp('#test-modal');
+          assert(modal.box, 'no box');
+          assert(modal.actions, 'no actions');
+        });
+      
+        // --- DpCollapse ---
+        test('DpCollapse open/close/toggle', function() {
+          const c = dp('#test-collapse');
+          c.open();
+          assert(c.isOpen(), 'should be open');
+          c.close();
+          assert(!c.isOpen(), 'should be closed');
+          c.toggle();
+          assert(c.isOpen(), 'should be open after toggle');
+          c.close();
+        });
+      
+        // --- DpTabs ---
+        test('DpTabs getActive/setActive', function() {
+          const tabs = dp('#test-tabs');
+          assert(tabs.getActive() === 0, 'should start at 0');
+          assert(tabs.getTabCount() === 3, 'wrong count: ' + tabs.getTabCount());
+          tabs.setActive(1);
+          assert(tabs.getActive() === 1, 'should be 1');
+          tabs.setActive(0);
+        });
+      
+        test('DpTabs getTabLabels', function() {
+          const tabs = dp('#test-tabs');
+          const labels = tabs.getTabLabels();
+          assert(labels.length === 3, 'wrong count');
+          assert(labels[0] === 'Tab A', 'wrong label: ' + labels[0]);
+        });
+      
+        // --- DpTable ---
+        test('DpTable getHeaders', function() {
+          const table = dp('#test-table');
+          const h = table.getHeaders();
+          assert(h.length === 3, 'wrong headers');
+          assert(h[0] === 'Name', 'wrong header: ' + h[0]);
+        });
+      
+        test('DpTable getData/getRow', function() {
+          const table = dp('#test-table');
+          const data = table.getData();
+          assert(data.length === 3, 'wrong rows: ' + data.length);
+          assert(data[0][0] === 'Alice', 'wrong data');
+          const row = table.getRow(1);
+          assert(row[0] === 'Bob', 'wrong row');
+        });
+      
+        test('DpTable addRow/removeRow', function() {
+          const table = dp('#test-table');
+          const before = table.getRowCount();
+          table.addRow(['Dave', '35', 'Viewer']);
+          assert(table.getRowCount() === before + 1, 'not added');
+          table.removeRow(table.getRowCount() - 1);
+          assert(table.getRowCount() === before, 'not removed');
+        });
+      
+        test('DpTable selectRow/getSelectedRow', function() {
+          const table = dp('#test-table');
+          table.selectRow(1);
+          assert(table.getSelectedIndex() === 1, 'wrong index');
+          const sel = table.getSelectedRow();
+          assert(sel[0] === 'Bob', 'wrong selection');
+          table.deselectRow();
+        });
+      
+        test('DpTable sort', function() {
+          const table = dp('#test-table');
+          table.sort(0, 'asc');
+          assert(table.getRow(0)[0] === 'Alice', 'sort asc failed');
+          table.sort(0, 'desc');
+          assert(table.getRow(0)[0] === 'Carol', 'sort desc failed');
+          table.sort(0, 'asc');
+        });
+      
+        test('DpTable toCSV', function() {
+          const csv = dp('#test-table').toCSV();
+          assert(csv.includes('Name,Age,Role'), 'no headers');
+          assert(csv.includes('Alice'), 'no data');
+        });
+      
+        test('DpTable toJSON', function() {
+          const json = dp('#test-table').toJSON();
+          assert(json.length === 3, 'wrong count');
+          assert(json[0].Name === 'Alice', 'wrong json');
+        });
+      
+        // --- DpSteps ---
+        test('DpSteps getActive/next/prev', function() {
+          const steps = dp('#test-steps');
+          assert(steps.getStepCount() === 4, 'wrong count');
+          steps.setActive(0);
+          steps.next();
+          assert(steps.getActive() === 1, 'next failed');
+          steps.prev();
+          assert(steps.getActive() === 0, 'prev failed');
+        });
+      
+        // --- DpRadialProgress ---
+        test('DpRadialProgress getValue/setValue', function() {
+          const p = dp('#test-progress');
+          p.setValue(42);
+          assert(p.getValue() === 42, 'wrong value');
+        });
+      
+        // --- DpTooltip ---
+        test('DpTooltip getTip/setTip', function() {
+          const tt = dp('#test-tooltip');
+          assert(tt.getTip() === 'Original tip', 'wrong tip');
+          tt.setTip('New tip');
+          assert(tt.getTip() === 'New tip', 'tip not changed');
+        });
+      
+        // --- DpRating ---
+        test('DpRating getValue/setValue', function() {
+          const r = dp('#test-rating');
+          assert(r.getValue() === 3, 'wrong initial: ' + r.getValue());
+          r.setValue(5);
+          assert(r.getValue() === 5, 'setValue failed');
+          r.setValue(3);
+        });
+      
+        // --- Interactive hooks ---
+        dp('#open-modal-btn').onClick(function() { dp('#test-modal').open(); });
+        dp('#dismiss-alert-btn').onClick(function() { dp('#test-alert').dismiss(); });
+        dp('#step-next').onClick(function() { dp('#test-steps').next(); });
+        dp('#step-prev').onClick(function() { dp('#test-steps').prev(); });
+        dp('#animate-progress').onClick(function() { dp('#test-progress').animate(75, 1000); });
+      
+        // --- Summary ---
+        log('');
+        log('> ' + passed + ' passed, ' + failed + ' failed');
+        if (failed === 0) log('> ALL TESTS PASSED');
+      });
+    </script>
+    <script>/**
+ * DaisyPug Component API — dp.js
+ * Zero-dependency client-side API for interacting with DaisyPug components.
+ * Auto-discovers components via dp-{name} CSS class hooks.
+ */
+(function(global) {
+  'use strict';
+
+  // ============================================================
+  // DpComponent — Base class for all components
+  // ============================================================
+
+  class DpComponent {
+    constructor(el) {
+      this.el = el;
+      this._listeners = new Map();
+      this._subCache = {};
+    }
+
+    // --- Properties ---
+    get id() { return this.el.id; }
+    get type() { return this._dpType(); }
+    get classes() { return this.el.classList; }
+
+    _dpType() {
+      for (const cls of this.el.classList) {
+        if (cls.startsWith('dp-') && cls !== 'dp-') return cls.slice(3);
+      }
+      return 'component';
+    }
+
+    // --- Event system ---
+    _on(event, fn, opts) {
+      const wrapper = (e) => fn(e, this);
+      wrapper._orig = fn;
+      this.el.addEventListener(event, wrapper, opts);
+      if (!this._listeners.has(event)) this._listeners.set(event, []);
+      this._listeners.get(event).push(wrapper);
+      return this;
+    }
+
+    _off(event, fn) {
+      const list = this._listeners.get(event) || [];
+      if (fn) {
+        const idx = list.findIndex(w => w._orig === fn);
+        if (idx >= 0) {
+          this.el.removeEventListener(event, list[idx]);
+          list.splice(idx, 1);
+        }
+      } else {
+        list.forEach(w => this.el.removeEventListener(event, w));
+        this._listeners.set(event, []);
+      }
+      return this;
+    }
+
+    onClick(fn, opts) { return this._on('click', fn, opts); }
+    offClick(fn) { return this._off('click', fn); }
+    onDblClick(fn, opts) { return this._on('dblclick', fn, opts); }
+    offDblClick(fn) { return this._off('dblclick', fn); }
+    onMouseEnter(fn, opts) { return this._on('mouseenter', fn, opts); }
+    offMouseEnter(fn) { return this._off('mouseenter', fn); }
+    onMouseLeave(fn, opts) { return this._on('mouseleave', fn, opts); }
+    offMouseLeave(fn) { return this._off('mouseleave', fn); }
+    onFocus(fn, opts) { return this._on('focus', fn, opts); }
+    offFocus(fn) { return this._off('focus', fn); }
+    onBlur(fn, opts) { return this._on('blur', fn, opts); }
+    offBlur(fn) { return this._off('blur', fn); }
+    onKeyDown(fn, opts) { return this._on('keydown', fn, opts); }
+    offKeyDown(fn) { return this._off('keydown', fn); }
+    onKeyUp(fn, opts) { return this._on('keyup', fn, opts); }
+    offKeyUp(fn) { return this._off('keyup', fn); }
+    onContextMenu(fn, opts) { return this._on('contextmenu', fn, opts); }
+    offContextMenu(fn) { return this._off('contextmenu', fn); }
+
+    // --- Visibility ---
+    show() { this.el.style.display = ''; return this; }
+    hide() { this.el.style.display = 'none'; return this; }
+    toggle() { return this.isVisible() ? this.hide() : this.show(); }
+    isVisible() { return this.el.style.display !== 'none' && !this.el.hidden; }
+
+    // --- Enable/Disable ---
+    enable() { this.el.disabled = false; this.el.classList.remove('btn-disabled'); return this; }
+    disable() { this.el.disabled = true; this.el.classList.add('btn-disabled'); return this; }
+    isEnabled() { return !this.el.disabled; }
+
+    // --- CSS Classes ---
+    addClass(cls) { this.el.classList.add(cls); return this; }
+    removeClass(cls) { this.el.classList.remove(cls); return this; }
+    toggleClass(cls) { this.el.classList.toggle(cls); return this; }
+    hasClass(cls) { return this.el.classList.contains(cls); }
+
+    // --- Attributes ---
+    getAttr(name) { return this.el.getAttribute(name); }
+    setAttr(name, val) { this.el.setAttribute(name, val); return this; }
+    removeAttr(name) { this.el.removeAttribute(name); return this; }
+    getData(key) { return this.el.dataset[key]; }
+    setData(key, val) { this.el.dataset[key] = val; return this; }
+
+    // --- Styles ---
+    getStyle(prop) { return getComputedStyle(this.el)[prop]; }
+    setStyle(prop, val) { this.el.style[prop] = val; return this; }
+
+    // --- DOM ---
+    remove() { this.el.remove(); }
+    clone() { return _wrap(this.el.cloneNode(true)); }
+
+    parent() {
+      let p = this.el.parentElement;
+      while (p) {
+        for (const cls of p.classList) {
+          if (cls.startsWith('dp-')) return _wrap(p);
+        }
+        p = p.parentElement;
+      }
+      return null;
+    }
+
+    find(sel) {
+      const el = this.el.querySelector(sel);
+      return el ? _wrap(el) : null;
+    }
+
+    findAll(sel) {
+      return Array.from(this.el.querySelectorAll(sel)).map(el => _wrap(el));
+    }
+
+    // --- Custom Events ---
+    emit(name, detail) {
+      this.el.dispatchEvent(new CustomEvent(name, { detail, bubbles: true }));
+      return this;
+    }
+
+    on(name, fn) {
+      return this._on(name, (e, comp) => fn(e.detail, e, comp));
+    }
+
+    off(name, fn) { return this._off(name, fn); }
+
+    // --- Sub-element access (lazy cached) ---
+    _sub(dpClass) {
+      if (!this._subCache[dpClass]) {
+        const el = this.el.querySelector(`.dp-${dpClass}`);
+        this._subCache[dpClass] = el ? _wrap(el) : null;
+      }
+      return this._subCache[dpClass];
+    }
+  }
+
+  // ============================================================
+  // DpInput — Text input (THE reference class)
+  // ============================================================
+
+  class DpInput extends DpComponent {
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.getValue(), e, comp), opts);
+    }
+    offChange(fn) { return this._off('change', fn); }
+
+    onInput(fn, opts) {
+      return this._on('input', (e, comp) => fn(comp.getValue(), e, comp), opts);
+    }
+    offInput(fn) { return this._off('input', fn); }
+
+    onKeyPress(fn, opts) {
+      return this._on('keypress', (e, comp) => fn(e.key, e, comp), opts);
+    }
+
+    onEnter(fn) {
+      return this._on('keydown', (e, comp) => {
+        if (e.key === 'Enter') fn(comp.getValue(), e, comp);
+      });
+    }
+
+    onEscape(fn) {
+      return this._on('keydown', (e, comp) => {
+        if (e.key === 'Escape') fn(e, comp);
+      });
+    }
+
+    getText() { return this.el.value; }
+    setText(str) { this.el.value = str; return this; }
+    getValue() { return this.el.value; }
+    setValue(val) { this.el.value = val; return this; }
+    clear() { this.el.value = ''; return this; }
+
+    focus() { this.el.focus(); return this; }
+    blur() { this.el.blur(); return this; }
+    select() { this.el.select(); return this; }
+
+    getPlaceholder() { return this.el.placeholder; }
+    setPlaceholder(str) { this.el.placeholder = str; return this; }
+
+    isRequired() { return this.el.required; }
+    setRequired(bool) { this.el.required = bool; return this; }
+
+    isReadOnly() { return this.el.readOnly; }
+    setReadOnly(bool) { this.el.readOnly = bool; return this; }
+
+    getType() { return this.el.type; }
+    setType(str) { this.el.type = str; return this; }
+
+    getName() { return this.el.name; }
+    setName(str) { this.el.name = str; return this; }
+  }
+
+  // ============================================================
+  // DpSelect
+  // ============================================================
+
+  class DpSelect extends DpInput {
+    getOptions() {
+      return Array.from(this.el.options).map(o => ({
+        value: o.value, text: o.text, selected: o.selected
+      }));
+    }
+
+    setOptions(arr) {
+      this.el.innerHTML = '';
+      arr.forEach(opt => this.addOption(
+        typeof opt === 'string' ? opt : opt.value,
+        typeof opt === 'string' ? opt : opt.text
+      ));
+      return this;
+    }
+
+    addOption(val, text) {
+      const o = document.createElement('option');
+      o.value = val;
+      o.textContent = text || val;
+      this.el.appendChild(o);
+      return this;
+    }
+
+    removeOption(val) {
+      const o = this.el.querySelector(`option[value="${val}"]`);
+      if (o) o.remove();
+      return this;
+    }
+
+    getSelectedIndex() { return this.el.selectedIndex; }
+    setSelectedIndex(n) { this.el.selectedIndex = n; return this; }
+    getSelectedText() { return this.el.options[this.el.selectedIndex]?.text || ''; }
+    getSelectedValue() { return this.el.value; }
+  }
+
+  // ============================================================
+  // DpTextarea
+  // ============================================================
+
+  class DpTextarea extends DpInput {
+    getRows() { return parseInt(this.el.rows) || 0; }
+    setRows(n) { this.el.rows = n; return this; }
+    getCols() { return parseInt(this.el.cols) || 0; }
+    setCols(n) { this.el.cols = n; return this; }
+    getLength() { return this.el.value.length; }
+    getLineCount() { return (this.el.value.match(/\n/g) || []).length + 1; }
+  }
+
+  // ============================================================
+  // DpCheckbox / DpToggle
+  // ============================================================
+
+  class DpCheckbox extends DpInput {
+    isChecked() { return this.el.checked; }
+    setChecked(bool) { this.el.checked = bool; return this; }
+    toggle() { this.el.checked = !this.el.checked; return this; }
+    getValue() { return this.el.checked; }
+    setValue(val) { this.el.checked = !!val; return this; }
+
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.isChecked(), e, comp), opts);
+    }
+  }
+
+  class DpToggle extends DpCheckbox {}
+
+  // ============================================================
+  // DpRadio
+  // ============================================================
+
+  class DpRadio extends DpInput {
+    isSelected() { return this.el.checked; }
+    select() { this.el.checked = true; return this; }
+
+    getGroup() {
+      if (!this.el.name) return [this];
+      return Array.from(document.querySelectorAll(`input[name="${this.el.name}"].dp-radio`))
+        .map(el => _wrap(el));
+    }
+
+    getGroupValue() {
+      const checked = this.getGroup().find(r => r.el.checked);
+      return checked ? checked.el.value : null;
+    }
+
+    setGroupValue(val) {
+      this.getGroup().forEach(r => { r.el.checked = r.el.value === val; });
+      return this;
+    }
+
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.el.value, e, comp), opts);
+    }
+  }
+
+  // ============================================================
+  // DpRange
+  // ============================================================
+
+  class DpRange extends DpInput {
+    getValue() { return parseFloat(this.el.value); }
+    setValue(n) { this.el.value = n; return this; }
+    getMin() { return parseFloat(this.el.min) || 0; }
+    setMin(n) { this.el.min = n; return this; }
+    getMax() { return parseFloat(this.el.max) || 100; }
+    setMax(n) { this.el.max = n; return this; }
+    getStep() { return parseFloat(this.el.step) || 1; }
+    setStep(n) { this.el.step = n; return this; }
+
+    getPercent() {
+      const min = this.getMin(), max = this.getMax();
+      return ((this.getValue() - min) / (max - min)) * 100;
+    }
+
+    onSlide(fn) {
+      return this._on('input', (e, comp) => fn(comp.getValue(), comp.getPercent(), e));
+    }
+  }
+
+  // ============================================================
+  // DpFileInput
+  // ============================================================
+
+  class DpFileInput extends DpInput {
+    getFiles() { return this.el.files; }
+    getFileNames() { return Array.from(this.el.files).map(f => f.name); }
+    getFileCount() { return this.el.files.length; }
+    clear() { this.el.value = ''; return this; }
+    getAccept() { return this.el.accept; }
+    setAccept(str) { this.el.accept = str; return this; }
+    isMultiple() { return this.el.multiple; }
+    setMultiple(bool) { this.el.multiple = bool; return this; }
+
+    onChange(fn, opts) {
+      return this._on('change', (e, comp) => fn(comp.getFiles(), e, comp), opts);
+    }
+  }
+
+  // ============================================================
+  // DpContainer — Base for components with children
+  // ============================================================
+
+  class DpContainer extends DpComponent {
+    getChildren() {
+      return Array.from(this.el.children)
+        .filter(c => Array.from(c.classList).some(cls => cls.startsWith('dp-')))
+        .map(c => _wrap(c));
+    }
+
+    getContent() { return this.el.innerHTML; }
+    setContent(html) { this.el.innerHTML = html; return this; }
+
+    append(child) {
+      if (typeof child === 'string') {
+        this.el.insertAdjacentHTML('beforeend', child);
+      } else if (child instanceof DpComponent) {
+        this.el.appendChild(child.el);
+      } else {
+        this.el.appendChild(child);
+      }
+      return this;
+    }
+
+    prepend(child) {
+      if (typeof child === 'string') {
+        this.el.insertAdjacentHTML('afterbegin', child);
+      } else if (child instanceof DpComponent) {
+        this.el.prepend(child.el);
+      } else {
+        this.el.prepend(child);
+      }
+      return this;
+    }
+
+    clear() { this.el.innerHTML = ''; return this; }
+    getChildCount() { return this.el.children.length; }
+  }
+
+  // ============================================================
+  // DpToggleable — open/close behavior
+  // ============================================================
+
+  class DpToggleable extends DpContainer {
+    open() { this._setOpen(true); return this; }
+    close() { this._setOpen(false); return this; }
+    toggle() { this._setOpen(!this.isOpen()); return this; }
+    isOpen() { return false; } // overridden
+
+    _setOpen(state) {} // overridden
+
+    onOpen(fn) { return this.on('dp:open', fn); }
+    onClose(fn) { return this.on('dp:close', fn); }
+    onToggle(fn) { return this.on('dp:toggle', fn); }
+
+    _fireToggle(isOpen) {
+      this.emit(isOpen ? 'dp:open' : 'dp:close');
+      this.emit('dp:toggle', isOpen);
+    }
+  }
+
+  // ============================================================
+  // DpCard
+  // ============================================================
+
+  class DpCard extends DpContainer {
+    get body() { return this._sub('card-body'); }
+    get title() { return this._sub('card-title'); }
+    get actions() { return this._sub('card-actions'); }
+
+    getTitle() { return this.title?.el.textContent.trim() || ''; }
+    setTitle(str) { if (this.title) this.title.el.textContent = str; return this; }
+  }
+
+  // ============================================================
+  // DpAlert
+  // ============================================================
+
+  class DpAlert extends DpContainer {
+    getMessage() { return this.el.textContent.trim(); }
+    setMessage(str) {
+      const span = this.el.querySelector('span');
+      if (span) span.textContent = str;
+      else this.el.textContent = str;
+      return this;
+    }
+
+    getColor() {
+      for (const cls of this.el.classList) {
+        const m = cls.match(/^alert-(\w+)$/);
+        if (m && !['vertical', 'horizontal', 'outline', 'dash', 'soft'].includes(m[1])) return m[1];
+      }
+      return null;
+    }
+
+    setColor(color) {
+      const old = this.getColor();
+      if (old) this.el.classList.remove(`alert-${old}`);
+      this.el.classList.add(`alert-${color}`);
+      return this;
+    }
+
+    dismiss() {
+      this.el.style.transition = 'opacity 0.3s';
+      this.el.style.opacity = '0';
+      setTimeout(() => this.remove(), 300);
+      this.emit('dp:dismiss');
+      return this;
+    }
+
+    onDismiss(fn) { return this.on('dp:dismiss', fn); }
+  }
+
+  // ============================================================
+  // DpCollapse
+  // ============================================================
+
+  class DpCollapse extends DpToggleable {
+    get title() { return this._sub('collapse-title'); }
+    get content() { return this._sub('collapse-content'); }
+
+    isOpen() {
+      const cb = this.el.querySelector('input[type="checkbox"], input[type="radio"]');
+      if (cb) return cb.checked;
+      return this.el.classList.contains('collapse-open');
+    }
+
+    _setOpen(state) {
+      const cb = this.el.querySelector('input[type="checkbox"], input[type="radio"]');
+      if (cb) cb.checked = state;
+      else {
+        this.el.classList.toggle('collapse-open', state);
+        this.el.classList.toggle('collapse-close', !state);
+      }
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpModal
+  // ============================================================
+
+  class DpModal extends DpToggleable {
+    get box() { return this._sub('modal-box'); }
+    get actions() { return this._sub('modal-action'); }
+
+    isOpen() { return this.el.open; }
+
+    open() {
+      this.el.showModal();
+      this._fireToggle(true);
+      return this;
+    }
+
+    close() {
+      this.el.close();
+      this._fireToggle(false);
+      return this;
+    }
+
+    _setOpen(state) { state ? this.open() : this.close(); }
+  }
+
+  // ============================================================
+  // DpDropdown
+  // ============================================================
+
+  class DpDropdown extends DpToggleable {
+    get trigger() {
+      const s = this.el.querySelector('summary');
+      return s ? _wrap(s) : null;
+    }
+    get content() { return this._sub('dropdown-content'); }
+
+    isOpen() { return this.el.open; }
+    _setOpen(state) {
+      this.el.open = state;
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpDrawer
+  // ============================================================
+
+  class DpDrawer extends DpToggleable {
+    get content() { return this._sub('drawer-content'); }
+    get side() { return this._sub('drawer-side'); }
+
+    _getToggle() { return this.el.querySelector('.drawer-toggle'); }
+
+    isOpen() { return this._getToggle()?.checked || false; }
+    _setOpen(state) {
+      const cb = this._getToggle();
+      if (cb) cb.checked = state;
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpSwap
+  // ============================================================
+
+  class DpSwap extends DpToggleable {
+    get on() { return this._sub('swap-on'); }
+    get off() { return this._sub('swap-off'); }
+
+    isOpen() {
+      const cb = this.el.querySelector('input[type="checkbox"]');
+      return cb?.checked || false;
+    }
+
+    _setOpen(state) {
+      const cb = this.el.querySelector('input[type="checkbox"]');
+      if (cb) cb.checked = state;
+      this._fireToggle(state);
+    }
+  }
+
+  // ============================================================
+  // DpTabs
+  // ============================================================
+
+  class DpTabs extends DpContainer {
+    _getTabs() { return Array.from(this.el.querySelectorAll('.dp-tab, .tab[role="tab"]')); }
+
+    getActive() {
+      return this._getTabs().findIndex(t => t.checked);
+    }
+
+    setActive(n) {
+      const tabs = this._getTabs();
+      if (tabs[n]) { tabs[n].checked = true; this.emit('dp:tabchange', { index: n, label: tabs[n].getAttribute('aria-label') }); }
+      return this;
+    }
+
+    getActiveLabel() {
+      const tabs = this._getTabs();
+      const active = tabs.find(t => t.checked);
+      return active?.getAttribute('aria-label') || '';
+    }
+
+    getTabCount() { return this._getTabs().length; }
+
+    getTabLabels() {
+      return this._getTabs().map(t => t.getAttribute('aria-label') || '');
+    }
+
+    onTabChange(fn) { return this.on('dp:tabchange', fn); }
+  }
+
+  // ============================================================
+  // DpTooltip
+  // ============================================================
+
+  class DpTooltip extends DpContainer {
+    getTip() { return this.el.dataset.tip || ''; }
+    setTip(str) { this.el.dataset.tip = str; return this; }
+  }
+
+  // ============================================================
+  // DpTable
+  // ============================================================
+
+  class DpTable extends DpComponent {
+    _thead() { return this.el.querySelector('thead'); }
+    _tbody() { return this.el.querySelector('tbody'); }
+    _rows() { return Array.from((this._tbody() || this.el).querySelectorAll('tr')); }
+
+    getHeaders() {
+      const thead = this._thead();
+      if (!thead) return [];
+      return Array.from(thead.querySelectorAll('th')).map(th => th.textContent.trim());
+    }
+
+    setHeaders(arr) {
+      let thead = this._thead();
+      if (!thead) { thead = document.createElement('thead'); this.el.prepend(thead); }
+      thead.innerHTML = '<tr>' + arr.map(h => `<th>${h}</th>`).join('') + '</tr>';
+      return this;
+    }
+
+    getColCount() { return this.getHeaders().length || (this._rows()[0]?.children.length || 0); }
+    getRowCount() { return this._rows().length; }
+
+    getData() {
+      return this._rows().map(tr =>
+        Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim())
+      );
+    }
+
+    setData(rows) {
+      let tbody = this._tbody();
+      if (!tbody) { tbody = document.createElement('tbody'); this.el.appendChild(tbody); }
+      tbody.innerHTML = rows.map(row =>
+        '<tr>' + row.map(cell => `<td>${cell}</td>`).join('') + '</tr>'
+      ).join('');
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    getRow(n) {
+      const row = this._rows()[n];
+      return row ? Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim()) : null;
+    }
+
+    addRow(data, idx) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = data.map(cell => `<td>${cell}</td>`).join('');
+      let tbody = this._tbody();
+      if (!tbody) { tbody = document.createElement('tbody'); this.el.appendChild(tbody); }
+      if (idx !== undefined && tbody.children[idx]) {
+        tbody.children[idx].before(tr);
+      } else {
+        tbody.appendChild(tr);
+      }
+      this._bindRowEvents(tr);
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    removeRow(n) {
+      const rows = this._rows();
+      if (rows[n]) rows[n].remove();
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    updateRow(n, data) {
+      const rows = this._rows();
+      if (rows[n]) rows[n].innerHTML = data.map(cell => `<td>${cell}</td>`).join('');
+      this.emit('dp:datachange', this.getData());
+      return this;
+    }
+
+    getCell(row, col) {
+      const r = this._rows()[row];
+      return r?.children[col]?.textContent.trim() || null;
+    }
+
+    setCell(row, col, val) {
+      const r = this._rows()[row];
+      if (r?.children[col]) r.children[col].textContent = val;
+      return this;
+    }
+
+    selectRow(n) {
+      this._rows().forEach((tr, i) => {
+        tr.classList.toggle('bg-primary/10', i === n);
+        tr.classList.toggle('dp-selected', i === n);
+      });
+      this._selectedIndex = n;
+      this.emit('dp:rowselect', { data: this.getRow(n), index: n });
+      return this;
+    }
+
+    deselectRow() {
+      this._rows().forEach(tr => {
+        tr.classList.remove('bg-primary/10', 'dp-selected');
+      });
+      this._selectedIndex = -1;
+      return this;
+    }
+
+    getSelectedRow() {
+      return this._selectedIndex >= 0 ? this.getRow(this._selectedIndex) : null;
+    }
+
+    getSelectedIndex() { return this._selectedIndex ?? -1; }
+
+    sort(col, dir = 'asc') {
+      const data = this.getData();
+      data.sort((a, b) => {
+        const va = a[col], vb = b[col];
+        const cmp = isNaN(va) ? va.localeCompare(vb) : parseFloat(va) - parseFloat(vb);
+        return dir === 'desc' ? -cmp : cmp;
+      });
+      this.setData(data);
+      this.emit('dp:sort', { col, dir });
+      return this;
+    }
+
+    filter(fn) {
+      if (!this._origData) this._origData = this.getData();
+      this.setData(this._origData.filter(fn));
+      return this;
+    }
+
+    clearFilter() {
+      if (this._origData) { this.setData(this._origData); this._origData = null; }
+      return this;
+    }
+
+    search(query) {
+      const q = query.toLowerCase();
+      return this.filter(row => row.some(cell => cell.toLowerCase().includes(q)));
+    }
+
+    clearSearch() { return this.clearFilter(); }
+
+    toCSV() {
+      const headers = this.getHeaders();
+      const rows = this.getData();
+      const lines = [];
+      if (headers.length) lines.push(headers.join(','));
+      rows.forEach(r => lines.push(r.join(',')));
+      return lines.join('\n');
+    }
+
+    toJSON() {
+      const headers = this.getHeaders();
+      return this.getData().map(row => {
+        const obj = {};
+        row.forEach((cell, i) => { obj[headers[i] || `col${i}`] = cell; });
+        return obj;
+      });
+    }
+
+    _bindRowEvents(tr) {
+      // Row events bound during discovery
+    }
+
+    onRowClick(fn) { return this.on('dp:rowclick', fn); }
+    onRowDblClick(fn) { return this.on('dp:rowdblclick', fn); }
+    onRowSelect(fn) { return this.on('dp:rowselect', fn); }
+    onCellClick(fn) { return this.on('dp:cellclick', fn); }
+    onSort(fn) { return this.on('dp:sort', fn); }
+    onDataChange(fn) { return this.on('dp:datachange', fn); }
+
+    _initTableEvents() {
+      this._selectedIndex = -1;
+      (this._tbody() || this.el).addEventListener('click', (e) => {
+        const td = e.target.closest('td');
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        const rowIdx = this._rows().indexOf(tr);
+        const rowData = this.getRow(rowIdx);
+        if (td) {
+          const colIdx = Array.from(tr.children).indexOf(td);
+          this.emit('dp:cellclick', { value: td.textContent.trim(), rowIdx, colIdx });
+        }
+        this.emit('dp:rowclick', { data: rowData, index: rowIdx });
+      });
+
+      (this._tbody() || this.el).addEventListener('dblclick', (e) => {
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        const rowIdx = this._rows().indexOf(tr);
+        this.emit('dp:rowdblclick', { data: this.getRow(rowIdx), index: rowIdx });
+      });
+    }
+  }
+
+  // ============================================================
+  // DpList
+  // ============================================================
+
+  class DpList extends DpComponent {
+    getItems() {
+      return Array.from(this.el.querySelectorAll('.dp-list-row, li')).map(el => _wrap(el));
+    }
+    getItemCount() { return this.getItems().length; }
+    addItem(html) { this.el.insertAdjacentHTML('beforeend', `<li class="dp-list-row list-row">${html}</li>`); return this; }
+    removeItem(n) { const items = this.el.querySelectorAll('.dp-list-row, li'); if (items[n]) items[n].remove(); return this; }
+    getItem(n) { const items = this.getItems(); return items[n] || null; }
+    clear() { this.el.innerHTML = ''; return this; }
+    onItemClick(fn) {
+      this.el.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+        const idx = Array.from(this.el.children).indexOf(li);
+        fn(_wrap(li), idx, e);
+      });
+      return this;
+    }
+  }
+
+  // ============================================================
+  // DpMenu
+  // ============================================================
+
+  class DpMenu extends DpComponent {
+    getItems() {
+      return Array.from(this.el.querySelectorAll('li:not(.dp-menu-title)')).map(el => _wrap(el));
+    }
+    getActive() {
+      const a = this.el.querySelector('.menu-active');
+      return a ? _wrap(a) : null;
+    }
+    getActiveIndex() {
+      const items = this.getItems();
+      return items.findIndex(item => item.hasClass('menu-active'));
+    }
+    setActive(n) {
+      this.getItems().forEach((item, i) => {
+        item.el.classList.toggle('menu-active', i === n);
+      });
+      return this;
+    }
+    onSelect(fn) {
+      this.el.addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li || li.classList.contains('dp-menu-title')) return;
+        const idx = this.getItems().findIndex(item => item.el === li);
+        fn(_wrap(li), idx, e);
+      });
+      return this;
+    }
+  }
+
+  // ============================================================
+  // DpSteps
+  // ============================================================
+
+  class DpSteps extends DpComponent {
+    _steps() { return Array.from(this.el.querySelectorAll('.dp-step')); }
+
+    getActive() {
+      const steps = this._steps();
+      for (let i = steps.length - 1; i >= 0; i--) {
+        if (Array.from(steps[i].classList).some(c => c.startsWith('step-') && c !== 'step')) return i;
+      }
+      return -1;
+    }
+
+    setActive(n, color = 'primary') {
+      this._steps().forEach((step, i) => {
+        // Remove existing step-* color classes
+        Array.from(step.classList).filter(c => c.startsWith('step-')).forEach(c => step.classList.remove(c));
+        if (i <= n) step.classList.add(`step-${color}`);
+      });
+      this.emit('dp:stepchange', n);
+      return this;
+    }
+
+    getStepCount() { return this._steps().length; }
+    next() { return this.setActive(Math.min(this.getActive() + 1, this.getStepCount() - 1)); }
+    prev() { return this.setActive(Math.max(this.getActive() - 1, 0)); }
+    reset() { return this.setActive(-1); }
+    onStepChange(fn) { return this.on('dp:stepchange', fn); }
+  }
+
+  // ============================================================
+  // DpCarousel
+  // ============================================================
+
+  class DpCarousel extends DpComponent {
+    _items() { return Array.from(this.el.querySelectorAll('.dp-carousel-item')); }
+    getSlideCount() { return this._items().length; }
+    getActive() { return this._activeIdx || 0; }
+    setActive(n) {
+      const items = this._items();
+      if (items[n]) { items[n].scrollIntoView({ behavior: 'smooth', inline: 'center' }); this._activeIdx = n; this.emit('dp:slidechange', n); }
+      return this;
+    }
+    next() { return this.setActive(Math.min(this.getActive() + 1, this.getSlideCount() - 1)); }
+    prev() { return this.setActive(Math.max(this.getActive() - 1, 0)); }
+    onSlideChange(fn) { return this.on('dp:slidechange', fn); }
+  }
+
+  // ============================================================
+  // DpRating
+  // ============================================================
+
+  class DpRating extends DpComponent {
+    _inputs() { return Array.from(this.el.querySelectorAll('input[type="radio"]')); }
+    getValue() {
+      const checked = this._inputs().findIndex(i => i.checked);
+      return checked >= 0 ? checked + 1 : 0;
+    }
+    setValue(n) {
+      const inputs = this._inputs();
+      if (inputs[n - 1]) inputs[n - 1].checked = true;
+      return this;
+    }
+    getMax() { return this._inputs().length; }
+    onChange(fn) {
+      this.el.addEventListener('change', () => fn(this.getValue(), this));
+      return this;
+    }
+  }
+
+  // ============================================================
+  // DpChat
+  // ============================================================
+
+  class DpChat extends DpContainer {
+    getMessages() {
+      return Array.from(this.el.querySelectorAll('.dp-chat')).map(el => ({
+        from: el.querySelector('.dp-chat-header')?.textContent.trim() || '',
+        text: el.querySelector('.dp-chat-bubble')?.textContent.trim() || '',
+        position: el.classList.contains('chat-start') ? 'start' : 'end',
+      }));
+    }
+  }
+
+  // ============================================================
+  // DpCountdown
+  // ============================================================
+
+  class DpCountdown extends DpComponent {
+    getValue() {
+      const span = this.el.querySelector('span[style]');
+      const m = span?.style.cssText.match(/--value:\s*(\d+)/);
+      return m ? parseInt(m[1]) : 0;
+    }
+    setValue(n) {
+      const span = this.el.querySelector('span[style]');
+      if (span) span.style.setProperty('--value', n);
+      return this;
+    }
+    start(from, interval = 1000) {
+      this.setValue(from);
+      this._timer = setInterval(() => {
+        const v = this.getValue() - 1;
+        this.setValue(v);
+        this.emit('dp:tick', v);
+        if (v <= 0) { this.stop(); this.emit('dp:complete'); }
+      }, interval);
+      return this;
+    }
+    stop() { clearInterval(this._timer); return this; }
+    onComplete(fn) { return this.on('dp:complete', fn); }
+    onTick(fn) { return this.on('dp:tick', fn); }
+  }
+
+  // ============================================================
+  // DpRadialProgress
+  // ============================================================
+
+  class DpRadialProgress extends DpComponent {
+    getValue() {
+      const m = this.el.style.cssText.match(/--value:\s*(\d+)/);
+      return m ? parseInt(m[1]) : 0;
+    }
+    setValue(n) {
+      this.el.style.setProperty('--value', n);
+      this.el.textContent = n + '%';
+      return this;
+    }
+    animate(to, duration = 500) {
+      const from = this.getValue();
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / duration, 1);
+        this.setValue(Math.round(from + (to - from) * p));
+        if (p < 1) requestAnimationFrame(tick);
+        else this.emit('dp:change', to);
+      };
+      requestAnimationFrame(tick);
+      return this;
+    }
+    onChange(fn) { return this.on('dp:change', fn); }
+  }
+
+  // ============================================================
+  // DpThemeController
+  // ============================================================
+
+  class DpThemeController extends DpComponent {
+    getTheme() { return this.el.value; }
+    setTheme(str) { this.el.value = str; this.el.checked = true; return this; }
+    getThemes() {
+      if (!this.el.name) return [this.el.value];
+      return Array.from(document.querySelectorAll(`input[name="${this.el.name}"]`))
+        .map(el => el.value);
+    }
+    onThemeChange(fn) {
+      return this._on('change', (e, comp) => fn(comp.getTheme(), comp));
+    }
+  }
+
+  // ============================================================
+  // Simple container classes (no extra methods)
+  // ============================================================
+
+  class DpHero extends DpContainer {
+    get content() { return this._sub('hero-content'); }
+    get overlay() { return this._sub('hero-overlay'); }
+  }
+
+  class DpToast extends DpContainer {}
+  class DpStack extends DpContainer {}
+  class DpJoin extends DpContainer {}
+  class DpIndicator extends DpContainer {}
+  class DpDiff extends DpContainer {}
+  class DpFieldset extends DpContainer {}
+  class DpBreadcrumbs extends DpComponent {}
+  class DpTimeline extends DpComponent {}
+  class DpMockup extends DpContainer {}
+  class DpButton extends DpComponent {}
+  class DpBadge extends DpComponent {}
+  class DpLink extends DpComponent {}
+  class DpKbd extends DpComponent {}
+  class DpLoading extends DpComponent {}
+  class DpProgress extends DpComponent {}
+  class DpStatus extends DpComponent {}
+  class DpDivider extends DpComponent {}
+  class DpSkeleton extends DpComponent {}
+
+  // ============================================================
+  // DpNavbar (for sub-element access)
+  // ============================================================
+
+  class DpNavbar extends DpContainer {
+    get start() { return this._sub('navbar-start'); }
+    get center() { return this._sub('navbar-center'); }
+    get end() { return this._sub('navbar-end'); }
+  }
+
+  // ============================================================
+  // Composite classes
+  // ============================================================
+
+  class DpFormField extends DpComponent {
+    getInput() {
+      const input = this.el.querySelector('.dp-input, .dp-select, .dp-textarea, .dp-checkbox, .dp-toggle, .dp-radio, .dp-range, .dp-file-input');
+      return input ? _wrap(input) : null;
+    }
+    getValue() { return this.getInput()?.getValue(); }
+    setValue(val) { this.getInput()?.setValue(val); return this; }
+    getLabel() {
+      const lbl = this.el.querySelector('.dp-formfield-label');
+      return lbl?.textContent.trim() || '';
+    }
+    setLabel(str) {
+      const lbl = this.el.querySelector('.dp-formfield-label');
+      if (lbl) lbl.textContent = str;
+      return this;
+    }
+    onChange(fn) { this.getInput()?.onChange(fn); return this; }
+  }
+
+  class DpFormCard extends DpContainer {
+    getFields() {
+      return Array.from(this.el.querySelectorAll('.dp-formfield-label')).map(lbl => {
+        // Walk to next sibling input
+        const parent = lbl.parentElement;
+        return _wrap(parent) instanceof DpFormField ? _wrap(parent) : new DpFormField(parent);
+      });
+    }
+    getData() {
+      const data = {};
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea, .dp-checkbox, .dp-toggle').forEach(el => {
+        const comp = _wrap(el);
+        const name = el.name || el.getAttribute('placeholder') || '';
+        data[name] = comp.getValue();
+      });
+      return data;
+    }
+    setData(obj) {
+      Object.entries(obj).forEach(([key, val]) => {
+        const el = this.el.querySelector(`[name="${key}"]`);
+        if (el) _wrap(el).setValue(val);
+      });
+      return this;
+    }
+    reset() {
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea').forEach(el => {
+        _wrap(el).clear();
+      });
+      return this;
+    }
+    onSubmit(fn) {
+      const btn = this.el.querySelector('.dp-btn');
+      if (btn) btn.addEventListener('click', (e) => { e.preventDefault(); fn(this.getData(), this); });
+      return this;
+    }
+  }
+
+  class DpConversation extends DpContainer {
+    getMessages() {
+      return Array.from(this.el.querySelectorAll('.dp-chat')).map(el => ({
+        from: el.querySelector('.dp-chat-header')?.textContent.trim() || '',
+        text: el.querySelector('.dp-chat-bubble')?.textContent.trim() || '',
+        position: el.classList.contains('chat-start') ? 'start' : 'end',
+      }));
+    }
+    addMessage(opts) {
+      const pos = opts.position || 'start';
+      const color = opts.color ? ` chat-bubble-${opts.color}` : '';
+      const html = `<div class="dp-chat chat chat-${pos}">` +
+        (opts.from ? `<div class="dp-chat-header chat-header">${opts.from}</div>` : '') +
+        `<div class="dp-chat-bubble chat-bubble${color}">${opts.text}</div>` +
+        (opts.footer ? `<div class="dp-chat-footer chat-footer">${opts.footer}</div>` : '') +
+        `</div>`;
+      this.el.insertAdjacentHTML('beforeend', html);
+      this.emit('dp:message', opts);
+      return this;
+    }
+    getMessageCount() { return this.el.querySelectorAll('.dp-chat').length; }
+    clear() { this.el.innerHTML = ''; return this; }
+    scrollToBottom() { this.el.scrollTop = this.el.scrollHeight; return this; }
+    onMessage(fn) { return this.on('dp:message', fn); }
+  }
+
+  class DpModalForm extends DpModal {
+    getData() {
+      const data = {};
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea, .dp-checkbox, .dp-toggle').forEach(el => {
+        const comp = _wrap(el);
+        data[el.name || el.placeholder || ''] = comp.getValue();
+      });
+      return data;
+    }
+    setData(obj) {
+      Object.entries(obj).forEach(([key, val]) => {
+        const el = this.el.querySelector(`[name="${key}"]`);
+        if (el) _wrap(el).setValue(val);
+      });
+      return this;
+    }
+    reset() {
+      this.el.querySelectorAll('.dp-input, .dp-select, .dp-textarea').forEach(el => _wrap(el).clear());
+      return this;
+    }
+    onSubmit(fn) {
+      const btn = this.el.querySelector('.dp-btn[class*="primary"], .dp-btn:last-child');
+      if (btn) btn.addEventListener('click', (e) => { e.preventDefault(); fn(this.getData(), this); });
+      return this;
+    }
+  }
+
+  class DpHeroCta extends DpContainer {
+    getTitle() { return this.el.querySelector('h1')?.textContent.trim() || ''; }
+    setTitle(str) { const h = this.el.querySelector('h1'); if (h) h.textContent = str; return this; }
+    getSubtitle() { return this.el.querySelector('p')?.textContent.trim() || ''; }
+    setSubtitle(str) { const p = this.el.querySelector('p'); if (p) p.textContent = str; return this; }
+    onPrimaryClick(fn) {
+      const btn = this.el.querySelector('.dp-btn');
+      if (btn) btn.addEventListener('click', fn);
+      return this;
+    }
+  }
+
+  class DpPageLayout extends DpContainer {
+    _drawer() { return this.el.querySelector('.dp-drawer') ? _wrap(this.el.querySelector('.dp-drawer')) : null; }
+    isSidebarOpen() { return this._drawer()?.isOpen() || false; }
+    toggleSidebar() { this._drawer()?.toggle(); return this; }
+    openSidebar() { this._drawer()?.open(); return this; }
+    closeSidebar() { this._drawer()?.close(); return this; }
+    getNav() { const el = this.el.querySelector('.dp-navbar'); return el ? _wrap(el) : null; }
+    getContent() { return this._sub('pagelayout-content'); }
+  }
+
+  class DpDataTable extends DpTable {
+    // Pagination on top of DpTable
+    _pageSize = 10;
+    _currentPage = 1;
+
+    getPage() { return this._currentPage; }
+    setPage(n) { this._currentPage = Math.max(1, Math.min(n, this.getPageCount())); this._renderPage(); return this; }
+    getPageCount() { return Math.ceil((this._allData || this.getData()).length / this._pageSize); }
+    getPageSize() { return this._pageSize; }
+    setPageSize(n) { this._pageSize = n; this._currentPage = 1; this._renderPage(); return this; }
+    nextPage() { return this.setPage(this._currentPage + 1); }
+    prevPage() { return this.setPage(this._currentPage - 1); }
+    firstPage() { return this.setPage(1); }
+    lastPage() { return this.setPage(this.getPageCount()); }
+    onPageChange(fn) { return this.on('dp:pagechange', fn); }
+
+    _renderPage() {
+      if (!this._allData) this._allData = this.getData();
+      const start = (this._currentPage - 1) * this._pageSize;
+      const page = this._allData.slice(start, start + this._pageSize);
+      this.setData(page);
+      this.emit('dp:pagechange', this._currentPage);
+    }
+  }
+
+  class DpNavComposite extends DpContainer {
+    getBrand() {
+      const btn = this.el.querySelector('.dp-navbar-start .dp-btn');
+      return btn?.textContent.trim() || '';
+    }
+    setBrand(str) {
+      const btn = this.el.querySelector('.dp-navbar-start .dp-btn');
+      if (btn) btn.textContent = str;
+      return this;
+    }
+    onNavigate(fn) {
+      this.el.querySelectorAll('.dp-menu-item, .dp-navbar-center a').forEach((el, i) => {
+        el.addEventListener('click', (e) => fn(el.textContent.trim(), i, e));
+      });
+      return this;
+    }
+  }
+
+  // ============================================================
+  // Component Registry — maps dp- class to API class
+  // ============================================================
+
+  const REGISTRY = {
+    'btn': DpButton, 'badge': DpBadge, 'link': DpLink, 'kbd': DpKbd,
+    'loading': DpLoading, 'progress': DpProgress, 'status': DpStatus,
+    'divider': DpDivider, 'skeleton': DpSkeleton,
+    'input': DpInput, 'select': DpSelect, 'textarea': DpTextarea,
+    'checkbox': DpCheckbox, 'toggle': DpToggle, 'radio': DpRadio,
+    'range': DpRange, 'file-input': DpFileInput,
+    'card': DpCard, 'alert': DpAlert, 'hero': DpHero,
+    'toast': DpToast, 'stack': DpStack, 'join': DpJoin,
+    'indicator': DpIndicator, 'diff': DpDiff, 'fieldset': DpFieldset,
+    'collapse': DpCollapse, 'modal': DpModal, 'dropdown': DpDropdown,
+    'drawer': DpDrawer, 'swap': DpSwap, 'tabs': DpTabs,
+    'tooltip': DpTooltip, 'navbar': DpNavbar,
+    'table': DpTable, 'list': DpList, 'menu': DpMenu,
+    'steps': DpSteps, 'timeline': DpTimeline, 'breadcrumbs': DpBreadcrumbs,
+    'carousel': DpCarousel, 'rating': DpRating, 'chat': DpChat,
+    'countdown': DpCountdown, 'radial-progress': DpRadialProgress,
+    'theme-controller': DpThemeController,
+    'mockup-browser': DpMockup, 'mockup-code': DpMockup,
+    'mockup-window': DpMockup, 'mockup-phone': DpMockup,
+    // Composites
+    'formfield': DpFormField, 'formcard': DpFormCard,
+    'datatable': DpDataTable, 'conversation': DpConversation,
+    'modalform': DpModalForm, 'herocta': DpHeroCta,
+    'pagelayout': DpPageLayout, 'nav': DpNavComposite,
+  };
+
+  // ============================================================
+  // Factory: _wrap(el) → appropriate component instance
+  // ============================================================
+
+  const _cache = new WeakMap();
+
+  function _wrap(el) {
+    if (!el) return null;
+    if (_cache.has(el)) return _cache.get(el);
+
+    let Cls = DpComponent;
+    for (const cls of el.classList) {
+      if (cls.startsWith('dp-')) {
+        const name = cls.slice(3);
+        if (REGISTRY[name]) { Cls = REGISTRY[name]; break; }
+      }
+    }
+
+    const comp = new Cls(el);
+
+    // Post-init hooks
+    if (comp instanceof DpTable && !(comp instanceof DpDataTable)) {
+      comp._initTableEvents();
+    }
+
+    _cache.set(el, comp);
+    return comp;
+  }
+
+  // ============================================================
+  // dp() — main factory function
+  // ============================================================
+
+  function dp(selector) {
+    if (selector instanceof Element) return _wrap(selector);
+    if (typeof selector === 'string') {
+      const el = document.querySelector(selector);
+      return el ? _wrap(el) : null;
+    }
+    return null;
+  }
+
+  dp.findAll = function(selector) {
+    return Array.from(document.querySelectorAll(selector)).map(el => _wrap(el));
+  };
+
+  dp.create = function(type, opts) {
+    // Future: render component and return wrapped instance
+    console.warn('dp.create() not yet implemented — render via DaisyPug engine instead');
+    return null;
+  };
+
+  // Ready system
+  const _readyCallbacks = [];
+  let _isReady = false;
+
+  dp.on = function(event, fn) {
+    if (event === 'ready') {
+      if (_isReady) fn();
+      else _readyCallbacks.push(fn);
+    }
+  };
+
+  dp.registry = _cache;
+  dp.version = '1.0.0';
+
+  // Expose classes for instanceof checks
+  dp.DpComponent = DpComponent;
+  dp.DpInput = DpInput;
+  dp.DpSelect = DpSelect;
+  dp.DpTextarea = DpTextarea;
+  dp.DpCheckbox = DpCheckbox;
+  dp.DpToggle = DpToggle;
+  dp.DpRadio = DpRadio;
+  dp.DpRange = DpRange;
+  dp.DpFileInput = DpFileInput;
+  dp.DpContainer = DpContainer;
+  dp.DpToggleable = DpToggleable;
+  dp.DpCard = DpCard;
+  dp.DpAlert = DpAlert;
+  dp.DpModal = DpModal;
+  dp.DpDrawer = DpDrawer;
+  dp.DpTabs = DpTabs;
+  dp.DpTable = DpTable;
+  dp.DpList = DpList;
+  dp.DpMenu = DpMenu;
+  dp.DpSteps = DpSteps;
+  dp.REGISTRY = REGISTRY;
+
+  // ============================================================
+  // Auto-discovery
+  // ============================================================
+
+  function _discover() {
+    document.querySelectorAll('[class*="dp-"]').forEach(el => _wrap(el));
+    _isReady = true;
+    _readyCallbacks.forEach(fn => fn());
+    _readyCallbacks.length = 0;
+  }
+
+  // MutationObserver for dynamic elements
+  function _observe() {
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1) {
+            if (Array.from(node.classList || []).some(c => c.startsWith('dp-'))) _wrap(node);
+            node.querySelectorAll?.('[class*="dp-"]').forEach(el => _wrap(el));
+          }
+        });
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { _discover(); _observe(); });
+  } else {
+    _discover();
+    _observe();
+  }
+
+  // ============================================================
+  // Export
+  // ============================================================
+
+  global.dp = dp;
+
+})(typeof window !== 'undefined' ? window : this);
+</script>
+  </body>
+</html>
