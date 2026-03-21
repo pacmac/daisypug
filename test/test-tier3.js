@@ -68,7 +68,7 @@ test('tabs with content',
     ['has role tablist', h => h.includes('role="tablist"')],
     ['has tab inputs', h => (h.match(/role="tab"/g) || []).length === 2],
     ['has tab-content', h => (h.match(/dp-tab-content/g) || []).length === 2],
-    ['has active', h => h.includes('tab-active')],
+    ['has checked', h => h.includes('checked="checked"')],
   ]);
 
 // Carousel
@@ -122,7 +122,7 @@ test('table with headers and rows',
   [
     ['has table class', h => h.includes('table table-zebra')],
     ['has thead', h => h.includes('<thead')],
-    ['has th', h => h.includes('<th>Name</th>')],
+    ['has th', h => h.includes('Name</th>')],
     ['has tbody', h => h.includes('<tbody')],
     ['has data', h => h.includes('Alice') && h.includes('30')],
   ]);

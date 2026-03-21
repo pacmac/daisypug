@@ -6,7 +6,7 @@ mixin tabs(opts)
 
 mixin tab(opts)
   - opts = opts || {}
-  - const cls = ['dp-tab', 'tab', opts.active && 'tab-active', opts.disabled && 'tab-disabled', opts.class].filter(Boolean).join(' ')
+  - const cls = ['dp-tab', 'tab', opts.disabled && 'tab-disabled', opts.class].filter(Boolean).join(' ')
   input(type="radio" name=opts.name class=cls role="tab" aria-label=opts.label checked=opts.active)&attributes(attributes)
 
 mixin tab-content(opts)
