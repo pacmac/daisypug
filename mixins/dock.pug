@@ -2,6 +2,22 @@ mixin dock(opts)
   - opts = opts || {}
   - const cls = ['dp-dock', 'dock', opts.size && `dock-${opts.size}`, opts.class].filter(Boolean).join(' ')
   div(class=cls)&attributes(attributes)
+    if opts.items
+      each item in opts.items
+        - const itemCls = [item.active && 'dock-active', item.class].filter(Boolean).join(' ') || undefined
+        button(class=itemCls data-panel=item.panel || item.name)&attributes(item.attrs || {})
+          if item.icon
+            i(class=item.icon)
+          +dock-label({text: item.text || item.label || item.name})
+    block
+
+mixin dock-item(opts)
+  - opts = opts || {}
+  - const cls = [opts.active && 'dock-active', opts.class].filter(Boolean).join(' ') || undefined
+  button(class=cls data-panel=opts.panel || opts.name)&attributes(attributes)
+    if opts.icon
+      i(class=opts.icon)
+    +dock-label({text: opts.text || opts.label})
     block
 
 mixin dock-label(opts)
