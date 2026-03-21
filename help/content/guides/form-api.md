@@ -65,6 +65,53 @@ form.fields()                   // all input components as array
 form.fieldNames()               // ['email', 'country', 'agree', ...]
 ```
 
+### Enable / Disable / ReadOnly
+
+```js
+form.disable()                  // disable all fields
+form.enable()                   // enable all fields
+form.readOnly(true)             // make all fields read-only
+form.readOnly(false)            // make editable again
+```
+
+### Field Visibility
+
+```js
+form.showField('advanced')      // show field + its label
+form.hideField('advanced')      // hide field + its label
+form.focus('email')             // focus a specific field
+```
+
+### Dynamic Fields
+
+```js
+form.addField('notes', '<textarea class="dp-textarea textarea w-full" name="notes">')
+form.removeField('notes')       // removes field + label
+```
+
+### Serialization
+
+```js
+form.toFormData()               // FormData object (for file uploads)
+form.toQueryString()            // 'email=a%40b.com&country=UK'
+form.fromQueryString('email=a@b&name=Alice')  // populate from URL params
+form.serialize()                // JSON string
+form.deserialize('{"email":"a@b"}')  // populate from JSON string
+```
+
+### Watch / Computed
+
+```js
+// Watch a single field
+form.watch('email', (value, field, form) => {
+  console.log('Email changed to:', value);
+});
+
+// Computed values — auto-update derived fields
+form.computed('fullName', data => `${data.firstName} ${data.lastName}`);
+// Updates element with id="fullName" or data-computed="fullName"
+```
+
 ### API Integration
 
 ```js
@@ -89,9 +136,23 @@ const { valid, errors } = form.validate()
 // errors: {fieldName: 'error message'}
 
 // Built-in validators:
-// - required fields (empty check)
+// - required (empty check)
 // - email format (@ check)
-// - minLength (from attribute)
+// - minLength / maxLength (from attributes)
+// - pattern (regex from pattern attribute)
+
+// Custom rules
+form.rules({
+  email: (val) => val.endsWith('@company.com') || 'Must be a company email',
+  password: (val) => val.length >= 8 || 'Minimum 8 characters',
+  confirmPassword: (val, data) => val === data.password || 'Passwords must match',
+  age: (val) => parseInt(val) >= 18 || 'Must be 18+',
+});
+
+// Show inline errors on fields (adds error classes + messages)
+form.errors()                   // auto-validate and show
+form.errors({email: 'Taken'})   // show specific errors
+form.clearErrors()              // remove all error indicators
 ```
 
 ### Dirty Checking
