@@ -1,0 +1,281 @@
+//- DaisyPug Component Showcase — tabbed demo for every dp- component
+
++navbar({class: 'bg-primary text-primary-content shadow-lg'})
+  +navbar-start
+    span.text-xl.font-bold.px-4 DaisyPug Showcase
+  +navbar-end
+    +theme-radios({themes: ['light', 'dark', 'cupcake', 'synthwave'], as: 'btn', active: 'light'})
+
+div.p-4
+
+  +tabs({style: 'lift', size: 'lg'})
+
+    //- ===== TAB: Layouts =====
+    +tab({name: 'showcase', label: 'Layouts', active: true})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Split Layouts
+
+      h3.font-semibold.mb-2 Basic Sidebar — vsplit('250px')
+      div(style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
+        +dp-vsplit('250px')
+          +dp-panel('west', {title: 'Sidebar'})
+            +menu({class: 'p-2', size: 'sm'})
+              +menu-item({active: true})
+                a Dashboard
+              +menu-item
+                a Orders
+              +menu-item
+                a Settings
+          +dp-panel('center', {title: 'Content'})
+            div.p-4
+              p Main content area. Sidebar is 250px.
+
+      h3.font-semibold.mt-6.mb-2 Nested 3-Column — vsplit + vsplit
+      div(style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
+        +dp-vsplit('150px')
+          +dp-panel('west', {title: 'Nav'})
+            +menu({size: 'sm', class: 'p-2'})
+              +menu-item({active: true})
+                a Inbox
+              +menu-item
+                a Sent
+          +dp-vsplit('280px')
+            +dp-panel('west', {title: 'List'})
+              +list({size: 'sm'})
+                +list-row
+                  div.text-sm Meeting at 10am
+                +list-row
+                  div.text-sm Updated report
+            +dp-panel('center', {title: 'Detail'})
+              div.p-4.text-sm Preview content here
+
+      h3.font-semibold.mt-6.mb-2 IDE Layout — vsplit + hsplit
+      div(style="height: 280px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
+        +dp-vsplit('200px')
+          +dp-panel('west', {title: 'Explorer'})
+            +menu({size: 'sm', class: 'p-2'})
+              +menu-item
+                a index.js
+              +menu-item({active: true})
+                a engine.js
+              +menu-item
+                a dp.js
+          +dp-hsplit('65%')
+            +dp-panel('north', {title: 'editor.js'})
+              +mockup-code({class: 'rounded-none h-full text-sm', lines: [{prefix: '1', text: "const pug = require('pug');"}, {prefix: '2', text: 'function render() {'}, {prefix: '3', text: '  return html;'}, {prefix: '4', text: '}'}]})
+            +dp-panel('south', {title: 'Terminal'})
+              +mockup-code({class: 'rounded-none h-full text-sm', lines: [{prefix: '$', text: 'npm test'}, {prefix: '>', text: '23 passed'}]})
+
+    //- ===== TAB: Forms =====
+    +tab({name: 'showcase', label: 'Forms'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Form System (dp-fitem)
+
+      h3.font-semibold.mb-2 3-Column Form — Auto-detect input types
+      div.bg-base-100.rounded-lg.p-4.mb-6
+        +dp-form({id: 'fitem-demo'}).three
+          .divider.text-xs.font-bold.opacity-50.mt-0(style="grid-column:1/-1") DETAILS
+          +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
+          +dp-fitem('Description', {class: 'textbox', name: 'DESCRIPTION', id: '~', placeholder: 'Enter description'})
+          +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
+          .divider.text-xs.font-bold.opacity-50(style="grid-column:1/-1") QUANTITIES
+          +dp-fitem('Quantity', {class: 'numberspinner', name: 'QTY', id: '~', min: 0, precision: 0, value: '25'})
+          +dp-fitem('Weight', {class: 'numberbox', name: 'WEIGHT', id: '~', precision: 2, value: '12.50'})
+          +dp-fitem('Price', {class: 'numberbox', name: 'PRICE', id: '~', precision: 2, value: '199.99'})
+          .divider.text-xs.font-bold.opacity-50(style="grid-column:1/-1") DATES & OTHER
+          +dp-fitem('Order Date', {class: 'datebox', name: 'ORDER_DATE', id: '~'})
+          +dp-fitem('Active', {class: 'checkbox', name: 'ACTIVE', id: '~', checked: true})
+          +dp-fitem('Notify', {class: 'toggle', name: 'NOTIFY', id: '~'})
+          div(style="grid-column:1/-1")
+            +dp-fitem('Notes', {class: 'multiline', name: 'NOTES', id: '~', rows: 2, placeholder: 'Optional notes...'})
+
+      h3.font-semibold.mb-2 Form with Groups
+      div.bg-base-100.rounded-lg.p-4(style="max-width:450px")
+        +dp-form({id: 'group-demo'})
+          +dp-fitem('Part ID', {class: 'combobox', name: 'GRP_PART', id: '~', options: ['A8000', 'B3200']})
+          +dp-fitem('Description', {class: 'textbox', name: 'GRP_DESC', id: '~'})
+          +dp-group('Dimensions')
+            +dp-fitem('Width', {class: 'numberbox', name: 'GRP_W', id: '~', precision: 2})
+            +dp-fitem('Height', {class: 'numberbox', name: 'GRP_H', id: '~', precision: 2})
+          +dp-hgroup('Rates')
+            +dp-fitem('Base', {class: 'numberbox', name: 'GRP_BASE', id: '~', precision: 4})
+            +dp-fitem('Tax %', {class: 'numberbox', name: 'GRP_TAX', id: '~', precision: 1})
+
+    //- ===== TAB: Toolbar =====
+    +tab({name: 'showcase', label: 'Toolbar'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Toolbar Variants
+
+      div.space-y-3.bg-base-100.rounded-lg.overflow-hidden
+        +dp-toolbar({title: 'Parts List', icon: 'bi bi-box-seam', asdpx: 'aed'})
+        +dp-toolbar({title: 'BOM Lines', icon: 'bi bi-layers', asdpx: 'aed'})
+          +dp-toolbar-sep
+          +btn({size: 'xs', style: 'ghost', text: 'Validate'})
+          +btn({size: 'xs', style: 'ghost', text: 'Export'})
+        +dp-toolbar({title: 'Order Entry', icon: 'bi bi-cart', asdpx: 'asdx'})
+        +dp-toolbar
+          +btn({size: 'xs', style: 'ghost', text: 'Refresh'})
+          +dp-toolbar-sep
+          +btn({size: 'xs', style: 'ghost', text: 'Export CSV'})
+
+    //- ===== TAB: Tables =====
+    +tab({name: 'showcase', label: 'Tables'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Data Tables
+
+      h3.font-semibold.mb-2 Auto-width columns (default)
+      div.bg-base-100.rounded-lg.p-4.mb-6
+        +table({headers: ['Part ID', 'Description', 'Qty', 'Price', 'Status'], rows: [['A8000', 'Hydraulic Pump', '120', '$199.99', 'Active'], ['B3200', 'Bearing Kit', '45', '$12.00', 'Active'], ['C1500', 'Control Valve', '8', '$285.00', 'Draft']], zebra: true, size: 'sm'})
+
+      h3.font-semibold.mb-2 DataTable with Pagination
+      div.bg-base-100.rounded-lg.p-4
+        +dp-datatable({headers: ['Date', 'Unit', 'Name', 'Type'], rows: [['Mar 22', 'B-05-08', 'Sensor A', 'knock-1'], ['Mar 22', 'B-05-08', 'Sensor A', 'knock-1'], ['Mar 21', 'C-04-10', 'Mobile', 'knock-2'], ['Mar 21', 'B-05-08', 'Sensor A', 'knock-1'], ['Mar 20', 'B-05-08', 'Sensor A', 'blunt']], zebra: true, size: 'sm', pagination: {current: 1, total: 3}})
+
+    //- ===== TAB: Dock =====
+    +tab({name: 'showcase', label: 'Dock'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Dock (Bottom Nav)
+
+      div.bg-base-100.rounded-lg.overflow-hidden(style="height:200px; position:relative")
+        div.p-4 Content area above the dock
+        div(style="position:absolute; bottom:0; left:0; right:0")
+          +dock({size: 'sm', items: [{name: 'home', text: 'Home', active: true}, {name: 'search', text: 'Search'}, {name: 'profile', text: 'Profile'}, {name: 'settings', text: 'Settings'}]})
+
+    //- ===== TAB: Tabs =====
+    +tab({name: 'showcase', label: 'Tabs'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Tab Variants
+
+      h3.font-semibold.mb-2 Box style
+      +tabs({style: 'box'})
+        +tab({name: 'box-demo', label: 'Tab A', active: true})
+        +tab-content({class: 'p-4'})
+          p Box tab A content
+        +tab({name: 'box-demo', label: 'Tab B'})
+        +tab-content({class: 'p-4'})
+          p Box tab B content
+
+      h3.font-semibold.mt-6.mb-2 Lift style
+      +tabs({style: 'lift'})
+        +tab({name: 'lift-demo', label: 'First', active: true})
+        +tab-content({class: 'bg-base-100 p-4 rounded-box'})
+          p Lift tab content
+        +tab({name: 'lift-demo', label: 'Second'})
+        +tab-content({class: 'bg-base-100 p-4 rounded-box'})
+          p Second tab
+
+      h3.font-semibold.mt-6.mb-2 Border style
+      +tabs({style: 'border'})
+        +tab({name: 'bdr-demo', label: 'Alpha', active: true})
+        +tab-content({class: 'p-4'})
+          p Border tab content
+        +tab({name: 'bdr-demo', label: 'Beta'})
+        +tab-content({class: 'p-4'})
+          p Beta content
+
+    //- ===== TAB: Modals =====
+    +tab({name: 'showcase', label: 'Modals'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Modal Dialogs
+
+      div.flex.gap-3
+        +btn({text: 'Basic Modal', color: 'primary'})(onclick="demo_basic.showModal()")
+        +btn({text: 'Form Modal', color: 'secondary'})(onclick="demo_form.showModal()")
+
+      +modal({id: 'demo_basic'})
+        +modal-box
+          h3.text-lg.font-bold Hello!
+          p.py-4 This is a basic modal. Press ESC or click outside to close.
+          +modal-action
+            form(method="dialog")
+              +btn({text: 'Close'})
+
+      +dp-modalform('demo_form', 'Edit Record', {color: 'primary'}, [{label: 'Name', name: 'modal_name'}, {label: 'Email', name: 'modal_email', type: 'email'}, {label: 'Role', as: 'select', name: 'modal_role', options: ['Admin', 'User', 'Guest']}], {submit: 'Save', cancel: 'Cancel'})
+
+    //- ===== TAB: Buttons =====
+    +tab({name: 'showcase', label: 'Buttons'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Buttons & Badges
+
+      h3.font-semibold.mb-2 Colors
+      div.flex.flex-wrap.gap-2.mb-4
+        +btn({color: 'primary', text: 'Primary'})
+        +btn({color: 'secondary', text: 'Secondary'})
+        +btn({color: 'accent', text: 'Accent'})
+        +btn({color: 'info', text: 'Info'})
+        +btn({color: 'success', text: 'Success'})
+        +btn({color: 'warning', text: 'Warning'})
+        +btn({color: 'error', text: 'Error'})
+
+      h3.font-semibold.mb-2 Styles
+      div.flex.flex-wrap.gap-2.mb-4
+        +btn({style: 'outline', color: 'primary', text: 'Outline'})
+        +btn({style: 'soft', color: 'success', text: 'Soft'})
+        +btn({style: 'dash', color: 'warning', text: 'Dash'})
+        +btn({style: 'ghost', text: 'Ghost'})
+        +btn({style: 'link', text: 'Link'})
+
+      h3.font-semibold.mb-2 Badges
+      div.flex.flex-wrap.gap-2
+        +badge({color: 'primary', text: 'Primary'})
+        +badge({color: 'secondary', style: 'outline', text: 'Outline'})
+        +badge({color: 'accent', style: 'soft', text: 'Soft'})
+        +badge({color: 'info', text: 'Info', size: 'lg'})
+        +badge({color: 'success', style: 'dash', text: 'Dash'})
+
+    //- ===== TAB: Chat =====
+    +tab({name: 'showcase', label: 'Chat'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Chat & Conversation
+
+      div.bg-base-100.rounded-lg.p-4(style="max-width:500px")
+        +dp-conversation([{from: 'Alice', text: 'Hey! Have you tried DaisyPug?', position: 'start', color: 'primary'}, {from: 'Bob', text: 'Yes! The mixins are incredibly clean.', position: 'end'}, {from: 'Alice', text: 'And it has a full JS API too!', position: 'start', color: 'primary'}, {from: 'Bob', text: 'The form system is like DUI but better.', position: 'end'}])
+
+    //- ===== TAB: Stats =====
+    +tab({name: 'showcase', label: 'Stats'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Stats, Steps & Timeline
+
+      +stats({class: 'shadow w-full mb-6'})
+        +stat
+          +stat-title({text: 'Revenue'})
+          +stat-value({text: '$12.4K'})
+          +stat-desc({text: '+21% from last month'})
+        +stat
+          +stat-title({text: 'Users'})
+          +stat-value({text: '2,100'})
+        +stat
+          +stat-title({text: 'Uptime'})
+          +stat-value({text: '99.8%'})
+
+      h3.font-semibold.mb-2 Steps
+      +steps
+        +step({color: 'primary', text: 'Register'})
+        +step({color: 'primary', text: 'Choose Plan'})
+        +step({color: 'primary', text: 'Payment'})
+        +step({text: 'Complete'})
+
+    //- ===== TAB: Full App =====
+    +tab({name: 'showcase', label: 'Full App'})
+    +tab-content({class: 'bg-base-200 p-4'})
+      h2.text-xl.font-bold.mb-4 Full CRUD Page
+
+      div(style="height: 450px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
+        +dp-vsplit('320px')
+          +dp-panel('west')
+            +dp-toolbar({title: 'Part', icon: 'bi bi-search', asdpx: 'asdx'})
+            div.p-3
+              +dp-form({id: 'app-form'})
+                +dp-fitem('Part ID', {class: 'combobox', name: 'APP_PART', id: '~', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
+                +dp-fitem('Description', {class: 'textbox', name: 'APP_DESC', id: '~'})
+                +dp-group('Dimensions')
+                  +dp-fitem('Width', {class: 'numberbox', name: 'APP_W', id: '~', precision: 2})
+                  +dp-fitem('Height', {class: 'numberbox', name: 'APP_H', id: '~', precision: 2})
+                +dp-group('Financials')
+                  +dp-fitem('Cost', {class: 'numberbox', name: 'APP_COST', id: '~', precision: 2})
+                  +dp-fitem('Currency', {class: 'combobox', name: 'APP_CUR', id: '~', options: ['SGD', 'USD']})
+                +dp-fitem('Active', {class: 'checkbox', name: 'APP_ACTIVE', id: '~', checked: true})
+          +dp-panel('center')
+            +dp-toolbar({title: 'Stock', icon: 'bi bi-list-ul', asdpx: 'aed'})
+            div.p-2
+              +table({headers: ['Location', 'On Hand', 'Reserved', 'Available'], rows: [['Main Store', '120', '15', '105'], ['Sub Store', '45', '0', '45'], ['Yard', '8', '2', '6']], zebra: true, size: 'sm'})
