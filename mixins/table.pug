@@ -2,7 +2,7 @@ mixin table(opts)
   - opts = opts || {}
   - const auto = opts.autoWidth !== false
   - const cls = ['dp-table', 'table', opts.size && `table-${opts.size}`, opts.zebra && 'table-zebra', opts.pinRows && 'table-pin-rows', opts.pinCols && 'table-pin-cols', opts.class].filter(Boolean).join(' ')
-  table(class=cls)&attributes(attributes)
+  table(class=cls data-autowidth=auto || undefined)&attributes(attributes)
     if opts.headers
       thead
         tr
