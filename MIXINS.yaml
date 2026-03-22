@@ -163,6 +163,7 @@ btn:
   sizes: "xs, sm, md, lg, xl"
   styles: "outline, dash, soft, ghost, link"
   help: btn.md
+  api: "DpButton: onClick(fn), enable(), disable(), show(), hide(), addClass(), removeClass()"
   example: "+btn({text: 'Click', color: 'primary', size: 'lg'})"
 
 badge:
@@ -181,6 +182,7 @@ card:
   args: "{size, style, side, imageFull, class}"
   children: "+card-body, +card-title, +card-actions"
   help: card.md
+  api: "DpCard: .body, .title, .actions (sub-elements), getTitle(), setTitle(str)"
   example: |
     +card({style: 'border'})
       +card-body
@@ -194,6 +196,7 @@ navbar:
   mixin: "+navbar(opts)"
   children: "+navbar-start, +navbar-center, +navbar-end"
   help: navbar.md
+  api: "DpNavbar: .start, .center, .end (sub-elements)"
 
 tabs:
   replaces: "div.tabs"
@@ -201,6 +204,7 @@ tabs:
   args: "{style: box|border|lift, size, placement, class}"
   children: "+tab({name, label, active}) → +tab-content"
   help: tabs.md
+  api: "DpTabs: getActive(), setActive(n), getTabCount(), getTabLabels(), getActiveLabel(), onTabChange(fn)"
   note: "Do NOT add tab-active class — use checked attribute only"
   example: |
     +tabs({style: 'lift'})
@@ -218,6 +222,7 @@ modal:
   children: "+modal-box, +modal-action"
   trigger: "onclick=\"modal_id.showModal()\""
   help: modal.md
+  api: "DpModal: open(), close(), isOpen(), .box, .actions, onOpen(fn), onClose(fn)"
 
 table:
   replaces: "table.table"
@@ -225,12 +230,14 @@ table:
   args: "{headers, rows, zebra, size, autoWidth, pinRows, pinCols, class}"
   note: "autoWidth=true by default — columns fit content, spacer column at end"
   help: table.md
+  api: "DpTable: getData(), setData(), addRow(), removeRow(), getRow(), selectRow(), sort(), filter(), search(), toCSV(), toJSON(), onRowClick(fn), onCellClick(fn)"
 
 alert:
   replaces: "div.alert"
   mixin: "+alert(opts)"
   args: "{color, style, direction, text, class}"
   help: alert.md
+  api: "DpAlert: getMessage(), setMessage(str), getColor(), setColor(color), dismiss(), onDismiss(fn)"
 
 menu:
   replaces: "ul.menu"
@@ -238,6 +245,7 @@ menu:
   args: "{size, direction, class}"
   children: "+menu-title, +menu-item, +menu-dropdown"
   help: menu.md
+  api: "DpMenu: getItems(), getActive(), setActive(n), getActiveIndex(), onSelect(fn)"
 
 dock:
   replaces: "div.dock"
@@ -253,12 +261,14 @@ drawer:
   args: "{id, end, class}"
   children: "+drawer-content, +drawer-side({for}), +drawer-button"
   help: drawer.md
+  api: "DpDrawer: open(), close(), toggle(), isOpen(), .content, .side, onOpen(fn), onClose(fn)"
 
 collapse:
   replaces: "div.collapse"
   mixin: "+collapse(opts) or +collapse-checkbox(opts)"
   children: "+collapse-title, +collapse-content"
   help: collapse.md
+  api: "DpCollapse: open(), close(), toggle(), isOpen(), .title, .content, onToggle(fn)"
 
 dropdown:
   replaces: "details.dropdown"
@@ -266,6 +276,7 @@ dropdown:
   args: "{position: top|bottom|left|right, end, hover, open, class}"
   children: "+dropdown-trigger, +dropdown-content, +dropdown-item"
   help: dropdown.md
+  api: "DpDropdown: open(), close(), toggle(), .trigger, .content, getItems(), addItem(opts), removeItem(n), clearItems(), onItemClick(fn)"
   example: |
     +dropdown({position: 'top', end: true})
       +dropdown-trigger({text: 'More', class: 'btn btn-sm'})
@@ -279,6 +290,7 @@ tooltip:
   mixin: "+tooltip(opts)"
   args: "{tip, color, position, class}"
   help: tooltip.md
+  api: "DpTooltip: getTip(), setTip(str)"
 
 stats:
   replaces: "div.stats"
@@ -291,6 +303,7 @@ steps:
   mixin: "+steps(opts)"
   children: "+step({color, text, icon})"
   help: steps.md
+  api: "DpSteps: getActive(), setActive(n, color), next(), prev(), reset(), getStepCount(), onStepChange(fn)"
 
 timeline:
   replaces: "ul.timeline"
@@ -321,6 +334,7 @@ swap:
   mixin: "+swap(opts)"
   children: "+swap-on, +swap-off"
   help: swap.md
+  api: "DpSwap: open(), close(), toggle(), isOpen(), .on, .off"
 
 join:
   replaces: "div.join"
@@ -333,6 +347,7 @@ list:
   mixin: "+list(opts)"
   children: "+list-row"
   help: list.md
+  api: "DpList: getItems(), getItemCount(), addItem(html), removeItem(n), getItem(n), clear(), onItemClick(fn)"
 
 chat:
   replaces: "div.chat"
@@ -357,6 +372,7 @@ rating:
   mixin: "+rating(opts)"
   args: "{name, stars, value, size, half, color}"
   help: rating.md
+  api: "DpRating: getValue(), setValue(n), getMax(), onChange(fn)"
 
 toast:
   replaces: "div.toast"
@@ -386,6 +402,7 @@ carousel:
   mixin: "+carousel(opts)"
   children: "+carousel-item"
   help: carousel.md
+  api: "DpCarousel: getActive(), setActive(n), next(), prev(), getSlideCount(), onSlideChange(fn)"
 
 # ============================================================
 # Form Inputs (used inside +dp-fitem or standalone)
