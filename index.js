@@ -53,22 +53,58 @@ function setup(app, opts = {}) {
     res.type('text/css').send(_cache.css);
   });
 
-  // Add mixins path to Pug basedir for absolute includes
-  const viewDirs = [].concat(app.get('views') || []);
-  if (!viewDirs.includes(paths.mixins)) {
-    app.set('views', [...viewDirs, paths.mixins]);
-  }
+  // Pre-compile all DaisyPug mixin AST nodes (once at startup)
+  const pug = require('pug');
+  const mixinSrc = fs.readFileSync(paths.mixinIndex, 'utf8');
+  const _mixinNodes = [];
+  pug.compile(mixinSrc, {
+    filename: paths.mixinIndex,
+    basedir: paths.root,
+    plugins: [{
+      preCodeGen(ast) {
+        (function walk(nodes) {
+          for (const n of nodes) {
+            if (n.type === 'Mixin' && n.call === false) _mixinNodes.push(n);
+            if (n.nodes) walk(n.nodes);
+            if (n.block && n.block.nodes) walk(n.block.nodes);
+          }
+        })(ast.nodes);
+        return ast;
+      }
+    }]
+  });
+  console.log(`[daisypug] ${_mixinNodes.length} mixins compiled into AST`);
+
+  // Pug plugin that injects mixin definitions into every template
+  const dpPlugin = {
+    preCodeGen(ast) {
+      ast.nodes = [..._mixinNodes, ...ast.nodes];
+      return ast;
+    }
+  };
+
+  // Override Pug engine — auto-inject mixins via AST, works with extends
+  app.engine('pug', (filePath, options, callback) => {
+    try {
+      const fn = pug.compileFile(filePath, {
+        ...options,
+        filename: filePath,
+        basedir: options.basedir || paths.root,
+        plugins: [dpPlugin, ...(options.plugins || [])],
+      });
+      callback(null, fn(options));
+    } catch (err) {
+      callback(err);
+    }
+  });
 
   // Set Pug locals so templates can reference assets
+  app.locals.basedir = paths.root;
   app.locals.dpCss = `${prefix}/dp.css`;
   app.locals.dpJs = includeApi ? `${prefix}/dp.js` : null;
   app.locals.dpLucide = includeLucide ? paths.lucideCDN : null;
   app.locals.dpVersion = paths.version;
   app.locals.dpMixinPath = paths.mixinIndex;
-
-  // Pug needs basedir for absolute includes
-  if (!app.locals.basedir) {
-    app.locals.basedir = path.dirname(require.resolve('./package.json'));
   }
 }
 
