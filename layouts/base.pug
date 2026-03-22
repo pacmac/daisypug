@@ -14,6 +14,9 @@ html(lang=locals.lang || 'en' data-theme=locals.theme || undefined)
       .dp-vsplit>.dp-panel:first-child{border-right:1px solid oklch(var(--bc)/.2)}
       .dp-hsplit>.dp-panel:first-child{border-bottom:1px solid oklch(var(--bc)/.2)}
       .dp-vsplit.no-border>.dp-panel:first-child,.dp-hsplit.no-border>.dp-panel:first-child{border:none}
+      .dp-form.two{display:grid;grid-template-columns:repeat(2,1fr);gap:0 1rem}
+      .dp-form.three{display:grid;grid-template-columns:repeat(3,1fr);gap:0 1rem}
+      .dp-form.four{display:grid;grid-template-columns:repeat(4,1fr);gap:0 1rem}
     if locals.head
       | !{locals.head}
   body

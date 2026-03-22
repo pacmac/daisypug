@@ -1,0 +1,115 @@
+//- DUI-evolved form system: +dp-form, +dp-fitem, +dp-group, +dp-hgroup
+
+//- Form container with optional column layout
+mixin dp-form(opts)
+  - opts = opts || {}
+  - const cls = ['dp-form', opts.class].filter(Boolean).join(' ')
+  form(class=cls id=opts.id)&attributes(attributes)
+    block
+
+//- Form item: label + auto-detected input
+//- Usage: +dp-fitem('Label', {class:'combobox', name:'FIELD', id:'~'})
+mixin dp-fitem(label, input, fitemOpts)
+  - input = input || {}
+  - fitemOpts = fitemOpts || {}
+  - const inputClass = input.class || ''
+  - const widgetType = inputClass.split(' ')[0] || 'textbox'
+  - const autoId = input.id === '~' ? input.name : input.id
+  - const isMultiline = widgetType === 'multiline' || widgetType === 'textarea' || input.multiline
+  - const isCheckbox = widgetType === 'checkbox'
+  - const isRadio = widgetType === 'radio'
+  - const fitemCls = ['dp-fitem', 'mb-2', isMultiline && 'dp-fitem-multiline', fitemOpts.class].filter(Boolean).join(' ')
+  div(class=fitemCls)
+    //- Label
+    if isCheckbox || isRadio
+      label.dp-fitem-label.fieldset-label.flex.items-center.gap-2.cursor-pointer(for=autoId)
+        +dp-fitem-input(input, widgetType, autoId)
+        | #{label}
+        if input.required
+          span.text-error *
+    else
+      label.dp-fitem-label.fieldset-label(for=autoId class=isMultiline ? 'self-start mt-1' : '')
+        | #{label}
+        if input.required
+          span.text-error *
+      +dp-fitem-input(input, widgetType, autoId)
+      block
+
+//- Internal: render the correct input element based on widget type
+mixin dp-fitem-input(input, widgetType, autoId)
+  - const color = input.color || 'primary'
+  - const size = input.size
+  if widgetType === 'combobox' || widgetType === 'qbe'
+    - const cls = ['dp-select', 'select', `select-${color}`, size && `select-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    select(class=cls name=input.name id=autoId required=input.required readonly=input.readonly)&attributes(input.attrs || {})
+      if input.placeholder
+        option(disabled selected)= input.placeholder
+      if input.options
+        each opt in input.options
+          if typeof opt === 'string'
+            option= opt
+          else
+            option(value=opt.value selected=opt.selected)= opt.text || opt.value
+  else if widgetType === 'multiline' || widgetType === 'textarea'
+    - const cls = ['dp-textarea', 'textarea', `textarea-${color}`, size && `textarea-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    textarea(class=cls name=input.name id=autoId rows=input.rows || 3 placeholder=input.placeholder required=input.required readonly=input.readonly)&attributes(input.attrs || {})
+      if input.value
+        | #{input.value}
+  else if widgetType === 'checkbox'
+    - const cls = ['dp-checkbox', 'checkbox', `checkbox-${color}`, size && `checkbox-${size}`, input.class].filter(Boolean).join(' ')
+    input(type="checkbox" class=cls name=input.name id=autoId checked=input.checked || input.value required=input.required)&attributes(input.attrs || {})
+  else if widgetType === 'radio'
+    - const cls = ['dp-radio', 'radio', `radio-${color}`, size && `radio-${size}`, input.class].filter(Boolean).join(' ')
+    input(type="radio" class=cls name=input.name id=autoId value=input.value checked=input.checked required=input.required)&attributes(input.attrs || {})
+  else if widgetType === 'numberbox'
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="number" class=cls name=input.name id=autoId value=input.value placeholder=input.placeholder required=input.required readonly=input.readonly min=input.min max=input.max step=input.precision !== undefined ? Math.pow(10, -input.precision) : undefined)&attributes(input.attrs || {})
+  else if widgetType === 'numberspinner'
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="number" class=cls name=input.name id=autoId value=input.value placeholder=input.placeholder required=input.required readonly=input.readonly min=input.min max=input.max step=input.precision !== undefined ? Math.pow(10, -input.precision) : 1)&attributes(input.attrs || {})
+  else if widgetType === 'datebox'
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="date" class=cls name=input.name id=autoId value=input.value required=input.required readonly=input.readonly)&attributes(input.attrs || {})
+  else if widgetType === 'datetimebox'
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="datetime-local" class=cls name=input.name id=autoId value=input.value required=input.required readonly=input.readonly)&attributes(input.attrs || {})
+  else if widgetType === 'timespinner'
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="time" class=cls name=input.name id=autoId value=input.value required=input.required readonly=input.readonly)&attributes(input.attrs || {})
+  else if widgetType === 'filebox'
+    - const cls = ['dp-file-input', 'file-input', `file-input-${color}`, size && `file-input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="file" class=cls name=input.name id=autoId accept=input.accept required=input.required)&attributes(input.attrs || {})
+  else if widgetType === 'searchbox'
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="search" class=cls name=input.name id=autoId value=input.value placeholder=input.placeholder || 'Search...' required=input.required)&attributes(input.attrs || {})
+  else if widgetType === 'passwordbox'
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="password" class=cls name=input.name id=autoId placeholder=input.placeholder required=input.required)&attributes(input.attrs || {})
+  else if widgetType === 'toggle'
+    - const cls = ['dp-toggle', 'toggle', `toggle-${color}`, size && `toggle-${size}`, input.class].filter(Boolean).join(' ')
+    input(type="checkbox" class=cls name=input.name id=autoId checked=input.checked || input.value required=input.required)&attributes(input.attrs || {})
+  else
+    //- Default: textbox
+    - const cls = ['dp-input', 'input', `input-${color}`, size && `input-${size}`, 'w-full', input.class].filter(Boolean).join(' ')
+    input(type="text" class=cls name=input.name id=autoId value=input.value placeholder=input.placeholder required=input.required readonly=input.readonly)&attributes(input.attrs || {})
+
+//- Vertical group — section heading + indented fields
+mixin dp-group(title)
+  div.dp-group.mt-3
+    if title
+      div.dp-group-title.text-xs.font-bold.uppercase.opacity-50.text-primary.mb-1= title
+    div.dp-group-body
+      block
+
+//- Alias
+mixin dp-vgroup(title)
+  +dp-group(title)
+    block
+
+//- Horizontal group — heading + fields side by side
+mixin dp-hgroup(title)
+  div.dp-hgroup.mt-3
+    if title
+      div.dp-hgroup-title.text-xs.font-bold.uppercase.opacity-50.text-primary.mb-1= title
+    div.dp-hgroup-body.flex.gap-4
+      block
