@@ -99,6 +99,17 @@ dp-hgroup:
   mixin: "+dp-hgroup(title)"
   help: dp-fitem.md
 
+dp-heading:
+  replaces: "h1, h2, h3, h4, h5, h6 with classes"
+  mixin: "+dp-heading(text, opts)"
+  args: "text: string; opts: {level: 1-6, icon: Lucide name, size: Tailwind text size, class}"
+  defaults: "level=2, size auto-mapped: h1=text-2xl, h2=text-lg, h3=text-base, h4-6=text-sm/xs"
+  help: dp-heading.md
+  example: |
+    +dp-heading('Parts Master', {level: 1, icon: 'package'})
+    +dp-heading('Details', {level: 2})
+    +dp-heading('Section', {level: 3, icon: 'info'})
+
 dp-icon:
   replaces: "i.bi.bi-*, svg icons"
   mixin: "+dp-icon(name, opts)"

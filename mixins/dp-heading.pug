@@ -1,0 +1,13 @@
+mixin dp-heading(text, opts)
+  - opts = opts || {}
+  - const level = opts.level || 2
+  - const sizeMap = {1: 'text-2xl', 2: 'text-lg', 3: 'text-base', 4: 'text-sm', 5: 'text-xs', 6: 'text-xs'}
+  - const sz = opts.size || sizeMap[level] || 'text-lg'
+  - const cls = ['dp-heading', 'font-semibold', sz, opts.class].filter(Boolean).join(' ')
+  - const tag = 'h' + level
+  #{tag}(class=cls)&attributes(attributes)
+    if opts.icon
+      +dp-icon(opts.icon, {size: level <= 2 ? 'md' : 'sm', class: 'inline-block mr-1.5 align-text-bottom'})
+    if text
+      | #{text}
+    block
