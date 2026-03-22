@@ -25,17 +25,19 @@
 /* Pagination: fixed above dock */
 .dp-datatable-pagination {
   position: fixed;
-  bottom: 4em;
+  bottom: 4.5em;
   left: 0;
   right: 0;
   z-index: 40;
+  display: flex;
+  justify-content: center;
   pointer-events: none;
 }
 .dp-datatable-pagination > * {
   pointer-events: auto;
-  background: oklch(var(--b1));
-  border: 1px solid oklch(var(--bc) / 0.15);
+  background-color: var(--fallback-b1, oklch(var(--b1)));
+  border: 1px solid color-mix(in oklch, currentColor 15%, transparent);
   border-radius: 0.75rem;
-  padding: 0.25rem;
-  box-shadow: 0 -2px 8px oklch(var(--bc) / 0.08);
+  padding: 0.35rem 0.5rem;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.08);
 }
