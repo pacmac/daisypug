@@ -32,12 +32,18 @@ function setup(app, opts = {}) {
   const includeApi = opts.api !== false;
   const includeLucide = opts.lucide !== false;
 
-  // Serve static files: /dp/dp.js, /dp/dp.css
-  const express = require('express');
-  app.use(prefix, express.static(paths.publicDir));
-  // Also serve dp.js from lib/
+  // Serve dp.js and dp.css from memory — no static files needed
+  const _cache = {};
+  function readOnce(key, filePath) {
+    if (!_cache[key]) _cache[key] = fs.readFileSync(filePath, 'utf8');
+    return _cache[key];
+  }
+
   app.get(`${prefix}/dp.js`, (req, res) => {
-    res.type('application/javascript').sendFile(paths.dpJs);
+    res.type('application/javascript').send(readOnce('js', paths.dpJs));
+  });
+  app.get(`${prefix}/dp.css`, (req, res) => {
+    res.type('text/css').send(readOnce('css', paths.css));
   });
 
   // Add mixins path to Pug basedir for absolute includes
