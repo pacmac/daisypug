@@ -34,7 +34,9 @@ dp-panel:
   replaces: "div with bg, border, scroll"
   mixin: "+dp-panel(name, opts)"
   args: "name: west|east|north|south|center; opts: {title, iconCls, scroll, id, class}"
-  help: dp-vsplit.md
+  help: dp-vsplit.md#usage
+  help-api: dp-vsplit.md#api-dpjs
+  help-styling: dp-vsplit.md#styling-rules
   api: "DpPanel: header, body, getTitle(), setTitle(), open(), close(), clear(), refresh(url)"
 
 dp-toolbar:
@@ -43,7 +45,9 @@ dp-toolbar:
   args: "{title, icon, asdpx, size, id, class}"
   asdpx: "a=Add, s=Save, e=Edit, d=Delete, p=Print, x=Cancel"
   children: "+dp-toolbar-sep, +btn"
-  help: dp-toolbar.md
+  help: dp-toolbar.md#usage
+  help-asdpx: dp-toolbar.md#asdpx-characters
+  help-api: dp-toolbar.md#api
   example: |
     +dp-toolbar({title: 'Parts', icon: 'box', asdpx: 'aed'})
       +dp-toolbar-sep
@@ -56,7 +60,7 @@ dp-form:
   mixin: "+dp-form(opts)"
   args: "{id, class}"
   classes: ".two .three .four for column grid"
-  help: dp-fitem.md
+  help: dp-fitem.md#multi-column-forms
   notes: "Duplicate id auto-detected → renders data-form-part for multi-tab forms"
   example: "+dp-form({id: 'head'}).two"
 
@@ -81,7 +85,10 @@ dp-fitem:
     filebox: "<input type=file>"
   id-shortcut: "id: '~' → auto-generates from name"
   pre-post: "pre/post: icon name string or {action, icon, id, text}"
-  help: dp-fitem.md
+  help: dp-fitem.md#usage
+  help-autodetect: dp-fitem.md#auto-detect-mapping
+  help-prepost: dp-fitem.md#prepost-slots
+  help-api: dp-fitem.md#api-dpjs
   api: "DpFitem: getValue(), setValue(), getLabel(), onPreClick(), onPostClick(), setPreIcon(), setPostIcon()"
   example: |
     +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~', pre: 'package', options: [...]})
@@ -104,7 +111,8 @@ dp-heading:
   mixin: "+dp-heading(text, opts)"
   args: "text: string; opts: {level: 1-6, icon: Lucide name, size: Tailwind text size, class}"
   defaults: "level=2, size auto-mapped: h1=text-2xl, h2=text-lg, h3=text-base, h4-6=text-sm/xs"
-  help: dp-heading.md
+  help: dp-heading.md#usage
+  help-sizes: dp-heading.md#default-sizes
   example: |
     +dp-heading('Parts Master', {level: 1, icon: 'package'})
     +dp-heading('Details', {level: 2})
@@ -115,7 +123,8 @@ dp-icon:
   mixin: "+dp-icon(name, opts)"
   args: "name: Lucide icon name; opts: {size: xs|sm|md|lg|xl, color, class}"
   sizes: "xs=14px, sm=16px, md=20px, lg=24px, xl=32px"
-  help: dp-icon.md
+  help: dp-icon.md#usage
+  help-sizes: dp-icon.md#options
   example: "+dp-icon('search', {size: 'sm', color: 'primary'})"
 
 dp-formfield:
@@ -139,7 +148,9 @@ dp-datatable:
   replaces: "table with pagination"
   mixin: "+dp-datatable(opts)"
   args: "{headers, rows, zebra, size, autoWidth, pagination}"
-  help: dp-datatable.md
+  help: dp-datatable.md#usage
+  help-pagination: dp-datatable.md#pagination
+  help-parsers: dp-datatable.md#response-format-adapters
   api: "DpDataTable: setData(), paginate(), nextPage(), loadData(url)"
 
 dp-conversation:
@@ -173,7 +184,8 @@ btn:
   colors: "neutral, primary, secondary, accent, info, success, warning, error"
   sizes: "xs, sm, md, lg, xl"
   styles: "outline, dash, soft, ghost, link"
-  help: btn.md
+  help: btn.md#usage
+  help-api: btn.md#api
   api: "DpButton: onClick(fn), enable(), disable(), show(), hide(), addClass(), removeClass()"
   example: "+btn({text: 'Click', color: 'primary', size: 'lg'})"
 
@@ -181,7 +193,8 @@ badge:
   replaces: "span.badge"
   mixin: "+badge(opts)"
   args: "{text, color, size, style, class}"
-  help: badge.md
+  help: badge.md#usage
+  help-api: badge.md#api-dpjs
   api: "DpBadge: getText(), setText(str), getColor(), setColor(color), getStyle(), setStyle(style), setIcon(name), removeIcon(), onClick(fn)"
   example: |
     +badge({color: 'success', text: 'Online'})(id="status-badge")
@@ -192,7 +205,8 @@ card:
   mixin: "+card(opts)"
   args: "{size, style, side, imageFull, class}"
   children: "+card-body, +card-title, +card-actions"
-  help: card.md
+  help: card.md#usage
+  help-api: card.md#api
   api: "DpCard: .body, .title, .actions (sub-elements), getTitle(), setTitle(str)"
   example: |
     +card({style: 'border'})
@@ -206,7 +220,7 @@ navbar:
   replaces: "div.navbar"
   mixin: "+navbar(opts)"
   children: "+navbar-start, +navbar-center, +navbar-end"
-  help: navbar.md
+  help: navbar.md#usage
   api: "DpNavbar: .start, .center, .end (sub-elements)"
 
 tabs:
@@ -214,7 +228,8 @@ tabs:
   mixin: "+tabs(opts)"
   args: "{style: box|border|lift, size, placement, class}"
   children: "+tab({name, label, active}) → +tab-content"
-  help: tabs.md
+  help: tabs.md#usage
+  help-api: tabs.md#api
   api: "DpTabs: getActive(), setActive(n), getTabCount(), getTabLabels(), getActiveLabel(), onTabChange(fn)"
   note: "Do NOT add tab-active class — use checked attribute only"
   example: |
@@ -232,7 +247,8 @@ modal:
   args: "{id, position, open, backdrop, class}"
   children: "+modal-box, +modal-action"
   trigger: "onclick=\"modal_id.showModal()\""
-  help: modal.md
+  help: modal.md#usage
+  help-api: modal.md#api
   api: "DpModal: open(), close(), isOpen(), .box, .actions, onOpen(fn), onClose(fn)"
 
 table:
@@ -240,14 +256,16 @@ table:
   mixin: "+table(opts)"
   args: "{headers, rows, zebra, size, autoWidth, pinRows, pinCols, class}"
   note: "autoWidth=true by default — columns fit content, spacer column at end"
-  help: table.md
+  help: table.md#usage
+  help-api: table.md#api
   api: "DpTable: getData(), setData(), addRow(), removeRow(), getRow(), selectRow(), sort(), filter(), search(), toCSV(), toJSON(), onRowClick(fn), onCellClick(fn)"
 
 alert:
   replaces: "div.alert"
   mixin: "+alert(opts)"
   args: "{color, style, direction, text, class}"
-  help: alert.md
+  help: alert.md#usage
+  help-api: alert.md#api
   api: "DpAlert: getMessage(), setMessage(str), getColor(), setColor(color), dismiss(), onDismiss(fn)"
 
 menu:
@@ -255,7 +273,8 @@ menu:
   mixin: "+menu(opts)"
   args: "{size, direction, class}"
   children: "+menu-title, +menu-item, +menu-dropdown"
-  help: menu.md
+  help: menu.md#usage
+  help-api: menu.md#api
   api: "DpMenu: getItems(), getActive(), setActive(n), getActiveIndex(), onSelect(fn)"
 
 dock:
@@ -263,7 +282,8 @@ dock:
   mixin: "+dock(opts)"
   args: "{size, items: [{name, text, icon, active}], class}"
   children: "+dock-item({name, text, icon, active})"
-  help: dock.md
+  help: dock.md#usage
+  help-api: dock.md#api-dpjs
   api: "DpDock: onSelect(), setActive(), setActiveByPanel(), getLabels()"
 
 drawer:
@@ -271,14 +291,16 @@ drawer:
   mixin: "+drawer(opts)"
   args: "{id, end, class}"
   children: "+drawer-content, +drawer-side({for}), +drawer-button"
-  help: drawer.md
+  help: drawer.md#usage
+  help-api: drawer.md#api
   api: "DpDrawer: open(), close(), toggle(), isOpen(), .content, .side, onOpen(fn), onClose(fn)"
 
 collapse:
   replaces: "div.collapse"
   mixin: "+collapse(opts) or +collapse-checkbox(opts)"
   children: "+collapse-title, +collapse-content"
-  help: collapse.md
+  help: collapse.md#usage
+  help-api: collapse.md#api
   api: "DpCollapse: open(), close(), toggle(), isOpen(), .title, .content, onToggle(fn)"
 
 dropdown:
@@ -286,7 +308,9 @@ dropdown:
   mixin: "+dropdown(opts)"
   args: "{position: top|bottom|left|right, end, hover, open, class}"
   children: "+dropdown-trigger, +dropdown-content, +dropdown-item"
-  help: dropdown.md
+  help: dropdown.md#usage
+  help-items: dropdown.md#item-options
+  help-api: dropdown.md#api-dpjs
   api: "DpDropdown: open(), close(), toggle(), .trigger, .content, getItems(), addItem(opts), removeItem(n), clearItems(), onItemClick(fn)"
   example: |
     +dropdown({position: 'top', end: true})
@@ -300,7 +324,7 @@ tooltip:
   replaces: "div.tooltip"
   mixin: "+tooltip(opts)"
   args: "{tip, color, position, class}"
-  help: tooltip.md
+  help: tooltip.md#usage
   api: "DpTooltip: getTip(), setTip(str)"
 
 stats:
@@ -313,7 +337,8 @@ steps:
   replaces: "ul.steps"
   mixin: "+steps(opts)"
   children: "+step({color, text, icon})"
-  help: steps.md
+  help: steps.md#usage
+  help-api: steps.md#api
   api: "DpSteps: getActive(), setActive(n, color), next(), prev(), reset(), getStepCount(), onStepChange(fn)"
 
 timeline:
@@ -344,7 +369,7 @@ swap:
   replaces: "label.swap"
   mixin: "+swap(opts)"
   children: "+swap-on, +swap-off"
-  help: swap.md
+  help: swap.md#usage
   api: "DpSwap: open(), close(), toggle(), isOpen(), .on, .off"
 
 join:
@@ -357,7 +382,7 @@ list:
   replaces: "ul.list"
   mixin: "+list(opts)"
   children: "+list-row"
-  help: list.md
+  help: list.md#usage
   api: "DpList: getItems(), getItemCount(), addItem(html), removeItem(n), getItem(n), clear(), onItemClick(fn)"
 
 chat:
@@ -382,7 +407,7 @@ rating:
   replaces: "div.rating"
   mixin: "+rating(opts)"
   args: "{name, stars, value, size, half, color}"
-  help: rating.md
+  help: rating.md#usage
   api: "DpRating: getValue(), setValue(n), getMax(), onChange(fn)"
 
 toast:
@@ -412,7 +437,7 @@ carousel:
   replaces: "div.carousel"
   mixin: "+carousel(opts)"
   children: "+carousel-item"
-  help: carousel.md
+  help: carousel.md#usage
   api: "DpCarousel: getActive(), setActive(n), next(), prev(), getSlideCount(), onSlideChange(fn)"
 
 # ============================================================
