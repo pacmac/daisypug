@@ -105,7 +105,6 @@ function setup(app, opts = {}) {
   app.locals.dpLucide = includeLucide ? paths.lucideCDN : null;
   app.locals.dpVersion = paths.version;
   app.locals.dpMixinPath = paths.mixinIndex;
-  }
 }
 
 /**

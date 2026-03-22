@@ -1,6 +1,6 @@
 {
   "name": "daisypug",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "DaisyUI component render engine — Pug mixins + YAML declarative input → HTML",
   "main": "index.js",
   "bin": {
