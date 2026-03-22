@@ -29,7 +29,7 @@ html(lang=locals.lang || 'en' data-theme=locals.theme || undefined)
       .dp-panel-body{padding:0}
       /* Pagination: fixed above dock */
       .dp-datatable-pagination{position:fixed;bottom:4em;left:0;right:0;z-index:40;pointer-events:none}
-      .dp-datatable-pagination>*{pointer-events:auto}
+      .dp-datatable-pagination>*{pointer-events:auto;background:oklch(var(--b1));border:1px solid oklch(var(--bc)/.15);border-radius:0.75rem;padding:0.25rem;box-shadow:0 -2px 8px oklch(var(--bc)/.08)}
     if locals.head
       | !{locals.head}
   body

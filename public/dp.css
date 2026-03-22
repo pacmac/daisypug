@@ -33,4 +33,9 @@
 }
 .dp-datatable-pagination > * {
   pointer-events: auto;
+  background: oklch(var(--b1));
+  border: 1px solid oklch(var(--bc) / 0.15);
+  border-radius: 0.75rem;
+  padding: 0.25rem;
+  box-shadow: 0 -2px 8px oklch(var(--bc) / 0.08);
 }
