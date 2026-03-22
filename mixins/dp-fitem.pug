@@ -1,11 +1,20 @@
 //- DUI-evolved form system: +dp-form, +dp-fitem, +dp-group, +dp-hgroup
 
-//- Form container with optional column layout
+//- Form container with optional column layout and form-part detection
 mixin dp-form(opts)
   - opts = opts || {}
+  - if (typeof _dpFormIds === 'undefined') _dpFormIds = {}
+  - const formId = opts.id || attributes.id
+  - const isFormPart = formId && _dpFormIds[formId]
+  - if (formId) _dpFormIds[formId] = true
   - const cls = ['dp-form', opts.class].filter(Boolean).join(' ')
-  form(class=cls id=opts.id)&attributes(attributes)
-    block
+  if isFormPart
+    //- Duplicate ID detected: render as form-part
+    form(class=cls data-form-part=formId)&attributes({...attributes, id: undefined})
+      block
+  else
+    form(class=cls id=formId)&attributes(attributes)
+      block
 
 //- Form item: label + auto-detected input
 //- Usage: +dp-fitem('Label', {class:'combobox', name:'FIELD', id:'~'})
