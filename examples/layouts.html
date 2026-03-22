@@ -570,6 +570,200 @@
           </div>
         </form>
       </div>
+      <h2 class="text-2xl font-bold">9. Toolbar Variants</h2>
+      <p class="text-sm opacity-60 mb-2">+dp-toolbar with asdpx shorthand, title, icon, separator, custom buttons</p>
+      <div class="space-y-2" style="border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
+        <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+          <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-box-seam"></i><span class="font-semibold text-sm">Parts List</span>
+          </div>
+          <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+          <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+            <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+            </button>
+            <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+            </button>
+            <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+            </button>
+          </div>
+        </div>
+        <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+          <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-layers"></i><span class="font-semibold text-sm">BOM Lines</span>
+          </div>
+          <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+          <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+            <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+            </button>
+            <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+            </button>
+            <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+            </button>
+            <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
+            <button class="dp-btn btn btn-xs btn-ghost">Validate
+            </button>
+            <button class="dp-btn btn btn-xs btn-ghost">Export
+            </button>
+          </div>
+        </div>
+        <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+          <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-cart"></i><span class="font-semibold text-sm">Order Entry</span>
+          </div>
+          <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+          <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+            <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+            </button>
+            <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
+            </button>
+            <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+            </button>
+            <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
+            </button>
+          </div>
+        </div>
+        <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+          <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+          <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+            <button class="dp-btn btn btn-xs btn-ghost">Refresh
+            </button>
+            <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
+            <button class="dp-btn btn btn-xs btn-ghost">Export
+            </button>
+          </div>
+        </div>
+      </div>
+      <h2 class="text-2xl font-bold">10. Full App Page (Everything Combined)</h2>
+      <p class="text-sm opacity-60 mb-2">vsplit + toolbar + fitem form + datatable — a real CRUD page</p>
+      <div style="height: 500px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
+        <div class="dp-vsplit grid h-full" style="grid-template-columns: 350px 1fr">
+          <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
+            <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-search"></i><span class="font-semibold text-sm">Part</span>
+                </div>
+                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
+                  </button>
+                </div>
+              </div>
+              <div class="p-3">
+                <form class="dp-form" id="part-form">
+                  <div class="dp-fitem mb-2">
+                    <label class="dp-fitem-label fieldset-label" for="PART_ID">Part ID
+                    </label>
+                    <select class="dp-select select select-primary w-full combobox" name="PART_ID" id="PART_ID">
+                      <option>A8000 - Pump</option>
+                      <option>B3200 - Bearing</option>
+                      <option>C1500 - Valve</option>
+                    </select>
+                  </div>
+                  <div class="dp-fitem mb-2">
+                    <label class="dp-fitem-label fieldset-label" for="DESCRIPTION">Description
+                    </label>
+                    <input class="dp-input input input-primary w-full textbox" type="text" name="DESCRIPTION" id="DESCRIPTION"/>
+                  </div>
+                  <div class="dp-group mt-3">
+                    <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Dimensions</div>
+                    <div class="dp-group-body">
+                      <div class="dp-fitem mb-2">
+                        <label class="dp-fitem-label fieldset-label" for="WIDTH">Width
+                        </label>
+                        <input class="dp-input input input-primary w-full numberbox" type="number" name="WIDTH" id="WIDTH" step="0.01"/>
+                      </div>
+                      <div class="dp-fitem mb-2">
+                        <label class="dp-fitem-label fieldset-label" for="HEIGHT">Height
+                        </label>
+                        <input class="dp-input input input-primary w-full numberbox" type="number" name="HEIGHT" id="HEIGHT" step="0.01"/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dp-group mt-3">
+                    <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Financials</div>
+                    <div class="dp-group-body">
+                      <div class="dp-fitem mb-2">
+                        <label class="dp-fitem-label fieldset-label" for="COST">Cost
+                        </label>
+                        <input class="dp-input input input-primary w-full numberbox" type="number" name="COST" id="COST" step="0.01"/>
+                      </div>
+                      <div class="dp-fitem mb-2">
+                        <label class="dp-fitem-label fieldset-label" for="CURRENCY">Currency
+                        </label>
+                        <select class="dp-select select select-primary w-full combobox" name="CURRENCY" id="CURRENCY">
+                          <option>SGD</option>
+                          <option>USD</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dp-fitem mb-2">
+                    <label class="dp-fitem-label fieldset-label flex items-center gap-2 cursor-pointer" for="ACTIVE">
+                      <input class="dp-checkbox checkbox checkbox-primary checkbox" type="checkbox" name="ACTIVE" id="ACTIVE" checked="checked"/>Active
+                    </label>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="dp-panel dp-panel-center flex flex-col bg-base-100 min-h-0 min-w-0">
+            <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-list-ul"></i><span class="font-semibold text-sm">Stock Balances</span>
+                </div>
+                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                  </button>
+                </div>
+              </div>
+              <div class="p-2">
+                <table class="dp-table table table-sm table-zebra">
+                  <thead>
+                    <tr>
+                      <th style="width: 1%; white-space: nowrap">Location</th>
+                      <th style="width: 1%; white-space: nowrap">On Hand</th>
+                      <th style="width: 1%; white-space: nowrap">Reserved</th>
+                      <th style="width: 1%; white-space: nowrap">Available</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="width: 1%; white-space: nowrap">Main Store</td>
+                      <td style="width: 1%; white-space: nowrap">120</td>
+                      <td style="width: 1%; white-space: nowrap">15</td>
+                      <td style="width: 1%; white-space: nowrap">105</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 1%; white-space: nowrap">Sub Store</td>
+                      <td style="width: 1%; white-space: nowrap">45</td>
+                      <td style="width: 1%; white-space: nowrap">0</td>
+                      <td style="width: 1%; white-space: nowrap">45</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 1%; white-space: nowrap">Yard</td>
+                      <td style="width: 1%; white-space: nowrap">8</td>
+                      <td style="width: 1%; white-space: nowrap">2</td>
+                      <td style="width: 1%; white-space: nowrap">6</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

@@ -218,3 +218,50 @@ div.p-6.max-w-6xl.mx-auto.space-y-8
       +dp-hgroup('Rates')
         +dp-fitem('Base Rate', {class: 'numberbox', name: 'BASE_RATE', id: '~', precision: 4})
         +dp-fitem('Tax Rate %', {class: 'numberbox', name: 'TAX_RATE', id: '~', precision: 1})
+
+  //- ===== Pattern 9: Toolbar Variants =====
+  h2.text-2xl.font-bold 9. Toolbar Variants
+  p.text-sm.opacity-60.mb-2 +dp-toolbar with asdpx shorthand, title, icon, separator, custom buttons
+
+  div.space-y-2(style="border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
+    //- Title + CRUD
+    +dp-toolbar({title: 'Parts List', icon: 'bi bi-box-seam', asdpx: 'aed'})
+
+    //- Title + CRUD + custom buttons with separator
+    +dp-toolbar({title: 'BOM Lines', icon: 'bi bi-layers', asdpx: 'aed'})
+      +dp-toolbar-sep
+      +btn({size: 'xs', style: 'ghost', text: 'Validate'})
+      +btn({size: 'xs', style: 'ghost', text: 'Export'})
+
+    //- Form CRUD buttons (add/save/delete/cancel)
+    +dp-toolbar({title: 'Order Entry', icon: 'bi bi-cart', asdpx: 'asdx'})
+
+    //- No title, just buttons
+    +dp-toolbar
+      +btn({size: 'xs', style: 'ghost', text: 'Refresh'})
+      +dp-toolbar-sep
+      +btn({size: 'xs', style: 'ghost', text: 'Export'})
+
+  //- ===== Pattern 10: Full App Page =====
+  h2.text-2xl.font-bold 10. Full App Page (Everything Combined)
+  p.text-sm.opacity-60.mb-2 vsplit + toolbar + fitem form + datatable — a real CRUD page
+
+  div(style="height: 500px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
+    +dp-vsplit('350px')
+      +dp-panel('west')
+        +dp-toolbar({title: 'Part', icon: 'bi bi-search', asdpx: 'asdx'})
+        div.p-3
+          +dp-form({id: 'part-form'})
+            +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
+            +dp-fitem('Description', {class: 'textbox', name: 'DESCRIPTION', id: '~'})
+            +dp-group('Dimensions')
+              +dp-fitem('Width', {class: 'numberbox', name: 'WIDTH', id: '~', precision: 2})
+              +dp-fitem('Height', {class: 'numberbox', name: 'HEIGHT', id: '~', precision: 2})
+            +dp-group('Financials')
+              +dp-fitem('Cost', {class: 'numberbox', name: 'COST', id: '~', precision: 2})
+              +dp-fitem('Currency', {class: 'combobox', name: 'CURRENCY', id: '~', options: ['SGD', 'USD']})
+            +dp-fitem('Active', {class: 'checkbox', name: 'ACTIVE', id: '~', checked: true})
+      +dp-panel('center')
+        +dp-toolbar({title: 'Stock Balances', icon: 'bi bi-list-ul', asdpx: 'aed'})
+        div.p-2
+          +table({headers: ['Location', 'On Hand', 'Reserved', 'Available'], rows: [['Main Store', '120', '15', '105'], ['Sub Store', '45', '0', '45'], ['Yard', '8', '2', '6']], zebra: true, size: 'sm'})

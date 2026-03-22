@@ -1,0 +1,48 @@
+//- DUI-evolved toolbar: title + inputs + buttons with asdpx shorthand
+
+mixin dp-toolbar(opts)
+  - opts = opts || {}
+  - const id = opts.id || attributes.id || ''
+  - const asdpx = opts.asdpx || attributes.asdpx || ''
+  - const title = opts.title || attributes.title || ''
+  - const icon = opts.icon || attributes.icon || ''
+  - const size = opts.size || attributes.size || 'md'
+  - const btnSize = size === 'sm' ? 'xs' : size === 'lg' ? 'md' : 'sm'
+  - const pad = size === 'lg' ? 'py-1.5' : 'py-1'
+  - const cls = ['dp-toolbar', 'flex', 'items-center', 'gap-1', 'px-2', pad, 'bg-base-200', 'border-b', 'border-base-300', opts.class].filter(Boolean).join(' ')
+  div(class=cls id=id ? id + '_toolbar' : undefined)&attributes({...attributes, id: undefined, asdpx: undefined, title: undefined, icon: undefined, size: undefined})
+
+    //- Title section (shrink-0)
+    if title
+      div.flex.items-center.gap-1.shrink-0.mr-2
+        if icon
+          i(class=icon)
+        span.font-semibold.text-sm= title
+
+    //- Inputs section (flex-1) — filled by page or JSON config
+    div.flex-1.flex.items-center.gap-2.dp-toolbar-inputs
+
+    //- Buttons section (shrink-0)
+    div.flex.items-center.gap-1.shrink-0.dp-toolbar-buttons
+
+      //- ASDPX CRUD buttons
+      if asdpx.includes('a')
+        +btn({size: btnSize, style: 'ghost', text: 'Add'})(id=id ? id + '_add' : 'tb_add')
+          //- i.bi.bi-plus-lg.me-1
+      if asdpx.includes('s')
+        +btn({size: btnSize, style: 'ghost', text: 'Save', disabled: true})(id=id ? id + '_save' : 'tb_save')
+      if asdpx.includes('e')
+        +btn({size: btnSize, style: 'ghost', text: 'Edit', disabled: true})(id=id ? id + '_edit' : 'tb_edit')
+      if asdpx.includes('d')
+        +btn({size: btnSize, style: 'ghost', text: 'Delete', disabled: true})(id=id ? id + '_del' : 'tb_del')
+      if asdpx.includes('p')
+        +btn({size: btnSize, style: 'ghost', text: 'Print'})(id=id ? id + '_print' : 'tb_print')
+      if asdpx.includes('x')
+        +btn({size: btnSize, style: 'ghost', text: 'Cancel', disabled: true})(id=id ? id + '_cancel' : 'tb_cancel')
+
+      //- Custom buttons via block
+      block
+
+//- Toolbar separator
+mixin dp-toolbar-sep()
+  div.dp-toolbar-sep.self-stretch.my-1(style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)")
