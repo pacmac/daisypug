@@ -47,9 +47,13 @@ function setup(app, opts = {}) {
   console.log(`[daisypug] v${paths.version} loaded — dp.js: ${jsKB}KB, dp.css: ${cssKB}KB (in-memory at ${prefix}/)`);
 
   app.get(`${prefix}/dp.js`, (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('ETag', `"dp-${paths.version}"`);
     res.type('application/javascript').send(_cache.js);
   });
   app.get(`${prefix}/dp.css`, (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('ETag', `"dp-css-${paths.version}"`);
     res.type('text/css').send(_cache.css);
   });
 
@@ -100,8 +104,8 @@ function setup(app, opts = {}) {
 
   // Set Pug locals so templates can reference assets
   app.locals.basedir = paths.root;
-  app.locals.dpCss = `${prefix}/dp.css`;
-  app.locals.dpJs = includeApi ? `${prefix}/dp.js` : null;
+  app.locals.dpCss = `${prefix}/dp.css?v=${paths.version}`;
+  app.locals.dpJs = includeApi ? `${prefix}/dp.js?v=${paths.version}` : null;
   app.locals.dpLucide = includeLucide ? paths.lucideCDN : null;
   app.locals.dpVersion = paths.version;
   app.locals.dpMixinPath = paths.mixinIndex;
