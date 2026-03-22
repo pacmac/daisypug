@@ -1,0 +1,12 @@
+//- Popup menu — for external trigger (not self-contained like dropdown)
+//- Use when you need to open/close from a separate button
+
+mixin dp-popup(opts)
+  - opts = opts || {}
+  - const cls = ['dp-popup', opts.position && `dp-popup-${opts.position}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls style="display:none; position:absolute; z-index:50")&attributes(attributes)
+    if opts.items
+      ul.menu.bg-base-200.rounded-box.shadow-lg(class=opts.menuClass || 'w-52')
+        each item in opts.items
+          +dropdown-item(item)
+    block

@@ -118,6 +118,21 @@ dp-heading:
     +dp-heading('Details', {level: 2})
     +dp-heading('Section', {level: 3, icon: 'info'})
 
+dp-popup:
+  replaces: "externally triggered dropdown/popup menu"
+  mixin: "+dp-popup(opts)"
+  args: "{position: top|bottom, class, menuClass, items: [{text, icon, page, href}]}"
+  note: "Use instead of +dropdown when triggered from an external button (e.g. dock More button)"
+  help: dp-popup.md#usage
+  help-api: dp-popup.md#api
+  api: "DpPopup: open(anchor), close(), toggle(anchor), isOpen(), getItems(), addItem(opts), removeItem(n), onItemClick(fn), onOpen(fn), onClose(fn)"
+  example: |
+    +dp-popup({position: 'top'})(id="more-menu")
+      ul.menu.bg-base-200.rounded-box.shadow-lg.w-52
+        +dropdown-item({text: 'Settings', icon: 'settings', page: 'settings'})
+        +dropdown-item({text: 'Help', icon: 'help-circle', page: 'help'})
+    // JS: dp('#more-menu').open('#more-btn') or dp('#more-menu').toggle('#dock-more')
+
 dp-icon:
   replaces: "i.bi.bi-*, svg icons"
   mixin: "+dp-icon(name, opts)"
