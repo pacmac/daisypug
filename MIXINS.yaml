@@ -1,0 +1,543 @@
+# DaisyPug Mixin Reference
+# Use this instead of raw DaisyUI HTML classes.
+# Every DaisyUI class has a corresponding mixin.
+
+# ============================================================
+# DUI-Evolved Components (dp- prefix)
+# ============================================================
+
+dp-vsplit:
+  replaces: "CSS grid side-by-side layout"
+  mixin: "+dp-vsplit(size)"
+  args: "size: CSS width for first panel ('400px', '30%', '1fr')"
+  children: "+dp-panel"
+  help: dp-vsplit.md
+  example: |
+    +dp-vsplit('300px')
+      +dp-panel('west', {title: 'Sidebar'})
+        //- content
+      +dp-panel('center')
+        //- content
+
+dp-hsplit:
+  replaces: "CSS grid stacked layout"
+  mixin: "+dp-hsplit(size)"
+  args: "size: CSS height for first panel ('200px', '50%')"
+  children: "+dp-panel"
+  help: dp-vsplit.md
+  example: |
+    +dp-hsplit('200px')
+      +dp-panel('north', {title: 'Top'})
+      +dp-panel('center')
+
+dp-panel:
+  replaces: "div with bg, border, scroll"
+  mixin: "+dp-panel(name, opts)"
+  args: "name: west|east|north|south|center; opts: {title, iconCls, scroll, id, class}"
+  help: dp-vsplit.md
+  api: "DpPanel: header, body, getTitle(), setTitle(), open(), close(), clear(), refresh(url)"
+
+dp-toolbar:
+  replaces: "div.flex with buttons"
+  mixin: "+dp-toolbar(opts)"
+  args: "{title, icon, asdpx, size, id, class}"
+  asdpx: "a=Add, s=Save, e=Edit, d=Delete, p=Print, x=Cancel"
+  children: "+dp-toolbar-sep, +btn"
+  help: dp-toolbar.md
+  example: |
+    +dp-toolbar({title: 'Parts', icon: 'box', asdpx: 'aed'})
+      +dp-toolbar-sep
+      +btn({size: 'xs', style: 'ghost'})
+        +dp-icon('download', {size: 'sm'})
+        |  Export
+
+dp-form:
+  replaces: "form element"
+  mixin: "+dp-form(opts)"
+  args: "{id, class}"
+  classes: ".two .three .four for column grid"
+  help: dp-fitem.md
+  notes: "Duplicate id auto-detected → renders data-form-part for multi-tab forms"
+  example: "+dp-form({id: 'head'}).two"
+
+dp-fitem:
+  replaces: "label + input pair"
+  mixin: "+dp-fitem(label, input, fitemOpts)"
+  args: "label: string; input: {class, name, id, color, pre, post, ...}"
+  auto-detect:
+    textbox: "<input type=text>"
+    combobox: "<select>"
+    numberbox: "<input type=number>"
+    numberspinner: "<input type=number> with step"
+    datebox: "<input type=date>"
+    datetimebox: "<input type=datetime-local>"
+    timespinner: "<input type=time>"
+    multiline: "<textarea>"
+    checkbox: "<input type=checkbox>"
+    toggle: "<input type=checkbox class=toggle>"
+    radio: "<input type=radio>"
+    searchbox: "<input type=search>"
+    passwordbox: "<input type=password>"
+    filebox: "<input type=file>"
+  id-shortcut: "id: '~' → auto-generates from name"
+  pre-post: "pre/post: icon name string or {action, icon, id, text}"
+  help: dp-fitem.md
+  api: "DpFitem: getValue(), setValue(), getLabel(), onPreClick(), onPostClick(), setPreIcon(), setPostIcon()"
+  example: |
+    +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~', pre: 'package', options: [...]})
+    +dp-fitem('Price', {class: 'numberbox', name: 'PRICE', id: '~', precision: 2, pre: 'dollar-sign'})
+    +dp-fitem('Search', {class: 'searchbox', name: 'Q', pre: 'search', post: 'x'})
+
+dp-group:
+  replaces: "fieldset / section heading"
+  mixin: "+dp-group(title)"
+  alias: "+dp-vgroup(title)"
+  help: dp-fitem.md
+
+dp-hgroup:
+  replaces: "side-by-side fields"
+  mixin: "+dp-hgroup(title)"
+  help: dp-fitem.md
+
+dp-icon:
+  replaces: "i.bi.bi-*, svg icons"
+  mixin: "+dp-icon(name, opts)"
+  args: "name: Lucide icon name; opts: {size: xs|sm|md|lg|xl, color, class}"
+  sizes: "xs=14px, sm=16px, md=20px, lg=24px, xl=32px"
+  help: dp-icon.md
+  example: "+dp-icon('search', {size: 'sm', color: 'primary'})"
+
+dp-formfield:
+  replaces: "label + input (legacy)"
+  mixin: "+dp-formfield(label, inputOpts, labelOpts)"
+  note: "Use +dp-fitem instead for new code"
+  help: dp-formfield.md
+
+dp-formcard:
+  replaces: "card with form"
+  mixin: "+dp-formcard(title, opts, fields, actions)"
+  help: dp-formcard.md
+
+dp-nav:
+  replaces: "navbar with menu + theme switcher"
+  mixin: "+dp-nav(brand, opts)"
+  args: "{items, actions, themes, activeTheme, class}"
+  help: dp-nav.md
+
+dp-datatable:
+  replaces: "table with pagination"
+  mixin: "+dp-datatable(opts)"
+  args: "{headers, rows, zebra, size, autoWidth, pagination}"
+  help: dp-datatable.md
+  api: "DpDataTable: setData(), paginate(), nextPage(), loadData(url)"
+
+dp-conversation:
+  replaces: "chat bubbles"
+  mixin: "+dp-conversation(messages)"
+  help: dp-conversation.md
+
+dp-modalform:
+  replaces: "modal with form"
+  mixin: "+dp-modalform(id, title, opts, fields, actions)"
+  help: dp-modalform.md
+
+dp-herocta:
+  replaces: "hero section with CTA"
+  mixin: "+dp-herocta(opts)"
+  help: dp-herocta.md
+
+dp-pagelayout:
+  replaces: "drawer + navbar + sidebar + content"
+  mixin: "+dp-pagelayout(opts)"
+  help: dp-pagelayout.md
+
+# ============================================================
+# Base DaisyUI Components
+# ============================================================
+
+btn:
+  replaces: "button.btn"
+  mixin: "+btn(opts)"
+  args: "{text, color, size, style, shape, wide, block, active, disabled, class}"
+  colors: "neutral, primary, secondary, accent, info, success, warning, error"
+  sizes: "xs, sm, md, lg, xl"
+  styles: "outline, dash, soft, ghost, link"
+  help: btn.md
+  example: "+btn({text: 'Click', color: 'primary', size: 'lg'})"
+
+badge:
+  replaces: "span.badge"
+  mixin: "+badge(opts)"
+  args: "{text, color, size, style, class}"
+  help: badge.md
+
+card:
+  replaces: "div.card"
+  mixin: "+card(opts)"
+  args: "{size, style, side, imageFull, class}"
+  children: "+card-body, +card-title, +card-actions"
+  help: card.md
+  example: |
+    +card({style: 'border'})
+      +card-body
+        +card-title({text: 'Title'})
+        p Content
+        +card-actions({class: 'justify-end'})
+          +btn({color: 'primary', text: 'Action'})
+
+navbar:
+  replaces: "div.navbar"
+  mixin: "+navbar(opts)"
+  children: "+navbar-start, +navbar-center, +navbar-end"
+  help: navbar.md
+
+tabs:
+  replaces: "div.tabs"
+  mixin: "+tabs(opts)"
+  args: "{style: box|border|lift, size, placement, class}"
+  children: "+tab({name, label, active}) → +tab-content"
+  help: tabs.md
+  note: "Do NOT add tab-active class — use checked attribute only"
+  example: |
+    +tabs({style: 'lift'})
+      +tab({name: 'my-tabs', label: 'Tab 1', active: true})
+      +tab-content({class: 'p-4'})
+        p Content 1
+      +tab({name: 'my-tabs', label: 'Tab 2'})
+      +tab-content({class: 'p-4'})
+        p Content 2
+
+modal:
+  replaces: "dialog.modal"
+  mixin: "+modal(opts)"
+  args: "{id, position, open, backdrop, class}"
+  children: "+modal-box, +modal-action"
+  trigger: "onclick=\"modal_id.showModal()\""
+  help: modal.md
+
+table:
+  replaces: "table.table"
+  mixin: "+table(opts)"
+  args: "{headers, rows, zebra, size, autoWidth, pinRows, pinCols, class}"
+  note: "autoWidth=true by default — columns fit content, spacer column at end"
+  help: table.md
+
+alert:
+  replaces: "div.alert"
+  mixin: "+alert(opts)"
+  args: "{color, style, direction, text, class}"
+  help: alert.md
+
+menu:
+  replaces: "ul.menu"
+  mixin: "+menu(opts)"
+  args: "{size, direction, class}"
+  children: "+menu-title, +menu-item, +menu-dropdown"
+  help: menu.md
+
+dock:
+  replaces: "div.dock"
+  mixin: "+dock(opts)"
+  args: "{size, items: [{name, text, icon, active}], class}"
+  children: "+dock-item({name, text, icon, active})"
+  help: dock.md
+  api: "DpDock: onSelect(), setActive(), setActiveByPanel(), getLabels()"
+
+drawer:
+  replaces: "div.drawer"
+  mixin: "+drawer(opts)"
+  args: "{id, end, class}"
+  children: "+drawer-content, +drawer-side({for}), +drawer-button"
+  help: drawer.md
+
+collapse:
+  replaces: "div.collapse"
+  mixin: "+collapse(opts) or +collapse-checkbox(opts)"
+  children: "+collapse-title, +collapse-content"
+  help: collapse.md
+
+dropdown:
+  replaces: "details.dropdown"
+  mixin: "+dropdown(opts)"
+  children: "+dropdown-trigger, +dropdown-content"
+  help: dropdown.md
+
+tooltip:
+  replaces: "div.tooltip"
+  mixin: "+tooltip(opts)"
+  args: "{tip, color, position, class}"
+  help: tooltip.md
+
+stats:
+  replaces: "div.stats"
+  mixin: "+stats(opts)"
+  children: "+stat → +stat-title, +stat-value, +stat-desc, +stat-figure, +stat-actions"
+  help: stat.md
+
+steps:
+  replaces: "ul.steps"
+  mixin: "+steps(opts)"
+  children: "+step({color, text, icon})"
+  help: steps.md
+
+timeline:
+  replaces: "ul.timeline"
+  mixin: "+timeline(opts)"
+  children: "+timeline-item → +timeline-start, +timeline-middle, +timeline-end, +timeline-hr"
+  help: timeline.md
+
+hero:
+  replaces: "div.hero"
+  mixin: "+hero(opts)"
+  children: "+hero-content, +hero-overlay"
+  help: hero.md
+
+fieldset:
+  replaces: "fieldset.fieldset"
+  mixin: "+fieldset(opts)"
+  children: "+fieldset-legend, +fieldset-label"
+  help: fieldset.md
+
+divider:
+  replaces: "div.divider"
+  mixin: "+divider(opts)"
+  args: "{text, color, direction, position, class}"
+  help: divider.md
+
+swap:
+  replaces: "label.swap"
+  mixin: "+swap(opts)"
+  children: "+swap-on, +swap-off"
+  help: swap.md
+
+join:
+  replaces: "div.join"
+  mixin: "+join(opts)"
+  children: "+join-item"
+  help: join.md
+
+list:
+  replaces: "ul.list"
+  mixin: "+list(opts)"
+  children: "+list-row"
+  help: list.md
+
+chat:
+  replaces: "div.chat"
+  mixin: "+chat(opts)"
+  children: "+chat-image, +chat-header, +chat-bubble, +chat-footer"
+  help: chat.md
+
+footer:
+  replaces: "footer.footer"
+  mixin: "+footer(opts)"
+  children: "+footer-title"
+  help: footer.md
+
+breadcrumbs:
+  replaces: "div.breadcrumbs"
+  mixin: "+breadcrumbs(opts)"
+  args: "{items: [{text, href}]}"
+  help: breadcrumbs.md
+
+rating:
+  replaces: "div.rating"
+  mixin: "+rating(opts)"
+  args: "{name, stars, value, size, half, color}"
+  help: rating.md
+
+toast:
+  replaces: "div.toast"
+  mixin: "+toast(opts)"
+  args: "{position: 'end bottom'}"
+  help: toast.md
+
+indicator:
+  replaces: "div.indicator"
+  mixin: "+indicator(opts)"
+  children: "+indicator-item"
+  help: indicator.md
+
+stack:
+  replaces: "div.stack"
+  mixin: "+stack(opts)"
+  help: stack.md
+
+diff:
+  replaces: "div.diff"
+  mixin: "+diff(opts)"
+  children: "+diff-item-1, +diff-item-2"
+  help: diff.md
+
+carousel:
+  replaces: "div.carousel"
+  mixin: "+carousel(opts)"
+  children: "+carousel-item"
+  help: carousel.md
+
+# ============================================================
+# Form Inputs (used inside +dp-fitem or standalone)
+# ============================================================
+
+input:
+  replaces: "input.input"
+  mixin: "+input(opts)"
+  args: "{color, size, style, placeholder, name, value, type, class}"
+  help: input.md
+
+select:
+  replaces: "select.select"
+  mixin: "+select(opts)"
+  args: "{color, size, style, placeholder, options, name, class}"
+  help: select.md
+
+textarea:
+  replaces: "textarea.textarea"
+  mixin: "+textarea(opts)"
+  args: "{color, size, style, placeholder, name, rows, class}"
+  help: textarea.md
+
+checkbox:
+  replaces: "input.checkbox"
+  mixin: "+checkbox(opts)"
+  args: "{color, size, checked, name, class}"
+  help: checkbox.md
+
+toggle:
+  replaces: "input.toggle"
+  mixin: "+toggle(opts)"
+  args: "{color, size, checked, name, class}"
+  help: toggle.md
+
+radio:
+  replaces: "input.radio"
+  mixin: "+radio(opts)"
+  args: "{color, size, name, value, checked, class}"
+  help: radio.md
+
+range:
+  replaces: "input.range"
+  mixin: "+range(opts)"
+  args: "{color, size, min, max, value, step, class}"
+  help: range.md
+
+file-input:
+  replaces: "input.file-input"
+  mixin: "+file-input(opts)"
+  args: "{color, size, style, name, accept, class}"
+  help: file-input.md
+
+progress:
+  replaces: "progress.progress"
+  mixin: "+progress(opts)"
+  args: "{color, value, max, class}"
+  help: progress.md
+
+radial-progress:
+  replaces: "div.radial-progress"
+  mixin: "+radial-progress(opts)"
+  args: "{value, color, size, thickness, class}"
+  help: radial-progress.md
+
+loading:
+  replaces: "span.loading"
+  mixin: "+loading(opts)"
+  args: "{variant: spinner|dots|ring|ball|bars|infinity, size, color, class}"
+  help: loading.md
+
+skeleton:
+  replaces: "div.skeleton"
+  mixin: "+skeleton(opts)"
+  help: skeleton.md
+
+# ============================================================
+# Display
+# ============================================================
+
+link:
+  replaces: "a.link"
+  mixin: "+link(opts)"
+  args: "{text, color, href, hover, class}"
+  help: link.md
+
+kbd:
+  replaces: "kbd.kbd"
+  mixin: "+kbd(opts)"
+  args: "{text, size, class}"
+  help: kbd.md
+
+status:
+  replaces: "div.status"
+  mixin: "+status(opts)"
+  args: "{color, size, class}"
+  help: status.md
+
+mask:
+  replaces: "div.mask"
+  mixin: "+mask(opts)"
+  args: "{shape, class}"
+  help: mask.md
+
+countdown:
+  replaces: "span.countdown"
+  mixin: "+countdown(opts)"
+  args: "{value, class}"
+  help: countdown.md
+
+# ============================================================
+# Mockups
+# ============================================================
+
+mockup-browser:
+  replaces: "div.mockup-browser"
+  mixin: "+mockup-browser(opts)"
+  args: "{url, class}"
+  help: mockup-browser.md
+
+mockup-code:
+  replaces: "div.mockup-code"
+  mixin: "+mockup-code(opts)"
+  args: "{lines: [{prefix, text}], class}"
+  help: mockup-code.md
+
+mockup-phone:
+  replaces: "div.mockup-phone"
+  mixin: "+mockup-phone(opts)"
+  help: mockup-phone.md
+
+mockup-window:
+  replaces: "div.mockup-window"
+  mixin: "+mockup-window(opts)"
+  help: mockup-window.md
+
+# ============================================================
+# Theme
+# ============================================================
+
+theme-controller:
+  replaces: "input.theme-controller"
+  mixin: "+theme-controller(opts)"
+  args: "{value, as: toggle|radio|btn, type, name, color, size, checked}"
+  help: theme-controller.md
+
+theme-radios:
+  replaces: "multiple theme-controller radios"
+  mixin: "+theme-radios(opts)"
+  args: "{themes: [...], as, name, color, size, active}"
+  help: theme-controller.md
+
+# ============================================================
+# Rules
+# ============================================================
+
+rules:
+  dp-classes: "Every component gets dp-{name} class for API hooks"
+  no-hardcoded-colors: "Never use bg-blue-500 etc — use DaisyUI semantic colors"
+  child-owns-padding: "Parent never sets child padding — panel body has padding:0"
+  no-double-borders: "Tables inside panels have border:none"
+  no-body-scroll: "Dashboard pages use h-screen overflow-hidden — panels scroll internally"
+  id-tilde: "id: '~' in +dp-fitem auto-generates id from name attribute"
+  form-parts: "Same +dp-form id used twice → second becomes data-form-part"
+  tab-active: "Never add tab-active class — use checked attribute only"
+  autoWidth: "Tables default to autoWidth:true — columns fit content"
+  lucide-icons: "Use +dp-icon(name) for all icons — Lucide icon set"
