@@ -33,6 +33,8 @@
   justify-content: center;
   pointer-events: none;
 }
+/* Hide pagination when any modal is open */
+body:has(dialog[open]) .dp-datatable-pagination { display: none; }
 .dp-datatable-pagination > * {
   pointer-events: auto;
   background: var(--color-base-100, #fff);
