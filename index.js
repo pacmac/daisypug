@@ -39,11 +39,18 @@ function setup(app, opts = {}) {
     return _cache[key];
   }
 
+  // Pre-load into cache and log sizes
+  const jsContent = readOnce('js', paths.dpJs);
+  const cssContent = readOnce('css', paths.css);
+  const jsKB = (Buffer.byteLength(jsContent) / 1024).toFixed(1);
+  const cssKB = (Buffer.byteLength(cssContent) / 1024).toFixed(1);
+  console.log(`[daisypug] v${paths.version} loaded — dp.js: ${jsKB}KB, dp.css: ${cssKB}KB (in-memory at ${prefix}/)`);
+
   app.get(`${prefix}/dp.js`, (req, res) => {
-    res.type('application/javascript').send(readOnce('js', paths.dpJs));
+    res.type('application/javascript').send(_cache.js);
   });
   app.get(`${prefix}/dp.css`, (req, res) => {
-    res.type('text/css').send(readOnce('css', paths.css));
+    res.type('text/css').send(_cache.css);
   });
 
   // Add mixins path to Pug basedir for absolute includes
