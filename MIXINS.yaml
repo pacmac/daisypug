@@ -272,6 +272,10 @@ table:
   args: "{headers, rows, zebra, size, autoWidth, pinRows, pinCols, class}"
   note: "autoWidth=true by default — columns fit content, spacer column at end"
   help: table.md#usage
+  grouping: |
+    table.groupBy(row => row[0].substring(0,10), key => new Date(key).toLocaleDateString())
+    table.groupByCol(0)         // group by first column value
+    table.groupBy(null)         // clear grouping
   help-api: table.md#api
   api: "DpTable: getData(), setData(), addRow(), removeRow(), getRow(), selectRow(), sort(), filter(), search(), toCSV(), toJSON(), onRowClick(fn), onCellClick(fn)"
 
