@@ -10,7 +10,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
   //- Tabs fill remaining height
   div.flex-1.min-h-0.overflow-hidden
-    +tabs({style: 'lift', size: 'lg'})
+    +tabs({style: 'lift', size: 'lg', class: 'remember'})(id="showcase-tabs")
 
       //- ===== TAB: Layouts =====
       +tab({name: 'showcase', label: 'Layouts', active: true})
