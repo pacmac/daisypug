@@ -180,6 +180,109 @@ form.onChange((data, changedField, form) => {
 })
 ```
 
+### Form-Parts (Multi-Tab Forms)
+
+A single logical form can span multiple tabs. Use the same `id` on each `+dp-form` — the mixin detects duplicates and renders them as `data-form-part` instead of a second `id`.
+
+```pug
+//- Main form (gets the id)
++dp-form#head
+  +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~'})
+
+//- Tab forms (same id → become form-parts)
++tabs({style: 'lift'})
+  +tab({name: 'tabs', label: 'Details', active: true})
+  +tab-content
+    +dp-form#head
+      +dp-fitem('Width', {class: 'numberbox', name: 'WIDTH', id: '~'})
+  +tab({name: 'tabs', label: 'Notes'})
+  +tab-content
+    +dp-form#head
+      +dp-fitem('Notes', {class: 'multiline', name: 'NOTES', id: '~'})
+```
+
+Renders as:
+```html
+<form id="head" class="dp-form">...</form>
+<form data-form-part="head" class="dp-form">...</form>
+<form data-form-part="head" class="dp-form">...</form>
+```
+
+`dp.form('#head')` automatically collects inputs from all parts:
+
+```js
+const form = dp.form('#head');
+form.getData();    // {PART_ID, WIDTH, NOTES} — all tabs
+form.isDirty();    // true if ANY field in ANY tab changed
+form.fields();     // all inputs across all tabs
+```
+
+### Form State Machine (CRUD)
+
+Bind a form to a toolbar for automatic CRUD state management:
+
+```js
+dp.form('#head').bind('#toolbar', {
+  url: '/api/parts',       // API endpoint for save/delete
+  idField: 'PART_ID'       // primary key field for PUT/DELETE URLs
+});
+```
+
+#### Modes
+
+| Mode | Fields | Toolbar Buttons |
+|------|--------|-----------------|
+| `view` | Read-only | Add, Edit enabled. Save, Cancel, Delete disabled |
+| `add` | Editable, cleared | Save, Cancel enabled. Add, Edit, Delete disabled |
+| `edit` | Editable, loaded | Save, Cancel, Delete enabled. Add, Edit disabled |
+
+#### Auto-wiring
+
+The `bind()` method connects toolbar buttons to form actions:
+
+| Button | Action |
+|--------|--------|
+| Add | `form.mode('add')` — clears fields, makes editable |
+| Save | Validates → POST (add) or PUT (edit) → back to view |
+| Cancel | Confirms if dirty → restores snapshot → back to view |
+| Edit | `form.mode('edit')` — makes editable, snapshots for cancel |
+| Delete | Confirms → DELETE → clears → back to view |
+
+#### Manual mode control
+
+```js
+form.mode()              // get current mode: 'view', 'add', 'edit'
+form.mode('edit')        // set mode manually
+
+form.onModeChange((mode, prev, form) => {
+  console.log(`${prev} → ${mode}`);
+});
+```
+
+#### Callbacks
+
+```js
+form.onSave((data, form) => {
+  // After successful save
+  dp('#my-table').loadData('/api/parts');
+});
+
+form.onCancel((form) => {
+  // After cancel
+});
+
+form.onDelete((form) => {
+  // After delete
+  dp('#my-table').loadData('/api/parts');
+});
+```
+
+#### Navigation guard
+
+```js
+form.guardNavigation();  // warns before leaving page with unsaved changes
+```
+
 ## Code
 
 ### Login Form
