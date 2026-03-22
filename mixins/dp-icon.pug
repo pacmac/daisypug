@@ -1,0 +1,9 @@
+//- Lucide icon component
+//- Usage: +dp-icon('search') or +dp-icon('search', {size: 'sm', color: 'primary', class: 'mr-1'})
+
+mixin dp-icon(name, opts)
+  - opts = opts || {}
+  - const sizeMap = {xs: 14, sm: 16, md: 20, lg: 24, xl: 32}
+  - const sz = sizeMap[opts.size] || sizeMap['sm']
+  - const cls = ['dp-icon', opts.color && `text-${opts.color}`, opts.class].filter(Boolean).join(' ') || undefined
+  i(data-lucide=name class=cls style=opts.size ? `width:${sz}px;height:${sz}px` : undefined)&attributes(attributes)
