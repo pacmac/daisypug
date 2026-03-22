@@ -135,6 +135,48 @@ table.setPageSize(50)  // change page size
 table.onPageChange(({page, total, pageCount}) => ...)
 ```
 
+### Row Grouping {#grouping}
+
+Insert section headers when a group value changes. Works with pagination — groups render within each page.
+
+#### Group by function
+
+```js
+// Group by date extracted from timestamp
+table.groupBy(
+  row => row[0].substring(0, 10),           // key: '2026-03-22'
+  key => new Date(key).toLocaleDateString('en-GB', {
+    weekday: 'short', day: 'numeric', month: 'short'
+  })                                         // label: 'Sat, 22 Mar'
+);
+```
+
+#### Group by column value
+
+```js
+table.groupByCol(2);                         // group by 3rd column
+table.groupByCol(0, val => `Category: ${val}`);  // with formatter
+```
+
+#### Clear grouping
+
+```js
+table.groupBy(null);
+table.groupByCol(null);
+```
+
+Renders:
+```
+── Sat, 22 Mar ──
+01:34  C-03-10  Iren
+01:08  C-03-10  Iren
+── Fri, 21 Mar ──
+22:38  B-05-08  Peter
+22:37  B-05-08  Peter
+```
+
+Group headers are `<tr class="dp-group-header">` — excluded from `getData()`, `getRow()`, `selectRow()` etc.
+
 ## Code
 
 ### Pug
