@@ -10,7 +10,9 @@ mixin dp-toolbar(opts)
   - const btnSize = size === 'sm' ? 'xs' : size === 'lg' ? 'md' : 'sm'
   - const pad = size === 'lg' ? 'py-1.5' : 'py-1'
   - const cls = ['dp-toolbar', 'flex', 'items-center', 'gap-1', 'px-2', pad, 'bg-base-200', 'border-b', 'border-base-300', opts.class].filter(Boolean).join(' ')
-  div(class=cls id=id ? id + '_toolbar' : undefined)&attributes({...attributes, id: undefined, asdpx: undefined, title: undefined, icon: undefined, size: undefined})
+  - const tbId = id ? id + '_toolbar' : undefined
+  - const cleanAttrs = Object.assign({}, attributes); delete cleanAttrs.id; delete cleanAttrs.asdpx; delete cleanAttrs.title; delete cleanAttrs.icon; delete cleanAttrs.size;
+  div(class=cls id=tbId)&attributes(cleanAttrs)
 
     //- Title section (shrink-0)
     if title

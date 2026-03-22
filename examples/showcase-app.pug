@@ -71,33 +71,62 @@ div.flex.flex-col.h-screen.overflow-hidden
       +tab({name: 'showcase', label: 'Forms'})
       +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
-        h3.font-semibold.mb-2 3-Column Form with Icons
-        div.bg-base-100.rounded-lg.p-4.mb-6
-          +dp-form({id: 'fitem-demo'}).three
-            .divider.text-xs.font-bold.opacity-50.mt-0(style="grid-column:1/-1") DETAILS
-            +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~', pre: 'package', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
-            +dp-fitem('Description', {class: 'textbox', name: 'DESCRIPTION', id: '~', placeholder: 'Enter description'})
-            +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
-            .divider.text-xs.font-bold.opacity-50(style="grid-column:1/-1") QUANTITIES
-            +dp-fitem('Quantity', {class: 'numberspinner', name: 'QTY', id: '~', min: 0, precision: 0, value: '25'})
-            +dp-fitem('Weight', {class: 'numberbox', name: 'WEIGHT', id: '~', precision: 2, value: '12.50'})
-            +dp-fitem('Price', {class: 'numberbox', name: 'PRICE', id: '~', precision: 2, value: '199.99', pre: 'dollar-sign'})
-            .divider.text-xs.font-bold.opacity-50(style="grid-column:1/-1") DATES & OTHER
-            +dp-fitem('Order Date', {class: 'datebox', name: 'ORDER_DATE', id: '~', pre: 'calendar'})
-            +dp-fitem('Active', {class: 'checkbox', name: 'ACTIVE', id: '~', checked: true})
-            +dp-fitem('Notify', {class: 'toggle', name: 'NOTIFY', id: '~'})
-            div(style="grid-column:1/-1")
-              +dp-fitem('Notes', {class: 'multiline', name: 'NOTES', id: '~', rows: 2, placeholder: 'Optional notes...'})
+        //- ---- CRUD Form with State Machine ----
+        h3.font-semibold.mb-2 CRUD Form with State Machine
+        div.bg-base-100.rounded-lg.overflow-hidden.mb-6
+          +dp-toolbar({id: 'crud_toolbar', title: 'Part Master', icon: 'package', asdpx: 'asdx'})
+          div.p-4
+            +dp-form({id: 'crud_form'})
+              +dp-fitem('Part ID', {class: 'combobox', name: 'CRUD_PART', id: '~', pre: 'package', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
+              +dp-fitem('Description', {class: 'textbox', name: 'CRUD_DESC', id: '~', placeholder: 'Part description'})
+              +dp-fitem('Price', {class: 'numberbox', name: 'CRUD_PRICE', id: '~', precision: 2, pre: 'dollar-sign'})
+            div.mt-2.text-xs.opacity-50
+              | Mode:
+              span#crud_mode_display view
+              |  | Dirty:
+              span#crud_dirty_display false
 
-        h3.font-semibold.mb-2 Pre/Post Slots
+        //- ---- Form-Parts (Multi-Tab) ----
+        h3.font-semibold.mb-2 Form-Parts — Single Form Across Tabs
+        div.bg-base-100.rounded-lg.overflow-hidden.mb-6
+          +dp-toolbar({id: 'parts_toolbar', title: 'Product', icon: 'box', asdpx: 'asdx'})
+          div.p-4
+            +dp-form({id: 'parts_form'})
+              +dp-fitem('Product ID', {class: 'textbox', name: 'PROD_ID', id: '~', pre: 'hash'})
+              +dp-fitem('Name', {class: 'textbox', name: 'PROD_NAME', id: '~'})
+            +tabs({style: 'box', class: 'mt-3'})
+              +tab({name: 'parts-tabs', label: 'Dimensions', active: true})
+              +tab-content({class: 'p-3'})
+                +dp-form({id: 'parts_form'})
+                  +dp-fitem('Width', {class: 'numberbox', name: 'PROD_W', id: '~', precision: 2})
+                  +dp-fitem('Height', {class: 'numberbox', name: 'PROD_H', id: '~', precision: 2})
+                  +dp-fitem('Weight', {class: 'numberbox', name: 'PROD_WT', id: '~', precision: 3})
+              +tab({name: 'parts-tabs', label: 'Financial'})
+              +tab-content({class: 'p-3'})
+                +dp-form({id: 'parts_form'})
+                  +dp-fitem('Cost', {class: 'numberbox', name: 'PROD_COST', id: '~', precision: 2, pre: 'dollar-sign'})
+                  +dp-fitem('Currency', {class: 'combobox', name: 'PROD_CUR', id: '~', options: ['SGD', 'USD', 'EUR']})
+              +tab({name: 'parts-tabs', label: 'Notes'})
+              +tab-content({class: 'p-3'})
+                +dp-form({id: 'parts_form'})
+                  +dp-fitem('Notes', {class: 'multiline', name: 'PROD_NOTES', id: '~', rows: 3, placeholder: 'Product notes...'})
+            div.mt-2.text-xs.opacity-50
+              | All fields:
+              span#parts_field_count 0
+              |  | getData keys:
+              span#parts_data_keys -
+
+        //- ---- Pre/Post Slots ----
+        h3.font-semibold.mb-2 Pre/Post Icon Slots
         div.bg-base-100.rounded-lg.p-4.mb-6(style="max-width:450px")
           +dp-form({id: 'slots-demo'})
             +dp-fitem('Search', {class: 'searchbox', name: 'SEARCH', id: '~', pre: 'search', post: 'x', placeholder: 'Type to search...'})
-            +dp-fitem('Email', {class: 'textbox', name: 'EMAIL', id: '~', pre: 'mail', placeholder: 'you@example.com'})
-            +dp-fitem('Website', {class: 'textbox', name: 'URL', id: '~', pre: 'globe', placeholder: 'https://'})
-            +dp-fitem('Part Code', {class: 'textbox', name: 'CODE', id: '~', pre: 'hash', post: {action: true, icon: 'search', id: 'btn_lookup'}})
+            +dp-fitem('Email', {class: 'textbox', name: 'SL_EMAIL', id: '~', pre: 'mail', placeholder: 'you@example.com'})
+            +dp-fitem('Website', {class: 'textbox', name: 'SL_URL', id: '~', pre: 'globe', placeholder: 'https://'})
+            +dp-fitem('Part Code', {class: 'textbox', name: 'SL_CODE', id: '~', pre: 'hash', post: {action: true, icon: 'search', id: 'btn_lookup'}})
 
-        h3.font-semibold.mb-2 Form with Groups
+        //- ---- Groups ----
+        h3.font-semibold.mb-2 Field Groups
         div.bg-base-100.rounded-lg.p-4(style="max-width:450px")
           +dp-form({id: 'group-demo'})
             +dp-fitem('Part ID', {class: 'combobox', name: 'GRP_PART', id: '~', pre: 'package', options: ['A8000', 'B3200']})
@@ -108,6 +137,33 @@ div.flex.flex-col.h-screen.overflow-hidden
             +dp-hgroup('Rates')
               +dp-fitem('Base', {class: 'numberbox', name: 'GRP_BASE', id: '~', precision: 4})
               +dp-fitem('Tax %', {class: 'numberbox', name: 'GRP_TAX', id: '~', precision: 1})
+
+        //- ---- Interactive JS for form demos ----
+        script.
+          document.addEventListener('DOMContentLoaded', () => {
+            if (typeof dp === 'undefined') return;
+            dp.on('ready', () => {
+              // CRUD form with state machine
+              const crudForm = dp.form('#crud_form');
+              crudForm.bind('#crud_toolbar_toolbar', { idField: 'CRUD_PART' });
+              crudForm.onModeChange((mode) => {
+                document.getElementById('crud_mode_display').textContent = mode;
+              });
+              crudForm.onChange(() => {
+                document.getElementById('crud_dirty_display').textContent = crudForm.isDirty();
+              });
+
+              // Form-parts demo
+              const partsForm = dp.form('#parts_form');
+              partsForm.bind('#parts_toolbar_toolbar', { idField: 'PROD_ID' });
+              const updatePartsInfo = () => {
+                document.getElementById('parts_field_count').textContent = partsForm.fields().length;
+                document.getElementById('parts_data_keys').textContent = Object.keys(partsForm.getData()).join(', ');
+              };
+              updatePartsInfo();
+              partsForm.onChange(updatePartsInfo);
+            });
+          });
 
       //- ===== TAB: Toolbar =====
       +tab({name: 'showcase', label: 'Toolbar'})
