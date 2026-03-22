@@ -1,0 +1,23 @@
+/* DaisyPug Framework CSS */
+
+/* Layout: split panel borders */
+.dp-vsplit > .dp-panel:first-child { border-right: 1px solid oklch(var(--bc) / 0.2); }
+.dp-hsplit > .dp-panel:first-child { border-bottom: 1px solid oklch(var(--bc) / 0.2); }
+.dp-vsplit.no-border > .dp-panel:first-child,
+.dp-hsplit.no-border > .dp-panel:first-child { border: none; }
+
+/* Forms: multi-column grid */
+.dp-form.two { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 1rem; }
+.dp-form.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 1rem; }
+.dp-form.four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 1rem; }
+
+/* Fit utilities — child stretches to fill parent */
+.fit { width: 100%; height: 100%; }
+.fit-w { width: 100%; }
+.fit-h { height: 100%; flex: 1; min-height: 0; }
+
+/* Prevent table double border inside panels */
+.dp-panel .dp-table, .dp-panel .table { border: none; }
+
+/* Panel body: never has padding — child decides */
+.dp-panel-body { padding: 0; }
