@@ -170,6 +170,10 @@ badge:
   mixin: "+badge(opts)"
   args: "{text, color, size, style, class}"
   help: badge.md
+  api: "DpBadge: getText(), setText(str), getColor(), setColor(color), getStyle(), setStyle(style), setIcon(name), removeIcon(), onClick(fn)"
+  example: |
+    +badge({color: 'success', text: 'Online'})(id="status-badge")
+    // JS: dp('#status-badge').setText('Offline').setColor('error').setIcon('wifi-off')
 
 card:
   replaces: "div.card"
