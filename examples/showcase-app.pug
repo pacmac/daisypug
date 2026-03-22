@@ -9,12 +9,12 @@ div.flex.flex-col.h-screen.overflow-hidden
     +theme-radios({themes: ['light', 'dark', 'cupcake', 'synthwave'], as: 'btn', active: 'light'})
 
   //- Tabs fill remaining height
-  div.flex-1.min-h-0.flex.flex-col
-    +tabs({style: 'lift', size: 'lg', class: 'flex-1 min-h-0 flex flex-col'})
+  div.flex-1.min-h-0.overflow-hidden
+    +tabs({style: 'lift', size: 'lg'})
 
       //- ===== TAB: Layouts =====
       +tab({name: 'showcase', label: 'Layouts', active: true})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         h3.font-semibold.mb-2 Basic Sidebar — vsplit('250px')
         div(style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
@@ -69,7 +69,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Forms =====
       +tab({name: 'showcase', label: 'Forms'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         h3.font-semibold.mb-2 3-Column Form — Auto-detect input types
         div.bg-base-100.rounded-lg.p-4.mb-6
@@ -103,7 +103,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Toolbar =====
       +tab({name: 'showcase', label: 'Toolbar'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         div.space-y-3.bg-base-100.rounded-lg.overflow-hidden
           +dp-toolbar({title: 'Parts List', icon: 'bi bi-box-seam', asdpx: 'aed'})
@@ -119,7 +119,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Tables =====
       +tab({name: 'showcase', label: 'Tables'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         h3.font-semibold.mb-2 Auto-width columns (default)
         div.bg-base-100.rounded-lg.p-4.mb-6
@@ -131,7 +131,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Dock =====
       +tab({name: 'showcase', label: 'Dock'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         div.bg-base-100.rounded-lg.overflow-hidden(style="height:200px; position:relative")
           div.p-4 Content area above the dock
@@ -140,7 +140,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Tabs =====
       +tab({name: 'showcase', label: 'Tabs'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         h3.font-semibold.mb-2 Box style
         +tabs({style: 'box'})
@@ -162,7 +162,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Modals =====
       +tab({name: 'showcase', label: 'Modals'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         div.flex.gap-3
           +btn({text: 'Basic Modal', color: 'primary'})(onclick="demo_basic.showModal()")
@@ -180,7 +180,7 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Buttons =====
       +tab({name: 'showcase', label: 'Buttons'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         h3.font-semibold.mb-2 Colors
         div.flex.flex-wrap.gap-2.mb-4
@@ -210,14 +210,14 @@ div.flex.flex-col.h-screen.overflow-hidden
 
       //- ===== TAB: Chat =====
       +tab({name: 'showcase', label: 'Chat'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-auto p-4'})
+      +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         div.bg-base-100.rounded-lg.p-4(style="max-width:500px")
           +dp-conversation([{from: 'Alice', text: 'Hey! Have you tried DaisyPug?', position: 'start', color: 'primary'}, {from: 'Bob', text: 'Yes! The mixins are incredibly clean.', position: 'end'}, {from: 'Alice', text: 'And it has a full JS API too!', position: 'start', color: 'primary'}, {from: 'Bob', text: 'The form system is like DUI but better.', position: 'end'}])
 
       //- ===== TAB: Full App =====
       +tab({name: 'showcase', label: 'Full App'})
-      +tab-content({class: 'bg-base-200 flex-1 min-h-0 overflow-hidden'})
+      +tab-content({class: 'bg-base-200 overflow-hidden'})
 
         div.h-full
           +dp-vsplit('320px')
