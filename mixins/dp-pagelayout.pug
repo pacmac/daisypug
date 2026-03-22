@@ -7,10 +7,10 @@ mixin dp-pagelayout(opts)
   +drawer({id: drawerId})
     +drawer-content
       +dp-nav(opts.brand || 'App', {items: nav, themes: themes, activeTheme: opts.activeTheme, class: opts.navClass})
-      div.dp-pagelayout-content.p-4
+      div.dp-pagelayout-content.flex-1.min-h-0
         block
     +drawer-side({for: drawerId})
-      +menu({class: 'bg-base-200 min-h-full w-80 p-4'})
+      +menu({class: 'bg-base-200 min-h-full w-80'})
         if opts.brand
           +menu-title({text: opts.brand})
         each item in sidebar
