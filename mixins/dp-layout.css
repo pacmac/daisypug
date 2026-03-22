@@ -1,0 +1,17 @@
+/* DaisyPug Layout — vsplit/hsplit/panel border rules */
+
+/* vsplit: first panel gets right border */
+.dp-vsplit > .dp-panel:first-child {
+  border-right: 1px solid oklch(var(--bc) / 0.2);
+}
+
+/* hsplit: first panel gets bottom border */
+.dp-hsplit > .dp-panel:first-child {
+  border-bottom: 1px solid oklch(var(--bc) / 0.2);
+}
+
+/* no-border suppresses divider */
+.dp-vsplit.no-border > .dp-panel:first-child,
+.dp-hsplit.no-border > .dp-panel:first-child {
+  border: none;
+}

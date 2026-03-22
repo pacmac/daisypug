@@ -1,0 +1,26 @@
+mixin dp-vsplit(size)
+  - size = size || '1fr'
+  - const cls = ['dp-vsplit', 'grid', 'h-full'].filter(Boolean).join(' ')
+  div(class=cls style=`grid-template-columns: ${size} 1fr`)&attributes(attributes)
+    block
+
+mixin dp-hsplit(size)
+  - size = size || '1fr'
+  - const cls = ['dp-hsplit', 'grid', 'h-full'].filter(Boolean).join(' ')
+  div(class=cls style=`grid-template-rows: ${size} 1fr`)&attributes(attributes)
+    block
+
+mixin dp-panel(name, opts)
+  - name = name || 'center'
+  - opts = opts || {}
+  - const isFirst = !opts._second
+  - const scroll = opts.scroll !== false
+  - const cls = ['dp-panel', `dp-panel-${name}`, 'flex', 'flex-col', 'bg-base-100', 'min-h-0', 'min-w-0', opts.class].filter(Boolean).join(' ')
+  div(class=cls id=opts.id)&attributes(attributes)
+    if opts.title
+      div.dp-panel-header.bg-base-200.border-b.border-base-300.px-3.py-2.flex.items-center.gap-2.flex-shrink-0
+        if opts.iconCls
+          i(class=opts.iconCls)
+        span.font-semibold.text-sm= opts.title
+    div(class=['dp-panel-body', 'flex-1', scroll && 'overflow-auto', 'min-h-0'].filter(Boolean).join(' '))
+      block
