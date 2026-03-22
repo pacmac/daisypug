@@ -27,766 +27,712 @@
     </style>
   </head>
   <body>
-    <div class="dp-navbar navbar bg-primary text-primary-content shadow-lg">
-      <div class="dp-navbar-start navbar-start"><span class="text-xl font-bold px-4">DaisyPug Showcase</span>
+    <div class="flex flex-col h-screen overflow-hidden">
+      <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+        <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-grid-1x2"></i><span class="font-semibold text-sm">DaisyPug Showcase</span>
+        </div>
+        <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+        <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+          <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
+          <input class="dp-theme-controller theme-controller btn" type="radio" value="light" name="theme-radios" checked="checked" aria-label="light"/>
+          <input class="dp-theme-controller theme-controller btn" type="radio" value="dark" name="theme-radios" aria-label="dark"/>
+          <input class="dp-theme-controller theme-controller btn" type="radio" value="cupcake" name="theme-radios" aria-label="cupcake"/>
+          <input class="dp-theme-controller theme-controller btn" type="radio" value="synthwave" name="theme-radios" aria-label="synthwave"/>
+        </div>
       </div>
-      <div class="dp-navbar-end navbar-end">
-        <input class="dp-theme-controller theme-controller btn" type="radio" value="light" name="theme-radios" checked="checked" aria-label="light"/>
-        <input class="dp-theme-controller theme-controller btn" type="radio" value="dark" name="theme-radios" aria-label="dark"/>
-        <input class="dp-theme-controller theme-controller btn" type="radio" value="cupcake" name="theme-radios" aria-label="cupcake"/>
-        <input class="dp-theme-controller theme-controller btn" type="radio" value="synthwave" name="theme-radios" aria-label="synthwave"/>
-      </div>
-    </div>
-    <div class="p-4">
-      <div class="dp-tabs tabs tabs-lift tabs-lg" role="tablist">
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Layouts" checked="checked"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Split Layouts</h2>
-          <h3 class="font-semibold mb-2">Basic Sidebar — vsplit('250px')</h3>
-          <div style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
-            <div class="dp-vsplit grid h-full" style="grid-template-columns: 250px 1fr">
-              <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
-                <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Sidebar</span>
-                </div>
-                <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                  <ul class="dp-menu menu menu-sm p-2">
-                    <li class="menu-active"><a>Dashboard</a>
-                    </li>
-                    <li><a>Orders</a>
-                    </li>
-                    <li><a>Settings</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="dp-panel dp-panel-center flex flex-col bg-base-100 min-h-0 min-w-0">
-                <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Content</span>
-                </div>
-                <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                  <div class="p-4">
-                    <p>Main content area. Sidebar is 250px.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h3 class="font-semibold mt-6 mb-2">Nested 3-Column — vsplit + vsplit</h3>
-          <div style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
-            <div class="dp-vsplit grid h-full" style="grid-template-columns: 150px 1fr">
-              <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
-                <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Nav</span>
-                </div>
-                <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                  <ul class="dp-menu menu menu-sm p-2">
-                    <li class="menu-active"><a>Inbox</a>
-                    </li>
-                    <li><a>Sent</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="dp-vsplit grid h-full" style="grid-template-columns: 280px 1fr">
+      <div class="flex-1 min-h-0 flex flex-col">
+        <div class="dp-tabs tabs tabs-lift tabs-lg flex-1 min-h-0 flex flex-col" role="tablist">
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Layouts" checked="checked"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <h3 class="font-semibold mb-2">Basic Sidebar — vsplit('250px')</h3>
+            <div style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
+              <div class="dp-vsplit grid h-full" style="grid-template-columns: 250px 1fr">
                 <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
-                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">List</span>
+                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Sidebar</span>
                   </div>
                   <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                    <ul class="dp-list list list-sm">
-                      <li class="dp-list-row list-row">
-                        <div class="text-sm">Meeting at 10am</div>
+                    <ul class="dp-menu menu menu-sm">
+                      <li class="menu-active"><a>Dashboard</a>
                       </li>
-                      <li class="dp-list-row list-row">
-                        <div class="text-sm">Updated report</div>
+                      <li><a>Orders</a>
+                      </li>
+                      <li><a>Settings</a>
                       </li>
                     </ul>
                   </div>
                 </div>
                 <div class="dp-panel dp-panel-center flex flex-col bg-base-100 min-h-0 min-w-0">
-                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Detail</span>
+                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Content</span>
                   </div>
                   <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                    <div class="p-4 text-sm">Preview content here</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h3 class="font-semibold mt-6 mb-2">IDE Layout — vsplit + hsplit</h3>
-          <div style="height: 280px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
-            <div class="dp-vsplit grid h-full" style="grid-template-columns: 200px 1fr">
-              <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
-                <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Explorer</span>
-                </div>
-                <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                  <ul class="dp-menu menu menu-sm p-2">
-                    <li><a>index.js</a>
-                    </li>
-                    <li class="menu-active"><a>engine.js</a>
-                    </li>
-                    <li><a>dp.js</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="dp-hsplit grid h-full" style="grid-template-rows: 65% 1fr">
-                <div class="dp-panel dp-panel-north flex flex-col bg-base-100 min-h-0 min-w-0">
-                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">editor.js</span>
-                  </div>
-                  <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                    <div class="dp-mockup-code mockup-code rounded-none h-full text-sm">
-                      <pre data-prefix="1"><code>const pug = require('pug');</code></pre>
-                      <pre data-prefix="2"><code>function render() {</code></pre>
-                      <pre data-prefix="3"><code>  return html;</code></pre>
-                      <pre data-prefix="4"><code>}</code></pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="dp-panel dp-panel-south flex flex-col bg-base-100 min-h-0 min-w-0">
-                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Terminal</span>
-                  </div>
-                  <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                    <div class="dp-mockup-code mockup-code rounded-none h-full text-sm">
-                      <pre data-prefix="$"><code>npm test</code></pre>
-                      <pre data-prefix="&gt;"><code>23 passed</code></pre>
+                    <div class="p-4">
+                      <p>Main content area. Sidebar is 250px.</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <h3 class="font-semibold mt-6 mb-2">Nested 3-Column</h3>
+            <div style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
+              <div class="dp-vsplit grid h-full" style="grid-template-columns: 150px 1fr">
+                <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
+                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Nav</span>
+                  </div>
+                  <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                    <ul class="dp-menu menu menu-sm">
+                      <li class="menu-active"><a>Inbox</a>
+                      </li>
+                      <li><a>Sent</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="dp-vsplit grid h-full" style="grid-template-columns: 280px 1fr">
+                  <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
+                    <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">List</span>
+                    </div>
+                    <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                      <ul class="dp-list list list-sm">
+                        <li class="dp-list-row list-row">
+                          <div class="text-sm">Meeting at 10am</div>
+                        </li>
+                        <li class="dp-list-row list-row">
+                          <div class="text-sm">Updated report</div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="dp-panel dp-panel-center flex flex-col bg-base-100 min-h-0 min-w-0">
+                    <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Detail</span>
+                    </div>
+                    <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                      <div class="p-4 text-sm">Preview content here</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h3 class="font-semibold mt-6 mb-2">IDE Layout — vsplit + hsplit</h3>
+            <div style="height: 280px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
+              <div class="dp-vsplit grid h-full" style="grid-template-columns: 200px 1fr">
+                <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
+                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Explorer</span>
+                  </div>
+                  <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                    <ul class="dp-menu menu menu-sm">
+                      <li><a>index.js</a>
+                      </li>
+                      <li class="menu-active"><a>engine.js</a>
+                      </li>
+                      <li><a>dp.js</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="dp-hsplit grid h-full" style="grid-template-rows: 65% 1fr">
+                  <div class="dp-panel dp-panel-north flex flex-col bg-base-100 min-h-0 min-w-0">
+                    <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">editor.js</span>
+                    </div>
+                    <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                      <div class="dp-mockup-code mockup-code rounded-none h-full text-sm">
+                        <pre data-prefix="1"><code>const pug = require('pug');</code></pre>
+                        <pre data-prefix="2"><code>function render() {</code></pre>
+                        <pre data-prefix="3"><code>  return html;</code></pre>
+                        <pre data-prefix="4"><code>}</code></pre>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dp-panel dp-panel-south flex flex-col bg-base-100 min-h-0 min-w-0">
+                    <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Terminal</span>
+                    </div>
+                    <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                      <div class="dp-mockup-code mockup-code rounded-none h-full text-sm">
+                        <pre data-prefix="$"><code>npm test</code></pre>
+                        <pre data-prefix="&gt;"><code>23 passed</code></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Forms"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Form System (dp-fitem)</h2>
-          <h3 class="font-semibold mb-2">3-Column Form — Auto-detect input types</h3>
-          <div class="bg-base-100 rounded-lg p-4 mb-6">
-            <form class="dp-form three" id="fitem-demo">
-              <div class="divider text-xs font-bold opacity-50 mt-0" style="grid-column:1/-1">DETAILS</div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="PART_ID">Part ID
-                </label>
-                <select class="dp-select select select-primary w-full combobox" name="PART_ID" id="PART_ID">
-                  <option>A8000 - Pump</option>
-                  <option>B3200 - Bearing</option>
-                  <option>C1500 - Valve</option>
-                </select>
-              </div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="DESCRIPTION">Description
-                </label>
-                <input class="dp-input input input-primary w-full textbox" type="text" name="DESCRIPTION" id="DESCRIPTION" placeholder="Enter description"/>
-              </div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="STATUS">Status
-                </label>
-                <select class="dp-select select select-primary w-full combobox" name="STATUS" id="STATUS">
-                  <option value="A">Active</option>
-                  <option value="I">Inactive</option>
-                </select>
-              </div>
-              <div class="divider text-xs font-bold opacity-50" style="grid-column:1/-1">QUANTITIES</div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="QTY">Quantity
-                </label>
-                <input class="dp-input input input-primary w-full numberspinner" type="number" name="QTY" id="QTY" value="25" min="0" step="1"/>
-              </div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="WEIGHT">Weight
-                </label>
-                <input class="dp-input input input-primary w-full numberbox" type="number" name="WEIGHT" id="WEIGHT" value="12.50" step="0.01"/>
-              </div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="PRICE">Price
-                </label>
-                <input class="dp-input input input-primary w-full numberbox" type="number" name="PRICE" id="PRICE" value="199.99" step="0.01"/>
-              </div>
-              <div class="divider text-xs font-bold opacity-50" style="grid-column:1/-1">DATES & OTHER</div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="ORDER_DATE">Order Date
-                </label>
-                <input class="dp-input input input-primary w-full datebox" type="date" name="ORDER_DATE" id="ORDER_DATE"/>
-              </div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label flex items-center gap-2 cursor-pointer" for="ACTIVE">
-                  <input class="dp-checkbox checkbox checkbox-primary checkbox" type="checkbox" name="ACTIVE" id="ACTIVE" checked="checked"/>Active
-                </label>
-              </div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="NOTIFY">Notify
-                </label>
-                <input class="dp-toggle toggle toggle-primary toggle" type="checkbox" name="NOTIFY" id="NOTIFY"/>
-              </div>
-              <div style="grid-column:1/-1">
-                <div class="dp-fitem mb-2 dp-fitem-multiline">
-                  <label class="dp-fitem-label fieldset-label self-start mt-1" for="NOTES">Notes
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Forms"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <h3 class="font-semibold mb-2">3-Column Form — Auto-detect input types</h3>
+            <div class="bg-base-100 rounded-lg p-4 mb-6">
+              <form class="dp-form three" id="fitem-demo">
+                <div class="divider text-xs font-bold opacity-50 mt-0" style="grid-column:1/-1">DETAILS</div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="PART_ID">Part ID
                   </label>
-                  <textarea class="dp-textarea textarea textarea-primary w-full multiline" name="NOTES" id="NOTES" rows="2" placeholder="Optional notes..."></textarea>
+                  <select class="dp-select select select-primary w-full combobox" name="PART_ID" id="PART_ID">
+                    <option>A8000 - Pump</option>
+                    <option>B3200 - Bearing</option>
+                    <option>C1500 - Valve</option>
+                  </select>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="DESCRIPTION">Description
+                  </label>
+                  <input class="dp-input input input-primary w-full textbox" type="text" name="DESCRIPTION" id="DESCRIPTION" placeholder="Enter description"/>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="STATUS">Status
+                  </label>
+                  <select class="dp-select select select-primary w-full combobox" name="STATUS" id="STATUS">
+                    <option value="A">Active</option>
+                    <option value="I">Inactive</option>
+                  </select>
+                </div>
+                <div class="divider text-xs font-bold opacity-50" style="grid-column:1/-1">QUANTITIES</div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="QTY">Quantity
+                  </label>
+                  <input class="dp-input input input-primary w-full numberspinner" type="number" name="QTY" id="QTY" value="25" min="0" step="1"/>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="WEIGHT">Weight
+                  </label>
+                  <input class="dp-input input input-primary w-full numberbox" type="number" name="WEIGHT" id="WEIGHT" value="12.50" step="0.01"/>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="PRICE">Price
+                  </label>
+                  <input class="dp-input input input-primary w-full numberbox" type="number" name="PRICE" id="PRICE" value="199.99" step="0.01"/>
+                </div>
+                <div class="divider text-xs font-bold opacity-50" style="grid-column:1/-1">DATES & OTHER</div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="ORDER_DATE">Order Date
+                  </label>
+                  <input class="dp-input input input-primary w-full datebox" type="date" name="ORDER_DATE" id="ORDER_DATE"/>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label flex items-center gap-2 cursor-pointer" for="ACTIVE">
+                    <input class="dp-checkbox checkbox checkbox-primary checkbox" type="checkbox" name="ACTIVE" id="ACTIVE" checked="checked"/>Active
+                  </label>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="NOTIFY">Notify
+                  </label>
+                  <input class="dp-toggle toggle toggle-primary toggle" type="checkbox" name="NOTIFY" id="NOTIFY"/>
+                </div>
+                <div style="grid-column:1/-1">
+                  <div class="dp-fitem mb-2 dp-fitem-multiline">
+                    <label class="dp-fitem-label fieldset-label self-start mt-1" for="NOTES">Notes
+                    </label>
+                    <textarea class="dp-textarea textarea textarea-primary w-full multiline" name="NOTES" id="NOTES" rows="2" placeholder="Optional notes..."></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <h3 class="font-semibold mb-2">Form with Groups</h3>
+            <div class="bg-base-100 rounded-lg p-4" style="max-width:450px">
+              <form class="dp-form" id="group-demo">
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="GRP_PART">Part ID
+                  </label>
+                  <select class="dp-select select select-primary w-full combobox" name="GRP_PART" id="GRP_PART">
+                    <option>A8000</option>
+                    <option>B3200</option>
+                  </select>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="GRP_DESC">Description
+                  </label>
+                  <input class="dp-input input input-primary w-full textbox" type="text" name="GRP_DESC" id="GRP_DESC"/>
+                </div>
+                <div class="dp-group mt-3">
+                  <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Dimensions</div>
+                  <div class="dp-group-body">
+                    <div class="dp-fitem mb-2">
+                      <label class="dp-fitem-label fieldset-label" for="GRP_W">Width
+                      </label>
+                      <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_W" id="GRP_W" step="0.01"/>
+                    </div>
+                    <div class="dp-fitem mb-2">
+                      <label class="dp-fitem-label fieldset-label" for="GRP_H">Height
+                      </label>
+                      <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_H" id="GRP_H" step="0.01"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="dp-hgroup mt-3">
+                  <div class="dp-hgroup-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Rates</div>
+                  <div class="dp-hgroup-body flex gap-4">
+                    <div class="dp-fitem mb-2">
+                      <label class="dp-fitem-label fieldset-label" for="GRP_BASE">Base
+                      </label>
+                      <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_BASE" id="GRP_BASE" step="0.00009999999999999999"/>
+                    </div>
+                    <div class="dp-fitem mb-2">
+                      <label class="dp-fitem-label fieldset-label" for="GRP_TAX">Tax %
+                      </label>
+                      <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_TAX" id="GRP_TAX" step="0.1"/>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Toolbar"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <div class="space-y-3 bg-base-100 rounded-lg overflow-hidden">
+              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-box-seam"></i><span class="font-semibold text-sm">Parts List</span>
+                </div>
+                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                  </button>
                 </div>
               </div>
-            </form>
-          </div>
-          <h3 class="font-semibold mb-2">Form with Groups</h3>
-          <div class="bg-base-100 rounded-lg p-4" style="max-width:450px">
-            <form class="dp-form" id="group-demo">
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="GRP_PART">Part ID
-                </label>
-                <select class="dp-select select select-primary w-full combobox" name="GRP_PART" id="GRP_PART">
-                  <option>A8000</option>
-                  <option>B3200</option>
-                </select>
-              </div>
-              <div class="dp-fitem mb-2">
-                <label class="dp-fitem-label fieldset-label" for="GRP_DESC">Description
-                </label>
-                <input class="dp-input input input-primary w-full textbox" type="text" name="GRP_DESC" id="GRP_DESC"/>
-              </div>
-              <div class="dp-group mt-3">
-                <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Dimensions</div>
-                <div class="dp-group-body">
-                  <div class="dp-fitem mb-2">
-                    <label class="dp-fitem-label fieldset-label" for="GRP_W">Width
-                    </label>
-                    <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_W" id="GRP_W" step="0.01"/>
-                  </div>
-                  <div class="dp-fitem mb-2">
-                    <label class="dp-fitem-label fieldset-label" for="GRP_H">Height
-                    </label>
-                    <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_H" id="GRP_H" step="0.01"/>
-                  </div>
+              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-layers"></i><span class="font-semibold text-sm">BOM Lines</span>
+                </div>
+                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                  </button>
+                  <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
+                  <button class="dp-btn btn btn-xs btn-ghost">Validate
+                  </button>
+                  <button class="dp-btn btn btn-xs btn-ghost">Export
+                  </button>
                 </div>
               </div>
-              <div class="dp-hgroup mt-3">
-                <div class="dp-hgroup-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Rates</div>
-                <div class="dp-hgroup-body flex gap-4">
-                  <div class="dp-fitem mb-2">
-                    <label class="dp-fitem-label fieldset-label" for="GRP_BASE">Base
-                    </label>
-                    <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_BASE" id="GRP_BASE" step="0.00009999999999999999"/>
-                  </div>
-                  <div class="dp-fitem mb-2">
-                    <label class="dp-fitem-label fieldset-label" for="GRP_TAX">Tax %
-                    </label>
-                    <input class="dp-input input input-primary w-full numberbox" type="number" name="GRP_TAX" id="GRP_TAX" step="0.1"/>
-                  </div>
+              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-cart"></i><span class="font-semibold text-sm">Order Entry</span>
+                </div>
+                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
+                  </button>
                 </div>
               </div>
-            </form>
-          </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Toolbar"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Toolbar Variants</h2>
-          <div class="space-y-3 bg-base-100 rounded-lg overflow-hidden">
-            <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-              <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-box-seam"></i><span class="font-semibold text-sm">Parts List</span>
-              </div>
-              <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
-              <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
-                </button>
-                <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
-                </button>
-                <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
-                </button>
-              </div>
-            </div>
-            <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-              <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-layers"></i><span class="font-semibold text-sm">BOM Lines</span>
-              </div>
-              <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
-              <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
-                </button>
-                <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
-                </button>
-                <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
-                </button>
-                <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
-                <button class="dp-btn btn btn-xs btn-ghost">Validate
-                </button>
-                <button class="dp-btn btn btn-xs btn-ghost">Export
-                </button>
-              </div>
-            </div>
-            <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-              <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-cart"></i><span class="font-semibold text-sm">Order Entry</span>
-              </div>
-              <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
-              <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
-                </button>
-                <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
-                </button>
-                <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
-                </button>
-                <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
-                </button>
-              </div>
-            </div>
-            <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-              <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
-              <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                <button class="dp-btn btn btn-xs btn-ghost">Refresh
-                </button>
-                <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
-                <button class="dp-btn btn btn-xs btn-ghost">Export CSV
-                </button>
+              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                  <button class="dp-btn btn btn-xs btn-ghost">Refresh
+                  </button>
+                  <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
+                  <button class="dp-btn btn btn-xs btn-ghost">Export CSV
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Tables"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Data Tables</h2>
-          <h3 class="font-semibold mb-2">Auto-width columns (default)</h3>
-          <div class="bg-base-100 rounded-lg p-4 mb-6">
-            <table class="dp-table table table-sm table-zebra">
-              <thead>
-                <tr>
-                  <th style="width: 1%; white-space: nowrap">Part ID</th>
-                  <th style="width: 1%; white-space: nowrap">Description</th>
-                  <th style="width: 1%; white-space: nowrap">Qty</th>
-                  <th style="width: 1%; white-space: nowrap">Price</th>
-                  <th style="width: 1%; white-space: nowrap">Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%; white-space: nowrap">A8000</td>
-                  <td style="width: 1%; white-space: nowrap">Hydraulic Pump</td>
-                  <td style="width: 1%; white-space: nowrap">120</td>
-                  <td style="width: 1%; white-space: nowrap">$199.99</td>
-                  <td style="width: 1%; white-space: nowrap">Active</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td style="width: 1%; white-space: nowrap">B3200</td>
-                  <td style="width: 1%; white-space: nowrap">Bearing Kit</td>
-                  <td style="width: 1%; white-space: nowrap">45</td>
-                  <td style="width: 1%; white-space: nowrap">$12.00</td>
-                  <td style="width: 1%; white-space: nowrap">Active</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td style="width: 1%; white-space: nowrap">C1500</td>
-                  <td style="width: 1%; white-space: nowrap">Control Valve</td>
-                  <td style="width: 1%; white-space: nowrap">8</td>
-                  <td style="width: 1%; white-space: nowrap">$285.00</td>
-                  <td style="width: 1%; white-space: nowrap">Draft</td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <h3 class="font-semibold mb-2">DataTable with Pagination</h3>
-          <div class="bg-base-100 rounded-lg p-4">
-            <div class="dp-datatable">
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Tables"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <h3 class="font-semibold mb-2">Auto-width columns (default)</h3>
+            <div class="bg-base-100 rounded-lg p-4 mb-6">
               <table class="dp-table table table-sm table-zebra">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Unit</th>
-                    <th>Name</th>
-                    <th>Type</th>
+                    <th style="width: 1%; white-space: nowrap">Part ID</th>
+                    <th style="width: 1%; white-space: nowrap">Description</th>
+                    <th style="width: 1%; white-space: nowrap">Qty</th>
+                    <th style="width: 1%; white-space: nowrap">Price</th>
+                    <th style="width: 1%; white-space: nowrap">Status</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Mar 22</td>
-                    <td>B-05-08</td>
-                    <td>Sensor A</td>
-                    <td>knock-1</td>
+                    <td style="width: 1%; white-space: nowrap">A8000</td>
+                    <td style="width: 1%; white-space: nowrap">Hydraulic Pump</td>
+                    <td style="width: 1%; white-space: nowrap">120</td>
+                    <td style="width: 1%; white-space: nowrap">$199.99</td>
+                    <td style="width: 1%; white-space: nowrap">Active</td>
+                    <td></td>
                   </tr>
                   <tr>
-                    <td>Mar 22</td>
-                    <td>B-05-08</td>
-                    <td>Sensor A</td>
-                    <td>knock-1</td>
+                    <td style="width: 1%; white-space: nowrap">B3200</td>
+                    <td style="width: 1%; white-space: nowrap">Bearing Kit</td>
+                    <td style="width: 1%; white-space: nowrap">45</td>
+                    <td style="width: 1%; white-space: nowrap">$12.00</td>
+                    <td style="width: 1%; white-space: nowrap">Active</td>
+                    <td></td>
                   </tr>
                   <tr>
-                    <td>Mar 21</td>
-                    <td>C-04-10</td>
-                    <td>Mobile</td>
-                    <td>knock-2</td>
-                  </tr>
-                  <tr>
-                    <td>Mar 21</td>
-                    <td>B-05-08</td>
-                    <td>Sensor A</td>
-                    <td>knock-1</td>
-                  </tr>
-                  <tr>
-                    <td>Mar 20</td>
-                    <td>B-05-08</td>
-                    <td>Sensor A</td>
-                    <td>blunt</td>
+                    <td style="width: 1%; white-space: nowrap">C1500</td>
+                    <td style="width: 1%; white-space: nowrap">Control Valve</td>
+                    <td style="width: 1%; white-space: nowrap">8</td>
+                    <td style="width: 1%; white-space: nowrap">$285.00</td>
+                    <td style="width: 1%; white-space: nowrap">Draft</td>
+                    <td></td>
                   </tr>
                 </tbody>
               </table>
-              <div class="dp-datatable-pagination flex justify-center mt-4">
-                <div class="dp-join join">
-                  <button class="dp-btn btn btn-primary btn-sm join-item">1
-                  </button>
-                  <button class="dp-btn btn btn-sm join-item">2
-                  </button>
-                  <button class="dp-btn btn btn-sm join-item">3
-                  </button>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Dock"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Dock (Bottom Nav)</h2>
-          <div class="bg-base-100 rounded-lg overflow-hidden" style="height:200px; position:relative">
-            <div class="p-4">Content area above the dock</div>
-            <div style="position:absolute; bottom:0; left:0; right:0">
-              <div class="dp-dock dock dock-sm">
-                <button class="dock-active" data-panel="home"><span class="dp-dock-label dock-label">Home</span>
-                </button>
-                <button data-panel="search"><span class="dp-dock-label dock-label">Search</span>
-                </button>
-                <button data-panel="profile"><span class="dp-dock-label dock-label">Profile</span>
-                </button>
-                <button data-panel="settings"><span class="dp-dock-label dock-label">Settings</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Tabs"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Tab Variants</h2>
-          <h3 class="font-semibold mb-2">Box style</h3>
-          <div class="dp-tabs tabs tabs-box" role="tablist">
-            <input class="dp-tab tab" type="radio" name="box-demo" role="tab" aria-label="Tab A" checked="checked"/>
-            <div class="dp-tab-content tab-content p-4" role="tabpanel">
-              <p>Box tab A content</p>
-            </div>
-            <input class="dp-tab tab" type="radio" name="box-demo" role="tab" aria-label="Tab B"/>
-            <div class="dp-tab-content tab-content p-4" role="tabpanel">
-              <p>Box tab B content</p>
-            </div>
-          </div>
-          <h3 class="font-semibold mt-6 mb-2">Lift style</h3>
-          <div class="dp-tabs tabs tabs-lift" role="tablist">
-            <input class="dp-tab tab" type="radio" name="lift-demo" role="tab" aria-label="First" checked="checked"/>
-            <div class="dp-tab-content tab-content bg-base-100 p-4 rounded-box" role="tabpanel">
-              <p>Lift tab content</p>
-            </div>
-            <input class="dp-tab tab" type="radio" name="lift-demo" role="tab" aria-label="Second"/>
-            <div class="dp-tab-content tab-content bg-base-100 p-4 rounded-box" role="tabpanel">
-              <p>Second tab</p>
-            </div>
-          </div>
-          <h3 class="font-semibold mt-6 mb-2">Border style</h3>
-          <div class="dp-tabs tabs tabs-border" role="tablist">
-            <input class="dp-tab tab" type="radio" name="bdr-demo" role="tab" aria-label="Alpha" checked="checked"/>
-            <div class="dp-tab-content tab-content p-4" role="tabpanel">
-              <p>Border tab content</p>
-            </div>
-            <input class="dp-tab tab" type="radio" name="bdr-demo" role="tab" aria-label="Beta"/>
-            <div class="dp-tab-content tab-content p-4" role="tabpanel">
-              <p>Beta content</p>
-            </div>
-          </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Modals"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Modal Dialogs</h2>
-          <div class="flex gap-3">
-            <button class="dp-btn btn btn-primary" onclick="demo_basic.showModal()">Basic Modal
-            </button>
-            <button class="dp-btn btn btn-secondary" onclick="demo_form.showModal()">Form Modal
-            </button>
-          </div>
-          <dialog class="dp-modal modal" id="demo_basic">
-            <div class="dp-modal-box modal-box">
-              <h3 class="text-lg font-bold">Hello!</h3>
-              <p class="py-4">This is a basic modal. Press ESC or click outside to close.</p>
-              <div class="dp-modal-action modal-action">
-                <form method="dialog">
-                  <button class="dp-btn btn">Close
-                  </button>
-                </form>
-              </div>
-            </div>
-            <form class="modal-backdrop" method="dialog">
-              <button>close</button>
-            </form>
-          </dialog>
-          <dialog class="dp-modal modal" id="demo_form">
-            <div class="dp-modal-box modal-box">
-              <h3 class="text-lg font-bold">Edit Record</h3>
-              <fieldset class="dp-fieldset fieldset">
-                <label class="dp-formfield-label fieldset-label">Name
-                </label>
-                <input class="dp-input input w-full" type="text" name="modal_name"/>
-                <label class="dp-formfield-label fieldset-label">Email
-                </label>
-                <input class="dp-input input w-full" type="email" name="modal_email"/>
-                <label class="dp-formfield-label fieldset-label">Role
-                </label>
-                <select class="dp-select select w-full" name="modal_role">
-                  <option>Admin</option>
-                  <option>User</option>
-                  <option>Guest</option>
-                </select>
-              </fieldset>
-              <div class="dp-modal-action modal-action">
-                <form method="dialog">
-                  <div class="flex gap-2">
-                    <button class="dp-btn btn btn-ghost">Cancel
+            <h3 class="font-semibold mb-2">DataTable with Pagination</h3>
+            <div class="bg-base-100 rounded-lg p-4">
+              <div class="dp-datatable">
+                <table class="dp-table table table-sm table-zebra">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Unit</th>
+                      <th>Name</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Mar 22</td>
+                      <td>B-05-08</td>
+                      <td>Sensor A</td>
+                      <td>knock-1</td>
+                    </tr>
+                    <tr>
+                      <td>Mar 22</td>
+                      <td>B-05-08</td>
+                      <td>Sensor A</td>
+                      <td>knock-1</td>
+                    </tr>
+                    <tr>
+                      <td>Mar 21</td>
+                      <td>C-04-10</td>
+                      <td>Mobile</td>
+                      <td>knock-2</td>
+                    </tr>
+                    <tr>
+                      <td>Mar 21</td>
+                      <td>B-05-08</td>
+                      <td>Sensor A</td>
+                      <td>knock-1</td>
+                    </tr>
+                    <tr>
+                      <td>Mar 20</td>
+                      <td>B-05-08</td>
+                      <td>Sensor A</td>
+                      <td>blunt</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="dp-datatable-pagination flex justify-center mt-4">
+                  <div class="dp-join join">
+                    <button class="dp-btn btn btn-primary btn-sm join-item">1
                     </button>
-                    <button class="dp-btn btn btn-primary">Save
+                    <button class="dp-btn btn btn-sm join-item">2
+                    </button>
+                    <button class="dp-btn btn btn-sm join-item">3
                     </button>
                   </div>
-                </form>
-              </div>
-            </div>
-            <form class="modal-backdrop" method="dialog">
-              <button>close</button>
-            </form>
-          </dialog>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Buttons"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Buttons & Badges</h2>
-          <h3 class="font-semibold mb-2">Colors</h3>
-          <div class="flex flex-wrap gap-2 mb-4">
-            <button class="dp-btn btn btn-primary">Primary
-            </button>
-            <button class="dp-btn btn btn-secondary">Secondary
-            </button>
-            <button class="dp-btn btn btn-accent">Accent
-            </button>
-            <button class="dp-btn btn btn-info">Info
-            </button>
-            <button class="dp-btn btn btn-success">Success
-            </button>
-            <button class="dp-btn btn btn-warning">Warning
-            </button>
-            <button class="dp-btn btn btn-error">Error
-            </button>
-          </div>
-          <h3 class="font-semibold mb-2">Styles</h3>
-          <div class="flex flex-wrap gap-2 mb-4">
-            <button class="dp-btn btn btn-primary btn-outline">Outline
-            </button>
-            <button class="dp-btn btn btn-success btn-soft">Soft
-            </button>
-            <button class="dp-btn btn btn-warning btn-dash">Dash
-            </button>
-            <button class="dp-btn btn btn-ghost">Ghost
-            </button>
-            <button class="dp-btn btn btn-link">Link
-            </button>
-          </div>
-          <h3 class="font-semibold mb-2">Badges</h3>
-          <div class="flex flex-wrap gap-2"><span class="dp-badge badge badge-primary">Primary</span><span class="dp-badge badge badge-secondary badge-outline">Outline</span><span class="dp-badge badge badge-accent badge-soft">Soft</span><span class="dp-badge badge badge-info badge-lg">Info</span><span class="dp-badge badge badge-success badge-dash">Dash</span>
-          </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Chat"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Chat & Conversation</h2>
-          <div class="bg-base-100 rounded-lg p-4" style="max-width:500px">
-            <div class="dp-conversation">
-              <div class="dp-chat chat chat-start">
-                <div class="dp-chat-header chat-header">Alice
-                </div>
-                <div class="dp-chat-bubble chat-bubble chat-bubble-primary">Hey! Have you tried DaisyPug?
-                </div>
-              </div>
-              <div class="dp-chat chat chat-end">
-                <div class="dp-chat-header chat-header">Bob
-                </div>
-                <div class="dp-chat-bubble chat-bubble">Yes! The mixins are incredibly clean.
-                </div>
-              </div>
-              <div class="dp-chat chat chat-start">
-                <div class="dp-chat-header chat-header">Alice
-                </div>
-                <div class="dp-chat-bubble chat-bubble chat-bubble-primary">And it has a full JS API too!
-                </div>
-              </div>
-              <div class="dp-chat chat chat-end">
-                <div class="dp-chat-header chat-header">Bob
-                </div>
-                <div class="dp-chat-bubble chat-bubble">The form system is like DUI but better.
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Stats"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Stats, Steps & Timeline</h2>
-          <div class="dp-stats stats shadow w-full mb-6">
-            <div class="dp-stat stat">
-              <div class="dp-stat-title stat-title">Revenue
-              </div>
-              <div class="dp-stat-value stat-value">$12.4K
-              </div>
-              <div class="dp-stat-desc stat-desc">+21% from last month
-              </div>
-            </div>
-            <div class="dp-stat stat">
-              <div class="dp-stat-title stat-title">Users
-              </div>
-              <div class="dp-stat-value stat-value">2,100
-              </div>
-            </div>
-            <div class="dp-stat stat">
-              <div class="dp-stat-title stat-title">Uptime
-              </div>
-              <div class="dp-stat-value stat-value">99.8%
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Dock"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <div class="bg-base-100 rounded-lg overflow-hidden" style="height:200px; position:relative">
+              <div class="p-4">Content area above the dock</div>
+              <div style="position:absolute; bottom:0; left:0; right:0">
+                <div class="dp-dock dock dock-sm">
+                  <button class="dock-active" data-panel="home"><span class="dp-dock-label dock-label">Home</span>
+                  </button>
+                  <button data-panel="search"><span class="dp-dock-label dock-label">Search</span>
+                  </button>
+                  <button data-panel="profile"><span class="dp-dock-label dock-label">Profile</span>
+                  </button>
+                  <button data-panel="settings"><span class="dp-dock-label dock-label">Settings</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-          <h3 class="font-semibold mb-2">Steps</h3>
-          <ul class="dp-steps steps">
-            <li class="dp-step step step-primary">Register
-            </li>
-            <li class="dp-step step step-primary">Choose Plan
-            </li>
-            <li class="dp-step step step-primary">Payment
-            </li>
-            <li class="dp-step step">Complete
-            </li>
-          </ul>
-        </div>
-        <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Full App"/>
-        <div class="dp-tab-content tab-content bg-base-200 p-4" role="tabpanel">
-          <h2 class="text-xl font-bold mb-4">Full CRUD Page</h2>
-          <div style="height: 450px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
-            <div class="dp-vsplit grid h-full" style="grid-template-columns: 320px 1fr">
-              <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
-                <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                  <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-                    <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-search"></i><span class="font-semibold text-sm">Part</span>
-                    </div>
-                    <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
-                    <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                      <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Tabs"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <h3 class="font-semibold mb-2">Box style</h3>
+            <div class="dp-tabs tabs tabs-box" role="tablist">
+              <input class="dp-tab tab" type="radio" name="box-demo" role="tab" aria-label="Tab A" checked="checked"/>
+              <div class="dp-tab-content tab-content p-4" role="tabpanel">
+                <p>Box tab A content</p>
+              </div>
+              <input class="dp-tab tab" type="radio" name="box-demo" role="tab" aria-label="Tab B"/>
+              <div class="dp-tab-content tab-content p-4" role="tabpanel">
+                <p>Box tab B content</p>
+              </div>
+            </div>
+            <h3 class="font-semibold mt-6 mb-2">Lift style</h3>
+            <div class="dp-tabs tabs tabs-lift" role="tablist">
+              <input class="dp-tab tab" type="radio" name="lift-demo" role="tab" aria-label="First" checked="checked"/>
+              <div class="dp-tab-content tab-content bg-base-100 p-4 rounded-box" role="tabpanel">
+                <p>Lift tab content</p>
+              </div>
+              <input class="dp-tab tab" type="radio" name="lift-demo" role="tab" aria-label="Second"/>
+              <div class="dp-tab-content tab-content bg-base-100 p-4 rounded-box" role="tabpanel">
+                <p>Second tab</p>
+              </div>
+            </div>
+          </div>
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Modals"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <div class="flex gap-3">
+              <button class="dp-btn btn btn-primary" onclick="demo_basic.showModal()">Basic Modal
+              </button>
+              <button class="dp-btn btn btn-secondary" onclick="demo_form.showModal()">Form Modal
+              </button>
+            </div>
+            <dialog class="dp-modal modal" id="demo_basic">
+              <div class="dp-modal-box modal-box">
+                <h3 class="text-lg font-bold">Hello!</h3>
+                <p class="py-4">Press ESC or click outside to close.</p>
+                <div class="dp-modal-action modal-action">
+                  <form method="dialog">
+                    <button class="dp-btn btn">Close
+                    </button>
+                  </form>
+                </div>
+              </div>
+              <form class="modal-backdrop" method="dialog">
+                <button>close</button>
+              </form>
+            </dialog>
+            <dialog class="dp-modal modal" id="demo_form">
+              <div class="dp-modal-box modal-box">
+                <h3 class="text-lg font-bold">Edit Record</h3>
+                <fieldset class="dp-fieldset fieldset">
+                  <label class="dp-formfield-label fieldset-label">Name
+                  </label>
+                  <input class="dp-input input w-full" type="text" name="modal_name"/>
+                  <label class="dp-formfield-label fieldset-label">Email
+                  </label>
+                  <input class="dp-input input w-full" type="email" name="modal_email"/>
+                  <label class="dp-formfield-label fieldset-label">Role
+                  </label>
+                  <select class="dp-select select w-full" name="modal_role">
+                    <option>Admin</option>
+                    <option>User</option>
+                    <option>Guest</option>
+                  </select>
+                </fieldset>
+                <div class="dp-modal-action modal-action">
+                  <form method="dialog">
+                    <div class="flex gap-2">
+                      <button class="dp-btn btn btn-ghost">Cancel
                       </button>
-                      <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
-                      </button>
-                      <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
-                      </button>
-                      <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
+                      <button class="dp-btn btn btn-primary">Save
                       </button>
                     </div>
+                  </form>
+                </div>
+              </div>
+              <form class="modal-backdrop" method="dialog">
+                <button>close</button>
+              </form>
+            </dialog>
+          </div>
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Buttons"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <h3 class="font-semibold mb-2">Colors</h3>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button class="dp-btn btn btn-primary">Primary
+              </button>
+              <button class="dp-btn btn btn-secondary">Secondary
+              </button>
+              <button class="dp-btn btn btn-accent">Accent
+              </button>
+              <button class="dp-btn btn btn-info">Info
+              </button>
+              <button class="dp-btn btn btn-success">Success
+              </button>
+              <button class="dp-btn btn btn-warning">Warning
+              </button>
+              <button class="dp-btn btn btn-error">Error
+              </button>
+            </div>
+            <h3 class="font-semibold mb-2">Styles</h3>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button class="dp-btn btn btn-primary btn-outline">Outline
+              </button>
+              <button class="dp-btn btn btn-success btn-soft">Soft
+              </button>
+              <button class="dp-btn btn btn-warning btn-dash">Dash
+              </button>
+              <button class="dp-btn btn btn-ghost">Ghost
+              </button>
+              <button class="dp-btn btn btn-link">Link
+              </button>
+            </div>
+            <h3 class="font-semibold mb-2">Badges</h3>
+            <div class="flex flex-wrap gap-2"><span class="dp-badge badge badge-primary">Primary</span><span class="dp-badge badge badge-secondary badge-outline">Outline</span><span class="dp-badge badge badge-accent badge-soft">Soft</span><span class="dp-badge badge badge-info badge-lg">Info</span><span class="dp-badge badge badge-success badge-dash">Dash</span>
+            </div>
+          </div>
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Chat"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-auto p-4" role="tabpanel">
+            <div class="bg-base-100 rounded-lg p-4" style="max-width:500px">
+              <div class="dp-conversation">
+                <div class="dp-chat chat chat-start">
+                  <div class="dp-chat-header chat-header">Alice
                   </div>
-                  <div class="p-3">
-                    <form class="dp-form" id="app-form">
-                      <div class="dp-fitem mb-2">
-                        <label class="dp-fitem-label fieldset-label" for="APP_PART">Part ID
-                        </label>
-                        <select class="dp-select select select-primary w-full combobox" name="APP_PART" id="APP_PART">
-                          <option>A8000 - Pump</option>
-                          <option>B3200 - Bearing</option>
-                          <option>C1500 - Valve</option>
-                        </select>
+                  <div class="dp-chat-bubble chat-bubble chat-bubble-primary">Hey! Have you tried DaisyPug?
+                  </div>
+                </div>
+                <div class="dp-chat chat chat-end">
+                  <div class="dp-chat-header chat-header">Bob
+                  </div>
+                  <div class="dp-chat-bubble chat-bubble">Yes! The mixins are incredibly clean.
+                  </div>
+                </div>
+                <div class="dp-chat chat chat-start">
+                  <div class="dp-chat-header chat-header">Alice
+                  </div>
+                  <div class="dp-chat-bubble chat-bubble chat-bubble-primary">And it has a full JS API too!
+                  </div>
+                </div>
+                <div class="dp-chat chat chat-end">
+                  <div class="dp-chat-header chat-header">Bob
+                  </div>
+                  <div class="dp-chat-bubble chat-bubble">The form system is like DUI but better.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Full App"/>
+          <div class="dp-tab-content tab-content bg-base-200 flex-1 min-h-0 overflow-hidden" role="tabpanel">
+            <div class="h-full">
+              <div class="dp-vsplit grid h-full" style="grid-template-columns: 320px 1fr">
+                <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
+                  <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                    <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                      <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-search"></i><span class="font-semibold text-sm">Part</span>
                       </div>
-                      <div class="dp-fitem mb-2">
-                        <label class="dp-fitem-label fieldset-label" for="APP_DESC">Description
-                        </label>
-                        <input class="dp-input input input-primary w-full textbox" type="text" name="APP_DESC" id="APP_DESC"/>
+                      <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                      <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                        <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                        </button>
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
+                        </button>
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                        </button>
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
+                        </button>
                       </div>
-                      <div class="dp-group mt-3">
-                        <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Dimensions</div>
-                        <div class="dp-group-body">
-                          <div class="dp-fitem mb-2">
-                            <label class="dp-fitem-label fieldset-label" for="APP_W">Width
-                            </label>
-                            <input class="dp-input input input-primary w-full numberbox" type="number" name="APP_W" id="APP_W" step="0.01"/>
-                          </div>
-                          <div class="dp-fitem mb-2">
-                            <label class="dp-fitem-label fieldset-label" for="APP_H">Height
-                            </label>
-                            <input class="dp-input input input-primary w-full numberbox" type="number" name="APP_H" id="APP_H" step="0.01"/>
+                    </div>
+                    <div class="p-3">
+                      <form class="dp-form" id="app-form">
+                        <div class="dp-fitem mb-2">
+                          <label class="dp-fitem-label fieldset-label" for="APP_PART">Part ID
+                          </label>
+                          <select class="dp-select select select-primary w-full combobox" name="APP_PART" id="APP_PART">
+                            <option>A8000 - Pump</option>
+                            <option>B3200 - Bearing</option>
+                            <option>C1500 - Valve</option>
+                          </select>
+                        </div>
+                        <div class="dp-fitem mb-2">
+                          <label class="dp-fitem-label fieldset-label" for="APP_DESC">Description
+                          </label>
+                          <input class="dp-input input input-primary w-full textbox" type="text" name="APP_DESC" id="APP_DESC"/>
+                        </div>
+                        <div class="dp-group mt-3">
+                          <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Dimensions</div>
+                          <div class="dp-group-body">
+                            <div class="dp-fitem mb-2">
+                              <label class="dp-fitem-label fieldset-label" for="APP_W">Width
+                              </label>
+                              <input class="dp-input input input-primary w-full numberbox" type="number" name="APP_W" id="APP_W" step="0.01"/>
+                            </div>
+                            <div class="dp-fitem mb-2">
+                              <label class="dp-fitem-label fieldset-label" for="APP_H">Height
+                              </label>
+                              <input class="dp-input input input-primary w-full numberbox" type="number" name="APP_H" id="APP_H" step="0.01"/>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="dp-group mt-3">
-                        <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Financials</div>
-                        <div class="dp-group-body">
-                          <div class="dp-fitem mb-2">
-                            <label class="dp-fitem-label fieldset-label" for="APP_COST">Cost
-                            </label>
-                            <input class="dp-input input input-primary w-full numberbox" type="number" name="APP_COST" id="APP_COST" step="0.01"/>
-                          </div>
-                          <div class="dp-fitem mb-2">
-                            <label class="dp-fitem-label fieldset-label" for="APP_CUR">Currency
-                            </label>
-                            <select class="dp-select select select-primary w-full combobox" name="APP_CUR" id="APP_CUR">
-                              <option>SGD</option>
-                              <option>USD</option>
-                            </select>
+                        <div class="dp-group mt-3">
+                          <div class="dp-group-title text-xs font-bold uppercase opacity-50 text-primary mb-1">Financials</div>
+                          <div class="dp-group-body">
+                            <div class="dp-fitem mb-2">
+                              <label class="dp-fitem-label fieldset-label" for="APP_COST">Cost
+                              </label>
+                              <input class="dp-input input input-primary w-full numberbox" type="number" name="APP_COST" id="APP_COST" step="0.01"/>
+                            </div>
+                            <div class="dp-fitem mb-2">
+                              <label class="dp-fitem-label fieldset-label" for="APP_CUR">Currency
+                              </label>
+                              <select class="dp-select select select-primary w-full combobox" name="APP_CUR" id="APP_CUR">
+                                <option>SGD</option>
+                                <option>USD</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="dp-fitem mb-2">
-                        <label class="dp-fitem-label fieldset-label flex items-center gap-2 cursor-pointer" for="APP_ACTIVE">
-                          <input class="dp-checkbox checkbox checkbox-primary checkbox" type="checkbox" name="APP_ACTIVE" id="APP_ACTIVE" checked="checked"/>Active
-                        </label>
-                      </div>
-                    </form>
+                        <div class="dp-fitem mb-2">
+                          <label class="dp-fitem-label fieldset-label flex items-center gap-2 cursor-pointer" for="APP_ACTIVE">
+                            <input class="dp-checkbox checkbox checkbox-primary checkbox" type="checkbox" name="APP_ACTIVE" id="APP_ACTIVE" checked="checked"/>Active
+                          </label>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="dp-panel dp-panel-center flex flex-col bg-base-100 min-h-0 min-w-0">
-                <div class="dp-panel-body flex-1 overflow-auto min-h-0">
-                  <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-                    <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-list-ul"></i><span class="font-semibold text-sm">Stock</span>
+                <div class="dp-panel dp-panel-center flex flex-col bg-base-100 min-h-0 min-w-0">
+                  <div class="dp-panel-body flex-1 overflow-auto min-h-0">
+                    <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                      <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-list-ul"></i><span class="font-semibold text-sm">Stock</span>
+                      </div>
+                      <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                      <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                        <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                        </button>
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+                        </button>
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                        </button>
+                      </div>
                     </div>
-                    <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
-                    <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                      <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
-                      </button>
-                      <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
-                      </button>
-                      <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
-                      </button>
+                    <div class="p-2">
+                      <table class="dp-table table table-sm table-zebra">
+                        <thead>
+                          <tr>
+                            <th style="width: 1%; white-space: nowrap">Location</th>
+                            <th style="width: 1%; white-space: nowrap">On Hand</th>
+                            <th style="width: 1%; white-space: nowrap">Reserved</th>
+                            <th style="width: 1%; white-space: nowrap">Available</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td style="width: 1%; white-space: nowrap">Main Store</td>
+                            <td style="width: 1%; white-space: nowrap">120</td>
+                            <td style="width: 1%; white-space: nowrap">15</td>
+                            <td style="width: 1%; white-space: nowrap">105</td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td style="width: 1%; white-space: nowrap">Sub Store</td>
+                            <td style="width: 1%; white-space: nowrap">45</td>
+                            <td style="width: 1%; white-space: nowrap">0</td>
+                            <td style="width: 1%; white-space: nowrap">45</td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td style="width: 1%; white-space: nowrap">Yard</td>
+                            <td style="width: 1%; white-space: nowrap">8</td>
+                            <td style="width: 1%; white-space: nowrap">2</td>
+                            <td style="width: 1%; white-space: nowrap">6</td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                  </div>
-                  <div class="p-2">
-                    <table class="dp-table table table-sm table-zebra">
-                      <thead>
-                        <tr>
-                          <th style="width: 1%; white-space: nowrap">Location</th>
-                          <th style="width: 1%; white-space: nowrap">On Hand</th>
-                          <th style="width: 1%; white-space: nowrap">Reserved</th>
-                          <th style="width: 1%; white-space: nowrap">Available</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td style="width: 1%; white-space: nowrap">Main Store</td>
-                          <td style="width: 1%; white-space: nowrap">120</td>
-                          <td style="width: 1%; white-space: nowrap">15</td>
-                          <td style="width: 1%; white-space: nowrap">105</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td style="width: 1%; white-space: nowrap">Sub Store</td>
-                          <td style="width: 1%; white-space: nowrap">45</td>
-                          <td style="width: 1%; white-space: nowrap">0</td>
-                          <td style="width: 1%; white-space: nowrap">45</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td style="width: 1%; white-space: nowrap">Yard</td>
-                          <td style="width: 1%; white-space: nowrap">8</td>
-                          <td style="width: 1%; white-space: nowrap">2</td>
-                          <td style="width: 1%; white-space: nowrap">6</td>
-                          <td></td>
-                        </tr>
-                      </tbody>
-                    </table>
                   </div>
                 </div>
               </div>
