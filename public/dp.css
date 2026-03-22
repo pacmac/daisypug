@@ -21,3 +21,16 @@
 
 /* Panel body: never has padding — child decides */
 .dp-panel-body { padding: 0; }
+
+/* Pagination: fixed above dock */
+.dp-datatable-pagination {
+  position: fixed;
+  bottom: 4em;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+.dp-datatable-pagination > * {
+  pointer-events: auto;
+}
