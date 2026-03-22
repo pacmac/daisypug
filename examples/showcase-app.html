@@ -29,7 +29,7 @@
   <body>
     <div class="flex flex-col h-screen overflow-hidden">
       <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-        <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-grid-1x2"></i><span class="font-semibold text-sm">DaisyPug Showcase</span>
+        <div class="flex items-center gap-1.5 shrink-0 mr-2"><i class="dp-icon" data-lucide="layout-grid" style="width:16px;height:16px"></i><span class="font-semibold text-sm">DaisyPug Showcase</span>
         </div>
         <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
         <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
@@ -48,7 +48,7 @@
             <div style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;">
               <div class="dp-vsplit grid h-full" style="grid-template-columns: 250px 1fr">
                 <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
-                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><span class="font-semibold text-sm">Sidebar</span>
+                  <div class="dp-panel-header bg-base-200 border-b border-base-300 px-3 py-2 flex items-center gap-2 flex-shrink-0"><i class="menu"></i><span class="font-semibold text-sm">Sidebar</span>
                   </div>
                   <div class="dp-panel-body flex-1 overflow-auto min-h-0">
                     <ul class="dp-menu menu menu-sm">
@@ -158,18 +158,20 @@
           </div>
           <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Forms"/>
           <div class="dp-tab-content tab-content bg-base-200 p-4 overflow-auto" role="tabpanel">
-            <h3 class="font-semibold mb-2">3-Column Form — Auto-detect input types</h3>
+            <h3 class="font-semibold mb-2">3-Column Form with Icons</h3>
             <div class="bg-base-100 rounded-lg p-4 mb-6">
               <form class="dp-form three" id="fitem-demo">
                 <div class="divider text-xs font-bold opacity-50 mt-0" style="grid-column:1/-1">DETAILS</div>
                 <div class="dp-fitem mb-2">
                   <label class="dp-fitem-label fieldset-label" for="PART_ID">Part ID
                   </label>
-                  <select class="dp-select select select-primary w-full combobox" name="PART_ID" id="PART_ID">
-                    <option>A8000 - Pump</option>
-                    <option>B3200 - Bearing</option>
-                    <option>C1500 - Valve</option>
-                  </select>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="package" style="width:16px;height:16px"></i></span>
+                    <select class="dp-select select select-primary w-full join-item combobox" name="PART_ID" id="PART_ID">
+                      <option>A8000 - Pump</option>
+                      <option>B3200 - Bearing</option>
+                      <option>C1500 - Valve</option>
+                    </select>
+                  </div>
                 </div>
                 <div class="dp-fitem mb-2">
                   <label class="dp-fitem-label fieldset-label" for="DESCRIPTION">Description
@@ -198,13 +200,17 @@
                 <div class="dp-fitem mb-2">
                   <label class="dp-fitem-label fieldset-label" for="PRICE">Price
                   </label>
-                  <input class="dp-input input input-primary w-full numberbox" type="number" name="PRICE" id="PRICE" value="199.99" step="0.01"/>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="dollar-sign" style="width:16px;height:16px"></i></span>
+                    <input class="dp-input input input-primary w-full join-item numberbox" type="number" name="PRICE" id="PRICE" value="199.99" step="0.01"/>
+                  </div>
                 </div>
                 <div class="divider text-xs font-bold opacity-50" style="grid-column:1/-1">DATES & OTHER</div>
                 <div class="dp-fitem mb-2">
                   <label class="dp-fitem-label fieldset-label" for="ORDER_DATE">Order Date
                   </label>
-                  <input class="dp-input input input-primary w-full datebox" type="date" name="ORDER_DATE" id="ORDER_DATE"/>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="calendar" style="width:16px;height:16px"></i></span>
+                    <input class="dp-input input input-primary w-full join-item datebox" type="date" name="ORDER_DATE" id="ORDER_DATE"/>
+                  </div>
                 </div>
                 <div class="dp-fitem mb-2">
                   <label class="dp-fitem-label fieldset-label flex items-center gap-2 cursor-pointer" for="ACTIVE">
@@ -212,9 +218,9 @@
                   </label>
                 </div>
                 <div class="dp-fitem mb-2">
-                  <label class="dp-fitem-label fieldset-label" for="NOTIFY">Notify
+                  <label class="dp-fitem-label fieldset-label flex items-center gap-2 cursor-pointer" for="NOTIFY">
+                    <input class="dp-toggle toggle toggle-primary toggle" type="checkbox" name="NOTIFY" id="NOTIFY"/>Notify
                   </label>
-                  <input class="dp-toggle toggle toggle-primary toggle" type="checkbox" name="NOTIFY" id="NOTIFY"/>
                 </div>
                 <div style="grid-column:1/-1">
                   <div class="dp-fitem mb-2 dp-fitem-multiline">
@@ -225,16 +231,53 @@
                 </div>
               </form>
             </div>
+            <h3 class="font-semibold mb-2">Pre/Post Slots</h3>
+            <div class="bg-base-100 rounded-lg p-4 mb-6" style="max-width:450px">
+              <form class="dp-form" id="slots-demo">
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="SEARCH">Search
+                  </label>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="search" style="width:16px;height:16px"></i></span>
+                    <input class="dp-input input input-primary w-full join-item searchbox" type="search" name="SEARCH" id="SEARCH" placeholder="Type to search..."/><span class="dp-fitem-post join-item flex items-center px-2 bg-base-200 border border-base-300 cursor-pointer"><i class="dp-icon" data-lucide="x" style="width:16px;height:16px"></i></span>
+                  </div>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="EMAIL">Email
+                  </label>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="mail" style="width:16px;height:16px"></i></span>
+                    <input class="dp-input input input-primary w-full join-item textbox" type="text" name="EMAIL" id="EMAIL" placeholder="you@example.com"/>
+                  </div>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="URL">Website
+                  </label>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="globe" style="width:16px;height:16px"></i></span>
+                    <input class="dp-input input input-primary w-full join-item textbox" type="text" name="URL" id="URL" placeholder="https://"/>
+                  </div>
+                </div>
+                <div class="dp-fitem mb-2">
+                  <label class="dp-fitem-label fieldset-label" for="CODE">Part Code
+                  </label>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="hash" style="width:16px;height:16px"></i></span>
+                    <input class="dp-input input input-primary w-full join-item textbox" type="text" name="CODE" id="CODE"/>
+                    <button class="dp-fitem-post join-item btn btn-sm" type="button" id="btn_lookup"><i class="dp-icon" data-lucide="search" style="width:16px;height:16px"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
             <h3 class="font-semibold mb-2">Form with Groups</h3>
             <div class="bg-base-100 rounded-lg p-4" style="max-width:450px">
               <form class="dp-form" id="group-demo">
                 <div class="dp-fitem mb-2">
                   <label class="dp-fitem-label fieldset-label" for="GRP_PART">Part ID
                   </label>
-                  <select class="dp-select select select-primary w-full combobox" name="GRP_PART" id="GRP_PART">
-                    <option>A8000</option>
-                    <option>B3200</option>
-                  </select>
+                  <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="package" style="width:16px;height:16px"></i></span>
+                    <select class="dp-select select select-primary w-full join-item combobox" name="GRP_PART" id="GRP_PART">
+                      <option>A8000</option>
+                      <option>B3200</option>
+                    </select>
+                  </div>
                 </div>
                 <div class="dp-fitem mb-2">
                   <label class="dp-fitem-label fieldset-label" for="GRP_DESC">Description
@@ -278,58 +321,58 @@
           <div class="dp-tab-content tab-content bg-base-200 p-4 overflow-auto" role="tabpanel">
             <div class="space-y-3 bg-base-100 rounded-lg overflow-hidden">
               <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-box-seam"></i><span class="font-semibold text-sm">Parts List</span>
+                <div class="flex items-center gap-1.5 shrink-0 mr-2"><i class="dp-icon" data-lucide="box" style="width:16px;height:16px"></i><span class="font-semibold text-sm">Parts List</span>
                 </div>
                 <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
                 <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add"><i class="dp-icon" data-lucide="plus" style="width:16px;height:16px"></i> Add
                   </button>
-                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit"><i class="dp-icon" data-lucide="square-pen" style="width:16px;height:16px"></i> Edit
                   </button>
-                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del"><i class="dp-icon" data-lucide="trash-2" style="width:16px;height:16px"></i> Delete
                   </button>
                 </div>
               </div>
               <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-layers"></i><span class="font-semibold text-sm">BOM Lines</span>
+                <div class="flex items-center gap-1.5 shrink-0 mr-2"><i class="dp-icon" data-lucide="layers" style="width:16px;height:16px"></i><span class="font-semibold text-sm">BOM Lines</span>
                 </div>
                 <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
                 <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add"><i class="dp-icon" data-lucide="plus" style="width:16px;height:16px"></i> Add
                   </button>
-                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit"><i class="dp-icon" data-lucide="square-pen" style="width:16px;height:16px"></i> Edit
                   </button>
-                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del"><i class="dp-icon" data-lucide="trash-2" style="width:16px;height:16px"></i> Delete
                   </button>
                   <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
-                  <button class="dp-btn btn btn-xs btn-ghost">Validate
+                  <button class="dp-btn btn btn-xs btn-ghost"><i class="dp-icon" data-lucide="check-circle" style="width:16px;height:16px"></i> Validate
                   </button>
-                  <button class="dp-btn btn btn-xs btn-ghost">Export
-                  </button>
-                </div>
-              </div>
-              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-                <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-cart"></i><span class="font-semibold text-sm">Order Entry</span>
-                </div>
-                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
-                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
-                  </button>
-                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
-                  </button>
-                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
-                  </button>
-                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
+                  <button class="dp-btn btn btn-xs btn-ghost"><i class="dp-icon" data-lucide="download" style="width:16px;height:16px"></i> Export
                   </button>
                 </div>
               </div>
               <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex items-center gap-1.5 shrink-0 mr-2"><i class="dp-icon" data-lucide="shopping-cart" style="width:16px;height:16px"></i><span class="font-semibold text-sm">Order Entry</span>
+                </div>
                 <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
                 <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                  <button class="dp-btn btn btn-xs btn-ghost">Refresh
+                  <button class="dp-btn btn btn-sm btn-ghost" id="tb_add"><i class="dp-icon" data-lucide="plus" style="width:16px;height:16px"></i> Add
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save"><i class="dp-icon" data-lucide="save" style="width:16px;height:16px"></i> Save
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del"><i class="dp-icon" data-lucide="trash-2" style="width:16px;height:16px"></i> Delete
+                  </button>
+                  <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel"><i class="dp-icon" data-lucide="x" style="width:16px;height:16px"></i> Cancel
+                  </button>
+                </div>
+              </div>
+              <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
+                <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
+                <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
+                  <button class="dp-btn btn btn-xs btn-ghost"><i class="dp-icon" data-lucide="refresh-cw" style="width:16px;height:16px"></i> Refresh
                   </button>
                   <div class="dp-toolbar-sep self-stretch my-1" style="width:1px; background:color-mix(in oklch, var(--color-base-content) 30%, transparent)"></div>
-                  <button class="dp-btn btn btn-xs btn-ghost">Export CSV
+                  <button class="dp-btn btn btn-xs btn-ghost"><i class="dp-icon" data-lucide="file-down" style="width:16px;height:16px"></i> Export CSV
                   </button>
                 </div>
               </div>
@@ -482,9 +525,9 @@
           <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Modals"/>
           <div class="dp-tab-content tab-content bg-base-200 p-4 overflow-auto" role="tabpanel">
             <div class="flex gap-3">
-              <button class="dp-btn btn btn-primary" onclick="demo_basic.showModal()">Basic Modal
+              <button class="dp-btn btn btn-primary" onclick="demo_basic.showModal()"><i class="dp-icon" data-lucide="message-square" style="width:16px;height:16px"></i> Basic Modal
               </button>
-              <button class="dp-btn btn btn-secondary" onclick="demo_form.showModal()">Form Modal
+              <button class="dp-btn btn btn-secondary" onclick="demo_form.showModal()"><i class="dp-icon" data-lucide="file-edit" style="width:16px;height:16px"></i> Form Modal
               </button>
             </div>
             <dialog class="dp-modal modal" id="demo_basic">
@@ -538,7 +581,20 @@
           </div>
           <input class="dp-tab tab" type="radio" name="showcase" role="tab" aria-label="Buttons"/>
           <div class="dp-tab-content tab-content bg-base-200 p-4 overflow-auto" role="tabpanel">
-            <h3 class="font-semibold mb-2">Colors</h3>
+            <h3 class="font-semibold mb-2">With Icons</h3>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button class="dp-btn btn btn-primary"><i class="dp-icon" data-lucide="plus" style="width:16px;height:16px"></i> Add New
+              </button>
+              <button class="dp-btn btn btn-secondary"><i class="dp-icon" data-lucide="download" style="width:16px;height:16px"></i> Download
+              </button>
+              <button class="dp-btn btn btn-accent"><i class="dp-icon" data-lucide="send" style="width:16px;height:16px"></i> Submit
+              </button>
+              <button class="dp-btn btn btn-error btn-outline"><i class="dp-icon" data-lucide="trash-2" style="width:16px;height:16px"></i> Delete
+              </button>
+              <button class="dp-btn btn btn-ghost"><i class="dp-icon" data-lucide="settings" style="width:16px;height:16px"></i> Settings
+              </button>
+            </div>
+            <h3 class="font-semibold mb-2">Colors (no icons)</h3>
             <div class="flex flex-wrap gap-2 mb-4">
               <button class="dp-btn btn btn-primary">Primary
               </button>
@@ -610,17 +666,17 @@
                 <div class="dp-panel dp-panel-west flex flex-col bg-base-100 min-h-0 min-w-0">
                   <div class="dp-panel-body flex-1 overflow-auto min-h-0">
                     <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-                      <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-search"></i><span class="font-semibold text-sm">Part</span>
+                      <div class="flex items-center gap-1.5 shrink-0 mr-2"><i class="dp-icon" data-lucide="search" style="width:16px;height:16px"></i><span class="font-semibold text-sm">Part</span>
                       </div>
                       <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
                       <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                        <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                        <button class="dp-btn btn btn-sm btn-ghost" id="tb_add"><i class="dp-icon" data-lucide="plus" style="width:16px;height:16px"></i> Add
                         </button>
-                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save">Save
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_save"><i class="dp-icon" data-lucide="save" style="width:16px;height:16px"></i> Save
                         </button>
-                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del"><i class="dp-icon" data-lucide="trash-2" style="width:16px;height:16px"></i> Delete
                         </button>
-                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel">Cancel
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_cancel"><i class="dp-icon" data-lucide="x" style="width:16px;height:16px"></i> Cancel
                         </button>
                       </div>
                     </div>
@@ -629,11 +685,13 @@
                         <div class="dp-fitem mb-2">
                           <label class="dp-fitem-label fieldset-label" for="APP_PART">Part ID
                           </label>
-                          <select class="dp-select select select-primary w-full combobox" name="APP_PART" id="APP_PART">
-                            <option>A8000 - Pump</option>
-                            <option>B3200 - Bearing</option>
-                            <option>C1500 - Valve</option>
-                          </select>
+                          <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="package" style="width:16px;height:16px"></i></span>
+                            <select class="dp-select select select-primary w-full join-item combobox" name="APP_PART" id="APP_PART">
+                              <option>A8000 - Pump</option>
+                              <option>B3200 - Bearing</option>
+                              <option>C1500 - Valve</option>
+                            </select>
+                          </div>
                         </div>
                         <div class="dp-fitem mb-2">
                           <label class="dp-fitem-label fieldset-label" for="APP_DESC">Description
@@ -661,7 +719,9 @@
                             <div class="dp-fitem mb-2">
                               <label class="dp-fitem-label fieldset-label" for="APP_COST">Cost
                               </label>
-                              <input class="dp-input input input-primary w-full numberbox" type="number" name="APP_COST" id="APP_COST" step="0.01"/>
+                              <div class="dp-fitem-slots join w-full"><span class="dp-fitem-pre join-item flex items-center px-2 bg-base-200 border border-base-300"><i class="dp-icon" data-lucide="dollar-sign" style="width:16px;height:16px"></i></span>
+                                <input class="dp-input input input-primary w-full join-item numberbox" type="number" name="APP_COST" id="APP_COST" step="0.01"/>
+                              </div>
                             </div>
                             <div class="dp-fitem mb-2">
                               <label class="dp-fitem-label fieldset-label" for="APP_CUR">Currency
@@ -685,15 +745,15 @@
                 <div class="dp-panel dp-panel-center flex flex-col bg-base-100 min-h-0 min-w-0">
                   <div class="dp-panel-body flex-1 overflow-auto min-h-0">
                     <div class="dp-toolbar flex items-center gap-1 px-2 py-1 bg-base-200 border-b border-base-300">
-                      <div class="flex items-center gap-1 shrink-0 mr-2"><i class="bi bi-list-ul"></i><span class="font-semibold text-sm">Stock</span>
+                      <div class="flex items-center gap-1.5 shrink-0 mr-2"><i class="dp-icon" data-lucide="warehouse" style="width:16px;height:16px"></i><span class="font-semibold text-sm">Stock Balances</span>
                       </div>
                       <div class="flex-1 flex items-center gap-2 dp-toolbar-inputs"></div>
                       <div class="flex items-center gap-1 shrink-0 dp-toolbar-buttons">
-                        <button class="dp-btn btn btn-sm btn-ghost" id="tb_add">Add
+                        <button class="dp-btn btn btn-sm btn-ghost" id="tb_add"><i class="dp-icon" data-lucide="plus" style="width:16px;height:16px"></i> Add
                         </button>
-                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit">Edit
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_edit"><i class="dp-icon" data-lucide="square-pen" style="width:16px;height:16px"></i> Edit
                         </button>
-                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del">Delete
+                        <button class="dp-btn btn btn-sm btn-ghost btn-disabled" id="tb_del"><i class="dp-icon" data-lucide="trash-2" style="width:16px;height:16px"></i> Delete
                         </button>
                       </div>
                     </div>
@@ -741,5 +801,7 @@
         </div>
       </div>
     </div>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });</script>
   </body>
 </html>

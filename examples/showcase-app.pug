@@ -4,7 +4,7 @@
 div.flex.flex-col.h-screen.overflow-hidden
 
   //- Top toolbar (shrink-0)
-  +dp-toolbar({title: 'DaisyPug Showcase', icon: 'bi bi-grid-1x2'})
+  +dp-toolbar({title: 'DaisyPug Showcase', icon: 'layout-grid'})
     +dp-toolbar-sep
     +theme-radios({themes: ['light', 'dark', 'cupcake', 'synthwave'], as: 'btn', active: 'light'})
 
@@ -19,7 +19,7 @@ div.flex.flex-col.h-screen.overflow-hidden
         h3.font-semibold.mb-2 Basic Sidebar — vsplit('250px')
         div(style="height: 250px; border: 1px solid oklch(var(--bc)/.2); border-radius: 0.5rem; overflow: hidden;")
           +dp-vsplit('250px')
-            +dp-panel('west', {title: 'Sidebar'})
+            +dp-panel('west', {title: 'Sidebar', iconCls: 'menu'})
               +menu({size: 'sm'})
                 +menu-item({active: true})
                   a Dashboard
@@ -71,28 +71,36 @@ div.flex.flex-col.h-screen.overflow-hidden
       +tab({name: 'showcase', label: 'Forms'})
       +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
-        h3.font-semibold.mb-2 3-Column Form — Auto-detect input types
+        h3.font-semibold.mb-2 3-Column Form with Icons
         div.bg-base-100.rounded-lg.p-4.mb-6
           +dp-form({id: 'fitem-demo'}).three
             .divider.text-xs.font-bold.opacity-50.mt-0(style="grid-column:1/-1") DETAILS
-            +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
+            +dp-fitem('Part ID', {class: 'combobox', name: 'PART_ID', id: '~', pre: 'package', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
             +dp-fitem('Description', {class: 'textbox', name: 'DESCRIPTION', id: '~', placeholder: 'Enter description'})
             +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
             .divider.text-xs.font-bold.opacity-50(style="grid-column:1/-1") QUANTITIES
             +dp-fitem('Quantity', {class: 'numberspinner', name: 'QTY', id: '~', min: 0, precision: 0, value: '25'})
             +dp-fitem('Weight', {class: 'numberbox', name: 'WEIGHT', id: '~', precision: 2, value: '12.50'})
-            +dp-fitem('Price', {class: 'numberbox', name: 'PRICE', id: '~', precision: 2, value: '199.99'})
+            +dp-fitem('Price', {class: 'numberbox', name: 'PRICE', id: '~', precision: 2, value: '199.99', pre: 'dollar-sign'})
             .divider.text-xs.font-bold.opacity-50(style="grid-column:1/-1") DATES & OTHER
-            +dp-fitem('Order Date', {class: 'datebox', name: 'ORDER_DATE', id: '~'})
+            +dp-fitem('Order Date', {class: 'datebox', name: 'ORDER_DATE', id: '~', pre: 'calendar'})
             +dp-fitem('Active', {class: 'checkbox', name: 'ACTIVE', id: '~', checked: true})
             +dp-fitem('Notify', {class: 'toggle', name: 'NOTIFY', id: '~'})
             div(style="grid-column:1/-1")
               +dp-fitem('Notes', {class: 'multiline', name: 'NOTES', id: '~', rows: 2, placeholder: 'Optional notes...'})
 
+        h3.font-semibold.mb-2 Pre/Post Slots
+        div.bg-base-100.rounded-lg.p-4.mb-6(style="max-width:450px")
+          +dp-form({id: 'slots-demo'})
+            +dp-fitem('Search', {class: 'searchbox', name: 'SEARCH', id: '~', pre: 'search', post: 'x', placeholder: 'Type to search...'})
+            +dp-fitem('Email', {class: 'textbox', name: 'EMAIL', id: '~', pre: 'mail', placeholder: 'you@example.com'})
+            +dp-fitem('Website', {class: 'textbox', name: 'URL', id: '~', pre: 'globe', placeholder: 'https://'})
+            +dp-fitem('Part Code', {class: 'textbox', name: 'CODE', id: '~', pre: 'hash', post: {action: true, icon: 'search', id: 'btn_lookup'}})
+
         h3.font-semibold.mb-2 Form with Groups
         div.bg-base-100.rounded-lg.p-4(style="max-width:450px")
           +dp-form({id: 'group-demo'})
-            +dp-fitem('Part ID', {class: 'combobox', name: 'GRP_PART', id: '~', options: ['A8000', 'B3200']})
+            +dp-fitem('Part ID', {class: 'combobox', name: 'GRP_PART', id: '~', pre: 'package', options: ['A8000', 'B3200']})
             +dp-fitem('Description', {class: 'textbox', name: 'GRP_DESC', id: '~'})
             +dp-group('Dimensions')
               +dp-fitem('Width', {class: 'numberbox', name: 'GRP_W', id: '~', precision: 2})
@@ -106,16 +114,24 @@ div.flex.flex-col.h-screen.overflow-hidden
       +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         div.space-y-3.bg-base-100.rounded-lg.overflow-hidden
-          +dp-toolbar({title: 'Parts List', icon: 'bi bi-box-seam', asdpx: 'aed'})
-          +dp-toolbar({title: 'BOM Lines', icon: 'bi bi-layers', asdpx: 'aed'})
+          +dp-toolbar({title: 'Parts List', icon: 'box', asdpx: 'aed'})
+          +dp-toolbar({title: 'BOM Lines', icon: 'layers', asdpx: 'aed'})
             +dp-toolbar-sep
-            +btn({size: 'xs', style: 'ghost', text: 'Validate'})
-            +btn({size: 'xs', style: 'ghost', text: 'Export'})
-          +dp-toolbar({title: 'Order Entry', icon: 'bi bi-cart', asdpx: 'asdx'})
+            +btn({size: 'xs', style: 'ghost'})
+              +dp-icon('check-circle', {size: 'sm'})
+              |  Validate
+            +btn({size: 'xs', style: 'ghost'})
+              +dp-icon('download', {size: 'sm'})
+              |  Export
+          +dp-toolbar({title: 'Order Entry', icon: 'shopping-cart', asdpx: 'asdx'})
           +dp-toolbar
-            +btn({size: 'xs', style: 'ghost', text: 'Refresh'})
+            +btn({size: 'xs', style: 'ghost'})
+              +dp-icon('refresh-cw', {size: 'sm'})
+              |  Refresh
             +dp-toolbar-sep
-            +btn({size: 'xs', style: 'ghost', text: 'Export CSV'})
+            +btn({size: 'xs', style: 'ghost'})
+              +dp-icon('file-down', {size: 'sm'})
+              |  Export CSV
 
       //- ===== TAB: Tables =====
       +tab({name: 'showcase', label: 'Tables'})
@@ -165,8 +181,12 @@ div.flex.flex-col.h-screen.overflow-hidden
       +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
         div.flex.gap-3
-          +btn({text: 'Basic Modal', color: 'primary'})(onclick="demo_basic.showModal()")
-          +btn({text: 'Form Modal', color: 'secondary'})(onclick="demo_form.showModal()")
+          +btn({color: 'primary'})(onclick="demo_basic.showModal()")
+            +dp-icon('message-square', {size: 'sm'})
+            |  Basic Modal
+          +btn({color: 'secondary'})(onclick="demo_form.showModal()")
+            +dp-icon('file-edit', {size: 'sm'})
+            |  Form Modal
 
         +modal({id: 'demo_basic'})
           +modal-box
@@ -182,7 +202,25 @@ div.flex.flex-col.h-screen.overflow-hidden
       +tab({name: 'showcase', label: 'Buttons'})
       +tab-content({class: 'bg-base-200 p-4 overflow-auto'})
 
-        h3.font-semibold.mb-2 Colors
+        h3.font-semibold.mb-2 With Icons
+        div.flex.flex-wrap.gap-2.mb-4
+          +btn({color: 'primary'})
+            +dp-icon('plus', {size: 'sm'})
+            |  Add New
+          +btn({color: 'secondary'})
+            +dp-icon('download', {size: 'sm'})
+            |  Download
+          +btn({color: 'accent'})
+            +dp-icon('send', {size: 'sm'})
+            |  Submit
+          +btn({style: 'outline', color: 'error'})
+            +dp-icon('trash-2', {size: 'sm'})
+            |  Delete
+          +btn({style: 'ghost'})
+            +dp-icon('settings', {size: 'sm'})
+            |  Settings
+
+        h3.font-semibold.mb-2 Colors (no icons)
         div.flex.flex-wrap.gap-2.mb-4
           +btn({color: 'primary', text: 'Primary'})
           +btn({color: 'secondary', text: 'Secondary'})
@@ -222,19 +260,19 @@ div.flex.flex-col.h-screen.overflow-hidden
         div.h-full
           +dp-vsplit('320px')
             +dp-panel('west')
-              +dp-toolbar({title: 'Part', icon: 'bi bi-search', asdpx: 'asdx'})
+              +dp-toolbar({title: 'Part', icon: 'search', asdpx: 'asdx'})
               div.p-3
                 +dp-form({id: 'app-form'})
-                  +dp-fitem('Part ID', {class: 'combobox', name: 'APP_PART', id: '~', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
+                  +dp-fitem('Part ID', {class: 'combobox', name: 'APP_PART', id: '~', pre: 'package', options: ['A8000 - Pump', 'B3200 - Bearing', 'C1500 - Valve']})
                   +dp-fitem('Description', {class: 'textbox', name: 'APP_DESC', id: '~'})
                   +dp-group('Dimensions')
                     +dp-fitem('Width', {class: 'numberbox', name: 'APP_W', id: '~', precision: 2})
                     +dp-fitem('Height', {class: 'numberbox', name: 'APP_H', id: '~', precision: 2})
                   +dp-group('Financials')
-                    +dp-fitem('Cost', {class: 'numberbox', name: 'APP_COST', id: '~', precision: 2})
+                    +dp-fitem('Cost', {class: 'numberbox', name: 'APP_COST', id: '~', precision: 2, pre: 'dollar-sign'})
                     +dp-fitem('Currency', {class: 'combobox', name: 'APP_CUR', id: '~', options: ['SGD', 'USD']})
                   +dp-fitem('Active', {class: 'checkbox', name: 'APP_ACTIVE', id: '~', checked: true})
             +dp-panel('center')
-              +dp-toolbar({title: 'Stock', icon: 'bi bi-list-ul', asdpx: 'aed'})
+              +dp-toolbar({title: 'Stock Balances', icon: 'warehouse', asdpx: 'aed'})
               div.p-2
                 +table({headers: ['Location', 'On Hand', 'Reserved', 'Available'], rows: [['Main Store', '120', '15', '105'], ['Sub Store', '45', '0', '45'], ['Yard', '8', '2', '6']], zebra: true, size: 'sm'})

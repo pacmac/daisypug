@@ -91,6 +91,71 @@ program
     }
   });
 
+// --- serve command ---
+
+program
+  .command('serve [dir]')
+  .description(`Serve a directory of static files
+
+  Examples:
+    daisypug serve examples/
+    daisypug serve examples/ --port 3000
+    daisypug serve .`)
+  .option('-p, --port <port>', 'port number', '8090')
+  .action((dir, opts) => {
+    const http = require('http');
+    const serveDir = path.resolve(dir || '.');
+    if (!fs.existsSync(serveDir) || !fs.statSync(serveDir).isDirectory()) {
+      process.stderr.write(`Error: Not a directory: ${serveDir}\n`);
+      process.exit(1);
+    }
+
+    const mimeTypes = {
+      '.html': 'text/html; charset=utf-8',
+      '.css': 'text/css',
+      '.js': 'application/javascript',
+      '.json': 'application/json',
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg',
+      '.svg': 'image/svg+xml',
+      '.ico': 'image/x-icon',
+      '.pug': 'text/plain; charset=utf-8',
+      '.yaml': 'text/plain; charset=utf-8',
+      '.yml': 'text/plain; charset=utf-8',
+    };
+
+    const server = http.createServer((req, res) => {
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      let filePath = path.join(serveDir, url.pathname === '/' ? 'index.html' : url.pathname);
+
+      if (!fs.existsSync(filePath)) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Not found');
+        return;
+      }
+
+      if (fs.statSync(filePath).isDirectory()) {
+        filePath = path.join(filePath, 'index.html');
+        if (!fs.existsSync(filePath)) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' });
+          res.end('Not found');
+          return;
+        }
+      }
+
+      const ext = path.extname(filePath).toLowerCase();
+      const contentType = mimeTypes[ext] || 'application/octet-stream';
+      const content = fs.readFileSync(filePath);
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content);
+    });
+
+    const port = parseInt(opts.port, 10);
+    server.listen(port, '0.0.0.0', () => {
+      process.stderr.write(`Serving ${serveDir} at http://0.0.0.0:${port}/\n`);
+    });
+  });
+
 // --- helpers ---
 
 async function readInput(file) {

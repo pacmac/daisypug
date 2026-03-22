@@ -14,9 +14,9 @@ mixin dp-toolbar(opts)
 
     //- Title section (shrink-0)
     if title
-      div.flex.items-center.gap-1.shrink-0.mr-2
+      div(class="flex items-center gap-1.5 shrink-0 mr-2")
         if icon
-          i(class=icon)
+          +dp-icon(icon, {size: 'sm'})
         span.font-semibold.text-sm= title
 
     //- Inputs section (flex-1) — filled by page or JSON config
@@ -27,18 +27,29 @@ mixin dp-toolbar(opts)
 
       //- ASDPX CRUD buttons
       if asdpx.includes('a')
-        +btn({size: btnSize, style: 'ghost', text: 'Add'})(id=id ? id + '_add' : 'tb_add')
-          //- i.bi.bi-plus-lg.me-1
+        +btn({size: btnSize, style: 'ghost'})(id=id ? id + '_add' : 'tb_add')
+          +dp-icon('plus', {size: 'sm'})
+          |  Add
       if asdpx.includes('s')
-        +btn({size: btnSize, style: 'ghost', text: 'Save', disabled: true})(id=id ? id + '_save' : 'tb_save')
+        +btn({size: btnSize, style: 'ghost', disabled: true})(id=id ? id + '_save' : 'tb_save')
+          +dp-icon('save', {size: 'sm'})
+          |  Save
       if asdpx.includes('e')
-        +btn({size: btnSize, style: 'ghost', text: 'Edit', disabled: true})(id=id ? id + '_edit' : 'tb_edit')
+        +btn({size: btnSize, style: 'ghost', disabled: true})(id=id ? id + '_edit' : 'tb_edit')
+          +dp-icon('square-pen', {size: 'sm'})
+          |  Edit
       if asdpx.includes('d')
-        +btn({size: btnSize, style: 'ghost', text: 'Delete', disabled: true})(id=id ? id + '_del' : 'tb_del')
+        +btn({size: btnSize, style: 'ghost', disabled: true})(id=id ? id + '_del' : 'tb_del')
+          +dp-icon('trash-2', {size: 'sm'})
+          |  Delete
       if asdpx.includes('p')
-        +btn({size: btnSize, style: 'ghost', text: 'Print'})(id=id ? id + '_print' : 'tb_print')
+        +btn({size: btnSize, style: 'ghost'})(id=id ? id + '_print' : 'tb_print')
+          +dp-icon('printer', {size: 'sm'})
+          |  Print
       if asdpx.includes('x')
-        +btn({size: btnSize, style: 'ghost', text: 'Cancel', disabled: true})(id=id ? id + '_cancel' : 'tb_cancel')
+        +btn({size: btnSize, style: 'ghost', disabled: true})(id=id ? id + '_cancel' : 'tb_cancel')
+          +dp-icon('x', {size: 'sm'})
+          |  Cancel
 
       //- Custom buttons via block
       block
