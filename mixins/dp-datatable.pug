@@ -3,7 +3,7 @@ mixin dp-datatable(opts)
   - const headers = opts.headers || []
   - const rows = opts.rows || []
   - const pagination = opts.pagination
-  div.dp-datatable
+  div.dp-datatable&attributes(attributes)
     +table({zebra: opts.zebra, size: opts.size, pinRows: opts.pinRows, pinCols: opts.pinCols, autoWidth: opts.autoWidth, class: opts.class})
       if headers.length
         thead
