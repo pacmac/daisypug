@@ -263,8 +263,16 @@ collapse:
 dropdown:
   replaces: "details.dropdown"
   mixin: "+dropdown(opts)"
-  children: "+dropdown-trigger, +dropdown-content"
+  args: "{position: top|bottom|left|right, end, hover, open, class}"
+  children: "+dropdown-trigger, +dropdown-content, +dropdown-item"
   help: dropdown.md
+  example: |
+    +dropdown({position: 'top', end: true})
+      +dropdown-trigger({text: 'More', class: 'btn btn-sm'})
+      +dropdown-content({class: 'menu bg-base-200 rounded-box shadow-lg w-52'})
+        +dropdown-item({text: 'Settings', icon: 'settings', page: 'settings'})
+        +dropdown-item({text: 'Help', icon: 'help-circle', page: 'help'})
+        +dropdown-item({text: 'Logout', icon: 'log-out', href: '/logout'})
 
 tooltip:
   replaces: "div.tooltip"

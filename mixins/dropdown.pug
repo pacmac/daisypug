@@ -15,4 +15,26 @@ mixin dropdown-content(opts)
   - opts = opts || {}
   - const cls = ['dp-dropdown-content', 'dropdown-content', opts.class].filter(Boolean).join(' ')
   ul(class=cls tabindex="0")&attributes(attributes)
+    if opts.items
+      each item in opts.items
+        +dropdown-item(item)
     block
+
+mixin dropdown-item(opts)
+  - opts = opts || {}
+  - const cls = ['dp-dropdown-item', opts.active && 'active', opts.disabled && 'disabled', opts.class].filter(Boolean).join(' ') || undefined
+  li(class=cls)&attributes(attributes)
+    if opts.href
+      a(href=opts.href data-page=opts.page)
+        if opts.icon
+          +dp-icon(opts.icon, {size: 'sm'})
+        if opts.text
+          |  #{opts.text}
+        block
+    else
+      a(data-page=opts.page)
+        if opts.icon
+          +dp-icon(opts.icon, {size: 'sm'})
+        if opts.text
+          |  #{opts.text}
+        block
