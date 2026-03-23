@@ -176,6 +176,7 @@ dp-datatable:
   args: "{headers, rows, zebra, size, autoWidth, pagination}"
   help: dp-datatable.md#usage
   help-columns: dp-datatable.md#columns
+  help-editor: dp-datatable.md#editor
   help-grouping: dp-datatable.md#grouping
   help-pagination: dp-datatable.md#pagination
   help-parsers: dp-datatable.md#response-format-adapters

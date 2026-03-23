@@ -79,6 +79,7 @@ Define columns for full datagrid functionality — object-based rows, hidden col
 | `cellClass` | string/function | Cell class: string or `(value, row, index) → className` |
 | `headerClass` | string | Class for the `<th>` element |
 | `headerStyle` | string | Inline style for the `<th>` element |
+| `editor` | object | Editor config for row-edit modal (see [Editor Modal](#editor)) |
 
 #### Setup
 
@@ -165,6 +166,71 @@ table.onRowDblClick(({ data, index, field, value }) => {
   console.log('Double-clicked row:', data)
 })
 ```
+
+### Editor Modal {#editor}
+
+Columns with an `editor` property enable a row-edit modal. When any column has an editor, `table.rowEditor()` auto-builds a `<dialog>` modal with form fields for each editable column.
+
+#### Editor types
+
+| Type | Description | Options |
+|------|-------------|---------|
+| `textbox` | Text input | `readonly`, `required` |
+| `numberbox` | Number input | `min`, `max`, `precision`, `required` |
+| `combobox` | Dropdown select | `data: [{value, text}]`, `url`, `required` |
+| `datebox` | Date picker | `required` |
+| `textarea` | Multi-line text | `rows`, `required` |
+
+#### Column editor config
+
+```js
+table.columns([
+  { field: 'PART_ID', title: 'Part ID', width: 120,
+    editor: { type: 'textbox', readonly: true } },
+  { field: 'QTY', title: 'Qty', width: 80, align: 'right',
+    editor: { type: 'numberbox', min: 0, precision: 0 } },
+  { field: 'STATUS', title: 'Status', width: 80,
+    editor: { type: 'combobox', data: [
+      { value: 'A', text: 'Active' },
+      { value: 'I', text: 'Inactive' },
+    ]} },
+  { field: 'NOTES', title: 'Notes',
+    editor: { type: 'textarea', rows: 3 } },
+  { field: 'ROWID', hidden: true },
+])
+```
+
+#### Opening the editor
+
+```js
+// Auto-build and wire the editor modal
+table.rowEditor({
+  addData: { STATUS: 'A', QTY: 1 },   // defaults for new rows
+  onEndEdit: ({ mode, index, row, formData }) => {
+    // mode: 'add' | 'edit'
+    dp.post('/api/parts', row).then(() => table.loadData('/api/parts'));
+  },
+  onValidateRow: ({ index, row }) => {
+    if (row.QTY <= 0) return 'Qty must be > 0';
+    // return string to show error; return falsy to proceed
+  },
+  onDeleteRow: ({ index, row }) => {
+    dp.delete('/api/parts/' + row.ROWID);
+  },
+})
+
+// Editor opens on:
+// - Double-click row (edit mode)
+// - Programmatic: table.editRow(index) or table.addRow()
+```
+
+#### How it works
+
+1. `rowEditor()` creates a `<dialog>` with form fields from column editor definitions
+2. Hidden columns without editors become `<input type="hidden">` (data round-trips)
+3. **Add**: clears form, applies `addData` defaults, opens modal
+4. **Edit**: fills form with selected row data by field name, opens modal
+5. **Save**: collects form values → runs `onValidateRow` → calls `onEndEdit` → updates grid → closes modal
 
 ### Pagination
 

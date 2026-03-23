@@ -75,6 +75,46 @@ dui:
     - editor
     - coloff
     - fixed
+  editor_system:
+    column_editor_types:
+      - textbox
+      - combobox (static data or remote _sqlid)
+      - numberbox (precision, min, max)
+      - numberspinner
+      - datebox
+      - searchbox (sbref)
+      - textarea / multiline
+    editor_options:
+      - type (editor type name)
+      - options.readonly
+      - options.required
+      - options.precision
+      - options.min / max
+      - options.data (static combobox items)
+      - options._sqlid (remote combobox data)
+      - options.editable (combobox typing)
+      - options.sbref (searchbox definition)
+    modal_convention:
+      id: "${gridId}_editor"
+      auto_generated: true (Pug mixin renders when any column has editor)
+      titlebar: "primary color, square-pen icon, 'Edit Row' title"
+      structure: "titlebar → form fields (one per editor column) → Save button"
+      hidden_columns: "columns with hidden:true and no editor become <input type=hidden>"
+    triggers:
+      - Add button (${gridId}_add) — clears form, applies addData defaults
+      - Edit button (${gridId}_edit) — fills with selectedRow
+      - Double-click row — same as edit (unless onDblClickRow returns false)
+    save_flow:
+      - collectEditorData() extracts form → {field: value} object
+      - onValidateRow(index, row, formData) — return error string to cancel
+      - Path A (onEndEdit): page handles POST, row._func = 'add'|'upd'
+      - Path B (saveSqlId): plugin auto-POSTs with _sqlid and _func
+      - Updates grid DOM (appendRow or updateRow)
+      - Closes modal
+    addData_patterns:
+      - static value: "QUANTITY": 1
+      - from form field: "STATUS": "#defaultStatus"
+      - auto-increment: "LINE_NO": "$autonum:10"
 
 dp:
   class: DpDataTable
@@ -127,14 +167,27 @@ dp:
     - onSort
     - onDataChange
     - onPageChange
+    - template cloning for row rendering
+    - inline pagination footer
+    - full-height flex layout with scroll
+    - font-size inheritance
   todo:
+    - column.editor (editor type + options on column definition)
+    - rowEditor() — auto-build modal from column editors
+    - populateEditor(row) — fill modal fields from row data
+    - collectEditor() — extract modal fields to object
+    - saveEditor() — validate → callback/POST → update grid → close
+    - onEndEdit(index, row, formData) callback
+    - onValidateRow(index, row, formData) callback
+    - onDeleteRow(index, row) callback
+    - addData defaults (static, $autonum, #fieldRef)
+    - saveSqlId (auto-POST on save)
+    - asdpx toolbar integration (add/edit/delete buttons wired to editor)
+    - Double-click row opens editor
     - reload (server re-fetch with params)
     - fitColumns (auto-stretch to fill width)
     - rownumbers (row number column)
     - loadFilter (transform response before rendering)
-    - rowEditor (auto-wired editor modal)
-    - editButs (configure editor buttons)
-    - editDone (finish editing)
     - findRows (search rows by criteria object)
     - hideRow / showRow (toggle row visibility)
     - resizeColumn (resize by field)
@@ -145,17 +198,8 @@ dp:
     - onBeforeUnselect
     - onUnselect
     - onRowContextMenu
-    - onEndEdit
-    - onDeleteRow
-    - onValidateRow
-    - column.editor (inline editing)
-    - column.styler (per-cell style function — have cellClass/style instead)
-    - asdpx toolbar integration
-    - addData (defaults for new rows)
-    - saveSqlId (auto-save endpoint)
     - getSelections (multi-select)
     - clearSelections
-    - toolbar config in JSON
   skip:
     - EUI shims (getPanel, getPager, freezeRow, checkRow, etc.)
     - pagination option (use paginate() method instead)
@@ -164,5 +208,16 @@ notes: |
   Column formatters accept functions directly, not string refs like DUI.
   Template cloning used for row rendering (not innerHTML).
   DUI uses column.styler; DP uses column.style and column.cellClass (functions or strings).
-  DUI row editor auto-wires ${gridId}_editor modal; DP does not yet.
-  Multi-select not yet supported (DUI has ctrl+click toggle).
+
+  Editor modal design for DP:
+  - column.editor = { type, ...options } on column definitions
+  - table.rowEditor() auto-builds a <dialog> modal using template cloning
+  - Each editor column becomes a dp-fitem field (auto-detect type from editor.type)
+  - Hidden columns without editors become hidden inputs
+  - populateEditor fills fields from row object by field name
+  - collectEditor extracts field values back to object
+  - Save flow: validate → onEndEdit callback (or auto-POST) → updateRow/addRow → close
+  - Add button clears form and applies addData defaults
+  - Edit button / double-click fills form with selected row
+  - Delete button fires onDeleteRow with confirmation
+  - _func field injected as 'add'|'upd'|'del' for server routing
