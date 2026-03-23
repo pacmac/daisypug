@@ -4,21 +4,21 @@ mixin dp-datatable(opts)
   - const rows = opts.rows || []
   - const pagination = opts.pagination
   div.dp-datatable&attributes(attributes)
-    +table({zebra: opts.zebra, size: opts.size, pinRows: opts.pinRows, pinCols: opts.pinCols, autoWidth: opts.autoWidth, class: opts.class})
-      if headers.length
-        thead
-          tr
-            each h in headers
-              th= h
-      tbody
-        each row in rows
-          tr
-            each cell in row
-              td= cell
-    div.dp-datatable-pagination.flex.justify-center.mt-4
+    div.dp-datatable-scroll
+      +table({zebra: opts.zebra, size: opts.size, pinRows: true, pinCols: opts.pinCols, autoWidth: opts.autoWidth, class: opts.class})
+        if headers.length
+          thead
+            tr
+              each h in headers
+                th= h
+        tbody
+          each row in rows
+            tr
+              each cell in row
+                td= cell
+    div.dp-datatable-pagination
       if pagination
-        +join
-          - const total = pagination.total || 1
-          - const current = pagination.current || 1
-          - for (let i = 1; i <= total; i++)
-            +btn({text: String(i), size: 'sm', color: i === current ? 'primary' : undefined, class: 'join-item'})
+        - const total = pagination.total || 1
+        - const current = pagination.current || 1
+        - for (let i = 1; i <= total; i++)
+          button(class=`dp-datatable-page${i === current ? ' active' : ''}`)= i

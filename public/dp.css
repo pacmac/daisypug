@@ -49,27 +49,50 @@
 .dp-viewport > .dp-popup { flex: none; }
 .dp-viewport > .flex-1 { min-height: 0; overflow-y: auto; }
 
-/* Viewport: constrain pagination bar */
-.dp-viewport .dp-datatable-pagination { position: sticky; bottom: 0; left: 0; right: 0; }
+/* Component font inheritance — set once on wrapper, children inherit */
+.dp-datatable, .dp-tabs, .dp-toolbar, .dp-form { font-size: inherit; }
 
-/* Pagination: fixed above dock */
-.dp-datatable-pagination {
-  position: fixed;
-  bottom: 4.5em;
-  left: 0;
-  right: 0;
-  z-index: 40;
+/* DataTable: full-height flex column with scrolling body */
+.dp-datatable {
   display: flex;
-  justify-content: center;
-  pointer-events: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
-/* Hide pagination when any modal is open */
-body:has(dialog[open]) .dp-datatable-pagination { display: none; }
-.dp-datatable-pagination > * {
-  pointer-events: auto;
-  background: var(--color-base-100, #fff);
-  border: 1px solid color-mix(in oklch, currentColor 15%, transparent);
-  border-radius: 0.75rem;
-  padding: 0.35rem 0.5rem;
-  box-shadow: 0 -2px 12px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.08);
+.dp-datatable-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Pagination: inline footer bar */
+.dp-datatable-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+  padding: 0.35em 0.5em;
+  font-size: 0.8em;
+  border-top: 1px solid oklch(var(--bc) / 0.1);
+  flex: none;
+  opacity: 0.7;
+}
+.dp-datatable-pagination:empty { display: none; }
+.dp-datatable-pagination button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.15em 0.4em;
+  border-radius: 0.25em;
+  font: inherit;
+  color: inherit;
+  line-height: 1;
+}
+.dp-datatable-pagination button:hover { background: oklch(var(--bc) / 0.08); }
+.dp-datatable-pagination button:disabled,
+.dp-datatable-pagination button.disabled { opacity: 0.3; cursor: default; }
+.dp-datatable-pagination button.disabled:hover { background: none; }
+.dp-datatable-pagination .dp-page-info {
+  padding: 0.15em 0.5em;
+  white-space: nowrap;
 }
