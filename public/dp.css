@@ -45,6 +45,9 @@
 /* Viewport: constrain dock and stretch main content */
 .dp-viewport > .dock,
 .dp-viewport > .dp-dock { position: static !important; width: 100% !important; flex: none; }
+
+/* iOS safe area: push dock above home indicator */
+.dock, .dp-dock { padding-bottom: env(safe-area-inset-bottom, 0px); }
 .dp-viewport > .dp-navbar,
 .dp-viewport > .dp-popup { flex: none; }
 .dp-viewport > .flex-1 { min-height: 0; overflow-y: auto; }

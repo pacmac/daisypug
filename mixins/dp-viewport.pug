@@ -3,5 +3,5 @@ mixin dp-viewport(opts)
   - const width = opts.width || '860px'
   - const pad = opts.padding || '1em'
   - const border = opts.border !== undefined ? opts.border : true
-  div.dp-viewport(style=`max-width:${width};margin:0 auto;width:100%;height:100vh;padding:${pad} 0;box-sizing:border-box;display:flex;flex-direction:column` class=border ? 'dp-viewport-border' : undefined)&attributes(attributes)
+  div.dp-viewport(style=`max-width:${width};margin:0 auto;width:100%;height:100vh;height:100dvh;padding:${pad} 0;box-sizing:border-box;display:flex;flex-direction:column` class=border ? 'dp-viewport-border' : undefined)&attributes(attributes)
     block
