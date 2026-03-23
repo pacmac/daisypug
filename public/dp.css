@@ -55,6 +55,12 @@
 /* Component font inheritance — set once on wrapper, children inherit */
 .dp-datatable, .dp-tabs, .dp-toolbar, .dp-form { font-size: inherit; }
 
+/* DataTable: editable row cursor */
+.dp-datatable.editable tbody tr:not(.dp-group-header) { cursor: pointer; }
+.dp-datatable.editable tbody tr:not(.dp-group-header):hover {
+  background: oklch(var(--bc) / 0.04);
+}
+
 /* DataTable: full-height flex column with scrolling body */
 .dp-datatable {
   display: flex;
