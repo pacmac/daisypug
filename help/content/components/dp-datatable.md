@@ -32,6 +32,7 @@ table.addRow(['Alice', '30'])      // append row
 table.removeRow(0)                 // remove by index
 table.updateRow(0, ['Bob', '25'])  // replace row
 table.getRow(0)                    // get row data
+table.getRows()                    // alias for getData
 table.getCell(0, 1)                // get cell value
 table.setCell(0, 1, '31')          // set cell value
 
@@ -55,9 +56,114 @@ table.toJSON()                     // array of objects
 table.onRowClick(({data, index}) => ...)
 table.onRowDblClick(fn)
 table.onRowSelect(fn)
-table.onCellClick(({value, rowIdx, colIdx}) => ...)
+table.onCellClick(({value, field, rowIdx, colIdx}) => ...)
 table.onSort(fn)
 table.onDataChange(fn)
+```
+
+### Column Definitions (Datagrid Mode) {#columns}
+
+Define columns for full datagrid functionality — object-based rows, hidden columns, formatters, cell styling, row styling.
+
+#### Column properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `field` | string | Data field name (key in row object) |
+| `title` | string | Display header text (defaults to `field`) |
+| `width` | number/string | Column width (`120` = px, `'20%'`) |
+| `hidden` | boolean | Hide column (data still loaded, not rendered) |
+| `align` | string | `'left'` (default), `'right'`, `'center'` |
+| `formatter` | function | `(value, row, index) → html` |
+| `style` | string/function | Inline style: string or `(value, row, index) → style` |
+| `cellClass` | string/function | Cell class: string or `(value, row, index) → className` |
+| `headerClass` | string | Class for the `<th>` element |
+| `headerStyle` | string | Inline style for the `<th>` element |
+
+#### Setup
+
+```js
+const table = dp('.dp-datatable')
+
+table.columns([
+  { field: 'PART_ID', title: 'Part ID', width: 120 },
+  { field: 'DESCRIPTION', title: 'Description', width: 250 },
+  { field: 'QTY', title: 'Qty', width: 80, align: 'right',
+    formatter: (v) => Number(v).toLocaleString() },
+  { field: 'STATUS', title: 'Status', width: 80,
+    formatter: (v) => v === 'A'
+      ? '<span class="badge badge-success badge-sm">Active</span>'
+      : '<span class="badge badge-error badge-sm">Inactive</span>',
+    cellClass: (v) => v === 'A' ? 'text-success' : 'text-error' },
+  { field: 'ROWID', hidden: true },
+])
+
+table.idField('ROWID')
+```
+
+#### Object-based rows
+
+When columns are defined, all data methods work with objects:
+
+```js
+table.setData([
+  { PART_ID: 'A8000', DESCRIPTION: 'Hydraulic Pump', QTY: 12, STATUS: 'A', ROWID: 1 },
+  { PART_ID: 'B3200', DESCRIPTION: 'Bearing Kit', QTY: 48, STATUS: 'A', ROWID: 2 },
+])
+
+table.getRow(0)          // → {PART_ID: 'A8000', DESCRIPTION: ..., ROWID: 1}
+table.getData()          // → [{...}, {...}] — includes hidden fields
+table.addRow({ PART_ID: 'X1', DESCRIPTION: 'New', QTY: 0, STATUS: 'A', ROWID: 99 })
+table.updateRow(0, { QTY: 15 })   // merge into existing row
+table.getCell(0, 'QTY')           // → 12
+table.setCell(0, 'QTY', 20)
+```
+
+#### Selection by ID
+
+```js
+table.idField('ROWID')
+table.selectRecord(42)     // find and select row where ROWID === 42
+table.getSelectedRow()     // → {PART_ID: ..., ROWID: 42}
+```
+
+#### Show/hide columns
+
+```js
+table.hideColumn('DESCRIPTION')    // hide — data kept, column removed from DOM
+table.showColumn('DESCRIPTION')    // show again
+```
+
+#### Row styler
+
+```js
+table.rowStyler((index, row) => {
+  if (row.STATUS === 'I') return { class: 'opacity-40' };
+  if (row.QTY < 5) return { style: 'background: oklch(0.95 0.05 25)' };
+})
+```
+
+#### Sort / filter / search with fields
+
+```js
+table.sort('QTY', 'desc')                    // sort by field name
+table.filter(row => row.STATUS === 'A')       // filter objects
+table.search('pump')                          // searches all field values
+table.groupBy(row => row.STATUS)              // group by any expression
+table.groupByCol('STATUS')                    // group by field name
+table.groupByCol('STATUS', v => v === 'A' ? 'Active' : 'Inactive')
+```
+
+#### Events with field info
+
+```js
+table.onCellClick(({ value, field, rowIdx, colIdx }) => {
+  console.log(`Clicked ${field}=${value} on row ${rowIdx}`)
+})
+
+table.onRowDblClick(({ data, index, field, value }) => {
+  console.log('Double-clicked row:', data)
+})
 ```
 
 ### Pagination
@@ -156,6 +262,10 @@ table.groupBy(
 ```js
 table.groupByCol(2);                         // group by 3rd column
 table.groupByCol(0, val => `Category: ${val}`);  // with formatter
+
+// Column mode: use field name
+table.groupByCol('STATUS');
+table.groupByCol('STATUS', v => v === 'A' ? 'Active' : 'Inactive');
 ```
 
 #### Clear grouping
@@ -189,6 +299,40 @@ Group headers are `<tr class="dp-group-header">` — excluded from `getData()`, 
   size: 'sm',
   pagination: {current: 1, total: 3}
 })
+```
+
+### Datagrid with columns
+
+```js
+dp.on('ready', () => {
+  const table = dp('#parts');
+
+  table.columns([
+    { field: 'PART_ID', title: 'Part ID', width: 120 },
+    { field: 'DESCRIPTION', title: 'Description', width: 250 },
+    { field: 'QTY', title: 'Qty', width: 80, align: 'right' },
+    { field: 'STATUS', title: 'Status', width: 80,
+      formatter: (v) => v === 'A' ? 'Active' : 'Inactive',
+      cellClass: (v) => v === 'A' ? 'text-success' : 'text-error' },
+    { field: 'ROWID', hidden: true },
+  ]);
+
+  table.idField('ROWID');
+
+  table.rowStyler((i, row) => {
+    if (row.STATUS === 'I') return { class: 'opacity-40' };
+  });
+
+  table.setData([
+    { PART_ID: 'A8000', DESCRIPTION: 'Hydraulic Pump', QTY: 12, STATUS: 'A', ROWID: 1 },
+    { PART_ID: 'B3200', DESCRIPTION: 'Bearing Kit', QTY: 48, STATUS: 'A', ROWID: 2 },
+  ]);
+
+  table.onRowClick(({ data, index }) => {
+    table.selectRow(index);
+    console.log('Selected:', data.PART_ID);
+  });
+});
 ```
 
 ### Server-side pagination

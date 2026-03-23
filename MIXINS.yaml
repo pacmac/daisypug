@@ -160,14 +160,22 @@ dp-nav:
   help: dp-nav.md
 
 dp-datatable:
-  replaces: "table with pagination"
+  replaces: "table with pagination, datagrid"
   mixin: "+dp-datatable(opts)"
   args: "{headers, rows, zebra, size, autoWidth, pagination}"
   help: dp-datatable.md#usage
+  help-columns: dp-datatable.md#columns
   help-grouping: dp-datatable.md#grouping
   help-pagination: dp-datatable.md#pagination
   help-parsers: dp-datatable.md#response-format-adapters
-  api: "DpDataTable: setData(), paginate(), nextPage(), loadData(url)"
+  api: |
+    DpDataTable: columns([{field,title,width,hidden,align,formatter,style,cellClass,headerClass}]),
+    idField(field), selectRecord(id), rowStyler(fn), showColumn(field), hideColumn(field),
+    setData(rows), getData(), getRow(n), getRows(), addRow(obj), removeRow(n), updateRow(n,obj),
+    getCell(row,field), setCell(row,field,val), sort(field,dir), filter(fn), search(q),
+    groupBy(fn), groupByCol(field), selectRow(n), deselectRow(), getSelectedRow(),
+    paginate(opts), nextPage(), prevPage(), loadData(url,opts), toCSV(), toJSON(),
+    onRowClick(fn), onRowDblClick(fn), onCellClick(fn), onRowSelect(fn), onDataChange(fn)
 
 dp-conversation:
   replaces: "chat bubbles"
