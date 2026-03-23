@@ -1,5 +1,8 @@
 /* DaisyPug Framework CSS */
 
+/* Buttons: ensure vertical padding for wrapped text */
+.dp-btn { padding-top: 0.5em !important; padding-bottom: 0.5em !important; height: auto !important; min-height: 2em; }
+
 /* Layout: split panel borders */
 .dp-vsplit > .dp-panel:first-child { border-right: 1px solid oklch(var(--bc) / 0.2); }
 .dp-hsplit > .dp-panel:first-child { border-bottom: 1px solid oklch(var(--bc) / 0.2); }
