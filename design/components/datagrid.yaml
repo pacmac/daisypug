@@ -186,16 +186,17 @@ dp:
     - onBeforeRender on column.editor (async support for dynamic combobox)
     - Modal focus first editable input on open
     - Modal close button focus ring suppressed
+  priority:
+    - reload (server re-fetch with params)
+    - loadFilter (transform response before rendering)
+    - rownumbers (row number column)
+    - hideRow / showRow (toggle row visibility)
+    - asdpx toolbar integration (add/edit/delete buttons wired to editor)
   todo:
     - addData $autonum and #fieldRef patterns
     - saveSqlId (auto-POST on save)
-    - asdpx toolbar integration (add/edit/delete buttons wired to editor)
-    - reload (server re-fetch with params)
     - fitColumns (auto-stretch to fill width)
-    - rownumbers (row number column)
-    - loadFilter (transform response before rendering)
     - findRows (search rows by criteria object)
-    - hideRow / showRow (toggle row visibility)
     - resizeColumn (resize by field)
     - toExcel (export to xlsx)
     - readonly (lock table)

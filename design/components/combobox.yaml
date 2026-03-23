@@ -80,16 +80,17 @@ dp:
     - Editor modal integration (dp-combobox class, onBeforeRender)
     - Placeholder preservation on loadData
     - autoload (queue setValue for after next loadData)
+  priority:
+    - Local data filtering (filter in-memory by text match)
+    - sort (sort data by field)
+    - formatter (custom option rendering)
+    - fkey cascading integration (combo change triggers form load)
   todo:
     - Debounced type-to-filter (remote mode)
-    - Local data filtering
     - Edit modal (add/edit options inline)
     - Name/hidden input dance (display vs stored value)
     - groupField grouping
-    - formatter (custom option rendering)
     - Keyboard navigation (up/down/enter)
-    - fkey cascading integration
-    - sort (sort data by field)
     - Multi-select (getValues/setValues)
 
 notes: |
