@@ -37,9 +37,9 @@ html(lang=locals.lang || 'en' data-theme=locals.theme || undefined)
     if locals.head
       | !{locals.head}
   body
-    block content
     if locals.api
       script !{locals.dpScript}
+    block content
     script(src="https://unpkg.com/lucide@latest" defer)
     script.
       document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
