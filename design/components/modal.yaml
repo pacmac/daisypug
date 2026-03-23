@@ -34,14 +34,19 @@ dp:
     - Pug mixin (+modal, +modal-footer, +modal-action)
     - Native dialog element
     - DaisyUI modal-box styling
+    - Focus ring suppressed on close button (dp.css override)
+    - Programmatic modal creation (rowEditor auto-builds dialog)
+    - Primary titlebar with icon
+    - Footer with Save/Cancel/Delete buttons
+    - Backdrop click to close
+    - Focus first editable input on open
   todo:
     - form() (return form inside modal)
     - destroy
-    - buttons (footer button config)
-    - iconCls (title icon)
+    - buttons (declarative footer button config)
     - draggable
     - onSave callback
-    - dynDialog() equivalent (create modal programmatically)
+    - dynDialog() generic equivalent (create any modal programmatically)
 
 notes: |
   DUI uses native <dialog> with DaisyUI styling.

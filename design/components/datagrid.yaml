@@ -171,19 +171,25 @@ dp:
     - inline pagination footer
     - full-height flex layout with scroll
     - font-size inheritance
-  todo:
-    - column.editor (editor type + options on column definition)
+    - column.editor (type + options on column definition)
     - rowEditor() — auto-build modal from column editors
-    - populateEditor(row) — fill modal fields from row data
-    - collectEditor() — extract modal fields to object
-    - saveEditor() — validate → callback/POST → update grid → close
-    - onEndEdit(index, row, formData) callback
-    - onValidateRow(index, row, formData) callback
-    - onDeleteRow(index, row) callback
-    - addData defaults (static, $autonum, #fieldRef)
+    - editRow(n) / addNewRow() — open editor in edit/add mode
+    - populateEditor / collectEditor (fill/extract modal fields)
+    - saveEditor — validate → onEndEdit callback → update grid → close
+    - onEndEdit callback ({mode, index, row, formData})
+    - onValidateRow callback (return error string to cancel)
+    - onDeleteRow callback (with confirm, removes from grid)
+    - Delete button in modal footer (auto-added when onDeleteRow provided)
+    - addData defaults for new rows
+    - .editable class with cursor:pointer and hover highlight
+    - Edit icon in spacer column (pencil, right-aligned, touch-friendly)
+    - onBeforeRender on column.editor (async support for dynamic combobox)
+    - Modal focus first editable input on open
+    - Modal close button focus ring suppressed
+  todo:
+    - addData $autonum and #fieldRef patterns
     - saveSqlId (auto-POST on save)
     - asdpx toolbar integration (add/edit/delete buttons wired to editor)
-    - Double-click row opens editor
     - reload (server re-fetch with params)
     - fitColumns (auto-stretch to fill width)
     - rownumbers (row number column)

@@ -53,6 +53,11 @@ dp:
     - refresh (url load)
     - DpVsplit / DpHsplit layout containers
     - getPanels / getPanel(name)
+    - +dp-viewport (centered, full-height app container)
+    - dp-viewport: flex column, 100dvh, soft shadow, dock containment
+    - dp-viewport: iOS safe area (viewport-fit=cover, env(safe-area-inset-bottom))
+    - dp-viewport: configurable width, padding, border
+    - +grid({cols, gap}) layout mixin
   todo:
     - footer
     - destroy

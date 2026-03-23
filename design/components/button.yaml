@@ -32,6 +32,7 @@ dp:
     - DaisyUI button styles (outline, soft, dash, ghost, link)
     - Icon support via Lucide
     - All DaisyUI sizes (xs, sm, md, lg, xl)
+    - Vertical padding fix for wrapped text (dp.css override)
   todo:
     - toggle (toggle button state)
     - select / unselect (active state)
@@ -41,3 +42,5 @@ notes: |
   DP button covers all DaisyUI button variants.
   DUI button-plugin mainly handles enable/disable and debounce.
   Toggle/group behavior is minor — rarely used in DUI.
+  dp.css overrides .dp-btn with padding-top/bottom: 0.5em and height: auto
+  so wrapped multi-line text has breathing room.
