@@ -64,6 +64,8 @@
   opacity: 0.3;
   cursor: pointer;
   transition: opacity 0.15s;
+  display: block;
+  margin-left: auto;
 }
 @media (hover: hover) {
   .dp-edit-icon { opacity: 0.15; }
