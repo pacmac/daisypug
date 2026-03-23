@@ -2,5 +2,5 @@ mixin dp-viewport(opts)
   - opts = opts || {}
   - const width = opts.width || '860px'
   - const pad = opts.padding || '1em'
-  div.dp-viewport(style=`max-width:${width};margin:0 auto;width:100%;min-height:100vh;padding:${pad} 0;box-sizing:border-box`)&attributes(attributes)
+  div.dp-viewport(style=`max-width:${width};margin:0 auto;width:100%;height:100vh;padding:${pad} 0;box-sizing:border-box;display:flex;flex-direction:column`)&attributes(attributes)
     block

@@ -10,30 +10,7 @@ html(lang=locals.lang || 'en' data-theme=locals.theme || undefined)
       link(href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css")
       script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4")
       link(href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css")
-    style.
-      /* Layout: split panel borders */
-      .dp-vsplit>.dp-panel:first-child{border-right:1px solid oklch(var(--bc)/.2)}
-      .dp-hsplit>.dp-panel:first-child{border-bottom:1px solid oklch(var(--bc)/.2)}
-      .dp-vsplit.no-border>.dp-panel:first-child,.dp-hsplit.no-border>.dp-panel:first-child{border:none}
-      /* Forms: multi-column grid */
-      .dp-form.two{display:grid;grid-template-columns:repeat(2,1fr);gap:0 1rem}
-      .dp-form.three{display:grid;grid-template-columns:repeat(3,1fr);gap:0 1rem}
-      .dp-form.four{display:grid;grid-template-columns:repeat(4,1fr);gap:0 1rem}
-      /* Fit utilities — child stretches to fill parent */
-      .fit{width:100%;height:100%}
-      .fit-w{width:100%}
-      .fit-h{height:100%;flex:1;min-height:0}
-      /* Prevent dp-table double border inside bordered containers */
-      .dp-panel .dp-table,.dp-panel .table{border:none}
-      /* Panel body: never has padding — child decides */
-      .dp-panel-body{padding:0}
-      /* Table group headers */
-      .dp-group-header td{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;padding:0.4rem 0.75rem 0.15rem!important;color:var(--color-primary,oklch(0.5 0.2 260));background:transparent!important;border-bottom:2px solid var(--color-primary,oklch(0.5 0.2 260))!important;border-top:none!important;opacity:0.8}
-      .dp-group-header+tr td{border-top:none!important}
-      /* Pagination: fixed above dock */
-      .dp-datatable-pagination{position:fixed;bottom:4.5em;left:0;right:0;z-index:40;display:flex;justify-content:center;pointer-events:none}
-      body:has(dialog[open]) .dp-datatable-pagination{display:none}
-      .dp-datatable-pagination>*{pointer-events:auto;background:var(--color-base-100,#fff);border:1px solid color-mix(in oklch,currentColor 15%,transparent);border-radius:0.75rem;padding:0.35rem 0.5rem;box-shadow:0 -2px 12px rgba(0,0,0,0.12),0 0 1px rgba(0,0,0,0.08)}
+    style !{locals.dpCssInline || ''}
     if locals.head
       | !{locals.head}
   body

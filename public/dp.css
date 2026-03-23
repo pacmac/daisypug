@@ -37,6 +37,14 @@
 }
 .dp-group-header + tr td { border-top: none !important; }
 
+/* Viewport: constrain dock and content */
+.dp-viewport > :not(.dock):not(.dp-dock) { flex: 1; min-height: 0; overflow-y: auto; }
+.dp-viewport > .dock,
+.dp-viewport > .dp-dock { position: static !important; width: 100% !important; }
+
+/* Viewport: constrain pagination bar */
+.dp-viewport .dp-datatable-pagination { position: sticky; bottom: 0; left: 0; right: 0; }
+
 /* Pagination: fixed above dock */
 .dp-datatable-pagination {
   position: fixed;
