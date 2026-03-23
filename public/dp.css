@@ -37,6 +37,11 @@
 }
 .dp-group-header + tr td { border-top: none !important; }
 
+/* Viewport: soft edge shadow on desktop */
+@media (min-width: 640px) {
+  .dp-viewport-border { box-shadow: 0 0 12px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.12); }
+}
+
 /* Viewport: constrain dock and stretch main content */
 .dp-viewport > .dock,
 .dp-viewport > .dp-dock { position: static !important; width: 100% !important; flex: none; }
