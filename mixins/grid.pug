@@ -1,0 +1,7 @@
+mixin grid(opts)
+  - opts = opts || {}
+  - const cols = opts.cols || 1
+  - const gap = opts.gap !== undefined ? opts.gap : 2
+  - const cls = ['dp-grid', 'grid', `grid-cols-${cols}`, gap !== false && `gap-${gap}`, opts.class].filter(Boolean).join(' ')
+  div(class=cls)&attributes(attributes)
+    block

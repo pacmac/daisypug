@@ -133,6 +133,17 @@ dp-popup:
         +dropdown-item({text: 'Help', icon: 'help-circle', page: 'help'})
     // JS: dp('#more-menu').open('#more-btn') or dp('#more-menu').toggle('#dock-more')
 
+grid:
+  replaces: "div.grid.grid-cols-N.gap-N"
+  mixin: "+grid(opts)"
+  args: "{cols: 1-12, gap: 0-8, class}"
+  help: grid.md
+  example: |
+    +grid({cols: 3, gap: 2})
+      +btn({text: '1'})
+      +btn({text: '2'})
+      +btn({text: '3'})
+
 dp-viewport:
   replaces: "container, max-width wrapper"
   mixin: "+dp-viewport(opts)"
