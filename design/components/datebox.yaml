@@ -1,0 +1,53 @@
+name: datebox
+dui:
+  plugin: datebox-plugin.js
+  methods:
+    - getValue
+    - setValue
+    - getText
+    - setText
+    - getDate
+    - clear
+    - reset
+    - today
+    - month
+    - year
+    - enable
+    - disable
+    - readonly
+    - required
+    - isValid
+    - validate
+    - initValue
+    - textbox
+    - destroy
+    - options
+  callbacks:
+    - onSelect
+    - onChange
+  options:
+    - disabled
+    - readonly
+    - required
+    - formatter
+    - parser
+    - sharedCalendar
+    - value
+
+dp:
+  class: DpInput
+  status: partial
+  done:
+    - getValue / setValue (via DpInput, type=date)
+    - enable / disable
+    - onChange
+  todo:
+    - getDate (return Date object)
+    - today / month / year helpers
+    - formatter / parser (display format vs stored format)
+    - onSelect
+
+notes: |
+  DUI datebox uses native HTML5 <input type="date">.
+  DP already handles date inputs via DpInput.
+  Main gap is convenience methods (today, getDate) and format conversion.

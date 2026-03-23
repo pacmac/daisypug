@@ -1,0 +1,45 @@
+name: validatebox
+dui:
+  plugin: validatebox-plugin.js
+  methods:
+    - validate
+    - isValid
+    - disableValidation
+    - enableValidation
+    - resetValidation
+    - required
+    - options
+  rules:
+    - length[min,max]
+    - email
+    - inList
+    - csn
+    - neq[value]
+    - isJSON
+    - sqlsafe
+    - file
+    - xlsx
+    - udfLabels[max]
+  options:
+    - required
+    - validType
+
+dp:
+  class: DpInput (validation via DpForm)
+  status: partial
+  done:
+    - HTML5 required attribute
+    - DpForm.validate() checks validity
+    - DpForm.isValid()
+  todo:
+    - Custom validation rules (length, email, etc.)
+    - Per-field validation decorators
+    - Visual validation feedback (error styling)
+    - disableValidation / enableValidation / resetValidation
+    - validType attribute support
+    - Custom rule registration
+
+notes: |
+  DUI validatebox is a decorator on input fields.
+  DP relies on HTML5 validation + DpForm.validate().
+  Custom rules could be added as a validation registry on DpForm.

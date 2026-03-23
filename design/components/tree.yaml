@@ -1,0 +1,90 @@
+name: tree
+dui:
+  plugin: tree-plugin.js
+  methods:
+    - loadData
+    - getData
+    - find
+    - select
+    - getSelected
+    - getNode
+    - getRoots
+    - getRoot
+    - getParent
+    - getChildren
+    - getLevel
+    - isLeaf
+    - getChecked
+    - getLeafs
+    - lock
+    - unlock
+    - setFocus
+    - expand
+    - collapse
+    - toggle
+    - expandAll
+    - collapseAll
+    - expandTo
+    - scrollTo
+    - check
+    - uncheck
+    - append
+    - insert
+    - remove
+    - pop
+    - update
+    - reload
+    - move
+    - setIcon
+    - options
+  callbacks:
+    - onBeforeLoad
+    - onLoadSuccess
+    - onLoadError
+    - onBeforeSelect
+    - onSelect
+    - onClick
+    - onBeforeCheck
+    - onCheck
+    - onBeforeExpand
+    - onExpand
+    - onCollapse
+    - onDblClick
+    - onContextMenu
+  options:
+    - url
+    - method
+    - animate
+    - checkbox
+    - cascadeCheck
+    - onlyLeafCheck
+    - lines
+    - dnd
+    - data
+    - queryParams
+    - formatter
+    - filter
+    - loadFilter
+    - init
+
+dp:
+  class: null
+  status: todo
+  done: []
+  todo:
+    - DpTree class
+    - loadData (from array)
+    - find / select / getSelected
+    - expand / collapse / toggle
+    - Checkbox support
+    - Node CRUD (append, insert, remove, update)
+    - Pug mixin (+dp-tree)
+    - Keyboard navigation
+    - Icon support (Lucide)
+    - onSelect / onClick callbacks
+
+notes: |
+  DUI tree uses DaisyUI <ul> with <details>/<summary> for expand/collapse.
+  Node data stored in $.data(li, 'tree-node').
+  Icons resolved via $.dui.icon() → Lucide.
+  Used for sidebar navigation menus.

@@ -1,0 +1,64 @@
+name: toolbar
+dui:
+  plugin: toolbar-plugin.js
+  functions:
+    - butEn (enable/disable buttons by asdpx string)
+    - asdpx (read asdpx from visible form)
+    - saveok (flash save feedback)
+    - backgo (navigate back)
+    - but_add (add handler)
+    - but_save (save handler)
+    - but_del (delete handler with confirm)
+    - but_clr (cancel/clear handler)
+    - toolbut (add custom buttons)
+    - roset (set readonly)
+    - roclr (clear readonly)
+    - uilock / uiunlock (lock/unlock UI)
+    - isronly (check readonly)
+    - readonly (toggle readonly class)
+  asdpx_chars:
+    a: Add (but_add)
+    s: Save (but_save)
+    d: Delete (but_del)
+    p: Print (but_print)
+    x: Clear/Cancel (but_clr)
+    n: Add-menu variant (but_addm)
+  button_ids:
+    - but_add
+    - but_save
+    - but_del
+    - but_clr
+    - but_print
+    - but_addm
+    - but_bak
+
+dp:
+  class: DpToolbar
+  status: partial
+  done:
+    - Pug mixin (+dp-toolbar with title, inputs, buttons)
+    - asdpx button generation (a/s/d/p/x)
+    - Lucide icons on CRUD buttons
+    - Disabled state by default
+    - Three sections (title | inputs | buttons)
+    - DpToolbar class with getTitle/setTitle
+    - getButtons / enableButton / disableButton
+    - form.bind(toolbar) wiring
+  todo:
+    - butEn() function (enable/disable by asdpx string with +/- modifiers)
+    - saveok() visual feedback (green flash, error badge)
+    - but_add / but_save / but_del / but_clr handlers
+    - toolbut() (add custom buttons dynamically)
+    - roset / roclr (readonly toggle)
+    - uilock / uiunlock
+    - Form state machine gating (only form-plugin can change during active state)
+    - backgo (history navigation)
+    - Add-menu variant (n char, swap but_add with but_addm)
+    - Custom toolbar button separator
+
+notes: |
+  DUI toolbar has deep integration with form state machine.
+  butEn() is gated — page scripts cannot override when form active.
+  saveok() provides visual save/error feedback with auto-dismiss.
+  DP toolbar exists as Pug mixin with basic API but lacks the
+  command functions (butEn, saveok, but_add, etc.).

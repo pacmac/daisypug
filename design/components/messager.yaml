@@ -1,0 +1,37 @@
+name: messager
+dui:
+  plugin: messager-plugin.js
+  methods:
+    - show (toast notification)
+    - alert (modal alert)
+    - confirm (modal confirm with ok/cancel)
+    - prompt (modal with input)
+    - progress (loading overlay)
+  global_functions:
+    - beep (audio alert)
+    - msgbox (convenience alert)
+    - mask / loading (loading overlay aliases)
+  options:
+    - title
+    - msg
+    - showType
+    - timeout
+    - cls
+
+dp:
+  class: null
+  status: todo
+  done: []
+  todo:
+    - dp.toast(msg, opts) (DaisyUI toast component)
+    - dp.alert(msg, opts) (modal alert)
+    - dp.confirm(msg, opts) (modal confirm, returns promise)
+    - dp.prompt(msg, opts) (modal with input)
+    - dp.loading(msg) / dp.loading.close() (overlay)
+    - Auto-dismiss timeout for toasts
+
+notes: |
+  DUI uses DaisyUI .toast.toast-end for notifications.
+  Modal alerts use dynDialog() for consistent styling.
+  Progress overlay blocks UI during slow operations.
+  DP should use DaisyUI alert + toast components.

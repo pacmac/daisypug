@@ -1,0 +1,43 @@
+name: button
+dui:
+  plugin: button-plugin.js
+  methods:
+    - enable
+    - disable
+    - select
+    - unselect
+    - options
+  callbacks:
+    - onClick
+  options:
+    - id
+    - disabled
+    - toggle
+    - selected
+    - group
+    - plain
+    - text
+    - iconCls
+    - iconAlign
+    - size
+
+dp:
+  class: DpComponent (via dp-btn class)
+  status: done
+  done:
+    - Pug mixin (+btn with color, size, style, shape, etc.)
+    - enable / disable
+    - show / hide
+    - onClick
+    - DaisyUI button styles (outline, soft, dash, ghost, link)
+    - Icon support via Lucide
+    - All DaisyUI sizes (xs, sm, md, lg, xl)
+  todo:
+    - toggle (toggle button state)
+    - select / unselect (active state)
+    - group (button group / radio behavior)
+
+notes: |
+  DP button covers all DaisyUI button variants.
+  DUI button-plugin mainly handles enable/disable and debounce.
+  Toggle/group behavior is minor — rarely used in DUI.

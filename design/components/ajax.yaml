@@ -1,0 +1,35 @@
+name: ajax
+dui:
+  plugin: ajax-plugin.js
+  functions:
+    - ajaxget(url, vars, cb, avar)
+    - iserr(data, cb) (check response for error, show message)
+    - gurl(url) (inject _vpath for module-relative queries)
+    - getapp() (get app context)
+    - addQsp(url, params) (add query string params)
+  features:
+    - Slow-request spinner (400ms threshold)
+    - Error wrapping (403, JSON error responses)
+    - URL param parsing (url2obj)
+
+dp:
+  class: null (dp.get/post/etc)
+  status: partial
+  done:
+    - dp.get(url, opts)
+    - dp.post(url, data, opts)
+    - dp.put(url, data, opts)
+    - dp.patch(url, data, opts)
+    - dp.delete(url, opts)
+    - Internal _fetch() helper
+  todo:
+    - iserr() equivalent (auto-check response for error field)
+    - Slow-request loading indicator
+    - gurl() equivalent (module-relative URL resolution)
+    - Error toast on failed requests
+    - Request abort/cancel
+
+notes: |
+  DUI ajaxget is a flexible swiss-army function (vars can be in URL).
+  DP has cleaner REST-style methods (get/post/put/patch/delete).
+  Main gap is auto-error handling and loading indicator.

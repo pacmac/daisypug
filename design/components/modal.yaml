@@ -1,0 +1,50 @@
+name: modal
+dui:
+  plugin: modal-plugin.js
+  methods:
+    - open
+    - close
+    - destroy
+    - setTitle
+    - form
+    - resize
+    - move
+    - options
+  callbacks:
+    - onOpen
+    - onClose
+    - onSave
+  options:
+    - title
+    - iconCls
+    - titlebar
+    - bordered
+    - draggable
+    - modal
+    - closed
+    - buttons
+
+dp:
+  class: DpModal
+  status: partial
+  done:
+    - open / close
+    - setTitle / getTitle
+    - onOpen / onClose
+    - Pug mixin (+modal, +modal-footer, +modal-action)
+    - Native dialog element
+    - DaisyUI modal-box styling
+  todo:
+    - form() (return form inside modal)
+    - destroy
+    - buttons (footer button config)
+    - iconCls (title icon)
+    - draggable
+    - onSave callback
+    - dynDialog() equivalent (create modal programmatically)
+
+notes: |
+  DUI uses native <dialog> with DaisyUI styling.
+  DP already uses native <dialog> via modal mixin.
+  DUI has dynDialog() for creating modals on the fly — DP does not yet.
+  DUI modal-plugin also aliases $.fn.dialog and $.fn.window.

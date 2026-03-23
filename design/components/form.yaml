@@ -1,0 +1,109 @@
+name: form
+dui:
+  plugin: form-plugin.js
+  methods:
+    - load
+    - preload
+    - fkeyLoad
+    - submit
+    - reset
+    - validate
+    - clear
+    - unchange
+    - isChanged
+    - enable
+    - disable
+    - reload
+    - focusFirst
+    - getData
+    - setData
+    - disableValidation
+    - enableValidation
+    - resetValidation
+    - syncToolbar
+    - resetDirty
+    - beginAdd
+    - reselect
+    - state
+    - mode
+    - options
+  callbacks:
+    - onChange
+    - onBeforeLoad
+    - onLoadSuccess
+    - onLoadError
+    - onSubmit
+    - onProgress
+  options:
+    - url
+    - method
+    - queryParams
+    - novalidate
+    - ajax
+    - iframe
+    - state
+    - dirty
+    - mode
+    - changed
+    - dirtyFields
+    - loading
+  html_classes:
+    - .single (single-record, default upd)
+    - .multi (master-detail with fkey, default add)
+    - .lock (disable during submit)
+    - .changed (dirty field marker)
+    - .sub-off (exclude from submit)
+    - .sub-on (force include in submit)
+    - data-loadby (load by name instead of id)
+
+dp:
+  class: DpForm
+  status: partial
+  done:
+    - getData
+    - setData
+    - getField
+    - setField
+    - clear
+    - validate
+    - isValid
+    - load (ajax load)
+    - save (ajax save)
+    - get.text / get.int / get.float / get.bool / get.date
+    - set.text / set.int / set.float / set.bool / set.date
+    - bind (toolbar binding with url/idField)
+    - mode (view/add/edit state machine)
+    - onSubmit
+    - onChange
+    - onLoad
+    - onError
+    - form-parts (multi-tab form support)
+  todo:
+    - preload (populate without state transition)
+    - fkeyLoad (load by foreign key selection)
+    - submit (with url/method config)
+    - reset (revert to loaded state)
+    - unchange (clear dirty tracking)
+    - isChanged (per-field dirty detection)
+    - enable / disable (toggle all fields)
+    - reload (re-fetch from url)
+    - focusFirst
+    - disableValidation / enableValidation / resetValidation
+    - syncToolbar (auto-sync with asdpx)
+    - resetDirty
+    - beginAdd (transition to add mode)
+    - reselect (restore fkey after save)
+    - state machine (idle/new/loading/view/edit/saving/deleting)
+    - .changed class per-field dirty tracking
+    - .lock class during submit
+    - .sub-off / .sub-on submit control
+    - onBeforeLoad (cancel with return false)
+    - onLoadError
+    - onProgress
+
+notes: |
+  DUI form has a full state machine (idle→loading→view→edit→saving→idle).
+  DP form has simplified mode (view/add/edit) via bind().
+  DUI tracks dirty fields with .changed class and compareValue().
+  DUI form-lock pattern disables all inputs except .fkey during save.
+  DP form-parts handles same form across multiple tabs.

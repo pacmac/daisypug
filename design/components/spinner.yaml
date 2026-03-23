@@ -1,0 +1,45 @@
+name: spinner
+dui:
+  plugin: spinner-plugin.js
+  methods:
+    - getValue
+    - setValue
+    - clear
+    - reset
+    - enable
+    - disable
+    - readonly
+    - isValid
+    - validate
+    - spinUp
+    - spinDown
+    - resize
+    - textbox
+    - destroy
+    - setValidType
+    - options
+  callbacks:
+    - onSpinUp
+    - onSpinDown
+  options:
+    - step
+    - min
+    - max
+    - precision
+
+dp:
+  class: null
+  status: todo
+  done: []
+  todo:
+    - DpSpinner class (or extend DpInput)
+    - spinUp / spinDown with step
+    - min / max / precision
+    - Up/down button UI
+    - Keyboard up/down arrow support
+    - onSpinUp / onSpinDown
+
+notes: |
+  DUI spinner extends numberbox with up/down buttons.
+  Could be implemented as DpInput + DaisyUI join buttons.
+  Also used by timespinner-plugin.js for time input.

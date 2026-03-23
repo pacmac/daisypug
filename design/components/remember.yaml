@@ -1,0 +1,28 @@
+name: remember
+dui:
+  plugin: remember-plugin.js
+  methods:
+    - get(el, scope)
+    - set(el, value, scope)
+    - remove(el, scope)
+    - clear(pid)
+    - clearAll()
+  options:
+    - ttl (default 30 days)
+
+dp:
+  class: null (dp.remember)
+  status: done
+  done:
+    - dp.remember.get(key)
+    - dp.remember.set(key, value)
+    - dp.remember.remove(key)
+    - dp.remember.clear()
+    - Auto-init for .remember[id] elements
+    - Scoped keys (dp:rem:scope:id)
+    - 30-day TTL
+    - Auto-restore on page load
+
+notes: |
+  Feature-complete. DP remember matches DUI functionality.
+  Uses localStorage with JSON wrapper and TTL expiry.

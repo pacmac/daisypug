@@ -1,0 +1,51 @@
+name: tabs
+dui:
+  plugin: tabs-plugin.js
+  methods:
+    - add
+    - close
+    - getTab
+    - getTabIndex
+    - getSelected
+    - select
+    - unselect
+    - exists
+    - update
+    - enableTab
+    - disableTab
+    - enableAll
+    - disableAll
+    - showHeader
+    - hideHeader
+    - resize
+    - options
+  callbacks:
+    - onSelect
+  options:
+    - width
+    - height
+    - fit
+    - border
+    - plain
+
+dp:
+  class: DpTabs
+  status: partial
+  done:
+    - Pug mixin (+tabs, +tab, +tab-content)
+    - getActiveTab / setActiveTab
+    - onTabChange
+    - DaisyUI tab styles (lift, bordered, boxed)
+  todo:
+    - add (dynamic tab creation)
+    - close (remove tab)
+    - getTab / getTabIndex
+    - exists
+    - update (change tab title/content)
+    - enableTab / disableTab
+    - showHeader / hideHeader
+
+notes: |
+  DUI tabs use DaisyUI radio tabs with :checked CSS.
+  DP tabs already work with DaisyUI v5 checked pattern.
+  Main gap is dynamic tab management (add/close/update).

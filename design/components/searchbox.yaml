@@ -1,0 +1,89 @@
+name: searchbox
+dui:
+  plugin: searchbox-plugin.js
+  methods:
+    - getValue
+    - setValue
+    - getText
+    - setText
+    - select
+    - loadData
+    - reselect
+    - clear
+    - enable
+    - disable
+    - editable
+    - readonly
+    - reload
+    - textbox
+    - destroy
+    - options
+  callbacks:
+    - onSelect
+    - onLoadSuccess
+    - onLoadError
+  options:
+    - valueField
+    - textField
+    - url
+    - method
+    - queryParams
+    - columns
+    - filters
+    - fields
+    - pageSize
+    - delay
+    - minChars
+    - searchParam
+    - searchSuffix
+    - maxRecents
+    - autocomplete
+    - disabled
+    - editable
+    - readonly
+    - formatter
+    - sbref
+  json_config:
+    location: searchbox.<entity>.json
+    properties:
+      - url
+      - queryParams
+      - valueField
+      - textField
+      - searchParam
+      - searchSuffix
+      - maxRecents
+      - pageSize
+      - columns (field, title, width, align)
+      - filters (field, title, editor)
+      - fields (field, name — auto-populate on select)
+
+dp:
+  class: null
+  status: todo
+  done: []
+  todo:
+    - DpSearchbox class
+    - Type-to-search with debounce
+    - Server-side search (url + queryParams)
+    - Dropdown with results table (template cloning)
+    - Column definitions in dropdown
+    - Filter accordion (optional)
+    - Recents via localStorage
+    - Field auto-population on select (fields config)
+    - Pagination (load more)
+    - Keyboard navigation (arrows, enter, escape)
+    - getValue / setValue / getText / setText
+    - onSelect callback
+    - enable / disable / readonly / editable
+    - JSON config via sbref or data attribute
+    - Pug mixin (+dp-searchbox or extend +dp-fitem)
+
+notes: |
+  Three-layer widget: Pug mixin (DOM shell), JSON config (SSOT), JS plugin (behavior).
+  DUI mixin renders full DOM: input, dropdown, table headers, filter fields, row template.
+  Config embedded as base64 in data-searchbox attribute.
+  Template cloning for result rows (already our standard pattern).
+  Recents stored in localStorage with TTL (like dp.remember).
+  fields array auto-populates other form fields on select — key for fkey cascading.
+  25+ entity configs in DUI (part, sorder, job, customer, etc.).

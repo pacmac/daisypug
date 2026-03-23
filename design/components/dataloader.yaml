@@ -1,0 +1,37 @@
+name: dataloader
+dui:
+  plugin: dataloader-plugin.js
+  functions:
+    - loadByFkey ($fkey)
+    - loadComboOptions
+    - getVisibleForm
+    - getFormForField
+    - isPrimaryFkey
+    - fieldValue / setFieldValue
+    - normalizeRecord
+    - applyRecord
+  events:
+    - dui:loadbyfkey
+    - dui:contentloaded
+  features:
+    - Combo preload (auto-load combo options from _sqlid)
+    - Fkey cascading (primary combo change → form load)
+    - Field value normalization (dates, numbers)
+    - Record application (populate form fields from data)
+
+dp:
+  class: null
+  status: todo
+  done: []
+  todo:
+    - Fkey cascading (combo select → form load)
+    - Combo preload from URL
+    - Field normalization on load
+    - Auto-populate related fields on select
+    - Integration with DpForm and DpSelect/DpSearchbox
+
+notes: |
+  DUI dataloader is the glue between combos and forms.
+  When a .fkey combo changes, dataloader fires form load.
+  This is step 8 (server data binding) in dui-evolution plan.
+  Depends on combobox and searchbox being implemented first.

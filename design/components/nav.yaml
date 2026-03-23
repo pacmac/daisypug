@@ -1,0 +1,40 @@
+name: nav
+dui:
+  plugin: nav-plugin.js
+  functions:
+    - loadpage(menid)
+    - reload()
+    - newtab(nid)
+    - linkwin(link, title)
+    - nomenu(ms)
+    - getMenu()
+    - splash()
+    - appmsg(nid, link)
+    - buildMenu(menus)
+  features:
+    - Menu tree in sidebar
+    - Page loading into content panel
+    - Tab management
+    - History tracking
+
+dp:
+  class: DpNavComposite
+  status: partial
+  done:
+    - Pug mixin (+dp-nav with brand, items, actions, themes)
+    - getBrand / setBrand
+    - getItems
+    - setActive
+    - DpPageLayout with drawer + navbar + sidebar + content
+  todo:
+    - loadpage (load page into content panel)
+    - reload (refresh current page)
+    - newtab (open in new tab)
+    - Menu building from data (buildMenu)
+    - History tracking
+    - Page state save/restore
+
+notes: |
+  DUI nav is tightly coupled to panel loading and page lifecycle.
+  DP nav is currently a static navbar component.
+  Full navigation system requires page lifecycle (page.yaml) first.

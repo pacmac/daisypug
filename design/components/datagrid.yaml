@@ -1,0 +1,168 @@
+name: datagrid
+dui:
+  plugin: datagrid-plugin.js
+  methods:
+    - reload
+    - load
+    - loadData
+    - getData
+    - getRows
+    - getSelected
+    - getSelections
+    - clearSelections
+    - selectRow
+    - unselectRow
+    - selectRecord
+    - appendRow
+    - updateRow
+    - deleteRow
+    - showColumn
+    - hideColumn
+    - columns
+    - fitColumns
+    - renderColumns
+    - rowEditor
+    - editButs
+    - editDone
+    - findRows
+    - hideRow
+    - showRow
+    - showRows
+    - resizeColumn
+    - toExcel
+    - readonly
+    - options
+    - sort
+  callbacks:
+    - onBeforeLoad
+    - onLoadSuccess
+    - onBeforeSelect
+    - onSelect
+    - onBeforeUnselect
+    - onUnselect
+    - onClickRow
+    - onClickCell
+    - onDblClickRow
+    - onDblClickCell
+    - onRowContextMenu
+    - onEndEdit
+    - onDeleteRow
+    - onValidateRow
+  options:
+    - url
+    - method
+    - singleSelect
+    - fitColumns
+    - striped
+    - rownumbers
+    - pagination
+    - idField
+    - queryParams
+    - loadFilter
+    - addData
+    - saveSqlId
+    - data
+    - asdpx
+    - toolbar
+  column_properties:
+    - field
+    - title
+    - width
+    - hidden
+    - align
+    - formatter
+    - styler
+    - editor
+    - coloff
+    - fixed
+
+dp:
+  class: DpDataTable
+  status: partial
+  done:
+    - columns
+    - setData
+    - getData
+    - getRows
+    - getRow
+    - addRow
+    - removeRow
+    - updateRow
+    - getCell
+    - setCell
+    - selectRow
+    - deselectRow
+    - selectRecord
+    - getSelectedRow
+    - getSelectedIndex
+    - showColumn
+    - hideColumn
+    - idField
+    - rowStyler
+    - sort
+    - filter
+    - clearFilter
+    - search
+    - clearSearch
+    - toCSV
+    - toJSON
+    - groupBy
+    - groupByCol
+    - paginate
+    - nextPage
+    - prevPage
+    - setPage
+    - firstPage
+    - lastPage
+    - getPage
+    - getPageCount
+    - getPageSize
+    - setPageSize
+    - getTotalRows
+    - loadData
+    - onRowClick
+    - onRowDblClick
+    - onRowSelect
+    - onCellClick
+    - onSort
+    - onDataChange
+    - onPageChange
+  todo:
+    - reload (server re-fetch with params)
+    - fitColumns (auto-stretch to fill width)
+    - rownumbers (row number column)
+    - loadFilter (transform response before rendering)
+    - rowEditor (auto-wired editor modal)
+    - editButs (configure editor buttons)
+    - editDone (finish editing)
+    - findRows (search rows by criteria object)
+    - hideRow / showRow (toggle row visibility)
+    - resizeColumn (resize by field)
+    - toExcel (export to xlsx)
+    - readonly (lock table)
+    - onBeforeLoad
+    - onBeforeSelect (return false to cancel)
+    - onBeforeUnselect
+    - onUnselect
+    - onRowContextMenu
+    - onEndEdit
+    - onDeleteRow
+    - onValidateRow
+    - column.editor (inline editing)
+    - column.styler (per-cell style function — have cellClass/style instead)
+    - asdpx toolbar integration
+    - addData (defaults for new rows)
+    - saveSqlId (auto-save endpoint)
+    - getSelections (multi-select)
+    - clearSelections
+    - toolbar config in JSON
+  skip:
+    - EUI shims (getPanel, getPager, freezeRow, checkRow, etc.)
+    - pagination option (use paginate() method instead)
+
+notes: |
+  Column formatters accept functions directly, not string refs like DUI.
+  Template cloning used for row rendering (not innerHTML).
+  DUI uses column.styler; DP uses column.style and column.cellClass (functions or strings).
+  DUI row editor auto-wires ${gridId}_editor modal; DP does not yet.
+  Multi-select not yet supported (DUI has ctrl+click toggle).

@@ -1,0 +1,43 @@
+name: numberbox
+dui:
+  plugin: numberbox-plugin.js
+  methods:
+    - getValue
+    - setValue
+    - clear
+    - reset
+    - enable
+    - disable
+    - readonly
+    - isValid
+    - validate
+    - fix
+    - resize
+    - textbox
+    - destroy
+    - options
+  callbacks: (inherits textbox)
+  options:
+    - min
+    - max
+    - step
+    - precision
+    - decimal
+    - groupSeparator
+
+dp:
+  class: DpInput
+  status: partial
+  done:
+    - getValue / setValue (via DpInput)
+    - enable / disable
+  todo:
+    - Numeric formatting (precision, groupSeparator)
+    - min / max / step validation
+    - fix() (auto-format on blur)
+    - validate
+
+notes: |
+  DUI numberbox wraps native input with formatting on blur.
+  DP could handle this via DpInput + type="number" attributes.
+  Main gap is display formatting (groupSeparator, precision).

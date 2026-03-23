@@ -1,0 +1,73 @@
+name: panel
+dui:
+  plugin: panel-plugin.js
+  methods:
+    - header
+    - footer
+    - body
+    - setTitle
+    - open
+    - close
+    - destroy
+    - clear
+    - refresh
+    - resize
+    - move
+    - doLayout
+    - options
+  callbacks:
+    - onBeforeLoad
+    - onLoad
+    - onLoadError
+    - onBeforeOpen
+    - onOpen
+    - onBeforeClose
+    - onClose
+    - onResize
+  options:
+    - title
+    - iconCls
+    - href
+    - cache
+    - fit
+    - border
+    - content
+    - collapsible
+    - closable
+    - collapsed
+    - closed
+    - queryParams
+    - method
+    - loader
+    - extractor
+
+dp:
+  class: DpPanel
+  status: partial
+  done:
+    - Pug mixin (+dp-panel with title, icon, scrollable)
+    - header / body access
+    - getTitle / setTitle
+    - open / close
+    - clear
+    - refresh (url load)
+    - DpVsplit / DpHsplit layout containers
+    - getPanels / getPanel(name)
+  todo:
+    - footer
+    - destroy
+    - resize / move
+    - doLayout
+    - collapsible / collapsed
+    - closable
+    - href (auto-load content on init)
+    - cache (cache loaded content)
+    - onBeforeLoad / onLoad / onLoadError
+    - onBeforeOpen / onBeforeClose
+    - onResize
+    - loader / extractor functions
+
+notes: |
+  DP panel is simpler than DUI — no collapse/expand, no footer.
+  DP uses CSS grid for split layouts; DUI uses jQuery layout plugin.
+  DUI panel has script extraction from loaded content (extractor).

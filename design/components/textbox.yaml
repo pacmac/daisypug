@@ -1,0 +1,52 @@
+name: textbox
+dui:
+  plugin: textbox-plugin.js
+  methods:
+    - getValue
+    - setValue
+    - getText
+    - setText
+    - clear
+    - reset
+    - enable
+    - disable
+    - readonly
+    - isValid
+    - resize
+    - initValue
+    - destroy
+    - textbox
+    - options
+  callbacks:
+    - onChange
+    - onBlur
+    - onFocus
+    - onKeyDown
+    - onKeyUp
+  options:
+    - value
+    - disabled
+    - readonly
+    - required
+
+dp:
+  class: DpInput
+  status: partial
+  done:
+    - getValue / setValue
+    - enable / disable
+    - show / hide
+    - clear
+    - onChange
+    - readonly (via attribute)
+  todo:
+    - getText / setText (alias)
+    - reset (revert to initial value)
+    - isValid
+    - onBlur / onFocus / onKeyDown / onKeyUp
+    - initValue (store initial for reset)
+
+notes: |
+  DUI textbox wraps native <input> — no DOM construction.
+  DP DpInput already covers most functionality.
+  Mostly about adding missing event hooks and reset support.

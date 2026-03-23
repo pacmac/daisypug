@@ -1,0 +1,52 @@
+name: page
+dui:
+  plugin: page-plugin.js
+  methods:
+    - ready(fn)
+    - on(target, event, handler)
+    - setInterval(fn, ms)
+    - setTimeout(fn, ms)
+    - register(opts)
+    - hook(name, ...args)
+    - savePage(pageId, pageName)
+    - resolveBhave(pageId)
+    - getLastPage()
+    - reset()
+    - startup()
+    - historyAdd(menid)
+    - historyBack()
+  hooks:
+    - beforeAdd
+    - afterLoad
+    - beforeLoad
+    - onBeforePageLoad
+  state:
+    - fkey
+    - mode
+    - loading
+    - ronly
+    - pageId
+    - pageName
+    - pageModule
+
+dp:
+  class: null
+  status: todo
+  done:
+    - dp.on('ready', fn) (DOMContentLoaded)
+  todo:
+    - Page lifecycle system (register, hooks)
+    - Before-hooks with proceed/cancel pattern
+    - After-hooks (fire-and-forget)
+    - Page state (fkey, mode, loading, readonly)
+    - Auto-cleanup (intervals, timeouts, listeners)
+    - History management (back, save page)
+    - Page behavior config (resolveBhave)
+    - $.page.fn.* equivalent (page-level helpers)
+
+notes: |
+  DUI page-plugin is the lifecycle manager.
+  register({hooks, fn}) lets page scripts inject behavior.
+  Before-hooks can cancel operations (proceedFn pattern).
+  Auto-cleanup prevents memory leaks on page switch.
+  This is step 4 in the dui-evolution plan.

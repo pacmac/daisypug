@@ -1,0 +1,94 @@
+name: combobox
+dui:
+  plugin: combobox-plugin.js
+  methods:
+    - getValue
+    - setValue
+    - getValues
+    - setValues
+    - getText
+    - setText
+    - getData
+    - getRec
+    - loadData
+    - reload
+    - clear
+    - reset
+    - select
+    - unselect
+    - exists
+    - find
+    - sort
+    - enable
+    - disable
+    - readonly
+    - editbox
+    - toText
+    - toCombo
+    - formLoad
+    - required
+    - filtertip
+    - textbox
+    - destroy
+    - options
+  callbacks:
+    - onBeforeLoad
+    - onLoadSuccess
+    - onLoadError
+    - onSelect
+    - onUnselect
+  options:
+    - valueField
+    - textField
+    - separator
+    - groupField
+    - groupFormatter
+    - mode (local/remote)
+    - method
+    - url
+    - data
+    - queryParams
+    - loadFilter
+    - disabled
+    - readonly
+    - editable
+    - keyHandler
+    - filter
+    - formatter
+    - loader
+    - autoload
+    - _sqlid
+
+dp:
+  class: DpSelect (basic)
+  status: todo
+  done:
+    - getValue / setValue (basic select)
+    - getText
+    - enable / disable
+    - show / hide
+  todo:
+    - Remote data loading (url + queryParams)
+    - Debounced type-to-filter (remote mode)
+    - Local data filtering
+    - loadData (populate options from array)
+    - reload (re-fetch from url)
+    - getData / getRec (get full row for selected value)
+    - valueField / textField mapping
+    - Edit modal (add/edit options inline)
+    - Name/hidden input dance (display vs stored value)
+    - onSelect / onChange callbacks
+    - onLoadSuccess / onLoadError
+    - groupField grouping
+    - formatter (custom option rendering)
+    - Keyboard navigation (up/down/enter)
+    - autoload (auto-select after data loads)
+    - fkey cascading integration
+
+notes: |
+  DUI combobox is the most complex input — 1071 lines.
+  Key pattern: name attribute moves to hidden input, select becomes display-only.
+  Edit modal: .edit class triggers inline add/edit dialog for options.
+  Remote mode: debounced server queries as user types.
+  fkey integration: selecting a combo value triggers form load via dataloader.
+  This is step 7 in the dui-evolution plan.
