@@ -495,6 +495,12 @@ select:
   mixin: "+select(opts)"
   args: "{color, size, style, placeholder, options, name, class}"
   help: select.md
+  api-combobox: |
+    DpCombobox (class dp-combobox, extends DpSelect):
+    loadData(arr), load(url, opts), reload(url?), getData(), getRec(value?),
+    exists(value), getValue(), setValue(val), getText(), clear(),
+    config({valueField, textField, url, queryParams, loadFilter}),
+    onSelect(fn), onLoadSuccess(fn), onLoadError(fn)
 
 textarea:
   replaces: "textarea.textarea"

@@ -60,35 +60,43 @@ dui:
     - _sqlid
 
 dp:
-  class: DpSelect (basic)
-  status: todo
+  class: DpCombobox (extends DpSelect)
+  status: partial
   done:
-    - getValue / setValue (basic select)
-    - getText
-    - enable / disable
-    - show / hide
+    - getValue / setValue (inherited + autoload queue)
+    - getText (alias getSelectedText)
+    - enable / disable / show / hide (inherited)
+    - loadData (populate from array via template cloning)
+    - load (fetch from URL then loadData)
+    - reload (re-fetch from configured URL)
+    - getData (return stored data rows)
+    - getRec (full row for selected value, string comparison)
+    - exists (check if value in data)
+    - config (valueField, textField, url, queryParams, loadFilter)
+    - onSelect (callback with {value, text, rec, index})
+    - onLoadSuccess / onLoadError events
+    - loadFilter (transform response before storing)
+    - valueField / textField mapping with fallback chain
+    - Editor modal integration (dp-combobox class, onBeforeRender)
+    - Placeholder preservation on loadData
+    - autoload (queue setValue for after next loadData)
   todo:
-    - Remote data loading (url + queryParams)
     - Debounced type-to-filter (remote mode)
     - Local data filtering
-    - loadData (populate options from array)
-    - reload (re-fetch from url)
-    - getData / getRec (get full row for selected value)
-    - valueField / textField mapping
     - Edit modal (add/edit options inline)
     - Name/hidden input dance (display vs stored value)
-    - onSelect / onChange callbacks
-    - onLoadSuccess / onLoadError
     - groupField grouping
     - formatter (custom option rendering)
     - Keyboard navigation (up/down/enter)
-    - autoload (auto-select after data loads)
     - fkey cascading integration
+    - sort (sort data by field)
+    - Multi-select (getValues/setValues)
 
 notes: |
-  DUI combobox is the most complex input — 1071 lines.
-  Key pattern: name attribute moves to hidden input, select becomes display-only.
-  Edit modal: .edit class triggers inline add/edit dialog for options.
-  Remote mode: debounced server queries as user types.
-  fkey integration: selecting a combo value triggers form load via dataloader.
-  This is step 7 in the dui-evolution plan.
+  DpCombobox extends DpSelect with internal data store (_cbData).
+  Uses template cloning + DocumentFragment for option rendering.
+  Remote loading via dp.get() / _fetch().
+  onSelect bridges native change event to dp:select with full row data.
+  Editor modal combobox fields get dp-combobox class and onBeforeRender
+  callback for dynamic population at open time (async supported).
+  Registered as 'combobox' in REGISTRY (dp-combobox class).
