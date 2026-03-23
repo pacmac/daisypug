@@ -55,11 +55,18 @@
 /* Component font inheritance — set once on wrapper, children inherit */
 .dp-datatable, .dp-tabs, .dp-toolbar, .dp-form { font-size: inherit; }
 
-/* DataTable: editable row cursor */
+/* DataTable: editable rows */
 .dp-datatable.editable tbody tr:not(.dp-group-header) { cursor: pointer; }
 .dp-datatable.editable tbody tr:not(.dp-group-header):hover {
   background: oklch(var(--bc) / 0.04);
 }
+.dp-edit-icon {
+  opacity: 0.15;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+tr:hover .dp-edit-icon { opacity: 0.5; }
+.dp-edit-icon:hover { opacity: 1 !important; }
 
 /* DataTable: full-height flex column with scrolling body */
 .dp-datatable {
