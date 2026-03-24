@@ -79,16 +79,21 @@ mixin dp-fitem-input(input, widgetType, autoId, inSlot)
   - const size = input.size
   - const ji = inSlot ? 'join-item' : ''
   if widgetType === 'combobox' || widgetType === 'qbe'
-    - const cls = ['dp-select', 'select', `select-${color}`, size && `select-${size}`, 'w-full', ji, input.class].filter(Boolean).join(' ')
-    select(class=cls name=input.name id=autoId required=input.required readonly=input.readonly)&attributes(input.attrs || {})
-      if input.placeholder
-        option(disabled selected)= input.placeholder
-      if input.options
-        each opt in input.options
-          if typeof opt === 'string'
-            option= opt
-          else
-            option(value=opt.value selected=opt.selected)= opt.text || opt.value
+    - const cls = ['dp-combobox', 'w-full', ji, input.class].filter(Boolean).join(' ')
+    div(class=cls id=autoId)&attributes(input.attrs || {})
+      input.dp-cb-display.input(type="text" class=[`input-${color}`, size && `input-${size}`, 'w-full', ji].filter(Boolean).join(' ') placeholder=input.placeholder readonly=input.editable ? undefined : true)
+      input(type="hidden" name=input.name required=input.required value=input.value)
+      button.dp-cb-toggle(type="button" tabindex="-1")
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
+      ul.dp-cb-dropdown.menu
+        if input.options
+          each opt in input.options
+            if typeof opt === 'string'
+              li(data-value=opt)
+                a= opt
+            else
+              li(data-value=opt.value)
+                a= opt.text || opt.value
   else if widgetType === 'multiline' || widgetType === 'textarea'
     - const cls = ['dp-textarea', 'textarea', `textarea-${color}`, size && `textarea-${size}`, 'w-full', ji, input.class].filter(Boolean).join(' ')
     textarea(class=cls name=input.name id=autoId rows=input.rows || 3 placeholder=input.placeholder required=input.required readonly=input.readonly)&attributes(input.attrs || {})

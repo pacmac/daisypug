@@ -1,0 +1,380 @@
+//- DaisyPug Combobox Test Page — exercises custom dropdown combobox
+
++navbar({class: 'bg-base-100 shadow-sm'})
+  +navbar-start
+    span.text-xl.font-bold.px-4 Combobox Test
+  +navbar-end
+    +theme-radios({themes: ['light', 'dark', 'cupcake'], as: 'btn', active: 'light'})
+
+div.p-6.max-w-4xl.mx-auto
+
+  //- Test output console
+  div.mb-6
+    h2.text-2xl.font-bold Test Results
+    div#test-output.mockup-code.bg-neutral.text-neutral-content.max-h-64.overflow-y-auto
+      pre(data-prefix="~")
+        code Running tests...
+
+  +tabs({style: 'lifted', class: 'mb-6'})
+
+    //- Tab 1: Basic — select upgrade, loadData, getValue/setValue
+    +tab({name: 'cb-tabs', label: 'Basic', active: true})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Basic Combobox (select upgrade)
+      p.text-sm.mb-4.opacity-70 A native #{'<select>'} with dp-combobox class, upgraded to custom dropdown shell.
+      div.flex.flex-col.gap-4.max-w-sm
+        div
+          label.text-sm.font-medium Status
+          select.dp-combobox.select.select-bordered.select-sm.w-full(id="cb-basic")
+            option(disabled selected) Choose status...
+        div.flex.gap-2
+          +btn({text: 'Get Value', color: 'primary', size: 'sm'})(id="cb-basic-get")
+          +btn({text: 'Set "I"', color: 'secondary', size: 'sm'})(id="cb-basic-set")
+          +btn({text: 'Clear', color: 'ghost', size: 'sm'})(id="cb-basic-clear")
+        div#cb-basic-output.text-sm.font-mono.opacity-70
+
+    //- Tab 2: Div — pre-built div structure
+    +tab({name: 'cb-tabs', label: 'Div Shell'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Div-based Combobox
+      p.text-sm.mb-4.opacity-70 A div.dp-combobox with pre-built structure — no select upgrade needed.
+      div.flex.flex-col.gap-4.max-w-sm
+        div.dp-combobox.w-full(id="cb-div")
+          input.dp-cb-display.input.input-bordered.input-sm.w-full(type="text" readonly placeholder="Pick a fruit...")
+          input(type="hidden" name="fruit")
+        div.flex.gap-2
+          +btn({text: 'Get Value', color: 'primary', size: 'sm'})(id="cb-div-get")
+          +btn({text: 'Set "banana"', color: 'secondary', size: 'sm'})(id="cb-div-set")
+        div#cb-div-output.text-sm.font-mono.opacity-70
+
+    //- Tab 3: Search — editable/typeable combobox with local filter
+    +tab({name: 'cb-tabs', label: 'Search'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Searchable Combobox
+      p.text-sm.mb-4.opacity-70 Type to filter. 50 US states loaded — try typing "new" or "north".
+      div.flex.flex-col.gap-4.max-w-sm
+        div.dp-combobox.w-full(id="cb-search")
+          input.dp-cb-display.input.input-bordered.input-sm.w-full(type="text" placeholder="Search states...")
+          input(type="hidden" name="state")
+        div#cb-search-output.text-sm.font-mono.opacity-70
+
+    //- Tab 4: Lazy — large dataset with scroll loading
+    +tab({name: 'cb-tabs', label: 'Lazy Load'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Lazy Scroll Loading
+      p.text-sm.mb-4.opacity-70 500 items — first 50 rendered, more load on scroll.
+      div.flex.flex-col.gap-4.max-w-sm
+        div.dp-combobox.w-full(id="cb-lazy")
+          input.dp-cb-display.input.input-bordered.input-sm.w-full(type="text" readonly placeholder="Pick an item...")
+          input(type="hidden" name="item")
+        div#cb-lazy-output.text-sm.font-mono.opacity-70
+
+    //- Tab 5: Formatter — custom option rendering
+    +tab({name: 'cb-tabs', label: 'Formatter'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Custom Formatter
+      p.text-sm.mb-4.opacity-70 Each option rendered with a colored dot and description.
+      div.flex.flex-col.gap-4.max-w-sm
+        div.dp-combobox.w-full(id="cb-fmt")
+          input.dp-cb-display.input.input-bordered.input-sm.w-full(type="text" readonly placeholder="Choose priority...")
+          input(type="hidden" name="priority")
+        div#cb-fmt-output.text-sm.font-mono.opacity-70
+
+    //- Tab 6: Editor — datatable with combobox column editor
+    +tab({name: 'cb-tabs', label: 'Editor'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 DataTable Editor Combobox
+      p.text-sm.mb-4.opacity-70 Click a row to edit. The Status column uses a combobox editor.
+      div.dp-datatable(id="cb-table" style="height:300px")
+        div.dp-datatable-scroll
+          table.dp-table.table.table-sm.table-zebra.table-pin-rows(data-autowidth)
+            tbody
+        div.dp-datatable-pagination
+
+//- Test data and scripts
+script.
+  // US states for search test
+  const STATES = [
+    'Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut',
+    'Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa',
+    'Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan',
+    'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire',
+    'New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio',
+    'Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota',
+    'Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia',
+    'Wisconsin','Wyoming'
+  ];
+
+  dp.on('ready', function() {
+    const output = document.getElementById('test-output');
+    let passed = 0, failed = 0;
+
+    function log(msg) {
+      const pre = document.createElement('pre');
+      pre.dataset.prefix = '>';
+      pre.innerHTML = '<code>' + msg + '</code>';
+      output.appendChild(pre);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function assert(cond, msg) {
+      if (!cond) throw new Error(msg || 'assertion failed');
+    }
+
+    function test(name, fn) {
+      try {
+        fn();
+        passed++;
+        log('✓ ' + name);
+      } catch(e) {
+        failed++;
+        log('✗ ' + name + ' — ' + e.message);
+      }
+    }
+
+    // =====================================================
+    // Tab 1: Basic — select upgrade
+    // =====================================================
+    const cbBasic = dp('#cb-basic');
+    cbBasic.loadData([
+      {value: 'A', text: 'Active', color: 'green'},
+      {value: 'I', text: 'Inactive', color: 'red'},
+      {value: 'H', text: 'On Hold', color: 'orange'},
+    ]);
+    cbBasic.onSelect(({ value, text, rec }) => {
+      document.getElementById('cb-basic-output').textContent =
+        'Selected: ' + value + ' / ' + text + ' (color: ' + (rec?.color || '?') + ')';
+    });
+
+    test('Basic: upgraded from select', function() {
+      assert(cbBasic.el.tagName === 'DIV', 'should be div, got ' + cbBasic.el.tagName);
+      assert(cbBasic.el.classList.contains('dp-combobox'), 'missing dp-combobox class');
+    });
+
+    test('Basic: has shell parts', function() {
+      assert(cbBasic._display, 'no display input');
+      assert(cbBasic._hidden, 'no hidden input');
+      assert(cbBasic._toggle, 'no toggle button');
+      assert(cbBasic._dropdown, 'no dropdown');
+    });
+
+    test('Basic: placeholder from disabled option', function() {
+      assert(cbBasic._display.placeholder === 'Choose status...', 'wrong placeholder: ' + cbBasic._display.placeholder);
+    });
+
+    test('Basic: loadData renders items', function() {
+      const items = cbBasic._dropdown.querySelectorAll('li[data-value]');
+      assert(items.length === 3, 'expected 3 items, got ' + items.length);
+    });
+
+    test('Basic: setValue/getValue', function() {
+      cbBasic.setValue('I');
+      assert(cbBasic.getValue() === 'I', 'value not set');
+      assert(cbBasic.getText() === 'Inactive', 'display not updated');
+    });
+
+    test('Basic: getRec', function() {
+      const rec = cbBasic.getRec('A');
+      assert(rec && rec.color === 'green', 'wrong rec');
+    });
+
+    test('Basic: clear', function() {
+      cbBasic.clear();
+      assert(cbBasic.getValue() === '', 'not cleared');
+      assert(cbBasic.getText() === '', 'display not cleared');
+    });
+
+    test('Basic: open/close', function() {
+      cbBasic.open();
+      assert(cbBasic.isOpen(), 'not open');
+      assert(cbBasic.el.classList.contains('dp-cb-open'), 'no open class');
+      cbBasic.close();
+      assert(!cbBasic.isOpen(), 'not closed');
+    });
+
+    // Button handlers
+    dp('#cb-basic-get').onClick(function() {
+      document.getElementById('cb-basic-output').textContent =
+        'Value: "' + cbBasic.getValue() + '" Text: "' + cbBasic.getText() + '"';
+    });
+    dp('#cb-basic-set').onClick(function() {
+      cbBasic.setValue('I');
+    });
+    dp('#cb-basic-clear').onClick(function() {
+      cbBasic.clear();
+      document.getElementById('cb-basic-output').textContent = 'Cleared';
+    });
+
+    // =====================================================
+    // Tab 2: Div — pre-built structure
+    // =====================================================
+    const cbDiv = dp('#cb-div');
+    cbDiv.loadData([
+      {value: 'apple', text: 'Apple'},
+      {value: 'banana', text: 'Banana'},
+      {value: 'cherry', text: 'Cherry'},
+      {value: 'date', text: 'Date'},
+      {value: 'elderberry', text: 'Elderberry'},
+    ]);
+    cbDiv.onSelect(({ value, text }) => {
+      document.getElementById('cb-div-output').textContent = 'Selected: ' + value + ' / ' + text;
+    });
+
+    test('Div: already a div', function() {
+      assert(cbDiv.el.tagName === 'DIV', 'should be div');
+    });
+
+    test('Div: found existing parts', function() {
+      assert(cbDiv._display, 'no display');
+      assert(cbDiv._hidden, 'no hidden');
+      assert(cbDiv._hidden.name === 'fruit', 'wrong name: ' + cbDiv._hidden.name);
+    });
+
+    test('Div: items rendered', function() {
+      const items = cbDiv._dropdown.querySelectorAll('li[data-value]');
+      assert(items.length === 5, 'expected 5, got ' + items.length);
+    });
+
+    dp('#cb-div-get').onClick(function() {
+      document.getElementById('cb-div-output').textContent =
+        'Value: "' + cbDiv.getValue() + '" Text: "' + cbDiv.getText() + '"';
+    });
+    dp('#cb-div-set').onClick(function() {
+      cbDiv.setValue('banana');
+    });
+
+    // =====================================================
+    // Tab 3: Search — editable local filter
+    // =====================================================
+    const cbSearch = dp('#cb-search');
+    cbSearch.config({ editable: true });
+    cbSearch.loadData(STATES.map(s => ({ value: s, text: s })));
+    cbSearch.onSelect(({ value }) => {
+      document.getElementById('cb-search-output').textContent = 'Selected: ' + value;
+    });
+
+    test('Search: editable (not readonly)', function() {
+      assert(!cbSearch._display.readOnly, 'should not be readonly');
+    });
+
+    test('Search: all states loaded', function() {
+      assert(cbSearch.getData().length === 50, 'expected 50 states');
+    });
+
+    // =====================================================
+    // Tab 4: Lazy load — 500 items
+    // =====================================================
+    const cbLazy = dp('#cb-lazy');
+    const bigData = [];
+    for (let i = 1; i <= 500; i++) {
+      bigData.push({ value: 'item-' + i, text: 'Item #' + i + ' — Description of item number ' + i });
+    }
+    cbLazy.loadData(bigData);
+    cbLazy.onSelect(({ value }) => {
+      document.getElementById('cb-lazy-output').textContent = 'Selected: ' + value;
+    });
+
+    test('Lazy: 500 items stored', function() {
+      assert(cbLazy.getData().length === 500, 'expected 500 items');
+    });
+
+    test('Lazy: only first batch rendered', function() {
+      const rendered = cbLazy._dropdown.querySelectorAll('li[data-value]');
+      assert(rendered.length <= 50, 'should render ≤50, got ' + rendered.length);
+    });
+
+    // =====================================================
+    // Tab 5: Formatter
+    // =====================================================
+    const cbFmt = dp('#cb-fmt');
+    const priorities = [
+      { value: 'critical', text: 'Critical', color: '#ef4444', desc: 'Needs immediate attention' },
+      { value: 'high',     text: 'High',     color: '#f97316', desc: 'Should be resolved soon' },
+      { value: 'medium',   text: 'Medium',   color: '#eab308', desc: 'Normal priority' },
+      { value: 'low',      text: 'Low',      color: '#22c55e', desc: 'Can wait' },
+      { value: 'none',     text: 'None',     color: '#94a3b8', desc: 'Informational only' },
+    ];
+    cbFmt.config({
+      formatter: function(row, anchor) {
+        anchor.innerHTML = '';
+        const dot = document.createElement('span');
+        dot.style.cssText = 'display:inline-block;width:8px;height:8px;border-radius:50%;background:' + row.color + ';margin-right:0.5rem;flex-shrink:0';
+        const wrap = document.createElement('span');
+        const name = document.createElement('span');
+        name.textContent = row.text;
+        name.style.fontWeight = '500';
+        const desc = document.createElement('span');
+        desc.textContent = row.desc;
+        desc.style.cssText = 'font-size:0.75rem;opacity:0.6;margin-left:0.5rem';
+        wrap.appendChild(name);
+        wrap.appendChild(desc);
+        anchor.style.display = 'flex';
+        anchor.style.alignItems = 'center';
+        anchor.appendChild(dot);
+        anchor.appendChild(wrap);
+      },
+      displayFormatter: function(row, el) {
+        const dot = document.createElement('span');
+        dot.style.cssText = 'display:inline-block;width:8px;height:8px;border-radius:50%;background:' + row.color + ';margin-right:0.5rem;flex-shrink:0';
+        const text = document.createElement('span');
+        text.textContent = row.text;
+        text.style.fontWeight = '500';
+        el.appendChild(dot);
+        el.appendChild(text);
+      }
+    });
+    cbFmt.loadData(priorities);
+    cbFmt.onSelect(({ value, text }) => {
+      document.getElementById('cb-fmt-output').textContent = 'Selected: ' + value + ' (' + text + ')';
+    });
+
+    test('Formatter: items have custom content', function() {
+      const firstAnchor = cbFmt._dropdown.querySelector('li a');
+      assert(firstAnchor, 'no items');
+      assert(firstAnchor.querySelector('span'), 'no custom spans');
+    });
+
+    // =====================================================
+    // Tab 6: Editor — datatable with combobox column
+    // =====================================================
+    const table = dp('#cb-table');
+    table.columns([
+      { field: 'ID', title: 'ID', width: 80, editor: { type: 'textbox', readonly: true } },
+      { field: 'NAME', title: 'Name', editor: { type: 'textbox' } },
+      { field: 'STATUS', title: 'Status', width: 120,
+        formatter: function(v) { return v === 'A' ? 'Active' : v === 'I' ? 'Inactive' : v === 'H' ? 'On Hold' : v; },
+        editor: {
+          type: 'combobox',
+          data: [{value:'A',text:'Active'},{value:'I',text:'Inactive'},{value:'H',text:'On Hold'}]
+        }
+      },
+      { field: 'ROWID', hidden: true },
+    ]);
+    table.idField('ROWID');
+    table.rowEditor({
+      onEndEdit: function(ev) {
+        log('Editor saved: ' + ev.mode + ' ' + ev.row.ID + ' → ' + ev.row.STATUS);
+      }
+    });
+    table.setData([
+      { ID: 'A1000', NAME: 'Hydraulic Pump', STATUS: 'A', ROWID: 1 },
+      { ID: 'B2000', NAME: 'Bearing Kit',    STATUS: 'I', ROWID: 2 },
+      { ID: 'C3000', NAME: 'Control Valve',  STATUS: 'A', ROWID: 3 },
+    ]);
+
+    test('Editor: table rendered', function() {
+      const rows = table.el.querySelectorAll('tbody tr');
+      assert(rows.length === 3, 'expected 3 rows, got ' + rows.length);
+    });
+
+    // =====================================================
+    // Summary
+    // =====================================================
+    log('');
+    log('Done: ' + passed + ' passed, ' + failed + ' failed');
+    const summary = document.createElement('pre');
+    summary.dataset.prefix = failed ? '✗' : '✓';
+    summary.innerHTML = '<code class="' + (failed ? 'text-error' : 'text-success') + '">' +
+      (failed ? failed + ' FAILED' : 'ALL ' + passed + ' PASSED') + '</code>';
+    output.appendChild(summary);
+  });

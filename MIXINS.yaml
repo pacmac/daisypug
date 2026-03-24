@@ -70,7 +70,7 @@ dp-fitem:
   args: "label: string; input: {class, name, id, color, pre, post, ...}"
   auto-detect:
     textbox: "<input type=text>"
-    combobox: "<select>"
+    combobox: "div.dp-combobox (custom dropdown)"
     numberbox: "<input type=number>"
     numberspinner: "<input type=number> with step"
     datebox: "<input type=date>"
@@ -507,11 +507,14 @@ select:
   args: "{color, size, style, placeholder, options, name, class}"
   help: select.md
   api-combobox: |
-    DpCombobox (class dp-combobox, extends DpSelect):
+    DpCombobox (class dp-combobox, extends DpComponent):
+    Shell: div.dp-combobox > input.dp-cb-display + div.dp-cb-selected + input[hidden] + button.dp-cb-toggle + ul.dp-cb-dropdown
     loadData(arr), load(url, opts), reload(url?), getData(), getRec(value?),
-    exists(value), getValue(), setValue(val), getText(), clear(),
-    config({valueField, textField, url, queryParams, loadFilter}),
+    exists(value), getValue(), setValue(val), getText(), setText(), clear(),
+    open(), close(), toggleDropdown(), isOpen(),
+    config({valueField, textField, url, queryParams, loadFilter, editable, mode, delay, pageSize, formatter, displayFormatter, filter}),
     onSelect(fn), onLoadSuccess(fn), onLoadError(fn)
+    Features: type-to-search, lazy scroll loading, keyboard nav, formatter, displayFormatter (rich selected display)
 
 textarea:
   replaces: "textarea.textarea"

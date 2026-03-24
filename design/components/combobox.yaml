@@ -60,44 +60,61 @@ dui:
     - _sqlid
 
 dp:
-  class: DpCombobox (extends DpSelect)
-  status: partial
+  class: DpCombobox (extends DpComponent)
+  status: implemented
+  shell: div.dp-combobox > input.dp-cb-display + div.dp-cb-selected + input[hidden] + button.dp-cb-toggle + ul.dp-cb-dropdown
   done:
-    - getValue / setValue (inherited + autoload queue)
-    - getText (alias getSelectedText)
+    - Custom dropdown shell (no native select)
+    - getValue / setValue (hidden input + display text sync)
+    - getText / setText (display input)
+    - getName / setName (hidden input name)
     - enable / disable / show / hide (inherited)
+    - focus / blur (display input)
+    - isReadOnly / setReadOnly
+    - getPlaceholder / setPlaceholder
+    - isRequired / setRequired
+    - open / close / toggleDropdown / isOpen
     - loadData (populate from array via template cloning)
     - load (fetch from URL then loadData)
     - reload (re-fetch from configured URL)
     - getData (return stored data rows)
     - getRec (full row for selected value, string comparison)
     - exists (check if value in data)
-    - config (valueField, textField, url, queryParams, loadFilter)
-    - onSelect (callback with {value, text, rec, index})
+    - config (valueField, textField, url, queryParams, loadFilter, editable, formatter, mode, delay, pageSize, filter)
+    - onSelect (callback with {value, text, rec})
     - onLoadSuccess / onLoadError events
     - loadFilter (transform response before storing)
     - valueField / textField mapping with fallback chain
-    - Editor modal integration (dp-combobox class, onBeforeRender)
-    - Placeholder preservation on loadData
     - autoload (queue setValue for after next loadData)
+    - Type-to-search (local filter on keystroke)
+    - Remote search (debounced server query, mode:'remote')
+    - Custom filter function (config filter option)
+    - Lazy scroll loading (IntersectionObserver, configurable pageSize)
+    - Keyboard navigation (ArrowUp/Down, Enter, Escape, Tab)
+    - Formatter (custom dropdown option rendering via config formatter)
+    - displayFormatter (custom selected display with rich DOM content)
+    - Editor modal integration (div structure, onBeforeRender)
+    - dp-fitem pug mixin renders div structure natively
+    - Select upgrade (_upgradeFromSelect for backward compat)
+    - Scroll active item into view on open
+    - Modal overflow fix (dropdown visible inside dialogs)
+    - DpForm getData/setData/reset recognizes .dp-combobox
   priority:
-    - Local data filtering (filter in-memory by text match)
     - sort (sort data by field)
-    - formatter (custom option rendering)
     - fkey cascading integration (combo change triggers form load)
   todo:
-    - Debounced type-to-filter (remote mode)
-    - Edit modal (add/edit options inline)
-    - Name/hidden input dance (display vs stored value)
     - groupField grouping
-    - Keyboard navigation (up/down/enter)
     - Multi-select (getValues/setValues)
+    - Edit modal (add/edit options inline)
+    - Recents (localStorage via dp.remember)
 
 notes: |
-  DpCombobox extends DpSelect with internal data store (_cbData).
-  Uses template cloning + DocumentFragment for option rendering.
-  Remote loading via dp.get() / _fetch().
-  onSelect bridges native change event to dp:select with full row data.
-  Editor modal combobox fields get dp-combobox class and onBeforeRender
-  callback for dynamic population at open time (async supported).
+  DpCombobox extends DpComponent directly (not DpSelect).
+  Custom dropdown: div wrapper with display input, hidden input, toggle button, dropdown panel.
+  Uses template cloning + DocumentFragment for option rendering with lazy batching.
+  Type-to-search: local filter (case-insensitive substring) or remote (debounced fetch).
+  Keyboard: ArrowUp/Down moves highlight, Enter selects, Escape closes, Tab closes.
+  Editor modal creates div structure; _upgradeFromSelect handles legacy <select> elements.
   Registered as 'combobox' in REGISTRY (dp-combobox class).
+  CSS: dp.css handles shell layout, dropdown positioning, active/highlight/hover states,
+  modal overflow fix via :has(.dp-cb-open).

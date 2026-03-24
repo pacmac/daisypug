@@ -1,6 +1,6 @@
 {
   "name": "daisypug",
-  "version": "2.6.5",
+  "version": "2.6.6",
   "description": "DaisyUI component render engine — Pug mixins + YAML declarative input → HTML",
   "main": "index.js",
   "bin": {
@@ -31,5 +31,8 @@
     "postcss": "^8.5.8",
     "pug": "^3.0.4",
     "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "express": "^5.2.1"
   }
 }

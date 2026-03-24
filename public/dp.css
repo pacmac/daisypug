@@ -93,6 +93,68 @@ dialog .btn-circle:focus-visible { outline: none; box-shadow: none; }
   overflow-y: auto;
 }
 
+/* Combobox: custom dropdown shell */
+/* Combobox: custom dropdown shell */
+.dp-combobox { position: relative; display: inline-flex; align-items: center; }
+.dp-combobox .dp-cb-display { cursor: pointer; padding-right: 2rem; }
+.dp-combobox .dp-cb-display:disabled { cursor: default; }
+.dp-cb-selected {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 2rem;
+  bottom: 0;
+  pointer-events: none;
+  padding: 0 0.75rem;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.dp-cb-selected:not(:empty) { display: flex; }
+.dp-combobox .dp-cb-toggle {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.125rem;
+  color: inherit;
+  opacity: 0.5;
+  transition: transform 0.15s, opacity 0.15s;
+  line-height: 0;
+}
+.dp-combobox .dp-cb-toggle:hover { opacity: 0.8; }
+.dp-combobox.dp-cb-open .dp-cb-toggle { transform: translateY(-50%) rotate(180deg); }
+.dp-cb-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 100%;
+  z-index: 50;
+  max-height: 15rem;
+  overflow-y: auto;
+  background: var(--color-base-100, #fff);
+  border: 1px solid color-mix(in oklch, var(--color-base-content, #000) 15%, transparent);
+  border-radius: var(--radius-box, 0.5rem);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+}
+.dp-cb-open .dp-cb-dropdown { display: block; }
+.dp-cb-dropdown li a { cursor: pointer; border-radius: var(--radius-btn, 0.3rem); padding: 0.4rem 0.75rem; display: block; }
+.dp-cb-dropdown li a:hover { background: color-mix(in oklch, var(--color-base-content, #000) 8%, transparent); }
+.dp-cb-dropdown li a.active { background: color-mix(in oklch, var(--color-primary, #6419e6) 12%, transparent); color: var(--color-primary, #6419e6); font-weight: 500; }
+.dp-cb-dropdown li a.dp-cb-highlight { background: color-mix(in oklch, var(--color-base-content, #000) 10%, transparent); }
+
+/* Combobox inside modal: allow dropdown to overflow */
+dialog:has(.dp-cb-open),
+dialog:has(.dp-cb-open) .modal-box,
+dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
+
 /* Pagination: inline footer bar */
 .dp-datatable-pagination {
   display: flex;
