@@ -1,0 +1,45 @@
+extends ../content
+block style
+  style.
+    #tbar {
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }
+    
+    .partrow {
+      background-color:rgba(230, 230, 250, 0.3);
+      color:black;
+    }
+    
+    .exception,
+    .negative {
+      color: red;	    
+    }
+    
+    .demand,
+    .datagrid-header td[field=DEMAND_ORDER],
+    .datagrid-header td[field=DEMAND_QTY] {
+      color: blue;   
+    }
+
+    .supply,
+    .datagrid-header td[field=SUPPLY_ORDER],
+    .datagrid-header td[field=SUPPLY_QTY] {
+      color: green;    
+    }
+block content    
+  #cpplan
+  #tbar
+    div(style="display:inline-block")
+      form#gfilter
+        +fitem('Customer Filter',{class:'combobox navi fit', id:'CUSTOMER_ID_',name:'CUSTOMER_ID',_sqlid:'inv^cpplan_cust' })
+        +fitem('Name',{class:'textbox', id:'CUSTOMER_NAME_',readonly:true })
+        +fitem('Status Filter',{class:'combobox',name:'REPORT_TYPE','data-options':"data:[{text:'All',value:'ALL'},{text:'Shortages',value:'SHORTAGE'},{text:'Open Orders',value:'RLS'},{text:'Open Orders - Job Order',value:'RLS-J'},{text:'In-House',value:'INHOUSE',selected:true},{text:'Return',value:'RETURN'}],editable:false"})
+        a#dg2excel(disabled="disabled")
+    span.vert-sep(style="margin:0 8px;")
+    div#colsel(style="display:inline-block;")
+    span.vert-sep(style="margin:0 8px;")
+
+block script
+  +script("inv",['js/cp_plan.js'])

@@ -1,0 +1,30 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^qthids_sbox",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "TEST_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "SO Ref", "width": 100 },
+    { "field": "TYPE", "title": "Plan Type", "width": 120 },
+    { "field": "PLAN_ID", "title": "Plan ID", "width": 100 },
+    { "field": "GAUGE_ID", "title": "Gauge ID", "width": 100 },
+    { "field": "STATUS", "title": "Status", "width": 80 },
+    { "field": "RESULT", "title": "Result", "width": 120 }
+  ],
+  "filters": [
+    { "field": "TYPE", "title": "Plan Type", "editor": "textbox" },
+    { "field": "PLAN_ID", "title": "Plan ID", "editor": "textbox" },
+    { "field": "GAUGE_TYPE", "title": "Gauge Type", "editor": "textbox" },
+    { "field": "STATUS", "title": "Status", "editor": "textbox" },
+    { "field": "RESULT", "title": "Result", "editor": "textbox" }
+  ]
+}

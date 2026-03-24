@@ -1,0 +1,27 @@
+extends ../content 
+//- ── MIGRATOR ──────────────────────────────────
+//- page: admin/logins
+//- owner: root
+//- status: converted
+//- passes: 1  version: 8
+//- last_run: 2026-02-28 11:53:59
+//- manual:
+//-   #1: +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts
+//-   #2: raw div with region= attribute — convert to +panel(region)
+//-   #3: raw div with region= attribute — convert to +panel(region)
+//- ─────────────────────────────────────────────
+block content
+  +hsplit('70%')
+    +panel('north')
+      +datagrid#logins
+    +panel('center')
+      +datagrid#dgvwlogs
+  +modal(title="Send User Message" no-form max-w="lg")#user_msg
+    +fitem('Message', {id: 'user_msg_text', name: 'user_msg_text', class: 'textarea textarea-bordered', rows: 4, value: 'Dear $userid;\\n\\nCan you please log out briefly so we can apply some updates.\\n\\nThank You.'})
+    +modal-footer
+      +button('Send', {id: 'user_msg_send', size: 'sm', color: 'primary', icon: 'send'})
+block style
+  //- expiry bar gradient now set inline by $.page.fn.expires styler
+block script
+  script: include js/logins.js
+  //-+script("admin",["js/logins.js"])

@@ -1,0 +1,80 @@
+/*
+ * layout.css — Structural layout containers and content spacing (SSOT)
+ *
+ * Principle: the CONTENT controls its own spacing, not the container.
+ * - panel-body: no blanket rules — content uses utility classes (.p-2, .p-4)
+ *               or component CSS (forms.css padding-top on <form>)
+ * - tab-content: blanket margin on children because bare +fitem chains are
+ *                direct children and can't carry their own side margins
+ * - Structural/fill children (splits, grids, tabs, fit forms) → zero margin
+ */
+
+@layer components {
+  .drawer > .drawer-content {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  #content {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+}
+
+/* Layout padding reset — zero everything, rebuild from scratch */
+#content,
+.panel-body,
+.tab-content {
+  padding: 0;
+  margin: 0;
+}
+
+/* Tab content — transparent so panel headers don't blend with tab bg */
+.tab-content {
+  background: transparent !important;
+}
+
+/* ── Tab-content: children get breathing room ─────────────────────── */
+.tab-content > * {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+.tab-content > *:first-child {
+  margin-top: 0.5rem;
+}
+.tab-content > *:last-child {
+  margin-bottom: 0.5rem;
+}
+
+/* ── Structural/fill children: zero margin, edge-to-edge ──────────── */
+/* Layout elements that must fill their container completely.           */
+:is(.panel-body, .tab-content) > [style*="grid-template-columns"],
+:is(.panel-body, .tab-content) > [style*="grid-template-rows"],
+:is(.panel-body, .tab-content) > form.fit,
+:is(.panel-body, .tab-content) > .datagrid-wrap,
+:is(.panel-body, .tab-content) > .easyui-tabs {
+  margin: 0 !important;
+}
+
+/* ── Tab row background disabled (was base-200 fill) ──────────────── */
+/* .tabs.tabs-border { background: var(--color-base-200); } */
+
+/* ── Double border: tab-content inside panels ─────────────────────── */
+/* DaisyUI .tabs-border adds border-base-300 (1px solid) on all 4 sides
+   of .tab-content. When tabs fill a panel edge-to-edge the tab-content
+   borders double up with the panel's split borders (border-r, border-b).
+   Fix: strip left/right/bottom borders from tab-content inside panels;
+   the panel's own borders already provide the visual frame.
+   Top border kept — it separates the tab row from its content area. */
+.panel-body .easyui-tabs > .tab-content {
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+/* ── Tab focus outline: radio inputs show browser focus ring ───────── */
+input.tab:checked {
+  outline: none;
+}

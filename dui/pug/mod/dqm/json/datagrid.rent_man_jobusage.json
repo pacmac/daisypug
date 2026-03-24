@@ -1,0 +1,35 @@
+{
+  "title": "Linked Jobs",
+  "iconCls": "icon-linked",
+  "url": "/",
+  "method": "post",
+  "fit": true,
+  "striped": true,
+  "singleSelect": true,
+  "asdpx": "d",
+  "toolbar": [{"id":"job_move", "text":"Move", "icon":"move", "disabled":true}],
+
+  "columns": [
+    {"field": "RENTAL_ID", "hidden": true},
+    {"field": "LINE_NO", "title": "#", "width": 30, "fixed": true, "align": "center"},
+    {"field": "LICENSOR_JOB", "title": "Licensor Job", "width": 120, "fixed": true, "editor": "text"},
+    {"field": "OPERATION_REF", "title": "Operation Ref", "width": 120, "fixed": true, "formatter": "$.dui.fmt.ref2text"},
+    {"field": "RESOURCE_ID", "title": "Resource ID", "width": 100},
+    {"field": "CUSTOMER_ID", "title": "Cust ID", "width": 80, "fixed": true},
+    {"field": "SALES_ORDER_REF", "title": "Order ID / Line", "width": 120, "formatter": "$.dui.fmt.ref2text", "fixed": true},
+    {"field": "COC_QTY", "title": "COC Qty", "width": 60, "fixed": true, "formatter": "$.page.fn.qtyfmt", "align": "right"},
+    {"field": "WO_QTY", "title": "Reqd Qty", "width": 60, "fixed": true, "formatter": "$.page.fn.qtyfmt", "align": "right"},
+    {"field": "WO_COMPLETED_QTY", "title": "Comp Qty", "width": 60, "formatter": "$.page.fn.qtyfmt", "align": "right"},
+    {"field": "FIXED_QTY", "title": "Fixed Qty", "width": 60, "align": "right", "editor": {"type": "numberspinner", "options": {"precision": 0, "min": 0}}},
+    {"field": "ZERO_QTY", "title": "Zero Qty", "width": 60, "fixed": true, "editor": {"type": "combobox", "options": {"panelHeight": "auto", "data": [{"text": "YES", "value": "YES"}, {"text": "NO", "value": "NO", "selected": true}]}}},
+    {"field": "CALC_QTY", "width": 60, "title": "Calc Qty"},
+    {"field": "OPERATION_COST", "title": "$ Cost", "width": 60, "fixed": true, "formatter": "$.dui.fmt.currency", "align": "right"},
+    {"field": "WO_RELEASE", "title": "Released", "width": 80, "formatter": "$.dui.fmt.date", "fixed": true},
+    {"field": "WO_WANT", "title": "Wanted", "width": 80, "formatter": "$.dui.fmt.date", "fixed": true},
+    {"field": "LICENSOR_USER_5", "title": "User 5", "width": 100, "editor": "text", "hidden": false, "coloff": true},
+    {"field": "LICENSOR_USER_1", "title": "User 1", "width": 100, "editor": "text", "hidden": false, "coloff": true},
+    {"field": "LICENSOR_USER_2", "title": "User 2", "width": 100, "editor": "text", "hidden": false, "coloff": true},
+    {"field": "LICENSOR_USER_3", "title": "User 3", "width": 100, "editor": "text", "hidden": false, "coloff": true},
+    {"field": "LICENSOR_USER_4", "title": "User 4", "width": 100, "editor": "text", "hidden": false, "coloff": true}
+  ]
+}

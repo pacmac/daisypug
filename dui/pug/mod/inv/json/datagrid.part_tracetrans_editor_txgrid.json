@@ -1,0 +1,35 @@
+{
+  "id": "txgrid",
+  "fit": true,
+  "fitColumns": true,
+  "url": "/?_func=get&_sqlid=inv^part_trace",
+  "checkOnSelect": false,
+  "singleSelect": true,
+  "method": "get",
+  "striped": true,
+  "toolbar": [
+    { "type": "field", "label": "From",    "name": "sdate", "editor": { "type": "datebox",  "options": {} } },
+    { "type": "field", "label": "To",      "name": "edate", "editor": { "type": "datebox",  "options": {} } },
+    { "type": "field", "label": "Part ID", "name": "pid",   "editor": { "type": "combobox", "options": { "_sqlid": "inv^partid" } } }
+  ],
+  "columns": [
+    [
+      { "field": "EDIT",             "title": "Edit",       "checkbox": true },
+      { "field": "PART_ID",          "title": "Part ID",    "width": 200, "fixed": true },
+      { "field": "TRACE_ID",         "title": "Trace ID",   "width": 80,  "fixed": true },
+      { "field": "TRACE_DATE",       "title": "Trace Date", "formatter": "$.dui.fmt.date", "width": 80,  "fixed": true },
+      { "field": "EXPIRY_DATE",      "title": "Expiry Date","formatter": "$.dui.fmt.date", "width": 80,  "fixed": true },
+      { "field": "UNIT_MATERIAL_COST","title": "Unit Material Cost", "width": 80, "fixed": true },
+      { "field": "TRACE_USER_1",     "title": "Trace User 1","width": 80, "fixed": true },
+      { "field": "TRACE_USER_2",     "title": "Trace User 2","width": 80, "fixed": true },
+      { "field": "TRACE_USER_3",     "title": "Trace User 3","width": 80, "fixed": true },
+      { "field": "TRACE_USER_4",     "title": "Trace User 4","width": 80, "fixed": true },
+      { "field": "TRACE_USER_5",     "title": "Trace User 5","width": 80, "fixed": true },
+      { "field": "TRACE_USER_6",     "title": "Trace User 6","width": 80, "fixed": true },
+      { "field": "TRACE_USER_7",     "title": "Trace User 7","width": 80, "fixed": true },
+      { "field": "TRACE_USER_8",     "title": "Trace User 8","width": 80, "fixed": true },
+      { "field": "TRACE_USER_9",     "title": "Trace User 9","width": 80, "fixed": true },
+      { "field": "TRACE_USER_10",    "title": "Trace User 10","width": 80, "fixed": true }
+    ]
+  ]
+}

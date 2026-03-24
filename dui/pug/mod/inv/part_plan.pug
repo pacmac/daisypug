@@ -1,0 +1,20 @@
+extends ../content
+block style
+  style.
+    .partrow {
+      background-color:rgba(230, 230, 250, 0.3);
+      color:black;
+    }
+    .negative { color: red; }
+    .demand,
+    .datagrid-header td[field=DEMAND_DOC],
+    .datagrid-header td[field=DEMAND_QTY] { color: blue; }
+    .supply,
+    .datagrid-header td[field=SUPPLY_DOC],
+    .datagrid-header td[field=SUPPLY_QTY] { color: green; }
+
+block content
+  +datagrid#partplan
+
+block script
+  script: include js/part_plan.js

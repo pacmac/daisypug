@@ -1,0 +1,40 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^gauge_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",         "title": "Gauge ID",      "width": 100 },
+    { "field": "GAUGE_TYPE",    "title": "Gauge Type",    "width": 100 },
+    { "field": "DESCRIPTION",   "title": "Description",   "width": 200 },
+    { "field": "DEPARTMENT_ID", "title": "Department ID", "width": 120 },
+    { "field": "SERIAL_NO",     "title": "Serial No",     "width": 100 },
+    { "field": "MANUFACTURER",  "title": "Manufacturer",  "width": 120 },
+    { "field": "MODEL",         "title": "Model",         "width": 100 }
+  ],
+  "filters": [
+    { "field": "GAUGE_TYPE", "title": "Gauge Type", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "dqm^gaugeType" }
+      }
+    },
+    { "field": "DESCRIPTION", "title": "Description", "editor": "textbox" },
+    { "field": "DEPARTMENT_ID", "title": "Department ID", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "dqm^department" }
+      }
+    },
+    { "field": "SERIAL_NO", "title": "Serial No", "editor": "textbox" },
+    { "field": "MANUFACTURER", "title": "Manufacturer", "editor": "textbox" },
+    { "field": "MODEL", "title": "Model", "editor": "textbox" }
+  ]
+}

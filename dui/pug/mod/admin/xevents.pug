@@ -1,0 +1,27 @@
+extends ../content 
+block style 
+  style.
+    #tbar {
+      height:30px;
+      line-height:10px;  
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }
+block script 
+  +script("admin",["js/xevents.js"])
+block content
+  +tabs(data-options="fit:true" )
+    #evts1(title='XEVENTS')
+      table#xevts(fit="true")
+    #xtrx1(title='XTRANS')
+      table#xtrx(fit="true")
+      #tbar
+        form#gfilter
+          label From
+          +datebox.today(name="sdate" style="width:100px;")
+          label To
+          +datebox.today(name="edate" style="width:100px;")
+          +fitem('Type',{name:'type', class:'combobox','data-options':"data:[{text:'All',value:'All'},{text:'inbound',value:'inbound'},{text:'realtime',value:'realtime'},{text:'batch',value:'batch'}]"})
+          +fitem('Site ID',{id:'~', name:'siteid', class:'combobox'})
+      table#xhstry(fit="true")

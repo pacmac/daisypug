@@ -1,0 +1,95 @@
+{
+  "id": "cpplan",
+  "toolbar": "#tbar",
+  "fit": true,
+  "fitColumns": false,
+  "queryParams": null,
+  "url": "/?_sqlid=inv^cpplan&_func=get",
+  "checkOnSelect": false,
+  "singleSelect": true,
+  "columns": [
+    [
+      {
+        "field": "PART_ID",
+        "title": "Part ID"
+      },
+      {
+        "field": "CUST_PART_ID",
+        "title": "Cust Part"
+      },
+      {
+        "field": "CP_DATE",
+        "title": "CP Date",
+        "formatter": "$.dui.fmt.date",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "CP_REF",
+        "title": "CP ID",
+        "formatter": "$.page.fn.cpref",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "CUST_PO",
+        "title": "Cust PO"
+      },
+      {
+        "field": "DEMAND_ORDER",
+        "title": "Demand Order",
+        "formatter": "$.page.fn.ddref",
+        "width": 125,
+        "fixed": true
+      },
+      {
+        "field": "DEMAND_QTY",
+        "title": "Demand Qty",
+        "formatter": "$.page.fn.dd",
+        "width": 80,
+        "fixed": true,
+        "align": "right"
+      },
+      {
+        "field": "PROJ_QTY",
+        "title": "Projected Bal",
+        "formatter": "$.page.fn.integer",
+        "width": 80,
+        "fixed": true,
+        "align": "right"
+      },
+      {
+        "field": "SUPPLY_ORDER",
+        "title": "Supply Order",
+        "formatter": "$.page.fn.ssref",
+        "width": 125,
+        "fixed": true
+      },
+      {
+        "field": "SUPPLY_QTY",
+        "title": "Supply Qty",
+        "formatter": "$.page.fn.ss",
+        "width": 80,
+        "fixed": true,
+        "align": "right"
+      },
+      {
+        "field": "ACTION",
+        "title": "Action"
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Description",
+        "width": 200,
+        "fixed": false
+      },
+      {
+        "field": "EXCEPTION",
+        "title": "Exception",
+        "formatter": "$.page.fn.exception",
+        "width": 125,
+        "fixed": true
+      }
+    ]
+  ]
+}

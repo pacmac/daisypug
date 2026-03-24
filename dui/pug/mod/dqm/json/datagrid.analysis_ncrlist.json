@@ -1,0 +1,55 @@
+{
+  "id": "ncrlist",
+  "striped": false,
+  "rownumbers": false,
+  "selectOnCheck": true,
+  "singleSelect": true,
+  "fit": true,
+  "fitColumns": true,
+  "columns": [
+    [
+      {
+        "field": "open",
+        "title": "Open",
+        "checkbox": true
+      },
+      {
+        "field": "ncrid",
+        "title": "Doc ID",
+        "width": 120,
+        "fixed": true
+      },
+      {
+        "field": "date",
+        "title": "Date",
+        "width": 85,
+        "fixed": true
+      },
+      {
+        "field": "status",
+        "title": "Status",
+        "width": 100,
+        "fixed": true,
+        "hidden": true
+      },
+      {
+        "field": "drclass",
+        "title": "Defect Code",
+        "width": 120,
+        "fixed": true
+      },
+      {
+        "field": "subject",
+        "title": "Title / Subject",
+        "width": 500,
+        "fixed": false
+      },
+      {
+        "field": "NCR_QTY",
+        "title": "NCR Qty",
+        "width": 500,
+        "fixed": false
+      }
+    ]
+  ]
+}

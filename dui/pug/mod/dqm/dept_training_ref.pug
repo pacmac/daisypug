@@ -1,0 +1,12 @@
+extends ../content
+block script
+  script: include js/opcert_dept_training_ref.js
+block content
+  +vsplit('400px')
+    +panel('west')
+      +form.multi#main(asdpx='x' _sqlid='dqm^dept_training_ref')
+        +fitem('Department ID',{name:'DEPARTMENT_ID', id:'~', _sqlid:'vwltsa^depid1', class:'combobox fkey fit',required:true})
+        .info
+          +fitem('Description',{id:'DEPARTMENT_DESC', class:'textbox', readonly:true})
+    +panel('center')
+      +datagrid#dgitems

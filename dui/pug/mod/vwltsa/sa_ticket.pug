@@ -1,0 +1,111 @@
+extends ../content 
+block content
+  +layout(fit="true")
+    div#ticket.bg-base-200(region="west" style="width:400px;border-bottom:none")
+      form#tickfrm(asdpx='ax' _sqlid='vwltsa^ltick' mode="add").lock
+        input(name='TRANSACTION_ID' type="hidden")
+        +fitem('Ticket Type',{id:'~',required:true, name:"TYPE" ,class:'combobox','data-options':"editable:false,data:[{value:'R',text:'RUN'},{value:'S',text:'SETUP'},{value:'I',text:'INDIRECT'}]"})
+
+        div#main
+          +fitem('Operator ID',{class:'qbe navi fit bcscan',id:'EMP_ID',name:'EMPLOYEE_ID', required:true,style:'margin-bottom:8px;' ,'data-options':"iconCls:'icon-barcode'"})  
+          
+          +fitem('Operator Name',{id:'EMP_NAME',readonly:'true',class:'textbox'})
+          +fitem('Clock In',{id:'CID',class:'datebox today',name:'CLOCK_IN_DATE',style:"width:125px;",required:true})
+            span(style="display:inline-block;width:10px;")
+            +input({id:'CIT',class:'timespinner now',name:'CLOCK_IN_TIME',style:"width:65px;left:10px",required:true})
+          +fitem('Clock Out',{id:'COD',class:'datebox today',name:'CLOCK_OUT_DATE',style:"width:125px;",required:true})
+            span(style="display:inline-block;width:10px;")
+            +input({id:'COT',class:'timespinner now',name:'CLOCK_OUT_TIME',style:"width:65px;left:10px",required:true})
+          +fitem('Duration Hrs',{id:'CHR',class:'numberbox',name:'HOURS_WORKED',readonly:true,value:'0',precision:'2'})
+
+        div.opt#woref
+          +fitem('Job Reference',{id:'WOREF1',class:'qbe navi fit bcscan',name:'WOREF',style:"margin-bottom:8px;" ,'data-options':"iconCls:'icon-barcode'"})
+                  
+        fieldset#RUN().opt
+          legend RUN Details
+          +fitem('Qty Required',{id:'~',class:'numberbox', readonly:'true' ,name:'REQUIRED_QTY' ,value:"0",precision:'2',style:"margin-top:0;margin-bottom:8px;"})
+          +fitem('Qty Balance',{id:'~',class:'numberbox',readonly:'true' ,name:'BAL_QTY' ,value:"0",precision:'2'})
+          +fitem('Qty Pass',{class:'numberspinner',name:'GOOD_QTY' ,value:"0"})
+          +fitem('Qty Fail',{class:'numberspinner',name:'BAD_QTY' ,value:"0"})
+          +fitem('Fail Reason',{class:'combobox' ,name:'DEVIATION_REASON_ID', _sqlid:'vwltsa^devid'})
+        
+        fieldset#SETUP.plain(style="display:none;margin-top:0px;").opt
+          legend SETUP Details
+          +fitem('Completed',{class:'combobox',name:'SETUP_COMPLETED','data-options':"editable:false,data:[{value:'Y',text:'YES'},{value:'N',text:'NO'}]",style:"margin-top:0px;"})
+
+        fieldset#INDIRECT.plain(style="display:none;;margin-top:0px;").opt
+          legend INDIRECT Details
+          +fitem('Indirect ID',{class:'combobox navi fit' ,name:'INDIRECT_ID' ,_sqlid:'vwltsa^indid' })
+
+
+    div(region="center" style="border:none; padding:0px;")
+      table#ltdg
+      #pagi-filter.fg-blu
+        +fitem('Date From',{id: '~', class:'datebox today', name:'datef' ,style:"width:95px;"})   
+        +fitem('Date To',{id:'~',class:'datebox today', name:'datet' ,style:"width:95px;"})
+
+        span.vert-sep
+        +fitem('Job',{class:'qbe', id:'JOB_ID_',name:'WORKORDER_BASE_ID' ,style:"width:120px;"})
+        span.vert-sep      
+        
+        +fitem('Operator',{class:'qbe', id:'EMP_ID_',name:'EMPLOYEE_ID' ,style:"width:120px;"})
+        span.vert-sep
+        
+        +fitem('Shift-Fix ',{class:'combobox', id:'sfix',name:'FIXED_FLAG' ,style:"width:50px;",'data-options':"editable:false,panelHeight:'auto',data:[{value:'Y',text:'YES'},{value:'N',text:'NO',selected:true}]"})
+
+
+  div#opnmenu(style="width:120px;")
+    div(name="open" data-options="iconCls:'icon-info'") View Job
+block script
+  script: include js/sa_ticket.js
+block style
+  style.
+    #pagi-filter {   
+    } #pagi-filter label {
+      width:auto;
+      margin-right:8px;
+      margin-left:8px;
+    } #pagi-filter label:not(:first-of-type) {
+
+    }
+    
+    .opt{
+      display:none;
+    }
+
+    x.datagrid-pager, .datagrid-toolbar {
+      background: #eeeeee;
+      height:25px;
+      padding-top:4px;
+    }
+    
+    .datagrid-row td.run {
+      background: url('../icons/wrench.png') no-repeat scroll 52px center / 14px auto;
+    } .datagrid-row td.setup {
+      background: url('../icons/calculator.png') no-repeat scroll 52px center / 14px auto;
+    } .datagrid-row td.indir {
+      background: url('../icons/clean.png') no-repeat scroll 52px center / 14px auto; 
+    }
+
+    .datagrid-row > td > div.datagrid-cell > div {
+      width:20px;
+      height:20px;
+      display:inline-block;
+    }
+
+
+    div.sfix {
+      background: url('../icons/clock_red.png') no-repeat scroll center / 14px auto;  
+    } div.keyb {
+      background: url('../icons/keyboard.png') no-repeat scroll center / 14px auto;  
+    } div.touch {
+      background: url('../icons/touch.png') no-repeat scroll center / 14px auto;  
+    } div.thold {
+      background: url('../icons/clock_error.png') no-repeat scroll center / 14px auto;  
+    } div.run {
+      background: url('../icons/wrench.png') no-repeat scroll center / 14px auto;
+    } div.setup {
+      background: url('../icons/calculator.png') no-repeat scroll center / 14px auto;
+    } div.indir {
+      background: url('../icons/clean.png') no-repeat scroll center / 14px auto; 
+    }

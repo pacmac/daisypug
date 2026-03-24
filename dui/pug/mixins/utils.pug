@@ -1,0 +1,23 @@
+//- Legacy inline data injection — DISABLED: now loaded client-side via /api/init
+
+mixin script(mod, srcs)
+  if srcs
+    - if (!Array.isArray(srcs)) srcs = [srcs];
+    each src in srcs
+      - var _id = src.replace(/^.*\//, '').replace(/\.js$/, '');
+      script(id=_id)
+        != fn.pug.readScript(mod, src)
+  else
+    script(id=mod)
+      block
+
+include ../mod/custom/oms/mixins
+include ../mod/custom/dis/mixins
+
+mixin custom(grpid)
+  if $.isdev || grpid == $.codata.couid
+    block
+
+mixin dwap(dwap)
+  //- All data (ronly, pdata, bhave, codata, udata, menus) now comes from /api/init
+  //- This mixin is kept as a no-op for backward compat with page templates that call +dwap()

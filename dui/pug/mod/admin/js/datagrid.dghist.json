@@ -1,0 +1,44 @@
+{
+  "id": "dghist",
+  "columns": [
+    [
+      {
+        "field": "ver",
+        "order": "asc",
+        "title": "Ver",
+        "width": 30
+      },
+      {
+        "field": "notes",
+        "order": "asc",
+        "title": "Notes",
+        "width": 500
+      }
+    ]
+  ],
+  "options": {
+    "singleSelect": false,
+    "rownumbers": true,
+    "fitColumns": true,
+    "striped": true,
+    "fit": true,
+    "columns": [
+      [
+        {
+          "field": "ver",
+          "order": "asc",
+          "title": "Ver",
+          "width": 30
+        },
+        {
+          "field": "notes",
+          "order": "asc",
+          "title": "Notes",
+          "width": 500
+        }
+      ]
+    ],
+    "loadFilter": null
+  },
+  "sourceFile": "admin/js/update.js"
+}

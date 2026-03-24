@@ -1,0 +1,603 @@
+extends ../content
+
+block style
+  style.
+    #skills-shell,
+    #skills-shell .panel-body,
+    #skills-shell .panel.layout-panel,
+    #skills-shell .layout-panel-center,
+    #skills-shell .layout-panel-west {
+      height: 100%;
+    }
+    #skills-browser {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.03));
+    }
+    #skills-search {
+      width: 100%;
+      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.8);
+    }
+    #skills-count {
+      margin: 10px 0 12px;
+      font-size: 12px;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    #skills-list {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 12px;
+    }
+    .skill-nav-item {
+      width: 100%;
+      text-align: left;
+      border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+      border-radius: 14px;
+      padding: 14px;
+      background: color-mix(in srgb, var(--color-base-100) 92%, var(--color-base-content) 8%);
+      transition: border-color 120ms ease, transform 120ms ease, background 120ms ease;
+    }
+    .skill-nav-item:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--color-primary) 42%, transparent);
+    }
+    .skill-nav-item.is-active {
+      border-color: color-mix(in srgb, var(--color-primary) 58%, transparent);
+      background: color-mix(in srgb, var(--color-primary) 10%, var(--color-base-100) 90%);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    }
+    .skill-nav-name {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .skill-nav-desc {
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.45;
+      opacity: 0.72;
+    }
+    #skill-detail-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+      padding: 22px 26px;
+      overflow: auto;
+      background:
+        radial-gradient(circle at top right, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 32%),
+        linear-gradient(180deg, color-mix(in srgb, var(--color-base-100) 96%, var(--color-base-content) 4%), var(--color-base-100));
+    }
+    #skill-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+    .skill-meta-card {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+      background: color-mix(in srgb, var(--color-base-100) 94%, var(--color-base-content) 6%);
+    }
+    .skill-meta-label {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 6px;
+    }
+    .skill-meta-value {
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+    #skill-doc {
+      max-width: 980px;
+      line-height: 1.65;
+      font-size: 15px;
+    }
+    #skill-doc h1,
+    #skill-doc h2,
+    #skill-doc h3 {
+      line-height: 1.2;
+      margin: 1.2em 0 0.55em;
+      font-weight: 800;
+    }
+    #skill-doc h1 {
+      font-size: 2rem;
+      margin-top: 0.3em;
+    }
+    #skill-doc h2 {
+      font-size: 1.35rem;
+      padding-top: 0.4em;
+      border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    }
+    #skill-doc h3 {
+      font-size: 1.05rem;
+    }
+    #skill-doc p,
+    #skill-doc ul,
+    #skill-doc ol,
+    #skill-doc blockquote,
+    #skill-doc .skills-table-wrap,
+    #skill-doc pre {
+      margin: 0.75em 0;
+    }
+    #skill-doc ul,
+    #skill-doc ol {
+      padding-left: 1.5em;
+    }
+    #skill-doc li + li {
+      margin-top: 0.35em;
+    }
+    #skill-doc code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace;
+      font-size: 0.92em;
+      padding: 0.1em 0.35em;
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--color-base-content) 10%, var(--color-base-100));
+    }
+    #skill-doc .skills-code {
+      padding: 14px 16px;
+      border-radius: 16px;
+      overflow: auto;
+      background: #17212b;
+      color: #f4f7fb;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    #skill-doc .skills-code code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+    #skill-doc blockquote {
+      padding: 0.3em 0 0.3em 1em;
+      border-left: 4px solid color-mix(in srgb, var(--color-primary) 52%, transparent);
+      color: color-mix(in srgb, var(--color-base-content) 86%, transparent);
+      background: color-mix(in srgb, var(--color-primary) 5%, transparent);
+    }
+    #skill-doc a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+    #skill-doc a:hover {
+      text-decoration: underline;
+    }
+    .skills-table-wrap {
+      overflow: auto;
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+      background: color-mix(in srgb, var(--color-base-100) 96%, var(--color-base-content) 4%);
+    }
+    .skills-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    .skills-table th,
+    .skills-table td {
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+      border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    }
+    .skills-table th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: color-mix(in srgb, var(--color-base-content) 6%, var(--color-base-100));
+    }
+    #skills-empty {
+      padding: 40px 18px;
+      text-align: center;
+      opacity: 0.65;
+    }
+    @media (max-width: 960px) {
+      #skill-detail-shell {
+        padding: 18px;
+      }
+      .skill-nav-item {
+        padding: 12px;
+      }
+      #skill-doc h1 {
+        font-size: 1.65rem;
+      }
+    }
+
+block content
+  -
+    const nodeRequire = process.mainModule && process.mainModule.require
+      ? process.mainModule.require.bind(process.mainModule)
+      : null;
+    const fs = nodeRequire ? nodeRequire('fs') : null;
+    const path = nodeRequire ? nodeRequire('path') : null;
+
+    function escapeHtml(text) {
+      return String(text || '').replace(/[&<>"']/g, function(ch) {
+        return ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        })[ch];
+      });
+    }
+
+    function inlineMd(text) {
+      return escapeHtml(text || '')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    }
+
+    function renderTable(block) {
+      const rows = block
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      if (rows.length < 2) return '<p>' + inlineMd(block) + '</p>';
+
+      const header = rows[0].split('|').map((cell) => cell.trim()).filter(Boolean);
+      const bodyRows = rows.slice(2).map((line) => line.split('|').map((cell) => cell.trim()).filter(Boolean));
+
+      if (!header.length) return '<p>' + inlineMd(block) + '</p>';
+
+      let html = '<div class="skills-table-wrap"><table class="skills-table"><thead><tr>';
+      header.forEach((cell) => {
+        html += '<th>' + inlineMd(cell) + '</th>';
+      });
+      html += '</tr></thead><tbody>';
+
+      bodyRows.forEach((row) => {
+        if (!row.length) return;
+        html += '<tr>';
+        row.forEach((cell) => {
+          html += '<td>' + inlineMd(cell) + '</td>';
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      return html;
+    }
+
+    function markdownToHtml(markdown) {
+      const lines = String(markdown || '').replace(/\r\n/g, '\n').split('\n');
+      const html = [];
+      let paragraph = [];
+      let listItems = [];
+      let listType = '';
+      let quoteLines = [];
+      let codeLines = null;
+      let codeLang = '';
+      let tableLines = [];
+
+      function flushParagraph() {
+        if (!paragraph.length) return;
+        html.push('<p>' + inlineMd(paragraph.join(' ')) + '</p>');
+        paragraph = [];
+      }
+
+      function flushList() {
+        if (!listItems.length) return;
+        html.push('<' + listType + '><li>' + listItems.join('</li><li>') + '</li></' + listType + '>');
+        listItems = [];
+        listType = '';
+      }
+
+      function flushQuote() {
+        if (!quoteLines.length) return;
+        html.push('<blockquote>' + quoteLines.map((line) => '<p>' + inlineMd(line) + '</p>').join('') + '</blockquote>');
+        quoteLines = [];
+      }
+
+      function flushTable() {
+        if (!tableLines.length) return;
+        html.push(renderTable(tableLines.join('\n')));
+        tableLines = [];
+      }
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+
+        if (codeLines !== null) {
+          if (/^```/.test(trimmed)) {
+            html.push('<pre class="skills-code"><code' + (codeLang ? ' data-lang="' + escapeHtml(codeLang) + '"' : '') + '>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+            codeLines = null;
+            codeLang = '';
+          } else {
+            codeLines.push(line);
+          }
+          continue;
+        }
+
+        if (/^```/.test(trimmed)) {
+          flushParagraph();
+          flushList();
+          flushQuote();
+          flushTable();
+          codeLang = trimmed.replace(/^```/, '').trim();
+          codeLines = [];
+          continue;
+        }
+
+        if (trimmed.includes('|') && /^\|?[-:\s|]+\|?$/.test(trimmed)) {
+          tableLines.push(trimmed);
+          continue;
+        }
+
+        if (trimmed.includes('|')) {
+          const nextLine = i + 1 < lines.length ? lines[i + 1].trim() : '';
+          if (tableLines.length || /^\|?[-:\s|]+\|?$/.test(nextLine)) {
+            flushParagraph();
+            flushList();
+            flushQuote();
+            tableLines.push(trimmed);
+            continue;
+          }
+        }
+
+        if (!trimmed) {
+          flushParagraph();
+          flushList();
+          flushQuote();
+          flushTable();
+          continue;
+        }
+
+        let match = trimmed.match(/^(#{1,3})\s+(.*)$/);
+        if (match) {
+          flushParagraph();
+          flushList();
+          flushQuote();
+          flushTable();
+          const level = match[1].length;
+          html.push('<h' + level + '>' + inlineMd(match[2]) + '</h' + level + '>');
+          continue;
+        }
+
+        if (/^---+$/.test(trimmed)) {
+          flushParagraph();
+          flushList();
+          flushQuote();
+          flushTable();
+          html.push('<hr>');
+          continue;
+        }
+
+        match = trimmed.match(/^[-*]\s+(.*)$/);
+        if (match) {
+          flushParagraph();
+          flushQuote();
+          flushTable();
+          if (listType && listType !== 'ul') flushList();
+          listType = 'ul';
+          listItems.push(inlineMd(match[1]));
+          continue;
+        }
+
+        match = trimmed.match(/^\d+\.\s+(.*)$/);
+        if (match) {
+          flushParagraph();
+          flushQuote();
+          flushTable();
+          if (listType && listType !== 'ol') flushList();
+          listType = 'ol';
+          listItems.push(inlineMd(match[1]));
+          continue;
+        }
+
+        match = trimmed.match(/^>\s?(.*)$/);
+        if (match) {
+          flushParagraph();
+          flushList();
+          flushTable();
+          quoteLines.push(match[1]);
+          continue;
+        }
+
+        flushList();
+        flushQuote();
+        flushTable();
+        paragraph.push(trimmed);
+      }
+
+      flushParagraph();
+      flushList();
+      flushQuote();
+      flushTable();
+
+      return html.join('\n');
+    }
+
+    function splitFrontMatter(raw) {
+      const match = String(raw || '').match(/^---\n([\s\S]*?)\n---\n?/);
+      if (!match) return { meta: {}, body: String(raw || '') };
+      const meta = {};
+      match[1].split('\n').forEach((line) => {
+        const kv = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+        if (!kv) return;
+        meta[kv[1]] = kv[2].replace(/^['"]|['"]$/g, '').trim();
+      });
+      return {
+        meta: meta,
+        body: String(raw || '').slice(match[0].length)
+      }
+    }
+
+    const skillsRoot = path ? path.join(process.cwd(), '.claude', 'skills') : null;
+    const skills = [];
+
+    try {
+      if (!fs || !path || !skillsRoot) throw new Error('Node file access is unavailable in this template runtime');
+      fs.readdirSync(skillsRoot, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .forEach((entry) => {
+          const filePath = path.join(skillsRoot, entry.name, 'SKILL.md');
+          if (!fs.existsSync(filePath)) return;
+
+          const raw = fs.readFileSync(filePath, 'utf8');
+          const parsed = splitFrontMatter(raw);
+          const body = parsed.body.trim();
+          const titleMatch = body.match(/^#\s+(.+)$/m);
+          const description = (parsed.meta && parsed.meta.description)
+            || body.split('\n').map((line) => line.trim()).find((line) => line && !line.startsWith('#'))
+            || '';
+
+          skills.push({
+            id: entry.name,
+            name: (parsed.meta && parsed.meta.name) || entry.name,
+            title: titleMatch ? titleMatch[1].trim() : entry.name,
+            description: description,
+            path: path.relative(process.cwd(), filePath),
+            html: markdownToHtml(body),
+            markdown: raw
+          });
+        });
+
+      skills.sort((a, b) => a.name.localeCompare(b.name));
+    } catch (err) {
+      skills.push({
+        id: 'read-error',
+        name: 'read-error',
+        title: 'Unable to load skills',
+        description: err.message,
+        path: '.claude/skills',
+        html: '<p>Failed to read the local skills folder.</p><pre class="skills-code"><code>' + escapeHtml(err.message) + '</code></pre>',
+        markdown: err.message
+      });
+    }
+
+    const initialSkill = skills[0] || null;
+  #skills-shell.fit
+    +vsplit('30%')
+      +panel('west', {title: 'Local Skills'})
+        #skills-browser.p-3
+          input#skills-search(type='search', placeholder='Filter skills by name or description')
+          #skills-count= skills.length + ' skills'
+          #skills-list
+            each skill, idx in skills
+              button.skill-nav-item(class=idx === 0 ? 'is-active' : '', type='button', data-skill-id=skill.id, data-search=(skill.name + ' ' + skill.description).toLowerCase())
+                .skill-nav-name= skill.name
+                .skill-nav-desc= skill.description || skill.path
+          if !skills.length
+            #skills-empty No skills found in `.claude/skills`.
+
+      +panel('center', {title: 'Skill Details'})
+        if initialSkill
+          #skill-detail-shell
+            .flex.items-start.justify-between.gap-4(style='gap:16px;align-items:flex-start;')
+              div
+                h1#skill-title(style='margin:0;')= initialSkill.title
+                p#skill-description(style='margin:8px 0 0;opacity:.75;')= initialSkill.description
+              span.badge.badge-ghost#skill-badge= initialSkill.name
+            #skill-meta
+              .skill-meta-card
+                .skill-meta-label Skill
+                .skill-meta-value#skill-name= initialSkill.name
+              .skill-meta-card
+                .skill-meta-label Source
+                .skill-meta-value#skill-path= initialSkill.path
+            #skill-doc!= initialSkill.html
+        else
+          #skill-detail-shell
+            #skills-empty No skill documentation is available.
+
+    script#skills-data(type='application/json')!= JSON.stringify(skills).replace(/<\//g, '<\\/')
+
+block script
+  script.
+    $.page.ready(function() {
+      var dataNode = document.getElementById('skills-data');
+      if (!dataNode) return;
+
+      var skills = [];
+      try {
+        skills = JSON.parse(dataNode.textContent || '[]');
+      } catch (err) {
+        skills = [];
+      }
+
+      if (!skills.length) return;
+
+      var byId = {};
+      skills.forEach(function(skill) { byId[skill.id] = skill; });
+
+      var list = document.getElementById('skills-list');
+      var search = document.getElementById('skills-search');
+      var titleEl = document.getElementById('skill-title');
+      var descEl = document.getElementById('skill-description');
+      var badgeEl = document.getElementById('skill-badge');
+      var nameEl = document.getElementById('skill-name');
+      var pathEl = document.getElementById('skill-path');
+      var docEl = document.getElementById('skill-doc');
+      var activeId = skills[0].id;
+
+      function renderSkill(skill) {
+        if (!skill) return;
+        activeId = skill.id;
+        if (titleEl) titleEl.textContent = skill.title || skill.name;
+        if (descEl) descEl.textContent = skill.description || '';
+        if (badgeEl) badgeEl.textContent = skill.name || skill.id;
+        if (nameEl) nameEl.textContent = skill.name || skill.id;
+        if (pathEl) pathEl.textContent = skill.path || '';
+        if (docEl) docEl.innerHTML = skill.html || '<p>No documentation available.</p>';
+
+        Array.prototype.forEach.call(list.querySelectorAll('.skill-nav-item'), function(btn) {
+          btn.classList.toggle('is-active', btn.getAttribute('data-skill-id') === skill.id);
+        });
+      }
+
+      function applyFilter(term) {
+        var q = String(term || '').trim().toLowerCase();
+        var firstVisible = null;
+
+        Array.prototype.forEach.call(list.querySelectorAll('.skill-nav-item'), function(btn) {
+          var haystack = btn.getAttribute('data-search') || '';
+          var visible = !q || haystack.indexOf(q) > -1;
+          btn.style.display = visible ? '' : 'none';
+          if (visible && !firstVisible) firstVisible = btn;
+        });
+
+        if (!firstVisible) return;
+        if (firstVisible.style.display !== 'none' && !byId[activeId]) {
+          renderSkill(byId[firstVisible.getAttribute('data-skill-id')]);
+          return;
+        }
+
+        var activeBtn = list.querySelector('.skill-nav-item.is-active');
+        if (!activeBtn || activeBtn.style.display === 'none') {
+          renderSkill(byId[firstVisible.getAttribute('data-skill-id')]);
+        }
+      }
+
+      list.addEventListener('click', function(event) {
+        var btn = event.target.closest('.skill-nav-item');
+        if (!btn) return;
+        renderSkill(byId[btn.getAttribute('data-skill-id')]);
+      });
+
+      if (search) {
+        search.addEventListener('input', function() {
+          applyFilter(search.value);
+        });
+      }
+
+      renderSkill(byId[activeId]);
+    });

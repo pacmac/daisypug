@@ -1,0 +1,15 @@
+{
+  "id": "documents",
+  "fit": true,
+  "striped": true,
+  "singleSelect": true,
+  "columns": [[
+    {"field": "LINE", "title": "#", "width": 40},
+    {"field": "DOC_TYPE", "title": "Type", "width": 120},
+    {"field": "DOC_NAME", "title": "Document Name", "width": 200},
+    {"field": "UPLOAD_DATE", "title": "Upload Date", "width": 110},
+    {"field": "EXPIRY_DATE", "title": "Expiry", "width": 110},
+    {"field": "STATUS", "title": "Status", "width": 90},
+    {"field": "REMARKS", "title": "Remarks"}
+  ]]
+}

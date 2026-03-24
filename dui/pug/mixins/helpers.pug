@@ -1,0 +1,88 @@
+//- Shared Pug Helpers
+-
+  function getOpts(obj){ try {return eval('({'+obj+'})');} catch(err){return {}}}
+
+  // Resolve input ID from name (EUI legacy: id='~' means use name as id)
+  function resolveInputId(input) {
+    if (!input) return 'input-' + Math.random().toString(36).substr(2, 9);
+    if (input.id === '~') input.id = input.name || ('input-' + Math.random().toString(36).substr(2, 9));
+    if (!input.id && input.name && input.name !== '~') {
+      var safeIdRe = /^[A-Za-z_][A-Za-z0-9_:\\-]*$/;
+      if (safeIdRe.test(String(input.name))) input.id = input.name;
+    }
+    if (!input.id) input.id = 'input-' + Math.random().toString(36).substr(2, 9);
+    return input.id;
+  }
+
+  // Detect input type from class string — single source of truth
+  function detectInputType(cls) {
+    cls = cls || '';
+    var isNumberspinner = /\bnumberspinner\b/.test(cls);
+    return {
+      isCombobox: /\bcombobox\b/.test(cls) || /\bqbe\b/.test(cls),
+      isNumberbox: /\bnumberbox\b/.test(cls),
+      isNumberspinner: isNumberspinner,
+      isSpinner: /\bspinner\b/.test(cls) && !isNumberspinner,
+      isTimespinner: /\btimespinner\b/.test(cls),
+      isDatebox: /\bdatebox\b/.test(cls),
+      isDatetimebox: /\bdatetimebox\b/.test(cls),
+      isTextbox: /\btextbox\b/.test(cls),
+      isSearchbox: /\bsearchbox\b/.test(cls),
+      isTextarea: /\btextarea\b/.test(cls),
+      isMultiline: /\bmultiline\b/.test(cls)
+    };
+  }
+
+  // Global state for mixin coordination
+  var _state = {
+    tabGroupName: 'tabs-default',
+    _surfaceDepth: 0,
+    _panelCount: 0,
+    _iconColorIndex: 0
+  };
+
+  // Icon colour palette — cycled by nextIconColor() for auto-colouring icons
+  var _iconColors = ['text-primary','text-secondary','text-accent','text-info','text-success','text-warning','text-error'];
+  function nextIconColor() {
+    var c = _iconColors[_state._iconColorIndex % _iconColors.length];
+    _state._iconColorIndex++;
+    return c;
+  }
+
+  // Surface elevation: config-driven depth cycling.
+  // Config: surface.start, surface.levels, surface.direction, surface.wrap
+  // direction=increment: panels get lighter; direction=decrement: panels get darker
+  // wrap=bounce: reverse direction at limit; wrap=cycle: reset to start
+  var _surfaceCfg = (config && config.surface) || {};
+  var _sStart     = _surfaceCfg.start || 2;
+  var _sLevels    = _surfaceCfg.levels || 8;
+  var _sDir       = _surfaceCfg.direction === 'decrement' ? -1 : 1;
+  var _sWrap      = _surfaceCfg.wrap || 'bounce';
+
+  function surfaceDepth(delta) {
+    if (delta !== undefined) {
+      _state._surfaceDepth = Math.max(0, (_state._surfaceDepth || 0) + delta);
+    }
+    var raw = _state._surfaceDepth || 0;
+    if (raw === 0) return _surfaceCfg.nav || 0;
+
+    // Range for panels: start to levels (increment) or start to 0 (decrement)
+    var lo = _sDir === 1 ? _sStart : 0;
+    var hi = _sDir === 1 ? _sLevels : _sStart;
+    var range = hi - lo;
+    if (range <= 0) return _sStart;
+
+    // raw=1 is first panel → offset 0 from start
+    var offset = raw - 1;
+
+    if (_sWrap === 'bounce') {
+      // Bounce: 0,1,2...range,range-1,...1,0,1,2...
+      var cycle = range * 2;
+      var pos = offset % cycle;
+      if (pos >= range) pos = cycle - pos;
+      return lo + pos;
+    } else {
+      // Cycle: 0,1,2...range,0,1,2...
+      return lo + (offset % (range + 1));
+    }
+  }

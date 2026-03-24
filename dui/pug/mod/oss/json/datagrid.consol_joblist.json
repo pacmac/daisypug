@@ -1,0 +1,29 @@
+{
+  "id": "joblist",
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "oss^ulinkjobs",
+    "_func": "get",
+    "_dgrid": "y",
+    "START_DATE": "",
+    "END_DATE": "",
+    "CUSTOMER_ID": "",
+    "CONSOL_ID": ""
+  },
+  "fit": true,
+  "singleSelect": true,
+  "striped": true,
+  "columns": [
+    [
+      { "field": "_cbox", "checkbox": true, "title": "Sel" },
+      { "field": "WOREF", "title": "Job Ref", "width": 120, "formatter": "eui.ref2text" },
+      { "field": "WO_CLASS", "title": "Job Class", "width": 100 },
+      { "field": "PART_ID", "title": "Part ID", "width": 100 },
+      { "field": "CUSTOMER_ID", "hidden": true },
+      { "field": "SALES_ORDER_REF", "title": "Order ID / Line", "width": 120, "formatter": "eui.ref2text" },
+      { "field": "DESIRED_RLS_DATE", "title": "Released", "width": 80, "formatter": "$.dui.fmt.date" },
+      { "field": "DESIRED_WANT_DATE", "title": "Wanted", "width": 80, "formatter": "$.dui.fmt.date" },
+      { "field": "WO_QTY", "title": "Job Qty", "width": 60, "align": "right", "formatter": "$.page.fn.qtyfmt" }
+    ]
+  ]
+}

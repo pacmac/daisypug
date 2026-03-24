@@ -1,0 +1,6 @@
+{
+  "id": "dgfiles",
+  "sourceFile": "admin/js/update.js",
+  "lineNumber": 75,
+  "configPreview": "(\"reload\");\n    },\n  });\n\n  $(\"#dgbutup\").linkbutton({\n    size: \"small\",\n    iconCls: \"icon-download\",\n    text: \"Update\",\n    onClick: function () {..."
+}

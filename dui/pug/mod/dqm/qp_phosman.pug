@@ -1,0 +1,177 @@
+extends ../content
+
+block script
+  script: include js/qp_phosman.js
+
+block content
+  form.multi.fit#main(_sqlid="dqm^phosman" asdpx="ax")
+    +vsplit('400px')
+      +panel('west')
+        +input({name:'USER_NAME', id:'~', type:'hidden'})
+        +fitem('Test ID',{id:'ID', name:'ID', class:'searchbox fkey fit autonum', sbref:'phosman_ids'})
+
+        +v-group('')
+          +fitem('Job ID',{id:'~', name:'BASE_ID', class:'searchbox', required:true, sbref:'job'})
+          //-  +button#jobreload.iconbut({icon:'refresh-cw', size:'xs', style:'ghost', title:'Reload Job'})
+          +fitem('Create Date',{name:'CREATE_DATE', class:'datebox today', readonly:true})
+
+        +v-group('')
+          +fitem('Status',{id:'~', name:'STATUS', value:'PENDING', required: true, class:'combobox','data-options':"data:[{value:'PENDING',text:'PENDING'},{value:'IN-PROCESS',text:'IN-PROCESS'},{value:'COMPLETED',text:'COMPLETED'}]"})
+
+          +fitem('Inspected By',{name:'USER_ID', id:'~', class:'combobox', required:true,_sqlid:'admin^usercbo'})
+          
+
+          +fitem('Qty',{id:'~', name:'QTY', class:'numberspinner',precision:0, min:0, value:0, required:true})
+          +fitem('Top Coat Colour',{name:'COAT_COLOUR', class:'combobox', required:true})
+          +fitem('Coating Spec / Rev',{name:'COAT_SPEC_ID', class:'combobox', required:true})
+          +fitem('Quality Spec / Rev',{name:'QA_SPEC_ID', class:'combobox', required:true})
+
+          +fitem('Batch ID',{id:'~', name:'TRACE_ID', class:'textbox', required:true})
+          +fitem('Serial Numbers',{name:'SERIAL_IDS', class:'textbox', 'data-options':"multiline:true",validType:['length[0,255]'], required:true})
+
+      +panel('center')
+        +tabs(data-options="fit:true")
+          +tab-item("Order Info", {iconCls:"icon-app"})
+            +fitem('Part ID',{name:'PART_ID', class:'textbox', readonly:true})
+            +fitem('Sales Order / Line',{name:'SALES_ORDER_ID', class:'textbox',readonly:true})
+              +input({name:'SALES_ORDER_LINE_NO', class:'numberbox',precision:0, min:1,readonly:true})
+            +fitem('Customer ID',{name:'CUSTOMER_ID', class:'textbox',readonly:true})
+            +fitem('Customer PO',{name:'CUST_PO', class:'textbox',readonly:true})
+            +fitem('Customer Part ID',{name:'CUST_PART_ID', class:'textbox',readonly:true})
+            +fitem('Part Description',{name:'CUST_PART_DESCRIPTION', class:'textbox',readonly:true})
+            +fitem('Project Name',{name:'USER_2', class:'textbox',readonly:true})
+            +fitem('Cust Prod / Proc ID',{name:'USER_1', class:'textbox',readonly:true})
+            +fitem('Job Qty',{name:'WO_QTY', class:'textbox',readonly:true})
+            +fitem('Total Qty Accepted',{name:'TTL_OK_QTY', class:'textbox',readonly:true})
+            +fitem('Total Qty Rejected',{name:'TTL_REJECT_QTY', class:'textbox',readonly:true})
+
+          +tab-item("Pre-Inspect", {iconCls:"icon-notes"})
+            +input({class:'textbox spec', name:'PRE_NOTES', 'data-options':"multiline:true"})
+            ul.checklist
+
+          +tab-item("Environment", {iconCls:"icon-bolt"})
+            table#enviro
+              tr.head
+                th Operation
+                th.center Start Phosphate
+                th.center End Phosphate
+                th.center Final Inspection
+
+              tr.body
+                td Date & Time
+                td: +input({name:'ENV_START_PHOS',class:'datetimebox','data-options':"editable:false"})
+                td: +input({name:'ENV_END_PHOS',class:'datetimebox', 'data-options':"editable:false"})
+                td: +input({name:'ENV_START_INSPECT',class:'datetimebox', 'data-options':"editable:false"})
+
+              tr.body
+                td Air Temp
+                td: +input({name:'ENV_AIR_START',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_AIR_END',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_AIR_INSPECT',class:'combobox comply','data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+
+              tr.body
+                td Surface Temp
+                td: +input({name:'ENV_SURF_START',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_SURF_END',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_SURF_INSPECT',class:'combobox comply','data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+
+              tr.body#wetbulb
+                td Wet Bulb Temp
+                td: +input({name:'ENV_WET_START',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_WET_END',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({id:'~', name:'ENV_WET_INSPECT', grpid:'#wetbulb', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+
+              tr.body#drybulb
+                td Dry Bulb Temp
+                td: +input({name:'ENV_DRY_START',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DRY_END',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({id:'~', name:'ENV_DRY_INSPECT', grpid:'#drybulb', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+
+              tr.body#humid
+                td Relative Humidity
+                td: +input({name:'ENV_RH_START',class:'numberspinner',precision:0, suffix:' %', required:true})
+                td: +input({name:'ENV_RH_END',class:'numberspinner',precision:0, suffix:' %', required:true})
+                td: +input({id:'~', name:'ENV_RH_INSPECT', grpid:'#humid', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+
+              tr.body#dewpoint
+                td Dew Point Temp
+                td: +input({name:'ENV_DEW_START',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DEW_END',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({id:'~', name:'ENV_DEW_INSPECT', grpid:'#dewpoint', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+
+            +v-group('Notes')
+              +input({name:'ENV_NOTES', class:'textbox spec', multiline:'true'})
+              ul.checklist
+
+          +tab-item("Preparation", {iconCls:"icon-bhave"})
+            +v-group('Solvent Pre-Clean')
+              +fitem('Type',{name:'SURF_SOLV_TYPE', class:'combobox',required:true})
+              +fitem('Rinse & Water Break',{name:'SURF_RINSE_COMPLY', class:'combobox comply', required:true})
+
+            +v-group('Optional Treatment')
+              +fitem('Type',{name:'SURF_OPT_TREAT', class:'combobox'})
+              +fitem('Batch ID',{name:'SURF_BATCH', class:'textbox'})
+
+          +tab-item("Application", {iconCls:"icon-edit"})
+            +v-group('Phosphate')(id='appphos')
+              div.two
+                div
+                  +fitem('Manufacturer',{name:'APP_PHOS_MFG', grpid:'#appphos', class:'combobox', required:true})
+                  +fitem('Type',{name:'APP_PHOS_TYPE', class:'combobox', required:true})
+                  +fitem('Colour',{name:'APP_PHOS_COLOUR', class:'combobox', required:true})
+                  +fitem('Batch ID',{name:'APP_PHOS_BATCH', class:'textbox', required:true})
+                  +fitem('Expiry Date',{name:'APP_PHOS_DATE', class:'datebox', required:true})
+                div
+                  +fitem('Weight',{name:'APP_PHOS_WEIGHT', class:'numberbox', required:true,precision:3, suffix:' g/m2'})
+                  +fitem('Material',{name:'APP_PHOS_MATL', class:'combobox', required:true})
+                  +fitem('Tank Condition',{name:'APP_PHOS_TANK', class:'combobox', required:true})
+                  +fitem('Soak Temperature',{name:'APP_PHOS_TEMP', class:'numberbox', required:true, suffix:' &deg;C'})
+                  +fitem('Soak Duration',{name:'APP_PHOS_DURN', class:'numberbox', required:true, suffix:' mins'})
+
+          +tab-item("Inspection", {iconCls:"icon-value"})
+
+            +v-group('Inspection Standard',{class:'two'})
+              div
+                +fitem('Requirement',{id:'~', name:'INS_STD_REQD', class:'combobox', required:true})
+              div
+                +fitem('Frequency',{name:'INS_STD_FREQ', class:'combobox'})
+
+            +v-group('Visual Inspection',{class:'two'})
+              div
+                +fitem('Method',{name:'INS_VIS_METHOD', id:'~', class:'textbox', readonly:true})
+              div
+                +fitem('Magnification',{name:'INS_VIS_MAG', class:'combobox'})
+
+              table#phovis
+                tr.head
+                  th Inspection Criteria
+                  th.center Colour / Pattern Uniformity
+                  th.center Phosphate Grain Size
+                  th.center Crystalline Prescence
+
+                tr.body
+                  td Frequency
+                  td.center: |100%
+                  td.center: |1st + last on every 10pcs
+                  td.center: |1st + last on every 10pcs
+
+                tr.body
+                  td Result
+                  td.center: +input({name:'INS_VIS_COLOUR',class:'textbox comply', required:true})
+                  td.center: +input({name:'INS_VIS_GRAIN',class:'textbox comply', required:true})
+                  td.center: +input({name:'INS_VIS_PRESCENCE',class:'textbox comply', required:true})
+
+            +v-group('Adhesion',{class:'two'})
+              div
+                +fitem('Compliance',{name:'INS_ADH_COMPLY', required:true, class:'combobox comply'})
+                +fitem('NCR / QN #',{name:'ADH_QNID', class:'searchbox', sbref:'ncr_ids'})
+              div
+                +fitem('Method',{id:'ADH_METHOD', name:'~', class:'textbox',readonly:true})
+
+            +v-group('Compliance',{class:'two'})
+              div
+                +fitem('Overall Result',{name:'INS_VIS_COMPLY', class:'combobox comply', required:true})
+                +fitem('Qty Acceptable',{id:'~',name:'QTY_ACCEPTABLE', class:'numberspinner', precision:0,min:0, value:0,max:0})
+              div
+                +fitem('NCR / QN #',{name:'INS_VIS_QNID', class:'searchbox', sbref:'ncr_ids'})
+                +fitem('Qty Rejected',{id:'~',name:'QTY_REJECTED', class:'numberspinner', precision:0,min:0,value:0,max:0})

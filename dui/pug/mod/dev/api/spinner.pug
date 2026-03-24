@@ -1,0 +1,235 @@
+extends ../../../layout/layout
+
+block content
+  +content("Spinner API Test", "Tests jQuery plugin API methods with DIRECT initialization (NO parser)")
+    +section("Test Inputs", "Target elements for testing API methods")
+      +form({cols: 2})
+        +fitem("Basic Spinner (step=1):")
+          +spinner({id: 'target', value: 10})
+        +fitem("With Min/Max (0-100):")
+          +spinner({id: 'target2', min: 0, max: 100, step: 5, value: 50})
+        +fitem("Large Step (10):")
+          +spinner({id: 'target3', step: 10, value: 50})
+
+    +section("API Methods", "Click buttons to test each method")
+      .grid.grid-cols-1.gap-4.mb-4(class="sm:grid-cols-2 lg:grid-cols-4")
+        div
+          h3.font-medium.mb-2 Spinner Methods
+          .space-y-2
+            button.btn.btn-sm.btn-primary.w-full#test-getValue getValue()
+            button.btn.btn-sm.btn-primary.w-full#test-setValue setValue(75)
+            button.btn.btn-sm.btn-primary.w-full#test-spinUp spinUp()
+            button.btn.btn-sm.btn-primary.w-full#test-spinDown spinDown()
+
+        div
+          h3.font-medium.mb-2 Manual Operations
+          .space-y-2
+            button.btn.btn-sm.btn-secondary.w-full#test-increment Increment +5
+            button.btn.btn-sm.btn-secondary.w-full#test-decrement Decrement -5
+            button.btn.btn-sm.btn-secondary.w-full#test-max Set to Max (100)
+            button.btn.btn-sm.btn-secondary.w-full#test-min Set to Min (0)
+
+        div
+          h3.font-medium.mb-2 State Methods
+          .space-y-2
+            button.btn.btn-sm.btn-accent.w-full#test-disable disable()
+            button.btn.btn-sm.btn-accent.w-full#test-enable enable()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly readonly()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly-false readonly(false)
+            button.btn.btn-sm.btn-accent.w-full#test-options options()
+
+        div
+          h3.font-medium.mb-2 Inherited Methods
+          .space-y-2
+            button.btn.btn-sm.btn-info.w-full#test-textbox textbox()
+            button.btn.btn-sm.btn-info.w-full#test-isValid isValid()
+            button.btn.btn-sm.btn-info.w-full#test-clear clear()
+            button.btn.btn-sm.btn-info.w-full#test-reset reset()
+
+    +section("Test Output", "Results from API method calls")
+      +testOutput("output")
+        | Click buttons above to test API methods.
+        | Results will appear here...
+
+    +section("Event Log", "Events (onSpinUp, onSpinDown) logged here")
+      +testOutput("eventLog")
+
+  //- Load dependencies in correct order
+  script(src="/assets/js/textbox-helper.js")
+  script(src="/assets/js/spinner-helper.js")
+
+  //- Test script
+  script.
+    $(function() {
+      var $output = $('#output');
+      var $eventLog = $('#eventLog');
+
+      // Helper to log output with visual separation
+      function log(msg) {
+        $output.append(msg + '\n\n');
+        console.log(msg);
+      }
+
+      // Helper to log events
+      function logEvent(msg) {
+        var timestamp = new Date().toLocaleTimeString();
+        $eventLog.append('[' + timestamp + '] ' + msg + '\n');
+        console.log('[EVENT]', msg);
+      }
+
+      // Clear output on initialization
+      $output.text('');
+      $eventLog.text('');
+
+      // Initialize spinners with callbacks
+      log('Initializing spinner with callbacks...');
+      $('#target').spinner({
+        step: 1,
+        onSpinUp: function() {
+          logEvent('onSpinUp: value incremented');
+        },
+        onSpinDown: function() {
+          logEvent('onSpinDown: value decremented');
+        }
+      });
+
+      // Initialize second spinner (min/max)
+      $('#target2').spinner({
+        min: 0,
+        max: 100,
+        step: 5,
+        onSpinUp: function() {
+          logEvent('target2: onSpinUp');
+        },
+        onSpinDown: function() {
+          logEvent('target2: onSpinDown');
+        }
+      });
+
+      // Initialize third spinner (step=10)
+      $('#target3').spinner({
+        step: 10,
+        onSpinUp: function() {
+          logEvent('target3: onSpinUp');
+        }
+      });
+
+      log('Spinner initialized. Click buttons to test API methods.');
+      log('─────────────────────────────────────────────────────────────────');
+
+      //- ====================================================================
+      //- Spinner Methods Tests
+      //- ====================================================================
+      $('#test-getValue').click(function() {
+        var val = $('#target').spinner('getValue');
+        log('► getValue() = "' + val + '"');
+      });
+
+      $('#test-setValue').click(function() {
+        $('#target').spinner('setValue', 75);
+        log('► setValue(75) - done');
+      });
+
+      $('#test-spinUp').click(function() {
+        $('#target').spinner('spinUp');
+        var val = $('#target').spinner('getValue');
+        log('► spinUp() called, new value = ' + val);
+      });
+
+      $('#test-spinDown').click(function() {
+        $('#target').spinner('spinDown');
+        var val = $('#target').spinner('getValue');
+        log('► spinDown() called, new value = ' + val);
+      });
+
+      //- ====================================================================
+      //- Manual Operations Tests
+      //- ====================================================================
+      $('#test-increment').click(function() {
+        var currentVal = parseFloat($('#target').spinner('getValue'));
+        var newVal = isNaN(currentVal) ? 5 : currentVal + 5;
+        $('#target').spinner('setValue', newVal);
+        log('► Increment +5: ' + currentVal + ' → ' + newVal);
+      });
+
+      $('#test-decrement').click(function() {
+        var currentVal = parseFloat($('#target').spinner('getValue'));
+        var newVal = isNaN(currentVal) ? -5 : currentVal - 5;
+        $('#target').spinner('setValue', newVal);
+        log('► Decrement -5: ' + currentVal + ' → ' + newVal);
+      });
+
+      $('#test-max').click(function() {
+        $('#target2').spinner('setValue', 100);
+        var val = $('#target2').spinner('getValue');
+        log('► Set to max (100): ' + val);
+      });
+
+      $('#test-min').click(function() {
+        $('#target2').spinner('setValue', 0);
+        var val = $('#target2').spinner('getValue');
+        log('► Set to min (0): ' + val);
+      });
+
+      //- ====================================================================
+      //- State Methods Tests
+      //- ====================================================================
+      $('#test-disable').click(function() {
+        $('#target').spinner('disable');
+        log('► disable() - spinner disabled');
+      });
+
+      $('#test-enable').click(function() {
+        $('#target').spinner('enable');
+        log('► enable() - spinner enabled');
+      });
+
+      $('#test-readonly').click(function() {
+        $('#target').spinner('readonly');
+        log('► readonly() - spinner is now readonly');
+      });
+
+      $('#test-readonly-false').click(function() {
+        $('#target').spinner('readonly', false);
+        log('► readonly(false) - readonly removed');
+      });
+
+      $('#test-options').click(function() {
+        var opts = $('#target').spinner('options');
+        log('► options() = ' + JSON.stringify(opts, function(k, v) {
+          return typeof v === 'function' ? '[Function]' : v;
+        }, 2));
+      });
+
+      //- ====================================================================
+      //- Inherited Methods Tests
+      //- ====================================================================
+      $('#test-textbox').click(function() {
+        var $elem = $('#target').spinner('textbox');
+        log('► textbox() returned element: ' + $elem[0].tagName + ' with id=' + $elem.attr('id'));
+      });
+
+      $('#test-isValid').click(function() {
+        var valid = $('#target').spinner('isValid');
+        log('► isValid() = ' + valid);
+      });
+
+      $('#test-clear').click(function() {
+        $('#target').spinner('clear');
+        log('► clear() - spinner cleared');
+      });
+
+      $('#test-reset').click(function() {
+        $('#target').spinner('reset');
+        log('► reset() - spinner reset to initial value (10)');
+      });
+
+      //- ====================================================================
+      //- Initial status
+      //- ====================================================================
+      log('✅ All event handlers attached.');
+      log('✅ Click +/- buttons to see onSpinUp/onSpinDown events.');
+      log('✅ Use spinUp()/spinDown() methods to test programmatically.');
+      log('✅ Manual input changes do NOT trigger callbacks.');
+      log('');
+    });

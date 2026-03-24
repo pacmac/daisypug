@@ -1,0 +1,289 @@
+extends ../content 
+block script
+  script: include js/bhave.js
+block content
+  mixin usercombo(label,name,user)
+    -var input = {'data-valueid':'userid',name:name, id:name,'data-email':'#'+name+'_EMAIL',class:'easyui-combobox user-combo',_sqlid:'dqm^cbo_uid'}
+    +fitem(label,input)          
+      input(name=name+'_EMAIL' type="hidden" id=name+'_EMAIL') 
+
+
+  +tabs(style='min-width:800px;' fit="true" tabPosition="left")
+    div(title='CAAS(AW)95' iconCls="icon-awe95" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')#caas_aw95
+        +input({name:'appid', value:'dqm^caas_aw95', type:'hidden'})
+        div(style="width:400px;")
+          +fieldset('Combo Items')
+            +fitem('Work Status',{name:'CBO_STATUS_WORK', class:'combobox edit first'})
+    div(title='COC' iconCls="icon-coc" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s' )
+        +input({name:'appid', value:'dqm^coc_man', type:'hidden'})
+        +fieldset('NCRs')
+          +fitem('Allow Open NCRs',{name:'ALLOW_NCR' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+        +fieldset('COC Resource')
+          +fitem('Allow lower Completed qty in prior opnr',{name:'ALLOW_OPEN_OPN' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Allow Unissued Material ',{name:'ALLOW_OPN_PART' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Resource ID',{name:'COC_RESOURCE' ,class:'combobox','data-options':"panelHeight:'auto'",_sqlid:'vwltsa^resid'})
+          +fitem('Ignored Resources',{name:'COC_IGNORED_RESOURCES', class:'textbox', 'data-options':"multiline:true",style:'height:200px;'})
+        +fieldset('User Labels')
+          -for (var x=1; x<6; x++)
+            +fitem('User Label '+x,{name:'ulabel_'+x ,class:'textbox'})
+    
+    div(title='NCR' iconCls="icon-ncr" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', value:'dqm^comp^ncr_man', type:'hidden'})
+
+        +fieldset('Combo Items')
+          //-+fitem('Source Combo',{name:'srcsel', class:'srcsel combobox edit'})
+          +fitem('Material Disposition',{name:'DISPOSITION_MATERIAL', class:'dispomat combobox edit'}) 
+                
+        +fieldset('Auto-Created NCR')
+          +fitem('Job Ticket Deviated Qty',{name:'newncr_jobticket_badqty',class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +usercombo('Default Reported By','newncr_jobticket_reportedby')
+      
+        +fieldset('Link Source')
+          +fitem('Enforce Valid Job',{name:'enforce_valid_job',class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+
+    div(title='CPAR' iconCls="icon-cpar" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', value:'dqm^comp^cpar_man', type:'hidden'})
+        
+        +fieldset('Combo Items')
+          //-+fitem('Source Combo',{name:'srcsel', class:'srcsel combobox edit'})
+          +fitem('Material Disposition',{name:'DISPOSITION_MATERIAL', class:'dispomat combobox edit'})      
+        
+        +fieldset('Auto-Created CPAR')
+          +fitem('Followup NCR',{name:'newcpar_ncr_followup' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Followup CF',{name:'newcpar_cf_followup' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Enabled Liability Cost',{name:'CPAR_DISPOSITION_LIABILITY_COST', class:'textbox', 'data-options':"multiline:true",style:'height:200px;'})
+    div(title='CF' iconCls="icon-cf" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', value:'dqm^comp^cf_man', type:'hidden'})
+
+        +fieldset('Combo Items')
+          //-+fitem('Source Combo',{name:'srcsel', class:'srcsel combobox edit'})
+          +fitem('Material Disposition',{name:'DISPOSITION_MATERIAL', class:'dispomat combobox edit'}) 
+
+    div(title='Operators' iconCls="icon-user" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', value:'dqm^opcert^operators', type:'hidden'})
+        br
+        +fieldset('General')
+          +fitem('Default UDF',{class:'combobox', name:'defudf','data-options':"panelHeight:'auto'",_sqlid:'vwltsa^udfid'})
+        +fieldset('Tab Access')
+          +fitem('User Fields',{name:'udfen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+          +fitem('Resources',{name:'resen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+          +fitem('Certification',{name:'certen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+          +fitem('Qualifications',{name:'qualen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+          +fitem('NCRs',{name:'ncren' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+          +fitem('Attachments',{name:'docen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+          +fitem('Rating',{name:'rating' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+          
+    div(title='Analysis' iconCls="icon-chart" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', value:'dqm^comp^analysis', type:'hidden'})
+        +fitem('Start Date',{name:'frdate' ,class:'datebox year'})
+        
+        +fieldset('Defect Labels')
+          +fitem('No Code Label',{name:'nonetext' ,value:'No Code',class:'textbox upper'})
+          +fitem('Total Label',{name:'alltext' ,value:'ALL-DEFECTS',class:'textbox upper'})
+          +fitem('Top N Defects',{name:'top', value:3 , precision:0, min:1, eui:'numberspinner'})
+
+        +fieldset('Report-NCR')
+          +fitem('Cost',{name:'NCRCOST' ,value:500 , precision:2, min:100, eui:'numberspinner'})
+
+
+        +fieldset('Report-KPI')
+          +fitem('Avg Quote Time',{name:'AVG' ,value:3 , precision:0, min:1, eui:'numberspinner'})
+          +fitem('Operating Cost',{name:'OPERATING_COST' ,value:20000 , precision:0, min:1, eui:'numberspinner'})   
+          +fitem('MR Folder',{name:'MR_FOLDER' ,class:'textbox'})   
+    div(title='Gauge Manager' iconCls="icon-gauge" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s' )#gaugeman
+        +input({name:'appid', value:'dqm^gauges^gauge_man', type:'hidden'})
+        //-+fieldset('Rental')
+          +fitem('Outside Diameter',{name:'CBO_GAUGE_RENT_DIAMETER', class:'combobox edit first'})
+        +fieldset('Misc Settings')
+          //-+fitem('UDF Layout',{'_sqlid':"admin^udfid", class:'combobox',name:'UDF_LAYOUT_ID'})
+          +fitem('Gauge Numbering',{name:'autonum' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'Auto',value:'AUTO',selected:true},{text:'Manual',value:'USER'}]"})
+          +fitem('Allow Gauge Rename',{name:'allow_gauge_rename' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'Yes',value:'y'},{text:'No',value:'n',selected:true}]"})
+          +fitem('Show Due Alert',{name:'duealert' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'Yes',value:'y',selected:true},{text:'No',value:'n'}]"})
+          +fitem('Due Alert Days',{name:'alertdays' ,value:'7',class:'numberspinner',precision:0})
+          +fitem('Outside Diameter',{name:'CBO_OUTSIDE_DIAMETER', class:'combobox edit first','data-options':"panelHeight:'auto'"})         
+        +fieldset('Initial Calibration')
+          +fitem('Calibration #1',{name:'caldays1' ,value:'60' ,precision:'0' ,suffix:' Days',class:'numberspinner'})
+          +fitem('Calibration #2',{name:'caldays2' ,value:'120' ,precision:'0' ,suffix:' Days',class:'numberspinner'})
+
+          
+    div(title='Gauge Trans' iconCls="icon-inout" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s' )
+        +input({name:'appid', value:'dqm^gauges^gauge_inv', type:'hidden'})
+        +fieldset('Appearance')
+          +fitem('Hide Menu',{name:'fscreen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+        +fieldset('Check In-Out')
+          +fitem('Require Operator',{name:'reqop' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Require Job Ref',{name:'reqjob' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+        +fieldset('Repair/Calibration')
+          +fitem('Require Vendor',{name:'reqven' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Require Doc Ref',{name:'reqdoc' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})      
+    
+    div(title='Test Plans' iconCls="icon-org" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s' )
+        +input({name:'appid', value:'dqm^qp^qp_qpman', type:'hidden'})
+        +fieldset('Misc Settings')
+          +fitem('Part Type',{name:'partType' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'Part',value:'PART',selected:true},{text:'Job',value:'WORK_ORDER'}]"})
+          //-+fitem('Allow Copy Plan',{name:'copyplan' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          
+        +fieldset('Last Selection Memory')
+          +fitem('Title',{name:'MEM_TITLE' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Doc Ref',{name:'MEM_DOC' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Doc Grid-Ref',{name:'MEM_GREF' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+        +fieldset('Repair/Calibration')
+          +fitem('Require Vendor',{name:'reqven' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})
+          +fitem('Require Doc Ref',{name:'reqdoc' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n',selected:true},{text:'Yes',value:'y'}]"})      
+
+    div(title='Resin Coating' iconCls="icon-coat-resin" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s' )#coatman
+        +input({name:'appid', value:'dqm^qtr^qp_coatman', type:'hidden'})
+        
+        div.two
+          div(style="width:400px;")
+            +fieldset('Misc Settings')
+              +fitem('Job Class',{name:'JOB_CLASS', class:'textbox', value:'DEFAULT'})
+              +fitem('Lock Completed',{name:'COMPLETE_LOCK' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+
+            +fieldset('Main Lists')
+              +fitem('Coating Colour',{name:'CBO_COAT_COLOUR', class:'combobox edit first'})
+              +fitem('Coating Spec ID',{name:'CBO_COAT_SPEC_ID', class:'combobox edit first'})
+              +fitem('Quality Spec',{name:'CBO_QA_SPEC_ID', class:'combobox edit first'})
+
+            +fieldset('Surface Prep Lists')
+              +fitem('Solvent Type',{name:'CBO_SURF_SOLV_TYPE', class:'combobox edit first'})
+              +fitem('Blast/Grit Type',{name:'CBO_SURF_BLAST_TYPE', class:'combobox edit first'})
+          div  
+            +fieldset('Application Lists')
+              +fieldset('Phosphate')
+                +fitem('Manufacturer',{name:'CBO_APP_PHOS_MFG', class:'combobox edit first'})
+                +fitem('Type',{name:'CBO_APP_PHOS_TYPE', class:'combobox edit first'})
+                +fitem('Colour',{name:'CBO_APP_PHOS_COLOUR', class:'combobox edit first'})
+              +fieldset('Primer')
+                +fitem('Manufacturer',{name:'CBO_APP_PRIMER_MFG', class:'combobox edit first'})
+                +fitem('Type',{name:'CBO_APP_PRIMER_TYPE', class:'combobox edit first'})
+              +fieldset('Top Coat')
+                +fitem('Manufacturer',{name:'CBO_APP_COAT_MFG', class:'combobox edit first'})
+                +fitem('Type',{name:'CBO_APP_COAT_TYPE', class:'combobox edit first'})    
+
+
+
+    div(title='Phosphate Coating' iconCls="icon-coat-phos" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')#phosman
+        +input({name:'appid', value:'dqm^qtr^qp_phosman', type:'hidden'})
+
+        
+        div.two
+          div(style="width:400px;")
+            
+            +fieldset('Misc Settings')
+              +fitem('Job Class',{name:'JOB_CLASS', class:'textbox', value:'DEFAULT'})
+              +fitem('Lock Completed',{name:'COMPLETE_LOCK' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+              +fitem('Final Inspection',{name:'PHOS_FI',class:'combobox','data-options':"panelHeight:'auto'",_sqlid:'vwltsa^resid'})
+            +fieldset('Surface Prep Lists')
+              +fitem('Solvent Type',{name:'CBO_SURF_SOLV_TYPE', class:'combobox edit first'})
+              +fitem('Rinse Break Comply',{name:'CBO_SURF_RINSE_COMPLY', class:'combobox edit first'})
+              +fitem('Optional Treatment',{name:'CBO_SURF_OPT_TREAT', class:'combobox edit first'})
+            
+            +fieldset('Application Lists')
+              +fitem('Manufacturer',{name:'CBO_APP_PHOS_MFG', class:'combobox edit first'})
+              +fitem('Type',{name:'CBO_APP_PHOS_TYPE', class:'combobox edit first'})
+              +fitem('Colour',{name:'CBO_APP_PHOS_COLOUR', class:'combobox edit first'})
+              +fitem('Material',{name:'CBO_APP_PHOS_MATL', class:'combobox edit first'})
+              +fitem('Tank Condition',{name:'CBO_APP_PHOS_TANK', class:'combobox edit first'})
+          
+          div
+            +fieldset('Main Lists')
+              +fitem('Coating Colour',{name:'CBO_COAT_COLOUR', class:'combobox edit first'})
+              +fitem('Coating Spec ID',{name:'CBO_COAT_SPEC_ID', class:'combobox edit first'})
+              +fitem('Quality Spec',{name:'CBO_QA_SPEC_ID', class:'combobox edit first'})
+              
+            +fieldset('Inspection Lists')
+              +fitem('Requirement',{name:'CBO_INS_STD_REQD', id:'~', class:'combobox edit first'})
+              +fitem('Frequency',{name:'CBO_INS_STD_FREQ', class:'combobox edit first'})
+              +fitem('Method',{name:'CBO_INS_VIS_METHOD', class:'combobox edit first'})
+              +fitem('Maginification',{name:'CBO_INS_VIS_MAG', class:'combobox edit first'})
+              +fitem('Colour Uniformity',{name:'CBO_INS_VIS_COLOUR', class:'combobox edit first'})
+              +fitem('Grain Size',{name:'CBO_INS_VIS_GRAIN', class:'combobox edit first'})
+              +fitem('Crystaline Precsence',{name:'CBO_INS_VIS_PRESCENCE', class:'combobox edit first'})
+              +fitem('Compliance',{name:'CBO_INS_VIS_COMPLY', class:'combobox edit first'})
+              +fitem('Method',{name:'CBO_INS_VIS_METHOD', class:'combobox edit first'})
+              +fitem('Adhesion',{name:'CBO_INS_ADH_COMPLY', class:'combobox edit first'})
+    div(title='Qualificatn Manager' iconCls="icon-qtest" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s' )#quaman
+        +input({name:'appid', value:'dqm^qualification_man', type:'hidden'})
+        
+        div
+          +fitem('Type',{name:'CBO_TYPE', class:'combobox edit first'})
+          +fitem('Class',{name:'CBO_CLASS', class:'combobox edit first'})
+          +fitem('Status',{name:'CBO_STATUS', class:'combobox edit first'})
+
+          +fieldset('General')
+            +fitem('Default UDF',{class:'combobox', name:'defudf','data-options':"panelHeight:'auto'",_sqlid:'vwltsa^udfid'})          
+          
+          +fitem('Method',{name:'CBO_METHOD', class:'combobox edit first'})
+          +fitem('License Owner',{name:'CBO_LICENSOR_OWNER', class:'combobox edit first'})
+          +fitem('Result',{name:'CBO_RESULT', class:'combobox edit first'})
+
+    div(title='Everslik Coating' iconCls="icon-coat-ever" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')#everslik
+        +input({name:'appid', value:'dqm^qtr^qp_everslik', type:'hidden'})
+
+        
+        div.two
+          div(style="width:400px;")
+            
+            +fieldset('Misc Settings')
+              +fitem('Job Class',{name:'JOB_CLASS', class:'textbox', value:'DEFAULT'})
+              +fitem('Lock Completed',{name:'COMPLETE_LOCK' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+              +fitem('Pre-inspect Note',{name:'PRE_INSPECT_NOTES', class:'textbox' , 'data-options':"multiline:true", style:"height:100px;"})
+              +fitem('Cleanliness Spec',{name:'SURF_CLEAN_SPEC', class:'textbox'})
+        
+          
+            +fieldset('Main Lists')
+              +fitem('Coating System',{name:'CBO_COAT_SYSTEM', class:'combobox edit first'})
+              +fitem('Coating Spec ID',{name:'CBO_COAT_SPEC_ID', class:'combobox edit first'})
+            +fieldset('Surface')
+              +fitem('Solvent Pre-Clean Type',{name:'CBO_SURF_SOLV_TYPE', class:'combobox edit first'})
+              +fitem('Blast Type',{name:'CBO_SURF_BLAST_TYPE', class:'combobox edit first'})
+              +fitem('Blast Method',{name:'CBO_SURF_BLAST_METHOD', class:'combobox edit first'})
+              +fitem('Orig Surface',{name:'CBO_SURF_BLAST_ORIG_SURF', class:'combobox edit first'}) 
+              +fitem('Method Measure Anchor',{name:'CBO_SURF_ANCH_METHOD', class:'combobox edit first'}) 
+              +fitem('Cleanliness Reqmt',{name:'CBO_SURF_CLEAN_REQUIREMENT', class:'combobox edit first'}) 
+              +fitem('Cleanliness Compliance',{name:'CBO_SURF_CLEAN_COMPLY', class:'combobox edit first'}) 
+
+            +fieldset('Inspection - Base Coat')
+              +fitem('Unit Thickness',{name:'CBO_INSPECT_FINAL_BASE_UNIT_THICKNESS', class:'combobox edit first'})
+            +fieldset('Inspection - Top Coat')
+              +fitem('Unit Thickness',{name:'CBO_INSPECT_FINAL_TOP_UNIT_THICKNESS', class:'combobox edit first'})
+          div
+            +fieldset('Application Lists - Phosphate')
+              +fitem('Manufacturer',{name:'CBO_APP_PHOS_MFG', class:'combobox edit first'})
+              +fitem('Type',{name:'CBO_APP_PHOS_TYPE', class:'combobox edit first'})
+              +fitem('Colour',{name:'CBO_APP_PHOS_COLOUR', class:'combobox edit first'})
+
+            +fieldset('Application Lists - Base Coat')
+              +fitem('Manufacturer',{name:'CBO_APP_BASE_COAT_MFG', class:'combobox edit first'})
+              +fitem('Type',{name:'CBO_APP_BASE_COAT_TYPE', class:'combobox edit first'})
+              +fitem('Solvent',{name:'CBO_APP_BASE_COAT_SOLVENT', class:'combobox edit first'})
+
+            +fieldset('Application Lists - Top Coat')
+              +fitem('Manufacturer',{name:'CBO_APP_TOP_COAT_MFG', class:'combobox edit first'})
+              +fitem('Type',{name:'CBO_APP_TOP_COAT_TYPE', class:'combobox edit first'})
+              +fitem('Solvent',{name:'CBO_APP_TOP_COAT_SOLVENT', class:'combobox edit first'})
+    div(title='Training Sessions' iconCls="icon-people" style="padding:12px")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')#sessions
+        +input({name:'appid', value:'dqm^opcert^sessions', type:'hidden'})
+        div(style="width:400px;")
+          +fieldset('Misc Settings')
+            //- +fitem('Form No',{name:'FORM_NO', class:'textbox'})
+            +fitem('Form Spec',{name:'FORM_BOTTOM_SPEC', class:'textbox' , 'data-options':"multiline:true", style:"height:100px;"})
+
+    +custom('oms')
+      +oms_bhave_rental()     

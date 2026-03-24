@@ -1,0 +1,62 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "sales^soids_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "SO ID", "width": 100 },
+    { "field": "CUST_ID", "title": "Customer ID", "width": 100 },
+    { "field": "CUST_NAME", "title": "Customer Name", "width": 200 },
+    { "field": "CUST_PO", "title": "Customer PO", "width": 120 },
+    { "field": "DATE", "title": "Order Date", "width": 100 },
+    { "field": "STATUS", "title": "Status", "width": 60 },
+    { "field": "CURRENCY_ID", "title": "Currency", "width": 70 },
+    { "field": "GST_ID", "title": "GST", "width": 60 }
+  ],
+  "filters": [
+    { "field": "CUST_ID", "title": "Customer ID", "editor": "textbox" },
+    { "field": "CUST_NAME", "title": "Customer Name", "editor": "textbox" },
+    { "field": "CUST_PO", "title": "Customer PO", "editor": "textbox" },
+    { "field": "DATE", "title": "Order Date", "editor": "datebox" },
+    {
+      "field": "STATUS",
+      "title": "Status",
+      "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "", "text": "All" },
+            { "value": "H", "text": "On Hold" },
+            { "value": "R", "text": "Released" },
+            { "value": "C", "text": "Closed" }
+          ]
+        }
+      }
+    },
+    {
+      "field": "CURRENCY_ID",
+      "title": "Currency",
+      "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "admin^curr" }
+      }
+    },
+    {
+      "field": "GST_ID",
+      "title": "GST",
+      "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "admin^gst" }
+      }
+    }
+  ]
+}

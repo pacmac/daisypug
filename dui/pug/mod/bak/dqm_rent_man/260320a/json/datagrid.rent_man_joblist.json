@@ -1,0 +1,92 @@
+{
+  "id": "joblist",
+  "url": "/",
+  "fit": true,
+  "disabled": false,
+  "rownumbers": true,
+  "editor": "inline",
+  "striped": true,
+  "singleSelect": true,
+  "queryParams": {
+    "_sqlid": "dqm^rent_jobs",
+    "_func": "get",
+    "_dgrid": "y"
+  },
+  "columns": [
+    [
+      {
+        "field": "_cbox",
+        "checkbox": true,
+        "title": "Sel"
+      },
+      {
+        "field": "OPERATION_REF",
+        "title": "Operation Ref",
+        "width": 120,
+        "formatter": "eui.ref2text"
+      },
+      {
+        "field": "WO_CLASS",
+        "title": "Job Class",
+        "width": 100,
+        "coloff": true
+      },
+      {
+        "field": "RESOURCE_ID",
+        "title": "Resource ID",
+        "width": 100
+      },
+      {
+        "field": "WO_RELEASE",
+        "title": "Released",
+        "width": 80,
+        "formatter": "eui.date",
+        "coloff": true
+      },
+      {
+        "field": "WO_WANT",
+        "title": "Wanted",
+        "width": 80,
+        "formatter": "eui.date",
+        "coloff": true
+      },
+      {
+        "field": "WO_QTY",
+        "title": "Reqd Qty",
+        "width": 60,
+        "formatter": "$.page.fn.qtyfmt",
+        "align": "right",
+        "coloff": true
+      },
+      {
+        "field": "WO_COMPLETED_QTY",
+        "title": "Comp Qty",
+        "width": 60,
+        "formatter": "$.page.fn.qtyfmt",
+        "align": "right",
+        "coloff": true
+      },
+      {
+        "field": "COC_QTY",
+        "title": "COC Qty",
+        "width": 60,
+        "formatter": "$.page.fn.qtyfmt",
+        "align": "right",
+        "coloff": true
+      },
+      {
+        "field": "SALES_ORDER_REF",
+        "title": "Order ID / Line",
+        "width": 120,
+        "formatter": "eui.ref2text"
+      },
+      {
+        "field": "CUSTOMER_ID",
+        "title": "Cust ID",
+        "width": 80,
+        "fixed": true,
+        "coloff": true
+      }
+    ]
+  ]
+}

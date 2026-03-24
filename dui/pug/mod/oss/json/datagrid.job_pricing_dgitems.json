@@ -1,0 +1,20 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "oss^job_price_ln",
+    "_dgrid": "y",
+    "CUSTOMER_ID": ""
+  },
+  "rownumbers": true,
+  "striped": true,
+  "fitColumns": true,
+  "columns": [
+    { "field": "_stamp", "hidden": true },
+    { "field": "CUSTOMER_ID", "hidden": true },
+    { "field": "_PART_CLASS", "hidden": true },
+    { "field": "PART_ID", "title": "Part ID", "width": 100, "fixed": true },
+    { "field": "WO_CLASS", "title": "Job Class", "width": 100, "fixed": true },
+    { "field": "RATE_PIECE", "title": "Rate $/Pce", "width": 80, "fixed": true, "align": "right", "formatter": "eui.currency" }
+  ]
+}

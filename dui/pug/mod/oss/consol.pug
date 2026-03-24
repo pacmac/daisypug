@@ -1,0 +1,86 @@
+extends ../content
+block script
+  script: include js/consol.js 
+block content
+  +form.multi.fit#main.changeonly(_sqlid="oss^consol" asdpx="adx")
+    +vsplit('400px')
+      +panel('west')
+        +input({type:'hidden', name:'_stamp', value:'y'})
+        +input({type:'hidden', name:'_datechk', id:'~', value:'y'})
+        +fitem('Consolidation ID',{id:'~', name:'CONSOL_ID', _sqlid:'oss^consol_ids', class:'combobox fkey fit autonum','data-options':"groupField:'STATUS'"})
+          
+        +fitem('Status',{name:'STATUS', id:'~', class:'combobox', 'data-options':"readonly:true, editable:false, data:[{value:'PENDING',text:'Pending', selected:true},{value:'APPROVED',text:'Approved'},{value:'INVOICED',text:'Invoiced'}]"})
+
+        +fitem('Customer ID',{name:'CUSTOMER_ID', id:'~', _sqlid:'oss^price_ids', class:'combobox _lock',required:true})
+        +fitem('Customer Name',{id:'~', name:'CUSTOMER_NAME', class:'textbox', readonly:true})
+        +fitem('Currency ID',{id:'~',name:'CURRENCY_ID', class:'textbox', readonly:true})
+        +fitem('Invoice ID',{id:'~', name:'INVOICE_ID', class:'textbox'})
+          
+        div
+          +fitem('Start Date',{name:'START_DATE', class:'datebox month _lock', required:true})
+          +fitem('End Date',{name:'END_DATE', class:'datebox today _lock', required:true})
+
+        div  
+          +fitem('Job Charges',{id:'_JOB_COST', class:'numberbox tcost', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+          +fitem('Service Charges',{id:'_SERVICE_COST', class:'numberbox tcost', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+          +fitem('Rental Charges',{id:'_RENT_COST', class:'numberbox tcost', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+        div  
+          +fitem('Total Charges',{id:'~', name:'TOTAL_COST', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+
+        div(style="margin-top:12px")
+          .fitem
+            +label({text:'Notes & Comments',style:"margin-bottom:8px;"})
+            +input({name:'NOTES',class:'textbox', 'data-options':"multiline:true", style:'height:100px;width:345px'})
+        
+      +panel('center')
+        +tabs#maintab
+    
+          +tab-item("Linked Jobs",{iconCls:"icon-tools",style:'padding:0px;'})
+            +hsplit('115px')
+              +panel('north')
+                div.three
+                  div(style="width:400px;")
+                    +fitem('Standard Multiplier',{id:'~', name:'JOB_MULTI_STD', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+                    +fitem('Overtime Multiplier',{id:'~', name:'JOB_MULTI_WKE', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+                    +fitem('Holiday Multiplier',{id:'~', name:'JOB_MULTI_HOL', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})                  
+                    
+                  div(style="width:400px;")
+                    +fitem('Total Qty',{id:'~', name:'JOB_QTY_TOTAL', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+                    +fitem('Total Hours',{id:'~', name:'JOB_HRS_TOTAL', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+                    +fitem('Total Cost',{id:'~', name:'JOB_COST', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+                  
+                  .flex.justify-end.pt-4
+                    +button('Recalc',{id:'jobget',icon:'refresh-cw',style:'ghost',size:'sm'})
+                      
+              +panel('center')
+                +hsplit('50%')
+                  +panel('north')
+                    +datagrid#joblink
+                  +panel('center')
+                    +datagrid#joblist
+                                    
+          +tab-item("Service Tickets",{iconCls:"icon-ticket",style:'padding:2px;'})
+            +hsplit('60px')
+              +panel('north')
+                div.two
+                  div(style="width:400px;")
+                    +fitem('Total Cost',{id:'~', name:'SERVICE_COST', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+                
+                  .flex.justify-end.pt-4
+                    +button('Retrieve',{id:'svcget',icon:'refresh-cw',style:'ghost',size:'sm'})
+                
+              +panel('center', { style: "padding:8px;" })
+                +datagrid#svclist
+
+          +tab-item("Lease Rental",{iconCls:"icon-lease",style:'padding:2px;'})
+            +hsplit('60px')
+              +panel('north')
+                div.two
+                  div(style="width:400px;")
+                    +fitem('Total Cost',{id:'~', name:'RENT_COST', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+                
+                  .flex.justify-end.pt-4
+                    +button('Retrieve',{id:'rentget',icon:'refresh-cw',style:'ghost',size:'sm'})
+                
+              +panel('center', { style: "padding:8px;" })
+                +datagrid#rentlist

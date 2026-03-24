@@ -1,0 +1,24 @@
+extends ../content 
+block content 
+  form.multi.fit(asdpx='ax' _sqlid='admin^help' data-lbut="ax" data-ebut="ax" style="height:100%;")
+    +layout(fit="true")
+      +panel(region="west" style="width:400px;xborder:none;")
+        .fitem
+          label ID
+          +combobox#UID.fkey.noupper(type='text', _sqlid='admin^cbo_helpid', name='id' class="fit")
+        
+        .fitem
+          label Title
+          +textbox(name='title')
+        
+        .fitem
+          +linkbutton#but_adhelp.but_help(href='#' data-options="iconCls:'icon-gear'")
+
+      +panel(region="center" fit="true")
+        +tabs(data-options="plain:true,fit:true")
+          div#Main(title='HTML' fit="true")
+            +textbox(name='description' data-options="multiline:true" style="height:100%;width:100%;")
+    
+      //- removed: empty east panel (0px) — 2-panel rule
+block script
+  +script("admin",["js/help.js"])

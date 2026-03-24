@@ -1,0 +1,15 @@
+{
+  "id": "qualifications",
+  "fit": true,
+  "striped": true,
+  "singleSelect": true,
+  "columns": [[
+    {"field": "LINE", "title": "#", "width": 40},
+    {"field": "QUAL_TYPE", "title": "Type", "width": 100},
+    {"field": "QUAL_NAME", "title": "Qualification", "width": 200},
+    {"field": "INSTITUTION", "title": "Institution", "width": 180},
+    {"field": "YEAR_OBTAINED", "title": "Year", "width": 70, "align": "center"},
+    {"field": "EXPIRY_DATE", "title": "Expiry", "width": 100},
+    {"field": "REMARKS", "title": "Remarks"}
+  ]]
+}

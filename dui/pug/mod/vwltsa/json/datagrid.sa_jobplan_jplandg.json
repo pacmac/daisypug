@@ -1,0 +1,21 @@
+{
+  "method": "get",
+  "fit": true,
+  "striped": false,
+  "singleSelect": false,
+  "toolbar": [
+    { "type": "field", "label": "Resource", "id": "rescbo", "name": "rescbo", "editor": { "type": "combobox" } },
+    { "type": "field", "label": "Job", "id": "worcbo", "name": "worcbo", "editor": { "type": "combobox" } },
+    { "id": "propen", "text": "Priorities", "icon": "flag", "alwaysEnabled": true },
+    { "id": "jplan", "text": "AutoPlan", "icon": "refresh-cw", "alwaysEnabled": true },
+    { "id": "apply", "text": "Apply", "icon": "check", "alwaysEnabled": true }
+  ],
+  "columns": [
+    { "field": "rid", "title": "Resource ID", "width": 100 },
+    { "field": "active", "hidden": true },
+    { "field": "units", "title": "Units", "width": 50, "align": "center" },
+    { "field": "class", "title": "Class", "width": 50, "hidden": true },
+    { "field": "desc", "title": "Description", "width": 50, "hidden": true },
+    { "field": "unp", "title": "Unplanned Jobs", "width": 132 }
+  ]
+}

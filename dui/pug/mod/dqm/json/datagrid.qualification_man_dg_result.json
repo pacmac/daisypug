@@ -1,0 +1,20 @@
+{
+  "fit": true,
+  "fitColumns": true,
+  "rownumbers": false,
+  "striped": true,
+  "asdpx": "aed",
+    "editor": "form",
+  "columns": [[
+    {"field": "QUALIFICATION_ID", "hidden": true},
+    {"field": "LINE_NO", "hidden": true},
+    {"field": "RESULT_DATE", "title": "Date", "width": 100, "fixed": true, "formatter": "$.dui.fmt.date", "editor": "datebox"},
+    {"field": "RESULT_ID", "title": "Result ID", "width": 100, "fixed": true, "editor": "text"},
+    {"field": "RESULT", "id": "RESULT", "title": "Result", "width": 120, "editor": {"type": "combobox", "options": {"required": true, "editable": false}}},
+    {"field": "SCORE", "title": "Score", "width": 100, "fixed": true, "editor": "numberspinner"},
+    {"field": "MAJOR_NCRS", "title": "# of Major NCRs", "width": 130, "fixed": true, "editor": "numberspinner"},
+    {"field": "MINOR_NCRS", "title": "# of Minor NCRs", "width": 130, "fixed": true, "editor": "numberspinner"},
+    {"field": "OFI", "title": "# of OFI", "width": 60, "fixed": true, "editor": "numberspinner"},
+    {"field": "NOTES", "title": "Notes", "width": 1000, "editor": {"type": "textbox", "options": {"readonly": false, "multiline": true, "height": 150}}}
+  ]]
+}

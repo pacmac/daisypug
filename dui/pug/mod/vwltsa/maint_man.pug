@@ -1,0 +1,46 @@
+extends ../content 
+block script
+  script: include js/maint_man.js
+block content 
+  form#maints.multi(_sqlid='vwltsa^maint', asdpx='xa' mode="add" data-lbut="x" data-ebut="nsx").fit
+    +layout(data-options="fit:true")
+      +panel#FAFAFA.bg-base-200(region="west" style="width:400px")
+        +fitem('ID',{class:'combobox fkey fit',id:'~', name:'MAINT_ID',_sqlid:'vwltsa^maint_ids','data-options':"required:true"  })
+        +fitem('Status',{class:'combobox',id:'~', name:'STATUS' ,'data-options':"validType:['inList'],editable:false,required:true" })
+        +fitem('Type',{class:'combobox',id:'~', name:'TYPE','data-options':"validType:['inList'],editable:false,required:true" })
+        +fitem('Class',{class:'combobox',id:'~', name:'CLASS','data-options':"validType:['inList'],editable:false,required:true" })
+        +fitem('Resource ID',{class:'searchbox',id:'~',name:'RESOURCE_ID',"sbref":"resource_ids" })
+        +fitem('Tolerance Class',{class:'textbox',id:'~', name:'TOLERANCE_CLASS',readonly:true})
+        +fitem('Department ID',{class:'combobox', name:'DEPARTMENT_ID',_sqlid:'dqm^department' ,'data-options':"validType:['inList'],editable:false" })      
+        +fitem('Description',{class:'textbox', name:'DESCRIPTION', id:'~'})
+        +fitem('Owner ID',{class:'combobox', id:'~',name:'OWNER_ID'})
+        +fitem('Location ID',{class:'textbox', name:'LOCATION'})
+        +fitem('Serial Number',{class:'textbox', name:'SERIAL_NO'})
+        +fitem('Maint Plan',{class:'combobox', name:'MAINT_PLAN',id:'~','data-options':"validType:['inList'],editable:false"})
+        +v-group('Dates')
+          +fitem('Purchase',{class:'datebox',name:'PURCHASE_DATE'})
+          +fitem('Disposal',{class:'datebox',name:'DISPOSAL_DATE',id:'~'})
+
+
+      +panel(region="center")
+        +tabs#gmtabs(fit="true")
+          +tab-item('Profile' ,{iconCls:"icon-date"})
+            +fitem('Maintenance Method',{class:'combobox',id:'~', name:'MAINT_METHOD' ,'data-options':"validType:['inList'],editable:false" })            
+            +v-group('Initial Maintenance')
+              +fitem('1st',{class:'numberspinner',name:'MAINT_DAYS_1',precision:'0', suffix:' Days'})
+              +fitem('2nd',{class:'numberspinner',name:'MAINT_DAYS_1',precision:'0', suffix:' Days'})   
+            +v-group('Periodic Maintenance')
+              +fitem('Frequency Units',{class:'combobox',id:'~',name:'MAINT_CYCLE_TYPE',"data-options":"data:[{text:'DAYS',value:'DAYS'},{text:'WEEKS',value:'WEEKS'},{text:'MONTHS',value:'MONTHS'}],editable:false",  value:'MONTHS'})
+              +fitem('Frequency Value',{class:'numberspinner',id:'~',name:'MAINT_CYCLE_TIME',precision:'0'})    
+              +fitem('Due Days Alert',{class:'numberspinner',id:'~',name:'MAINT_DUE_ALERT_DAYS',precision:'0'})          
+            +v-group('Last Maintenance')
+              +fitem('Completed Date',{class:'datebox',name:'LAST_MAINT_DATE',id:'~'})
+              +fitem('By',{class:'textbox',name:'LAST_MAINT_PERSON'})
+            +v-group('Next Maintenance')
+              +fitem('Due Date',{class:'datebox',id:'~',name:'MAINT_DUE_DATE'})
+          +tab-item('Events',{iconCls:"icon-form"})
+            #DG_EVENTS
+          +tab-item('Schedules',{iconCls:"icon-vmfg"})
+            #DG_SCHED
+          +tab-item('User Fields',{ iconCls:"icon-list"}) 
+            +udfs({select:bhave.defudf,ron:false})

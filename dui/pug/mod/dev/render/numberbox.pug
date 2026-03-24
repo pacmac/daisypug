@@ -1,0 +1,224 @@
+extends ../../../layout/layout
+
+block content
+  +content("Numberbox API Test", "Tests jQuery plugin API methods with DIRECT initialization (NO parser)")
+    +section("Test Inputs", "Target elements for testing API methods")
+      +form({cols: 2})
+        +fitem("Basic Number:")
+          +numberbox({id: 'target', class: 'input-bordered w-full', value: 100})
+        +fitem("Decimal (Precision=2):")
+          +numberbox({id: 'target2', class: 'input-bordered w-full', step: '0.01', value: 19.99})
+        +fitem("Min/Max (0-100):")
+          +numberbox({id: 'target3', class: 'input-bordered w-full', min: 0, max: 100, value: 50})
+
+    +section("API Methods", "Click buttons to test each method")
+      .grid.grid-cols-1.gap-4.mb-4(class="sm:grid-cols-2 lg:grid-cols-4")
+        div
+          h3.font-medium.mb-2 Value Methods
+          .space-y-2
+            button.btn.btn-sm.btn-primary.w-full#test-getValue getValue()
+            button.btn.btn-sm.btn-primary.w-full#test-setValue setValue(250)
+            button.btn.btn-sm.btn-primary.w-full#test-fix fix() (precision)
+            button.btn.btn-sm.btn-primary.w-full#test-clear clear()
+            button.btn.btn-sm.btn-primary.w-full#test-reset reset()
+
+        div
+          h3.font-medium.mb-2 Numeric Operations
+          .space-y-2
+            button.btn.btn-sm.btn-secondary.w-full#test-setValue-decimal setValue(123.456)
+            button.btn.btn-sm.btn-secondary.w-full#test-setValue-neg setValue(-50)
+            button.btn.btn-sm.btn-secondary.w-full#test-increment Increment by 5
+            button.btn.btn-sm.btn-secondary.w-full#test-decrement Decrement by 5
+
+        div
+          h3.font-medium.mb-2 State Methods
+          .space-y-2
+            button.btn.btn-sm.btn-accent.w-full#test-disable disable()
+            button.btn.btn-sm.btn-accent.w-full#test-enable enable()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly readonly()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly-false readonly(false)
+            button.btn.btn-sm.btn-accent.w-full#test-options options()
+
+        div
+          h3.font-medium.mb-2 Inherited Methods
+          .space-y-2
+            button.btn.btn-sm.btn-info.w-full#test-textbox textbox()
+            button.btn.btn-sm.btn-info.w-full#test-isValid isValid()
+            button.btn.btn-sm.btn-info.w-full#test-resize resize(300)
+
+    +section("Test Output", "Results from API method calls")
+      +testOutput("output")
+        | Click buttons above to test API methods.
+        | Results will appear here...
+
+    +section("Event Log", "Events (onChange) logged here")
+      +testOutput("eventLog")
+
+  //- Load dependencies in correct order
+  script(src="/assets/js/textbox-helper.js")
+  script(src="/assets/js/numberbox-helper.js")
+
+  //- Test script
+  script.
+    $(function() {
+      var $output = $('#output');
+      var $eventLog = $('#eventLog');
+
+      // Helper to log output with visual separation
+      function log(msg) {
+        $output.append(msg + '\n\n');
+        console.log(msg);
+      }
+
+      // Helper to log events
+      function logEvent(msg) {
+        var timestamp = new Date().toLocaleTimeString();
+        $eventLog.append('[' + timestamp + '] ' + msg + '\n');
+        console.log('[EVENT]', msg);
+      }
+
+      // Clear output on initialization
+      $output.text('');
+      $eventLog.text('');
+
+      // Initialize numberboxes with options and event callbacks
+      log('Initializing numberbox with callbacks...');
+      $('#target').numberbox({
+        onChange: function(newVal, oldVal) {
+          logEvent('onChange: value changed from ' + oldVal + ' to ' + newVal);
+        }
+      });
+
+      // Initialize second numberbox (decimal)
+      $('#target2').numberbox({
+        precision: 2,
+        onChange: function(newVal) {
+          logEvent('onChange: decimal value = ' + newVal);
+        }
+      });
+
+      // Initialize third numberbox (min/max)
+      $('#target3').numberbox({
+        min: 0,
+        max: 100,
+        onChange: function(newVal) {
+          logEvent('onChange: constrained value = ' + newVal);
+        }
+      });
+
+      log('Numberbox initialized. Click buttons to test API methods.');
+      log('─────────────────────────────────────────────────────────────────');
+
+      //- ====================================================================
+      //- Value Methods Tests
+      //- ====================================================================
+      $('#test-getValue').click(function() {
+        var val = $('#target').numberbox('getValue');
+        log('► getValue() = "' + val + '"');
+      });
+
+      $('#test-setValue').click(function() {
+        $('#target').numberbox('setValue', 250);
+        log('► setValue(250) - done');
+      });
+
+      $('#test-fix').click(function() {
+        $('#target2').numberbox('fix');
+        var val = $('#target2').numberbox('getValue');
+        log('► fix() - precision applied, value = ' + val);
+      });
+
+      $('#test-clear').click(function() {
+        $('#target').numberbox('clear');
+        log('► clear() - input cleared');
+      });
+
+      $('#test-reset').click(function() {
+        $('#target').numberbox('reset');
+        log('► reset() - reset to initial value (100)');
+      });
+
+      //- ====================================================================
+      //- Numeric Operations Tests
+      //- ====================================================================
+      $('#test-setValue-decimal').click(function() {
+        $('#target2').numberbox('setValue', 123.456);
+        var val = $('#target2').numberbox('getValue');
+        log('► setValue(123.456) - value = ' + val);
+      });
+
+      $('#test-setValue-neg').click(function() {
+        $('#target3').numberbox('setValue', -50);
+        var val = $('#target3').numberbox('getValue');
+        log('► setValue(-50) on min:0 max:100 - clamped value = ' + val);
+      });
+
+      $('#test-increment').click(function() {
+        var currentVal = parseFloat($('#target').numberbox('getValue'));
+        var newVal = isNaN(currentVal) ? 5 : currentVal + 5;
+        $('#target').numberbox('setValue', newVal);
+        log('► Increment by 5: ' + currentVal + ' → ' + newVal);
+      });
+
+      $('#test-decrement').click(function() {
+        var currentVal = parseFloat($('#target').numberbox('getValue'));
+        var newVal = isNaN(currentVal) ? -5 : currentVal - 5;
+        $('#target').numberbox('setValue', newVal);
+        log('► Decrement by 5: ' + currentVal + ' → ' + newVal);
+      });
+
+      //- ====================================================================
+      //- State Methods Tests
+      //- ====================================================================
+      $('#test-disable').click(function() {
+        $('#target').numberbox('disable');
+        log('► disable() - input disabled');
+      });
+
+      $('#test-enable').click(function() {
+        $('#target').numberbox('enable');
+        log('► enable() - input enabled');
+      });
+
+      $('#test-readonly').click(function() {
+        $('#target').numberbox('readonly');
+        log('► readonly() - input is now readonly');
+      });
+
+      $('#test-readonly-false').click(function() {
+        $('#target').numberbox('readonly', false);
+        log('► readonly(false) - readonly removed');
+      });
+
+      $('#test-options').click(function() {
+        var opts = $('#target').numberbox('options');
+        log('► options() = ' + JSON.stringify(opts, null, 2));
+      });
+
+      //- ====================================================================
+      //- Inherited Methods Tests
+      //- ====================================================================
+      $('#test-textbox').click(function() {
+        var $elem = $('#target').numberbox('textbox');
+        log('► textbox() returned element: ' + $elem[0].tagName + ' with id=' + $elem.attr('id') + ', type=' + $elem.attr('type'));
+      });
+
+      $('#test-isValid').click(function() {
+        var valid = $('#target').numberbox('isValid');
+        log('► isValid() = ' + valid);
+      });
+
+      $('#test-resize').click(function() {
+        $('#target').numberbox('resize', 300);
+        log('► resize(300) - width set to 300px');
+      });
+
+      //- ====================================================================
+      //- Initial status
+      //- ====================================================================
+      log('✅ All event handlers attached.');
+      log('✅ Modify inputs to see onChange events.');
+      log('✅ Test fix() to see precision formatting.');
+      log('✅ Test setValue() with values outside min/max range.');
+      log('');
+    });

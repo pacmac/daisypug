@@ -1,0 +1,216 @@
+status: converted
+user: root
+source: inv/sa_parts.pug
+target: inv/sa_parts.pug
+version: 7
+passes: 23
+fragments:
+  part_dimension:
+    source: inv/part_dimension.pug
+    status: converted
+    version: 7
+    passes: 0
+  part_trans_query:
+    source: inv/part_trans_query.pug
+    status: converted
+    version: 7
+    passes: 0
+  _pn_gen_inc:
+    source: inv/_pn_gen_inc.pug
+    status: converted
+    version: 7
+    passes: 0
+datagrids:
+  phycount:
+    source: inv/json/datagrid.phycount.json
+    status: found
+  usedin:
+    source: inv/json/datagrid.usedin.json
+    status: found
+  prices:
+    source: inv/json/datagrid.prices.json
+    status: found
+  partfiles:
+    source: inv/json/datagrid.partfiles.json
+    status: missing
+  boms:
+    source: inv/json/datagrid.boms.json
+    status: found
+auto_fixed:
+  - 'L63: div.easyui-tabs → +tabs'
+  - 'L110: div.easyui-datagrid → +datagrid'
+  - 'L121: div.easyui-filegrid → +filegrid'
+  - 'L32: qbe: inject _sqlid:inv^partid_qbe'
+  - 'L4: strip easyui- prefix'
+  - 'L32: strip easyui- prefix'
+  - 'L36: strip easyui- prefix'
+  - 'L38: strip easyui- prefix'
+  - 'L40: strip easyui- prefix'
+  - 'L41: strip easyui- prefix'
+  - 'L42: strip easyui- prefix'
+  - 'L43: strip easyui- prefix'
+  - 'L45: strip easyui- prefix'
+  - 'L46: strip easyui- prefix'
+  - 'L48: strip easyui- prefix'
+  - 'L49: strip easyui- prefix'
+  - 'L50: strip easyui- prefix'
+  - 'L51: strip easyui- prefix'
+  - 'L52: strip easyui- prefix'
+  - 'L53: strip easyui- prefix'
+  - 'L54: strip easyui- prefix'
+  - 'L55: strip easyui- prefix'
+  - 'L69: strip easyui- prefix'
+  - 'L73: strip easyui- prefix'
+  - 'L74: strip easyui- prefix'
+  - 'L75: strip easyui- prefix'
+  - 'L83: strip easyui- prefix'
+  - 'L84: strip easyui- prefix'
+  - 'L85: strip easyui- prefix'
+  - 'L88: strip easyui- prefix'
+  - 'L89: strip easyui- prefix'
+  - 'L90: strip easyui- prefix'
+  - 'L97: strip easyui- prefix'
+  - 'L99: strip easyui- prefix'
+  - 'L105: strip easyui- prefix'
+  - 'L128: strip easyui- prefix'
+  - 'L135: strip easyui- prefix'
+  - 'L140: strip easyui- prefix'
+  - 'L76: #phycount → +datagrid (JS-initialized)'
+  - 'L115: #prices → +datagrid (JS-initialized)'
+  - 'L133: #boms → +datagrid (JS-initialized)'
+  - 'L31: div(region:west) → +panel'
+  - 'L62: div(region:center) → +panel'
+  - 'L79: div(region:north) → +panel'
+  - 'L92: div(region:center) → +panel'
+  - 'L103: div(region:north) → +panel'
+  - 'L109: div(region:center) → +panel'
+  - 'L125: div(region:north) → +panel'
+  - 'L132: div(region:center) → +panel'
+  - 'L137: include pn_gen_inc.pug → _pn_gen_inc.pug'
+  - 'L16: add const fragments = false'
+  - 'L113: remove </form>'
+  - 'L32: strip surface overrides'
+  - 'L80: strip surface overrides'
+  - 'L93: strip surface overrides'
+  - 'L104: strip surface overrides'
+  - 'L110: strip surface overrides'
+  - 'L125: strip surface overrides'
+  - 'L132: strip surface overrides'
+  - 'L31: +layout → +vsplit(400px)'
+  - 'L32: strip panel options (size hoisted to parent)'
+  - 'L63: strip panel options (size hoisted to parent)'
+  - 'L79: +layout → +hsplit(110px)'
+  - 'L80: strip panel options (size hoisted to parent)'
+  - 'L93: strip panel options (size hoisted to parent)'
+  - 'L103: +layout → +hsplit(50px)'
+  - 'L104: strip panel options (size hoisted to parent)'
+  - 'L110: strip panel options (size hoisted to parent)'
+  - 'L124: +layout → +hsplit(50px)'
+  - 'L125: strip panel options (size hoisted to parent)'
+  - 'L132: strip panel options (size hoisted to parent)'
+  - 'L140: .hide → .hidden'
+  - 'L82: strip jQuery Mobile grid class'
+  - 'L83: strip jQuery Mobile grid class'
+  - 'L88: strip jQuery Mobile grid class'
+  - 'L105: strip jQuery Mobile grid class'
+  - 'L108: strip jQuery Mobile grid class'
+  - 'L4: .linkbutton → .btn in style block'
+  - 'L71: fieldset → +fieldset'
+  - 'L69: fieldset → +fieldset'
+  - 'L136: [MANUAL FIX #1] Modal wrapper div has sizing styles — takes space in layout. Add .hidden or remove sizing.'
+  - 'L14: inject browser console.warn for manual fixes'
+manual:
+  - 'sa_parts.pug:L40: [inline-html] Inline HTML <form> — convert to pug/mixin syntax'
+  - 'sa_parts.pug:L42: [inline-html] Inline HTML <form> — convert to pug/mixin syntax'
+  - 'sa_parts.pug:L44: [inline-html] Inline HTML <form> — convert to pug/mixin syntax'
+js_auto_fixed:
+  - 'sa_parts.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts.js L?: dwap.udata → $.dui.udata'
+  - 'sa_parts.js L?: dwap.udata → $.dui.udata'
+  - 'sa_parts.js L?: dwap.udata → $.dui.udata'
+  - 'sa_parts.js L?: dwap.udata → $.dui.udata'
+  - 'sa_parts.js L40: dwap.page.fdat() → $.page.fn.fdat()'
+  - 'sa_parts.js L150: dwap.page.costitems() → $.page.fn.costitems()'
+  - 'sa_parts.js L153: dwap.page.traceable() → $.page.fn.traceable()'
+  - 'sa_parts.js L154: dwap.page.material_unit_cost() → $.page.fn.material_unit_cost()'
+  - 'sa_parts.js L160: dwap.page.traceable() → $.page.fn.traceable()'
+  - 'sa_parts.js L161: dwap.page.material_unit_cost() → $.page.fn.material_unit_cost()'
+  - 'sa_parts.js L182: dwap.page.opengen() → $.page.fn.opengen()'
+  - 'sa_parts.js L185: dwap.page.costitems() → $.page.fn.costitems()'
+  - 'sa_parts.js L200: dwap.page.costitems() → $.page.fn.costitems()'
+  - 'sa_parts.js L275: dwap.page.partgen() → $.page.fn.partgen()'
+  - 'sa_parts.js L276: dwap.page.prices() → $.page.fn.prices()'
+  - 'sa_parts.js L282: dwap.page.costitems() → $.page.fn.costitems()'
+  - 'sa_parts.js L288: dwap.page.dims() → $.page.fn.dims()'
+  - 'sa_parts.js L294: dwap.page.dims() → $.page.fn.dims()'
+  - 'sa_parts.js L299: dwap.page.dims() → $.page.fn.dims()'
+  - 'sa_parts.js L305: dwap.page.material_unit_cost() → $.page.fn.material_unit_cost()'
+  - 'sa_parts.js L308: dwap.page.material_unit_cost() → $.page.fn.material_unit_cost()'
+  - 'sa_parts.js L326: dwap.page.ecn() → $.page.fn.ecn()'
+  - 'sa_parts.js L328: dwap.page.costitems() → $.page.fn.costitems()'
+  - 'sa_parts.js L372: dwap.page.part_ud() → $.page.fn.part_ud()'
+  - 'sa_parts.js L378: dwap.page.ecn() → $.page.fn.ecn()'
+  - 'sa_parts.js L379: dwap.page.ecn() → $.page.fn.ecn()'
+  - 'sa_parts.js L382: dwap.page.part_detail_upd() → $.page.fn.part_detail_upd()'
+  - 'sa_parts.js L383: dwap.page.material_unit_cost() → $.page.fn.material_unit_cost()'
+  - 'sa_parts.js L384: dwap.page.mandatory() → $.page.fn.mandatory()'
+  - 'sa_parts.js L386: dwap.page.traceable_endis() → $.page.fn.traceable_endis()'
+  - 'sa_parts.js L673: dwap.page.part_ud() → $.page.fn.part_ud()'
+  - 'sa_parts.js L675: dwap.page.mandatory() → $.page.fn.mandatory()'
+  - 'sa_parts.js L676: dwap.page.part_detail_upd() → $.page.fn.part_detail_upd()'
+  - 'sa_parts.js L21: dwap.page.traceable → $.page.fn.traceable'
+  - 'sa_parts.js L28: dwap.page.material_unit_cost → $.page.fn.material_unit_cost'
+  - 'sa_parts.js L39: dwap.page.costitems → $.page.fn.costitems'
+  - 'sa_parts.js L62: dwap.page.nocarat → $.page.fn.nocarat'
+  - 'sa_parts.js L66: dwap.page.fdat → $.page.fn.fdat'
+  - 'sa_parts.js L72: dwap.page.dims → $.page.fn.dims'
+  - 'sa_parts.js L81: dwap.page.prices → $.page.fn.prices'
+  - 'sa_parts.js L83: dwap.page.currs → $.page.fn.currs'
+  - 'sa_parts.js L134: dwap.page.opengen → $.page.fn.opengen'
+  - 'sa_parts.js L152: dwap.page.dogen → $.page.fn.dogen'
+  - 'sa_parts.js L167: dwap.page.partgen → $.page.fn.partgen'
+  - 'sa_parts.js L171: dwap.page.dogen → $.page.fn.dogen'
+  - 'sa_parts.js L172: dwap.page.dogen → $.page.fn.dogen'
+  - 'sa_parts.js L193: dwap.page.part_ud → $.page.fn.part_ud'
+  - 'sa_parts.js L217: dwap.page.mandatory → $.page.fn.mandatory'
+  - 'sa_parts.js L226: dwap.page.part_detail_upd → $.page.fn.part_detail_upd'
+  - 'sa_parts.js L237: dwap.page.ecn → $.page.fn.ecn'
+  - 'sa_parts.js L244: dwap.page.traceable_endis → $.page.fn.traceable_endis'
+  - 'sa_parts.js L331: dwap.page.fkey → $.page.fn.fkey'
+  - 'sa_parts.js L332: dwap.page.fkey → $.page.fn.fkey'
+  - 'sa_parts.js L347: dwap.page.currs → $.page.fn.currs'
+  - 'sa_parts.js L490: dwap.page.nocarat → $.page.fn.nocarat'
+  - 'sa_parts.js L511: dwap.page.nocarat → $.page.fn.nocarat'
+  - 'sa_parts.js L531: dwap.page.nocarat → $.page.fn.nocarat'
+  - 'sa_parts.js L1: wrap in $.page.ready()'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L?: dwap.bhave → $.dui.bhave'
+  - 'sa_parts_bom.js L78: dwap.page.xlbom → $.page.fn.xlbom'
+  - 'sa_parts_bom.js L85: dwap.page.xlbom → $.page.fn.xlbom'
+  - 'sa_parts_bom.js L1: wrap in $.page.ready()'
+js_manual:
+  - 'sa_parts.js L19: Remaining dwap reference: 2. created new dwap.page.costimems() called by form.onload() & add new().'
+  - 'sa_parts.js L131: EUI tbar.dgre_ toolbar access — DUI uses #<dgId>_add/_edit/_del buttons: opt.tbar.dgre_del.hide();'
+  - >-
+    sa_parts.js L132: EUI tbar.dgre_ toolbar access — DUI uses #<dgId>_add/_edit/_del buttons:
+    opt.tbar.dgre_edit.hide();
+  - 'sa_parts.js L133: EUI tbar.dgre_ toolbar access — DUI uses #<dgId>_add/_edit/_del buttons: opt.tbar.dgre_add.hide();'
+  - 'sa_parts.js L567: Inline datagrid columns in JS — should be in datagrid.<id>.json: columns: [[]],'
+last_run_by: root
+last_run_at: '2026-03-02 09:48:11'
+_lk: d51482b5750c9bbb
+locked: false

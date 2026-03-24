@@ -1,0 +1,52 @@
+/* sa_jobman.css — Tree decoration only.
+   All other styling handled by DUI framework.
+   Included via: style: include css/sa_jobman.css */
+
+/* === SEQ / SUB label prefixes via CSS ::before ===
+   Uses li.type-seq / li.type-sub classes set by loadFilter */
+.wotree li.type-seq > a .tree-title::before,
+.wotree li.type-seq > details > summary .tree-title::before { content: "SEQ: "; }
+.wotree li.type-sub > a .tree-title::before,
+.wotree li.type-sub > details > summary .tree-title::before { content: "SUB: "; }
+
+/* === Progress bar — theme-friendly CSS gradient === */
+.wotree .tree-title span.bar {
+  display: inline-block;
+  width: 50px;
+  padding-left: 2px;
+  background: linear-gradient(
+    to right,
+    color-mix(in oklch, var(--color-warning) 50%, transparent) var(--pct, 0%),
+    color-mix(in oklch, var(--color-base-300) 40%, transparent) var(--pct, 0%)
+  );
+}
+/* Gap: 1em between bar and first icon, 0.5em between stacked icons */
+.wotree .tree-title span.bar ~ [data-lucide] { margin-left: 0.5em; }
+.wotree .tree-title span.bar + [data-lucide] { margin-left: 1em; }
+
+.wotree .tree-title span.bar.complete {
+  background: linear-gradient(
+    to right,
+    color-mix(in oklch, var(--color-success) 50%, transparent) var(--pct, 0%),
+    color-mix(in oklch, var(--color-base-300) 40%, transparent) var(--pct, 0%)
+  );
+}
+
+/* === Tree scroll container === */
+.wotree {
+  height: calc(100vh - 170px);
+  overflow-y: auto;
+}
+
+/* === Sub-assembly part number label === */
+.tree-title span.partid {
+  margin-left: 6px;
+}
+.tree-title span.partid::before {
+  content: 'P/N: ';
+}
+
+/* === Deviated Qty Red Background === */
+input[numberboxname=DEVIATED_QTY] + .textbox {
+  background-image: url(/img/red-0.5.png);
+}

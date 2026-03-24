@@ -1,0 +1,63 @@
+
+
++form.fit#main(asdpx='x' _sqlid='admin^funcman')
+  +layout()
+    div(region="west" style="width:400px;background:$FAFAFA;")
+  
+      +fitem('Type',{id:'type',class:'combobox','data-options':"data:[{value:'-',text:'-- Select --',selected:true},{value:'sqlid',text:'SQL Functions'},{value:'sqlob',text:'SQL Objects'},{value:'appfn',text:'Global Functions'}],panelHeight:'auto'"})
+      
+      +form(asdpx='x' _sqlid='admin^funcman')
+      +input({type:'hidden',name:'type'})
+      div#mods
+        +fitem('Module',{id:'modid', class:'combobox'})
+        +fitem('Application',{id:'appid', class:'combobox navi fit'})
+    
+      +fitem('Function',{name:'name',id:'~',class:'combobox fkey fit novali noupper'})
+      +fitem('Version',{name:'version', id:'~',class:'textbox',readonly:true})
+      +fitem('Status',{name:'status', id:'~',class:'textbox',readonly:true})
+      +fitem('Requires',{name:'requires', id:'~',class:'textbox',readonly:true})
+      +fitem('Notes',{name:'notes', id:'~',class:'textbox','data-options':"multiline:true,height:100",readonly:true}) 
+        
+        //-.fbuts.center(style="margin-top:40px;")
+          +linkbutton#update(iconCls="icon-save" disabled="disabled")
+          +linkbutton#reload(iconCls="icon-reload")
+  
+    div(region="center")
+      +tabs(fit="true")
+        div(title="Source Code")
+          +input({type:'hidden',name:'source'})
+          div(id="source" name="source" style="height:calc(100% - 2px);width:calc(100% - 2px);border-radius:4px;border:1px solid #95B8E7;")
+        
+        div(title="Run Code")
+          +input({eui:'textbox',id:'~', name:'code','data-options':"multiline:true", style:'height:100%;width:100%', readonly:true, value:decodeURI(code)})  
+      
+      +layout(data-options="fit:true" style="border:0;")
+        div(region="north" style="height:70%;_padding:6px;border:none;" title="Source Code" collapsible="false" id="sqlxml")
+          //-+input({eui:'textbox',id:'~', name:'source','data-options':"multiline:true", style:'height:100%;width:100%'})
+          div#cm(style="height:100%;width:100%;")
+            textarea(id="source" name="source" style="height:100%;width:100%;_border-radius:4px;_border:1px solid #95B8E7;_resize:none;")
+           
+        
+        div(region="center" style="height:30%;padding:6px;" title="Run Code")
+          +input({eui:'textbox',id:'~', name:'code','data-options':"multiline:true", style:'height:100%;width:100%', readonly:true, value:decodeURI(code)}) 
+
+  if(1==2)
+    //-script(type="text/javascript"): include ./ace-builds/src-noconflict/ace.js
+
+  if(1==2)
+    style: include codemirror/lib/codemirror.css
+    style: include codemirror/theme/ambiance.css
+    style.
+      .CodeMirror {height:calc(100% - 2px);border-radius:4px;border:1px solid #95B8E7;}
+      .CodeMirror-gutters {border-top-left-radius:4px;border-bottom-left-radius:4px;}
+    
+    script(type="text/javascript"): include ./codemirror/lib/codemirror.js
+    script(type="text/javascript"): include ./codemirror/mode/javascript/javascript.js
+    //-script(type="text/javascript"): include codeMirror/addon/edit/matchbrackets.js
+    //-script(type="text/javascript"): include codeMirror/addon/comment/continuecomment.js
+    //script(type="text/javascript"): include ./CodeMirror/addon/comment/comment.js
+  
+  script(type="text/javascript")
+    include js/funcman.js
+
+    

@@ -1,0 +1,159 @@
+extends ../content
+//- ── MIGRATOR ──────────────────────────────────
+//- page: inv/sa_parts
+//- owner: root
+//- status: converted
+//- passes: 21  version: 6
+//- last_run: 2026-02-27 14:23:49
+//- fragments:
+//-   part_dimension: converted
+//-   part_trans_query: converted
+//-   _pn_gen_inc: converted
+//- manual:
+//-   #1: Modal wrapper div has sizing styles — takes space in layout. Add .hidden or remove sizing.
+//- ─────────────────────────────────────────────
+block style
+  style.
+    .btn + .btn {
+      margin-left: 8px;
+    }
+
+block script
+  //-+script("inv",['js/sa_parts.js','js/sa_parts_bom.js'])
+  script: include js/sa_parts.js
+  script: include js/sa_parts_bom.js
+  
+
+  script.
+    console.warn('[audit] sa_parts #1: Modal wrapper div has sizing styles — takes space in layout. Add .hidden or remove sizing.')
+block content
+  -
+    const fragments = false;
+    if($.license.moden('inv^pn_config')) bhave.partgen = 'y';
+    else bhave.partgen = 'n';
+    var asdpx = 'adxp'; 
+    
+    if(bhave.partgen=='y') var asdpx='ndxp';
+     
+  -if(bhave.partgen=='y')
+    -if(locals.udata.groups.indexOf('PART-UD')==-1)
+      <form id="partf" class="multi fit" _sqlid='inv^partall' asdpx='adxp'>
+    -else
+      <form id="partf" class="multi fit" _sqlid='inv^partall' asdpx='ndxp'>
+  -else
+    <form id="partf" class="multi fit" _sqlid='inv^partall' asdpx='adxp'>
+
+  +vsplit('400px')
+    +panel('west')
+      +fitem('Part ID',{_sqlid:'inv^partid_qbe', id:'~', name:'ID', class:'qbe fkey fit navi', panelWidth:'230px', validType:['length[1,30]']})
+    
+      div#header
+        +input({id:'_PART_REV_NO',  type:'hidden'})
+        +fitem('Part Class',{id:'~', name:'PART_CLASS_ID', required:true, class:'combobox','data-options':"data:[{text:'Component Part',value:'COMP'},{text:'Consumable Part',value:'CONSUMABLE'},{text:'Make To Stock',value:'FG'},{text:'Make To Order - Staged',value:'MAKE_STAGED'},{text:'Make To Order - Un-Staged',value:'MAKE_NOSTAGE'}],validType: ['inList']"})
+        
+        +fitem('Order Code',{name:'ORDER_TYPE', required:true,value:'NONE',  class:'combobox','data-options':"data:[{text:'NONE',value:'NONE'},{text:'EXPENSE',value:'EXPENSE'},{text:'INSPECTION&CERTIFICATION',value:'INSPECTION&CERTIFICATION'},{text:'OTHERS',value:'OTHERS'},{text:'PARTORDER',value:'PARTORDER'},{text:'SUBCONTRACT',value:'SUBCONTRACT'}],validType: ['inList']"})
+          
+        +fitem('Traceable',{id:'~', name:'TRACEABLE', required:true, class:'combobox sub-on','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}],validType: ['inList']"})
+        +fitem('Product Code',{id:'~',name:'PRODUCT_CODE', required:true, class:'combobox sub-on', _sqlid:'vwltsa^productcodeid'}) 
+        +fitem('UOM ID',{id:'~', name:'UOM_ID', required:true, class:'combobox sub-on', _sqlid:'inv^unitsid'}) 
+        +fitem('Active',{id:'~',name:'ACTIVE', required:true, class:'combobox','data-options':"data:[{text:'Yes',value:'Y',selected:true},{text:'No',value:'N'}]"})
+  
+        +fitem('Revision',{id:'~',name:'PART_REV_NO', class:'textbox',validType:['length[1,50]']})
+        +fitem('ECN',{id:'~',name:'ECN_ID', class:'textbox',validType:['length[1,50]'],readonly:true})
+        
+        +fitem('Alias',{id:'~',name:'ALIAS_DESC', class:'textbox', validType:['length[1,50]']})
+        +fitem('Material Unit Cost',{id:'~',name:'UNIT_MATERIAL_COST', class:'numberbox', 'data-options':"precision:4, min:0, _value:0, prefix:'$'"})
+        +fitem('Consumable Unit Cost',{id:'~',name:'UNIT_CONSUMABLE_COST', class:'numberbox', 'data-options':"precision:2, min:0, value:0, prefix:'$'"},{style:'display:none'})
+        +fitem('Dimensions',{class:'textbox','data-alias':'#DIM_TRACKED',readonly:true})
+        +fitem('Locked',{class:'textbox','data-alias':'#LOCKED',readonly:true})
+        +fitem('Bal Qty',{id:'~',name:'BAL_QTY', class:'numberbox sub-off', value:0, readonly:true, precision:4})
+        +fitem('Created By',{name:'USER_ID', class:'textbox sub-off', readonly:true})
+        +fitem('Created Date',{name:'CREATE_DATE', class:'datetimebox sub-off', readonly:true})
+   
+  
+      //-.fitem(style="margin-top:12px")
+        label(style="margin-bottom:4px;") Description
+        +input({eui:'textbox',id:'~', name:'DESCRIPTION','data-options':"multiline:true",  style:'height:150px;width:345px'})
+  
+    +panel('center')
+      +tabs#ptabs(data-options="fit:true, tabPosition:'left'")
+        +tab-item("Description",{iconCls:"icon-app",selected:"true"})
+          +input({eui:'textbox',id:'~', name:'DESCRIPTION','data-options':"multiline:true",  style:'height:99%;width:99%'})
+
+        +tab-item("User Fields",{iconCls:"icon-udf"})
+          +fieldset(null, {style:"margin-top:12px;"})
+            +fitem('UDF Layout',{name:'UDF_LAYOUT_ID', id:'UDF_LAYOUT_ID',class:'combobox',_sqlid:'vwltsa^udfid'})
+          +fieldset(null)#udf
+            +udf
+        +tab-item("Physical Count",{iconCls:"icon-edit"})  
+          +fitem('Locked',{id:'~',name:'LOCKED', required:true, class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N',selected:true}]"})   
+          +fitem('Last Count',{name:'LAST_COUNT_DATE',class:'datebox',readonly:true})
+          +fitem('Cycle Count(Days)',{name:'CYCLE_COUNT',class:'numberbox ', value:0,  precision:0})
+          +datagrid#phycount
+        +tab-item("Dimensions", {iconCls:"icon-value"})
+          +hsplit('110px')
+            +panel('north')
+              #dimsdiv
+                div.two
+                  #dimsset(style="max-width:440px;")
+                    +fitem('Dimension Tracked',{id:'~', name:'DIM_TRACKED', class:'combobox','data-options':"data:[{text:'YES',value:'Y'},{text:'NO',value:'N', selected:true}],readonly:true"})
+                    +fitem('Dimension UOM',{id:'~',name:'DIM_UOM', class:'combobox'})
+                    +fitem('Total Pieces',{id:'DIM_PC_TOTAL', class:'numberbox', readonly:true, value:0})            
+                    
+                  #dimsdims(style="max-width:400px;")
+                    +fitem('Length',{id:'~',name:'LENGTH', class:'combobox','data-options':"data:[{text:'YES',value:'Y'},{text:'NO',value:'N', selected:true}]"})
+                    +fitem('Width',{id:'~',name:'WIDTH', class:'combobox','data-options':"data:[{text:'YES',value:'Y'},{text:'NO',value:'N', selected:true}]"})
+                    +fitem('Height',{id:'~',name:'HEIGHT', class:'combobox','data-options':"data:[{text:'YES',value:'Y'},{text:'NO',value:'N', selected:true}]"})
+                    
+            +panel('center')
+              include part_dimension.pug
+  
+        +tab-item("Traceability",{iconCls:"icon-trace"})
+          div#trace(style="margin-top:20px;")
+            +fitem('Max Lot Size',{name:'LOT_SIZE', class:'numberspinner sub-on', min:0, precision:0, value:0 })
+            -for (var x=1; x<11; x++)
+              +fitem({text:'Trace Label '+x,id:'TRACE_'+x},{name:'TRACE_USER_'+x+'_LBL',class:'textbox sub-on','data-options':"validType:['length[1,40]']"})
+  
+        +tab-item("Where Used",{fit:"true", iconCls:"icon-focus"})
+          +hsplit('50px')
+            +panel('north')
+              div(style="max-width:440px;")
+                +fitem('Source Type',{id:'usedin_src', class:'combobox'})
+              
+              div(style="max-width:400px;")
+                             
+            +panel('center')
+              +datagrid#usedin
+  
+  
+        +tab-item('Prices',{fit:"true", iconCls:"icon-money"})
+          +datagrid#prices
+  
+        +tab-item("Balances", {iconCls:"icon-inout"})
+          include part_trans_query.pug
+  
+        +tab-item('Attachments', {fit:"true", iconCls:"icon-pclip"})
+          +filegrid#partfiles(data-options="fit:true")
+        
+        +tab-item('B.O.M', {fit:"true", iconCls:"icon-org"})
+          +hsplit('50px')
+            +panel('north')
+              .grid-a(style="margin-top: 18px;")
+                div(style="max-width:440px;")
+                  +fitem('Excel BOM Upload',{id:'xlbom', class:'filebox'}) 
+                div(style="max-width:400px;")
+                  +button('Validate Items',{id:'bomval',iconCls:'icon-tick'})
+                  
+            +panel('center')
+              +datagrid#boms
+        +tab-item('Material Plan', {fit:"true", iconCls:"icon-line"})
+          +fitem('Safety Stock Qty',{id:'~',name:'SAFETY_STOCK_QTY', class:'numberbox ', value:0, precision:4})      
+  //- [MANUAL FIX #1] Modal wrapper div has sizing styles — takes space in layout. Add .hidden or remove sizing.
+  #pngenwin.hidden
+    include _pn_gen_inc.pug
+  
+  -if(bhave.partgen=='y')
+    #addmenu.menu.hidden
+      div(id="ud" name="ud" data-options="iconCls:'icon-keyboard'") User-Entered ID  
+      div(id="gen" name="gen" data-options="iconCls:'icon-bhave'") Auto-Generate ID
+      

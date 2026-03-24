@@ -1,0 +1,29 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "sales^quoteids_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "QUOTE_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 25,
+  "columns": [
+    { "field": "value", "title": "ID", "width": 100 },
+    { "field": "DESCRIPTION", "title": "Title", "width": 200 },
+    { "field": "CUSTOMER_NAME", "title": "Customer", "width": 150 },
+    { "field": "QUOTE_DATE", "title": "Date", "width": 100 },
+    { "field": "CURRENCY_ID", "title": "Currency", "width": 100 },
+    { "field": "PAYMENT_TERM", "title": "Terms", "width": 100 },
+    { "field": "STATUS", "title": "Status", "width": 100 }
+  ],
+  "filters": [
+    { "field": "DESCRIPTION", "title": "Description", "editor": "textbox" },
+    { "field": "CUSTOMER_NAME", "title": "Cust Name", "editor": "textbox" }
+  ]
+}

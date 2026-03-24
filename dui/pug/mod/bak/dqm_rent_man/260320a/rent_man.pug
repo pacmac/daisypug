@@ -1,0 +1,189 @@
+extends ../content
+block style
+  style.
+    table.ftable tr {
+      height:30px;
+    }
+    table.ftable th,
+    table.ftable td {
+      padding: 0 10px 0 10px;
+    }
+    table.ftable input.textbox-f {
+      width:200px;
+    }
+
+block script
+  script: include js/rent_man.js
+
+block content
+  +form.multi.fit#main.changeonly(_sqlid="dqm^rent" asdpx="adx")
+    +vsplit('400px').no-border
+      +panel('west')
+        +fitem('Rental ID',{id:'~', name:'RENTAL_ID',  class:'searchbox fkey fit autonum',sbref:"rent_ids"})
+        +fitem('Status',{id:'~', name:'STATUS', readonly: true, class:'combobox sub-on'})
+
+        +fitem('Gauge ID',{id:'~', name:'GAUGE_ID', class:'searchbox bcscan sub-on', required:true, 'data-options':"iconCls:'icon-barcode'", sbref:'gauge_ids'})
+        //-+fitem('Rental Type',{name:'OWNER_TYPE', class:'textbox', readonly:true})
+        +fitem('Licensor ID',{name:'LICENSOR_ID', class:'textbox', readonly:true})
+        +fitem('Licensor Serial No',{name:'LICENSOR_SERIAL', class:'textbox'})
+        +fitem('Licensor Gauge ID',{name:'LICENSOR_GAUGE_NO', class:'textbox'})
+
+        +input({type:'hidden',name:'LICENSOR_START_DATE'})
+        +input({type:'hidden',name:'LICENSOR_END_DATE'})
+        //-+fitem('Licensor Close',{id:'~', name:'LICENSOR_INVOICE_NO', class:'textbox','data-stat':'INVOICED'})
+        +fitem('Licensor Close',{id:'~', name:'LICENSOR_CLOSE', class:'textbox','data-stat':'INVOICED'})
+
+        +tabs(data-options="fit:true, plain:true")
+          +tab-item('Dates')
+            #dates
+              +fitem('Request Date',{name:'REQUEST_DATE', class:'datebox today'})
+              +fitem('Gauge ETA Date',{name:'BOOK_DATE', class:'datebox'})
+
+              +v-group('Inbound')
+                +fitem('Dispatch Date',{name:'SHIP_DATE', class:'datebox sub-on'})
+                +fitem('Receive Date',{name:'RECEIPT_DATE', class:'datebox stat', 'data-stat':'RECEIVED', readonly:true})
+
+              +v-group('Outbound')
+                +fitem('Dispatch Date',{name:'RETURN_DATE', class:'datebox stat', 'data-stat':'RETURNED', readonly:true})
+                +fitem('Receive Date',{name:'RETURN_ARRIVAL_DATE', class:'datebox sub-on'})
+                +button('Reset Dates',{id:'resetdates',iconCls:'icon-tick'})
+          +tab-item('Specs')
+            +fitem('Diameter (inch)',{name:'GAUGE_RENT_DIAMETER', class:'numberbox', readonly:true, 'data-options':"precision:3, min:0, suffix:' in'"})
+            +fitem('Thread Type',{name:'GAUGE_RENT_THREAD', class:'textbox', readonly:true})
+            +fitem('Pin or Box',{name:'GAUGE_RENT_PINBOX', class:'textbox', readonly:true})
+            +fitem('Weight',{name:'GAUGE_RENT_WEIGHT', class:'textbox', readonly:true})
+            +fitem('Notes / Specs',{name:'NOTES', class:'textarea', style:'height:100px'})
+          //-+tab-item('Usage')
+            +fitem('Billable End-Cuts',{name:'WO_QTY_TOTAL', class:'numberbox', readonly:true, value:0, 'data-options':"formatter:$.page.fn.qtyfmt"})
+            +fitem('COC Qty',{name:'WO_COC_TOTAL', class:'numberbox', readonly:true, value:0, 'data-options':"formatter:$.page.fn.qtyfmt"})
+            +v-group('Cost Allocations ('+global.codata.currency_id+')')
+              +fitem('Total Cost',{name:'~', id:'COST_TOTAL', class:'numberbox', readonly: true, precision:2, min:0, value:0})
+              +fitem('Cost Per Piece',{name:'~', id:'COST_PER_PIECE', class:'numberbox', readonly: true, precision:2, min:0, value:0})
+
+      +panel('center')
+        +tabs(data-options="fit:true")
+          +tab-item('Job Usage', {style:'padding:2px;'})
+            +hsplit('50%').no-border
+              +panel('north', { style: "padding:6px;" })
+                +datagrid#jobusage
+
+              +panel('center', { style: "padding:6px;" }).nocheck
+                +datagrid#joblist
+
+          +tab-item('Freight', {style:'padding:12px;'})
+
+            table.ftable
+              tr.head
+                th(style="width:150px") Details
+                th(style="") Inbound Freight
+                th(style="") Outbound Freight
+
+              tr.body
+                td Freight Company
+                td: +input({name:'INCOMING_CO', class:'combobox','data-options':"data:jsonParse($.dui.bhave.CBO_FREIGHT_CO)"})
+                td: +input({name:'OUTGOING_CO', class:'combobox','data-options':"data:jsonParse($.dui.bhave.CBO_FREIGHT_CO)"})
+
+              tr.body
+                td Despatch Location
+                td: +input({name:'INCOMING_LOCATION', class:'textbox'})
+                td: +input({name:'OUTGOING_LOCATION', class:'textbox'})
+
+              tr.body
+                td AWB Number
+                td: +input({name:'INCOMING_AWB', class:'textbox'})
+                td: +input({name:'OUTGOING_AWB', class:'textbox'})
+
+              tr.body
+                td Currency
+                td: +input({id:'~', name:'INCOMING_CURRENCY', class:'combobox', _sqlid:'admin^curr','data-options':"panelHeight:'auto'"})
+                td: +input({id:'~', name:'OUTGOING_CURRENCY', class:'combobox', _sqlid:'admin^curr','data-options':"panelHeight:'auto'"})
+
+              tr.body
+                td Freight Costs
+                td: +input({name:'INCOMING_FREIGHT_COST', class:'numberbox cost-in'})
+                td: +input({name:'OUTGOING_FREIGHT_COST', class:'numberbox cost-out'})
+
+              tr.body
+                td Handling Charge
+                td: +input({name:'INCOMING_HANDLING_COST', class:'numberbox cost-in'})
+                td: +input({name:'OUTGOING_HANDLING_COST', class:'numberbox cost-out'})
+
+              tr.body
+                td Fuel Surcharge
+                td: +input({name:'INCOMING_FUEL_SURCHARGE', class:'numberbox cost-in'})
+                td: +input({name:'OUTGOING_FUEL_SURCHARGE', class:'numberbox cost-out'})
+
+              tr.body
+                td Other Costs
+                td: +input({name:'INCOMING_OTHER_COSTS', class:'numberbox cost-in'})
+                td: +input({name:'OUTGOING_OTHER_COSTS', class:'numberbox cost-out'})
+
+              tr.body
+                td GST Charges
+                td: +input({name:'INCOMING_GST', class:'numberbox cost-in'})
+                td: +input({name:'OUTGOING_GST', class:'numberbox cost-out'})
+
+              tr.body
+                td Total Charges
+                td: +input({name:'INCOMING_TOTAL', readonly:true, class:'numberbox cost-in total'})
+                td: +input({name:'OUTGOING_TOTAL', readonly:true, class:'numberbox cost-out total'})
+
+              tr.body
+                td Inc Outbound Freight
+                td: +input({id:'~', name:'INCLUDE_OUTBOUND_FREIGHT',class:'combobox','data-options':"data:[{value:'Y',text:'YES'},{value:'N',text:'NO'}]"})
+
+
+          +tab-item('Purchase', {style:'padding:12px;'})
+            .two(style="max-width:800px;")
+              div
+                +v-group('General')
+                  +input({type:'hidden', id:'SYS_CURRENCY', value: $.codata.currency_id})
+                  +fitem('Purchase Req ID',{id:'~', name:'PR_NO', class:'textbox'})
+                  +fitem('Notes',{name:'PO_NO', class:'textbox unlock'})
+                  +fitem('Licensor Invoice',{id:'~', name:'LICENSOR_INVOICE_NO', class:'textbox unlock','data-stat':'INVOICED'})
+
+                +v-group('Rental Charges')
+                  +fitem('Rental Line #',{name:'PO_RENTAL_LINE_NO', class:'numberspinner unlock', precision:0})
+                  //-+fitem('Est. Rental Start',{name:'PO_START_DATE', class:'datebox'})
+                  //-+fitem('Est. Rental End',{name:'PO_END_DATE', class:'datebox'})
+                  +fitem('Rental Days',{name:'RENTAL_DAYS', class:'numberbox',readonly:true, 'data-options':"formatter:$.page.fn.qtyfmt"})
+                  +fitem('Daily Rate',{name:'RENTAL_DAILY', class:'numberbox', readonly:true, precision:2, min:0, value:0})
+                  +fitem('Rental Cost',{id:'~', name:'RENTAL_COST', class:'numberbox',readonly:true, precision:2, min:0, value:0})
+                  +fitem('Currency',{id:'~',name:'RENTAL_CURRENCY', class:'textbox', readonly:true})
+                  +fitem('Xrate 1.00 '+$.codata.costing_currency_id+' = ',{id:'~', name:'RENTAL_XRATE', class:'numberbox',precision:8, min:0, value:0})
+                  +fitem('Rental Cost ('+$.codata.costing_currency_id+')',{name:'~', id:'RENTAL_SYSCUR',readonly:true, class:'numberbox',precision:2, min:0, value:0})
+                  .fbuts.center
+                    a#ZERORENTAL(iconCls="icon-zero_dollar") Zero Rental
+              div
+                +v-group('Freight Charges')
+                  +fitem('Freight Line #',{name:'PO_TRANSPORT_LINE_NO', class:'numberspinner unlock', precision:0})
+                  +fitem('Total Cost',{id:'~', name:'PO_TRANSPORT_AMT', class:'numberbox', precision:2, min:0, value:0, readonly:true})
+                  +fitem('Currency',{id:'PO_FREIGHT_CURRENCY', class:'textbox', readonly:true})
+
+
+                +v-group('Royalty Charges')
+                  +fitem('Royalty Line #',{name:'PO_ROYALTY_LINE_NO', class:'numberspinner unlock', precision:0})
+                  +fitem('Royalty Type',{id:'~', name:'ROYALTY_TYPE', class:'textbox', readonly:true})
+                  +fitem('Billable End-Cuts',{id:'~', name:'ROYALTY_QTY', class:'numberbox',readonly:true, 'data-options':"formatter:$.page.fn.qtyfmt"})
+                  +fitem('Rate / Type',{name:'RENTAL_ROYALTY', class:'numberbox', readonly:true, precision:2, min:0, value:0})
+                  +fitem('Royalty Cost',{id:'~', name:'ROYALTY_COST', class:'numberbox',readonly:true, precision:2, min:0, value:0})
+                  +fitem('Currency',{id:'~',name:'ROYALTY_CURRENCY', class:'textbox', readonly:true})
+                  +fitem('Xrate 1.00 '+$.codata.costing_currency_id+' = ',{id:'~', name:'ROYALTY_XRATE', class:'numberbox', precision:8, min:0, value:0})
+                  +fitem('Rate / Type ('+$.codata.costing_currency_id+')',{name:'~', id:'ENDS_RATE_SYSCUR', readonly:true, class:'numberbox',precision:2, min:0, value:0})
+                  +fitem('Royalty Cost ('+$.codata.costing_currency_id+')',{id:'ROYALTY_SYSCUR', readonly:true, class:'numberbox',precision:2, min:0, value:0})
+
+              //-div
+                +v-group('Purchase Requisition')
+                  +fitem('PR ID',{name:'PR_NO', class:'textbox'})
+                  +fitem('Rental Start',{name:'PR_START_DATE', class:'datebox'})
+                  +fitem('Rental End',{name:'PR_END_DATE', class:'datebox'})
+
+          //-+tab-item('Invoice', {style:'padding:12px;'})
+            +input({type:'hidden',name:'LICENSOR_START_DATE'})
+            +input({type:'hidden',name:'LICENSOR_END_DATE'})
+
+            +fitem('Invoice ID',{name:'LICENSOR_INVOICE_NO', class:'textbox','data-stat':'INVOICED'})
+
+  +dialog#jobmove(style="padding:10px;min-height:100px;" title="Move Job" data-options="closed:true")
+    form(style="width:250px;")
+      +fitem('Target Rental ID',{id:'_RENTAL_ID', class:'combobox'},{style:'min-width:inherit;'})

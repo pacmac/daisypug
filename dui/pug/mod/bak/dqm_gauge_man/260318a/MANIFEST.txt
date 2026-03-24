@@ -1,0 +1,7 @@
+# dui-backup-clean: dqm/gauge_man
+# 2026-03-18T20:23:39.317109
+
+html/dui/mod/dqm/gauge_man.pug -> gauge_man.pug
+html/dui/mod/dqm/js/gauge_man.js -> js/gauge_man.js
+html/dui/mod/dqm/json/datagrid.gauge_man_dgtests.json -> json/datagrid.gauge_man_dgtests.json
+yaml/migrator/mod/dqm/gauge_man.yaml -> gauge_man.yaml

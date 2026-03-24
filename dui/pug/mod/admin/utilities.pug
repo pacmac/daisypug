@@ -1,0 +1,28 @@
+extends ../content 
+
+block script
+  +script("admin",['js/utilities.js'])
+block content
+  +tabs#main(fit="true")
+    
+    #inv(title='Inventory' iconCls="icon-part")
+    #vwltsa(title='Manufacturing' iconCls="icon-mfg")
+    #dqm(title='Quality' iconCls="icon-qm" )
+      form.single
+        +fieldset('Copy Test Plan',{style:'margin-top:12px;'})
+          +fitem('Plan ID',{id:'SOURCE_PLAN_ID',class:'combobox', _sqlid:'dqm^qphids',required:true,'data-options':"groupFieldXX:'TYPE',validType:'inList'"})
+          +fitem('Target Site ID',{id:'TARGET_SITE_ID',name:'',class:'combobox',style:'',required:true, 'data-options':"validType:'length[1,50]'"})
+          
+          div(style="margin-bottom:0px;margin-top:12px")  
+            +linkbutton.page.copyplan(data-options="iconCls:'icon-add',onClick:function(){$.dui.page.copyplan()}")
+
+    #sales(title='Sales' iconCls="icon-customer")
+    #system(title='System' iconCls="icon-admin")
+    #user(title='User' iconCls="icon-user")
+      form.single
+        +fieldset('Copy User Access',{style:'margin-top:12px;'})
+          +fitem('Source User ID',{id:'source_user_id',class:'combobox', _sqlid:'admin^cbo_uid',required:true,'data-options':"validType:'inList'"})
+          +fitem('Target User ID',{id:'target_user_id',name:'',_sqlid:'admin^cbo_uid',class:'combobox',style:'',required:true, 'data-options':"validType:'length[1,50]'"})
+          
+          div(style="margin-bottom:0px;margin-top:12px")  
+            +linkbutton.page.useraccesscopy(data-options="iconCls:'icon-add',onClick:function(){$.dui.page.useraccesscopy()}")

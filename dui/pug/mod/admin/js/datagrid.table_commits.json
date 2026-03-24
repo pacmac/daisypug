@@ -1,0 +1,6 @@
+{
+  "id": "table#commits",
+  "sourceFile": "admin/js/commit_history.js",
+  "lineNumber": 23,
+  "configPreview": "({\n    singleSelect: false,\n    rownumbers: true,\n    fitColumns: true,\n    striped: true,\n    fit: true,\n\n    columns: [\n      [\n        { field: \"se..."
+}

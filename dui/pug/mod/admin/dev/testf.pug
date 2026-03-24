@@ -1,0 +1,35 @@
+extends ../../content 
+
+block script
+  script.
+    //var sol_data=[];
+    //sol_data.push({text:'Cust Part Ref',value:'CUST_PART_ID'});
+   // sol_data.push({text:'Cust Part Desc',value:'CUST_PART_DESCRIPTION'});
+    //$('#m3').multibox('options').data(sol_data);
+
+      /*ajaxget('/',{_func:'get',_sqlid:'admin^bhave',appid:'sales^sa_sorder'},function(bh){
+          if (bh.UDF_LAYOUT_ID){
+              ajaxget('/',{_func:'get',_sqlid:'admin^udfall',ID:bh.UDF_LAYOUT_ID},function(data){
+                for(x=1;x<=10;x++){
+                  if(data['UDF_'+x])sol_data.push({text:data['UDF_'+x],value:'USER_'+x});
+                }
+                console.log(sol_data);
+                $('#sol2wospec_cols').multibox('loadData',sol_data);
+              })  ;                      
+          }
+      });
+      */      
+
+    
+
+      
+block content   
+  +tabs#bhtabs(style='min-width:800px;' fit="true" tabPosition="left")
+    div(title='multiboxes tests' iconCls="icon-tools")
+      form.single.load(_sqlid='admin^bhave'  asdpx='s')
+        .two
+          div(style="width:420px;")  
+            +fitem('hardcoded',{id:'~',name:'m1',class:'easyui-multibox','data-options':"data:[{text:'User 1',value:'USER_1'},{text:'User 2',value:'USER_2'},{text:'User 3',value:'USER_3'}]"})    
+            +fitem('_sqlid',{id:'~',name:'m2', _sqlid:'vwltsa^empid', class:'easyui-multibox','data-options':""})   
+            +fitem('script',{id:'~',name:'m3', class:'easyui-multibox',_sqlid:'vwltsa^udf_multibox'}) 
+            +fitem('Combobox',{id:'~',name:'m4', class:'combobox','data-options':"data:[{text:'User 1',value:'USER_1'}]"}) 

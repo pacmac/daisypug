@@ -1,0 +1,311 @@
+//- Navigation Mixins
+//- Purpose: Helping users move through the application.
+//- DaisyUI Components: breadcrumbs, dock, menu, navbar, pagination, steps, tab
+
+//- Include icon mapping system (semantic → Lucide/Bootstrap)
+include ../layout/_iconmap.pug
+
+//- ============================================================================
+//- TABS CONTAINER
+//- ============================================================================
+mixin tabs(opts)
+  -
+    var options = opts || {}
+    var mAttrs = attributes || {}
+
+    // Parse data-options from EUI-style attributes
+    if (mAttrs['data-options']) {
+      var _dopts = getOpts(mAttrs['data-options'])
+      Object.keys(_dopts).forEach(function(k) {
+        if (options[k] === undefined) options[k] = _dopts[k]
+      })
+    }
+
+    var tabPosition = options.tabPosition || 'top'
+    var isVertical = (tabPosition === 'left' || tabPosition === 'right')
+
+  //- Vertical tabs → delegate to +vtab
+  if isVertical
+    - _state._inVtab = true
+    +vtab(options)&attributes(mAttrs)
+      block
+    - _state._inVtab = false
+  else
+    -
+      var classes = ['tabs', 'tabs-border', 'flex-1', 'min-h-0', 'easyui-tabs', 'tabs-top']
+      if (options.class) classes.push(options.class)
+
+      // Generate unique name for the radio group to allow multiple independent tab sets
+      var prevTabGroup = _state.tabGroupName
+      var prevTabIndex = _state.tabIndex
+      var prevTabAutoActivated = _state.tabAutoActivated
+      var prevTabVertical = _state.tabVertical
+      var prevTabDefault = _state.tabDefault
+      _state.tabGroupName = options.name || 'tabs_' + Math.random().toString(36).substr(2, 5)
+      _state.tabIndex = 0
+      _state.tabAutoActivated = false
+      _state.tabVertical = false
+      _state.tabDefault = options.default || null
+
+      var attrs = Object.assign({}, options)
+      delete attrs.name
+      delete attrs.class
+      delete attrs.fit
+      delete attrs.border
+      delete attrs.tabPosition
+      delete attrs.default
+      // Merge id and class from pug shorthand (e.g. +tabs#help-tabs.remember)
+      if (mAttrs.id) attrs.id = mAttrs.id
+      if (mAttrs.class) classes.push(mAttrs.class)
+
+    div(class=classes role="tablist")&attributes(attrs)
+      block
+
+    -
+      _state.tabGroupName = prevTabGroup
+      _state.tabIndex = prevTabIndex
+      _state.tabAutoActivated = prevTabAutoActivated
+      _state.tabVertical = prevTabVertical
+      _state.tabDefault = prevTabDefault
+
+//- ============================================================================
+//- INDIVIDUAL TAB
+//- ============================================================================
+mixin tab-item(title, opts)
+  //- Vertical tabs → delegate to +vtab-item
+  if _state._inVtab
+    +vtab-item(title, opts)
+      block
+  else
+    -
+      var options = opts || {}
+      var explicitActive = options.active || options.checked || false // Support both 'active' and 'checked'
+      var tabIndex = _state.tabIndex || 0
+      // DaisyUI radio tabs need one checked input to show the associated tab-content.
+      // If default is set, activate the matching tab; otherwise auto-activate first tab.
+      var matchesDefault = _state.tabDefault && !_state.tabAutoActivated && (_state.tabDefault === title)
+      var active = explicitActive || matchesDefault || (!_state.tabDefault && !_state.tabAutoActivated && tabIndex === 0)
+      if (active) _state.tabAutoActivated = true
+      _state.tabIndex = tabIndex + 1
+      var name = _state.tabGroupName
+
+      var attrs = Object.assign({}, options)
+      delete attrs.active
+      delete attrs.checked
+      delete attrs.name
+      delete attrs.title
+      delete attrs.iconCls
+      delete attrs.icon
+      delete attrs.fit
+      delete attrs.selected
+
+      // Resolve icon: EUI iconCls via iconmap, or direct Lucide name as fallback
+      var tabIconCls = options.iconCls || options.icon || ''
+      var tabLucideIcon = ''
+      if (tabIconCls) {
+        tabLucideIcon = typeof getIcon === 'function' ? getIcon(tabIconCls) : tabIconCls
+      }
+
+    //- Tab icon (rendered before input; CSS positions it visually inside the tab)
+    //- Outer span stays as grid item; inner span replaced by Lucide SVG
+    if tabLucideIcon
+      span.tab-icon(class=nextIconColor())
+        span(data-lucide=tabLucideIcon)
+
+    //- DaisyUI tab input (radio button controls visibility)
+    input.tab(
+      type="radio"
+      name=name
+      role="tab"
+      aria-label=title
+      checked=active
+    )&attributes(attrs)
+
+    //- Content wrapped in div.tab-content (REQUIRED by DaisyUI for CSS selectors)
+    //- DaisyUI tab-content automatically gets display:none and is shown when sibling input is :checked
+    - var _savedSurfaceDepth = _state._surfaceDepth
+    - var _wasFrozen = _state._surfaceFrozen
+    - _state._surfaceFrozen = true
+    div(class="tab-content border-base-300 bg-base-200/60 min-h-0 overflow-auto")
+      block
+    - _state._surfaceFrozen = _wasFrozen
+    - _state._surfaceDepth = _savedSurfaceDepth
+
+//- ============================================================================
+//- VTAB — Vertical tabs using +vsplit()
+//- ============================================================================
+//- Renders vsplit with west (tab nav) + center (tab content).
+//- +vtab-item children render flat inside center; vtab-plugin.js moves labels
+//- to the west panel on init and wires click handlers.
+//- Can be called directly or via +tabs({tabPosition:'left'}).
+
+mixin vtab(opts)
+  -
+    var options = opts || {}
+    var mAttrs = attributes || {}
+    if (mAttrs['data-options']) {
+      var _dopts = getOpts(mAttrs['data-options'])
+      Object.keys(_dopts).forEach(function(k) {
+        if (options[k] === undefined) options[k] = _dopts[k]
+      })
+    }
+    var width = (options.headerWidth || 150) + 'px'
+    var prevVtabIndex = _state._vtabIndex
+    var prevVtabDefault = _state._vtabDefault
+    var prevVtabAutoActivated = _state._vtabAutoActivated
+    _state._vtabIndex = 0
+    _state._vtabDefault = options.default || null
+    _state._vtabAutoActivated = false
+    // Set _inVtab so +tab-item delegates to +vtab-item
+    var wasInVtab = _state._inVtab
+    _state._inVtab = true
+  +vsplit(width)&attributes({id: mAttrs.id, class: 'vtab'})
+    +panel('west', {scroll: true})
+      .vtab-nav
+    +panel('center', {scroll: false})
+      .vtab-body.flex-1.min-h-0.relative.overflow-hidden.flex.flex-col
+        block
+  -
+    _state._vtabIndex = prevVtabIndex
+    _state._vtabDefault = prevVtabDefault
+    _state._vtabAutoActivated = prevVtabAutoActivated
+    _state._inVtab = wasInVtab
+
+mixin vtab-item(title, opts)
+  -
+    var options = opts || {}
+    var idx = _state._vtabIndex || 0
+    var matchesDefault = _state._vtabDefault && !_state._vtabAutoActivated && (_state._vtabDefault === title)
+    var active = options.active || options.checked || matchesDefault || (!_state._vtabDefault && !_state._vtabAutoActivated && idx === 0)
+    if (active) _state._vtabAutoActivated = true
+    _state._vtabIndex = idx + 1
+    var iconCls = options.iconCls || options.icon || ''
+  .vtab-label(class=active ? 'active' : '', data-vtab-idx=idx)
+    if iconCls
+      span.vtab-icon(class=nextIconColor())
+        +icon(iconCls)
+    span.vtab-text= title
+  .vtab-panel.min-h-0.overflow-auto.pl-2.pt-2(class=(active ? 'active ' : '') + 'bg-base-200/60')
+    block
+
+//- ============================================================================
+//- MENU ITEM (DaisyUI - Recursive)
+//- ============================================================================
+//- Renders a menu item with optional children using DaisyUI details/summary
+//- Parameters:
+//-   item: {text, icon?, children?, url?}
+//-   isTop: boolean (for styling, currently unused but kept for compatibility)
+//- ============================================================================
+
+
+mixin menuItem(item, isTop)
+  if item && item.text
+    - const childrenObj = item.children || []
+    - const kids = Array.isArray(childrenObj) ? childrenObj : Object.values(childrenObj)
+    - const hasKids = kids.length > 0
+    - const idPath = item.id ? `/mod/${String(item.id).replace(/\^/g, "/")}` : ""
+    - const url = idPath || item.url || item.attributes?.url || "#"
+    - const iconCls = item.icon || item.iconCls || ""
+    li
+      if hasKids
+        details(open=false)
+          summary(data-tip=item.text data-tip-if=".sidebar-collapsed")
+            if iconCls
+              +icon(iconCls, {size: 'lg'})
+            span= item.text
+
+          ul.menu
+            each child in kids
+              +menuItem(child, false)
+      else
+        - const appid = item.id || ""
+        - const legacyUrl = appid ? `/?_page=${appid}&_appid=${appid}` : (url !== "#" ? url : "javascript:void(0)")
+        a(id=appid href=legacyUrl data-appid=appid data-iconCls=iconCls title=item.text class=item.cls || '')
+          if item.status && iconCls
+            span.menu-status-wrap
+              +icon(iconCls, {size: 'lg'})
+              span(class='status-dot status-overlay status-' + item.status)
+          else if item.status
+            span.menu-status-wrap
+              span(class='status-dot status-overlay status-' + item.status)
+          else if iconCls
+            +icon(iconCls, {size: 'lg'})
+          span(class=iconCls)= item.text
+          if item.badge
+            span.menu-badge= item.badge
+
+//- ============================================================================
+//- DEPRECATED: +lucideIcon — use +icon(cls, opts) from _iconmap.pug instead
+//- Kept for backward compat only. Will be removed.
+//- ============================================================================
+mixin lucideIcon(name)
+  +icon(name, {size: 'lg'})
+
+//- ============================================================================
+//- Auto-generated skeleton: breadcrumbs
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin breadcrumbs(opts = {})
+  span.mixin-skeleton(data-mixin="breadcrumbs")
+    | [SKELETON: breadcrumbs]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: dock
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin dock(opts = {})
+  span.mixin-skeleton(data-mixin="dock")
+    | [SKELETON: dock]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: menu
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin menu(opts = {})
+  span.mixin-skeleton.easyui-menu(data-mixin="menu")
+    | [SKELETON: menu]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: navbar
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin navbar(opts = {})
+  span.mixin-skeleton(data-mixin="navbar")
+    | [SKELETON: navbar]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: pagination
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin pagination(opts = {})
+  span.mixin-skeleton(data-mixin="pagination")
+    | [SKELETON: pagination]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: steps
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin steps(opts = {})
+  span.mixin-skeleton(data-mixin="steps")
+    | [SKELETON: steps]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: tab
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin tab(opts = {})
+  span.mixin-skeleton(data-mixin="tab")
+    | [SKELETON: tab]

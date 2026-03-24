@@ -1,0 +1,194 @@
+//- Feedback Mixins
+//- Purpose: Informing users about events or loading states.
+//- DaisyUI Components: alert, loading, modal, skeleton, toast, tooltip
+
+//- ============================================================================
+//- Auto-generated skeleton: alert
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin alert(opts = {})
+  span.mixin-skeleton(data-mixin="alert")
+    | [SKELETON: alert]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: loading
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin loading(opts = {})
+  span.mixin-skeleton(data-mixin="loading")
+    | [SKELETON: loading]
+
+
+//- ============================================================================
+//- MODAL — Native <dialog> with DaisyUI modal structure
+//- ============================================================================
+//- Usage:
+//-   +modal#myid(title="My Title")
+//-     +fitem('Field', {id:'F1', class:'combobox', _sqlid:'...'})
+//-     +fitem('Other', {id:'F2', class:'textbox'})
+//-     +modal-footer
+//-       button.btn.btn-primary.btn-sm OK
+//-
+//- Attributes:
+//-   title    — Rendered as <h3> inside modal-box (removed from <dialog>)
+//-   style    — Applied to .modal-box (not the <dialog> overlay)
+//-   max-w    — Tailwind max-width class: sm, md, lg, xl, 2xl, 3xl
+//-   size     — Preset: small (30vw×40vh), medium (50vw×60vh), large (70vw×80vh), fullscreen (90vw×90vh)
+//-   fullscreen — Shorthand for size="fullscreen"
+//- EUI compat attributes (stripped silently):
+//-   closed, modal, iconCls
+//- JS API:
+//-   $('#id').dialog('open')  → showModal()
+//-   $('#id').dialog('close') → close()
+//- ============================================================================
+mixin modal(opts = {})
+  - var title = attributes.title || ''
+  - var style = attributes.style || ''
+  - var maxw = attributes['max-w'] || ''
+  - var noForm = attributes['no-form'] != null
+  - var hasTitlebar = attributes.titlebar != null
+  - var iconCls = attributes.iconCls || attributes['icon-cls'] || ''
+  - var isBordered = attributes.bordered != null
+  - var sizePreset = attributes.size || ''
+  - if (attributes.fullscreen != null) sizePreset = 'fullscreen'
+  - var modalId = attributes.id || ''
+  - delete attributes.title
+  - delete attributes.style
+  - delete attributes['max-w']
+  - delete attributes['no-form']
+  - delete attributes.titlebar
+  - delete attributes.iconCls
+  - delete attributes['icon-cls']
+  - delete attributes.bordered
+  - delete attributes.size
+  - delete attributes.fullscreen
+  - delete attributes.closed
+  - delete attributes.modal
+  - delete attributes.draggable
+  - var SIZE_PRESETS = { small: 'width:30vw;min-width:20rem;max-width:30vw !important;height:40vh;', medium: 'width:50vw;max-width:50vw !important;height:60vh;', large: 'width:70vw;max-width:70vw !important;height:80vh;', fullscreen: 'width:90vw;max-width:90vw !important;height:90vh;' }
+  - if (sizePreset && SIZE_PRESETS[sizePreset]) style = SIZE_PRESETS[sizePreset] + (style ? ' ' + style : '')
+  - var boxCls = maxw ? 'max-w-' + maxw : ''
+  - if (isBordered) boxCls += ' border border-base-300'
+  - if (hasTitlebar && title) boxCls += ' p-0 overflow-hidden flex flex-col'
+  dialog&attributes(attributes)(class="modal", data-titlebar=hasTitlebar ? '' : false, data-bordered=isBordered ? '' : false)
+    .modal-box(style=style, class=hasTitlebar && title ? boxCls : 'p-6 ' + boxCls)
+      if title && hasTitlebar
+        .bg-primary.text-primary-content.flex.items-center.gap-2.pl-4.pr-1.h-8.min-h-0.shrink-0(data-modal-titlebar)
+          if iconCls
+            +icon(iconCls, {size: 'sm', opacity: 'opacity-80'})
+          span.font-semibold.text-sm.flex-1= title
+          button.btn.btn-ghost.btn-xs.btn-circle.text-primary-content.opacity-70(type="button" onclick="this.closest('dialog').close()" aria-label="Close" class="hover:opacity-100")
+            +icon('circle-x')
+        .p-6(class=sizePreset ? 'flex-1 min-h-0 flex flex-col' : '')
+          template#dui-fitem-tpl
+            .mb-2.flex.items-center.gap-2
+              label.shrink-0(style="width:150px")
+              .flex-1
+                input.input.input-xs.input-bordered.w-full
+          if noForm
+            block
+          else
+            form(id=modalId ? modalId + '-form' : false)
+              block
+      else
+        if title
+          h3.font-bold.mb-4= title
+        template#dui-fitem-tpl
+          .mb-2.flex.items-center.gap-2
+            label.shrink-0(style="width:150px")
+            .flex-1
+              input.input.input-xs.input-bordered.w-full
+        if noForm
+          block
+        else
+          form(id=modalId ? modalId + '-form' : false)
+            block
+    .modal-backdrop: button(type="button" onclick="this.closest('dialog').close()") close
+
+//- ============================================================================
+//- MODAL-FOOTER — Standard modal action bar with Cancel
+//- ============================================================================
+//- Always renders Cancel. Place page-specific buttons in the block.
+//- Cancel is always the last (rightmost) button.
+//-
+//- Usage:
+//-   +modal-footer
+//-     button#apply.btn.btn-primary.btn-sm Apply
+//- ============================================================================
+mixin modal-footer
+  .modal-action.flex.justify-end.gap-2.pt-4.border-t.border-base-200.mt-4
+    block
+    button.btn.btn-sm(type="button" onclick="this.closest('dialog').close()") Cancel
+
+
+//- ============================================================================
+//- DOCVIEWER — Full-screen document/PDF viewer modal with iframe
+//- ============================================================================
+//- Usage:
+//-   +docviewer#my-viewer(title="My Viewer" icon-cls="eye")
+//- JS:
+//-   var iframe = document.querySelector('#my-viewer-iframe');
+//-   iframe.src = '/path/to/doc';
+//-   document.getElementById('my-viewer').showModal();
+//- ============================================================================
+mixin docviewer()
+  - var dvId = attributes.id || 'docviewer'
+  - attributes.titlebar = ''
+  - attributes['no-form'] = ''
+  - attributes.fullscreen = ''
+  +modal&attributes(attributes)
+    iframe.flex-1.w-full.border-0(id=dvId + '-iframe' src="about:blank")
+
+//- ============================================================================
+//- Auto-generated skeleton: skeleton
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin skeleton(opts = {})
+  span.mixin-skeleton(data-mixin="skeleton")
+    | [SKELETON: skeleton]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: toast
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin toast(opts = {})
+  span.mixin-skeleton(data-mixin="toast")
+    | [SKELETON: toast]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: tooltip
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin tooltip(opts = {})
+  span.mixin-skeleton(data-mixin="tooltip")
+    | [SKELETON: tooltip]
+//- ============================================================================
+//- DIALOG — Alias for +modal (EUI backward compatibility)
+//- ============================================================================
+mixin dialog(opts = {})
+  +modal&attributes(attributes)
+    block
+
+//- ============================================================================
+//- WINDOW — Alias for +modal (EUI backward compatibility)
+//- ============================================================================
+mixin window(opts = {})
+  +modal&attributes(attributes)
+    block
+//- ============================================================================
+//- Auto-generated skeleton: messager
+//- Created: 2026-02-01
+//- Status: skeleton - awaiting implementation
+
+mixin messager(opts = {})
+  span.mixin-skeleton.easyui-messager(data-mixin="messager")
+    | [SKELETON: messager]
+

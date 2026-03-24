@@ -1,0 +1,55 @@
+extends ../content
+
+block style
+  style .lock.icon-cross {opacity: 0.25}
+
+block script
+  -
+    // build the user events
+    var events = [];
+    var _ud = (typeof udata === 'object' && udata) || (req.session && req.session.udata) || {};
+    var _uevents = _ud.events || [];
+    var _sevents = ($ && $.events) || {};
+    for (var e in _sevents) {
+      var id = _sevents[e].id;
+      if (_uevents.indexOf(id) > -1) {
+        _sevents[e].iconCls = 'icon-tick';
+        _sevents[e].enabled = true;
+      } else {
+        _sevents[e].iconCls = 'lock icon-cross';
+        _sevents[e].enabled = false;
+      }
+      events.push(_sevents[e]);
+    }
+
+    // build appids from global $.menus tree for event tree grouping
+    var appids = {};
+    var _gmenus = ($ && $.menus) || [];
+    if (Array.isArray(_gmenus)) {
+      _gmenus.forEach(function(m) { if (m && m.id) appids[m.id] = { id: m.id, iconCls: m.iconCls, text: m.text }; });
+    }
+
+  +script('pref_data')
+    | var _pref_uevents = !{JSON.stringify(events)};
+    | var _pref_appids = !{JSON.stringify(appids)};
+
+  +script('pref')
+    include js/pref.js
+
+block content
+  - var _themeData = (config.themes || ['dark','light']).map(function(t){ return { text: t.charAt(0).toUpperCase() + t.slice(1), value: t }; });
+
+  +vsplit('450px')
+    +panel('west')
+      +tabs#maintab(data-options="fit:true")
+
+        +tab-item("Events", {iconCls: "icon-task", style: "padding:8px;"})
+          ul#events.dui-tree
+
+        +tab-item("Layout", {iconCls: "icon-bhave"})
+          +form#upref(class='single fit load', _sqlid='user^upref', asdpx='sx')
+            +fieldset('Appearance')
+              +fitem('Theme', {name: 'theme', class: 'combobox', 'data-options': "editable:false, data:" + JSON.stringify(_themeData)})
+              +fitem('Language', {name: 'language', class: 'combobox', 'data-options': "editable:false, data:[{text:'English',value:'eng'},{text:'简体中文',value:'chs'},{text:'Bahasa',value:'bah'}]"})
+
+    +panel('center')

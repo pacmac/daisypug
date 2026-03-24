@@ -1,0 +1,126 @@
+extends ../content 
+block content 
+  +form.multi#opers.fit(_sqlid='vwltsa^empall' asdpx='ax' data-lbut="ax" data-ebut="ax")
+    +layout(data-options="fit:true,border:false")
+      +panel#FAFAFA.bg-base-200(region="west" style="width:400px")
+          +fitem('Operator ID',{id:'empid' , name:'ID', class:'qbe navi fkey fit',required:true})
+          +fitem('Last Name',{name:'LAST_NAME', class:'textbox' , validType:['length[1,30]']})
+          +fitem('First Name',{name:'FIRST_NAME', class:'textbox' , validType:['length[1,30]']})
+          +fitem('Password',{name:'PASSWD', class:'textbox' ,type:'password', validType:['length[1,30]']})
+          +fitem('Country',{name:'COUNTRY', class:'textbox' , validType:['length[1,50]']})
+          +fitem('Phone',{name:'PHONE', class:'textbox' , validType:['length[1,20]']})
+          +fitem('Email',{name:'EMAIL_ADDR', class:'textbox' , validType:['email']})
+          +fitem('RFID Tag',{name:'RFID_TAG', class:'textbox' , validType:['length[1,15]']})
+          +fitem('Hourly Cost',{name:'BASE_PAY_RATE', class:'numberspinner', value:0, min:0, max:1000, precision:2, increment:1,required:true})
+          +fitem('Active',{name:'ACTIVE', class:'combobox','data-options':"data:[{text:'Yes',value:'Y', selected:true},{text:'No',value:'N'}],editable:false",required:true})
+          +fitem('Screen Language',{name:'LANGUAGE_ID', class:'combobox','data-options':"data:[{text:'English',value:'eng', selected:true},{text:'Simple Chinese',value:'chs'},{text:'Vietnamese',value:'vie'},{text:'Bahasa',value:'bah'},{text:'Thai',value:'thai'}],editable:false",required:true})
+          +fitem('Department',{ name:'DEPARTMENT_ID', _sqlid:'vwltsa^depid1', class:'combobox',validType:['length[1,255]'],required:true,'data-options':"editable:false"})
+          +fitem('Shift',{ name:'SHIFT_ID',id:'~', _sqlidXXX:'vwltsa^shiftid', class:'combobox',validType:['length[1,15]'],required:true,'data-options':"editable:false"})
+          +fitem('Remote',{name:'REMOTE', class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N', selected:true}],editable:false",required:true})
+
+      +panel('center', {  })
+        +tabs#optabs(data-options="fit:true")
+          
+          div#udftab(title="User Fields" iconCls="aicon-table")
+            +udfs({select:bhave.defudf,ron:false})
+          
+          div#restab.bg-base-200(region="center" style="padding:20px 10px 10px 5px" title="Resources" iconCls="aicon-group_gear")
+            ul#res_tree(style="opacity:0.5;" _sqlid="vwltsa^restree")
+            
+          div(title="Certification" iconCls="aicon-certificate")
+            #certdg
+          div(title="Qualifications" iconCls="aicon-certificate")
+            #qdg
+          div(title="NCRs" iconCls="icon-ncr")
+            +layout(data-options="fit:true" style="border:0;")
+              div(region="north" style="height:50%;padding:6px;" title="NCR" collapsible="false" iconCls="icon-ncr" resizable="true" split="true")
+                #ncrdg
+            
+              div(region="center" style="height:50%;padding:6px;" title="Summary" collapsible="false" iconCls="icon-ncr" resizable="true" split="true")
+                #ncrdg1
+
+          div(title="Attachments" style="width:100%;" iconCls="icon-pclip")
+            +filegrid#operatorfiles(style="width:100%;" data-options="fit:true")
+          div#rating(title='Rating' iconCls="aicon-gauge")
+            #ratingrid
+  +window#certwin(data-options="modal:true,closed:true,iconCls:'icon-edit',title:'Operator Certification'")
+    form#certfrm(style="padding-right:16px;")
+      input(name='ROWID' type='hidden')
+      .fitem
+        label Module
+        +combobox#MODULE_ID(name="MODULE_ID" required="required")
+
+      .fitem
+        label Description
+        +textbox#MODULE_DESC(name="MODULE_DESC" readonly="readonly")
+
+      .fitem
+        label Type
+        +textbox#MODULE_TYPE(name="MODULE_TYPE" readonly="readonly")
+
+      .fitem
+        label Planned
+        +datebox.today(name="PLAN_DATE")
+
+      .fitem
+        label Expiry
+        +datebox.today(name="EXPIRY_DATE")
+
+      .fitem
+        label Completed
+        +datebox.today(name="COMPLETED_DATE")
+
+      .fitem
+        label Attended
+        +combobox(name="ATTENDED" data-options="data:[{value:'Yes',text:'Yes'},{value:'No',text:'No'}], panelHeight:'auto'" required="required")
+
+      .fitem
+        label Result
+        +combobox(name="RESULT" data-options="data:[{value:'Pass',text:'Pass'},{value:'Fail',text:'Fail'}], panelHeight:'auto'" required="required")
+
+      .fitem
+        label Training ID
+        +textbox(name="TRAINING_ID" required="required")
+      
+      div#certbut(style="margin-top:20px;text-align:right;margin-bottom:12px;")
+        +linkbutton#certclr(iconCls="icon-cancel")
+        +linkbutton#certdel(iconCls="icon-delete")
+        +linkbutton#certsav(iconCls="icon-save")
+
+  +window#qwin(data-options="modal:true,closed:true,iconCls:'icon-edit',title:'Operator Qualification'")
+    form#qfrm(style="padding-right:16px;")
+      input(name='ROWID' type='hidden')
+      .fitem
+        label Qualification
+        +combobox#QUALIFICATION_ID(name="QUALIFICATION_ID" required="required")
+
+      .fitem
+        label Date
+        +datebox.today(name="QUALIFICATION_DATE")
+      .fitem
+        label Expiry Date
+        +datebox.today(name="EXPIRY_DATE")
+      div#qbut(style="margin-top:20px;text-align:right;margin-bottom:12px;")
+        +linkbutton#qclr(iconCls="icon-cancel")
+        +linkbutton#qdel(iconCls="icon-delete")
+        +linkbutton#qsav(iconCls="icon-save")
+
+block script 
+  script: include js/sa_operators.js
+block style
+  style.
+    .tree-node.on {
+      color:blue;
+    }
+    
+    td[field="STAT"] div.Pass,
+    td[field="STAT"] div.P {
+      height: 16px; width:16px;
+      background: url('../icons/tick.png');
+    } 
+    
+    td[field="STAT"] div.Fail,
+    td[field="STAT"] div.F {
+      height: 16px; width:16px;
+      background: url('../icons/cross.png');
+    }

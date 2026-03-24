@@ -1,0 +1,16 @@
+{
+  "fit": true,
+  "fitColumns": true,
+  "rownumbers": false,
+  "striped": true,
+  "asdpx": "aed",
+  "columns": [[
+    {"field": "QUALIFICATION_ID", "hidden": true},
+    {"field": "LINE_NO", "hidden": true},
+    {"field": "LICENSOR_OWNER", "id": "LICENSOR_OWNER", "title": "Licensor Owner", "width": 80, "editor": {"type": "combobox", "options": {"required": true, "editable": false}}},
+    {"field": "FEATURES", "title": "Spec/Feature", "width": 80, "editor": "textbox"},
+    {"field": "RANGES", "title": "Range", "width": 100, "editor": "textbox"},
+    {"field": "LIMITATIONS", "title": "Limitations", "width": 100, "editor": "textbox"},
+    {"field": "NOTES", "title": "Notes/Spec", "width": 80, "editor": {"type": "textbox", "options": {"readonly": false, "multiline": true, "height": 150}}}
+  ]]
+}

@@ -1,0 +1,78 @@
+extends ../content
+
+block script
+  //-+script("inv",['js/pn_config.js'])
+  script: include js/pn_config.js
+
+block style
+  style.
+    input[textboxname=TYPE_ID] + .textbox > input.textbox-text.validatebox-text {text-transform: uppercase;}
+    .frow > label {width:140px;}
+
+block content
+  +tabs#lists(data-options="tabPosition:'top', fit:true")
+    +tab-item("Classes",{})
+      form.multi#pclass(_sqlid='inv^pn_partclass', asdpx='ax')
+        +fitem('Class ID',{id:'~', name:'CLASS_ID', _sqlid:'inv^pn_partclass', class:'upper combobox fkey fit','data-valid':['length:1:25','sqlsafe']})
+        br
+        +fieldset('Part ID')
+          +fitem('Code ID',{name:'CODE_STR', class:'textbox upper', validType:['length[1,10]'],required:true})
+          +fitem('Position',{name:'CODE_RULE', class:'combobox upper', 'data-options':"editable:false,data:[{value:'NONE',text:'NONE'},{value:'PREFIX',text:'PREFIX'},{value:'SUFFIX',text:'SUFFIX'}]",required:true})
+        +fieldset('Part Description')
+          +fitem('Description',{name:'DESCRIPTION', class:'textbox' ,validType:['length[1,30]'],required:true})
+          +fitem('Position',{name:'DESC_RULE', class:'combobox', 'data-options':"editable:false,data:[{value:'NONE',text:'NONE'},{value:'PREFIX',text:'PREFIX'},{value:'SUFFIX',text:'SUFFIX'}]",required:true})
+        +fieldset('Traceability')
+          +fitem('Traceable',{id:'~', name:'TRACEABLE', required:true, class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+    +tab-item("Types",{})
+      +layout({border:false})
+        +panel('north', { style: "height:60px;", collapsible: "false", border: "false" })
+          form#ctype
+            div.two
+              div(style="width:400px;")
+                +fitem('Class ID',{id:'TYPE_CLASS_ID'})
+              div
+
+        +panel('center', { style: "padding:8px;" })
+          #dgtypes
+    
+    +tab-item("Parameters",{})
+      +layout({border:false})
+        +panel('north', { style: "height:60px;", collapsible: "false", border: "false" })
+          form#params
+            div.two
+              div(style="width:400px;")
+                +fitem('Class ID',{id:'PARAM_CLASS_ID'})
+              div
+                +fitem('Type ID',{id:'PARAM_TYPE_ID', _sqlid:'inv^pn_classtype', class:'combobox'})
+                
+        +panel('center', { style: "padding:8px;" })
+          #dgparams
+
+    +tab-item("Part ID",{})
+      +layout({border:false})
+        +panel('north', { style: "height:60px;", collapsible: "false", border: "false" })
+          form#part
+            div.two
+              div(style="width:400px;")
+                +fitem('Class ID',{id:'PART_CLASS_ID'})
+              div
+                +fitem('Formula',{id:'ID_GEN', class:'textbox',readonly:true})
+
+        +panel('center', { style: "padding:8px;" })
+          #dgpart
+    
+    +tab-item("Description",{})
+      +layout({border:false})
+        +panel('north', { style: "height:60px;", collapsible: "false", border: "false" })
+          form#desc
+            div.two
+              div(style="width:400px;")
+                +fitem('Class ID',{id:'DESC_CLASS_ID'})
+              div
+                +fitem('Formula',{id:'DESC_GEN', class:'textbox',readonly:true})
+
+        +panel('center', { style: "padding:8px;" })
+          #dgdesc
+    
+    +tab-item("Generator",{})
+      include pn_gen_inc.pug

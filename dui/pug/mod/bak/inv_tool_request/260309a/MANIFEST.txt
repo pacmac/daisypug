@@ -1,0 +1,7 @@
+# dui-backup-clean: inv/tool_request
+# 2026-03-09T13:12:14.888619
+
+html/dui/mod/inv/tool_request.pug -> tool_request.pug
+html/dui/mod/inv/js/tool_request.js -> js/tool_request.js
+html/dui/mod/inv/json/datagrid.tool_request_tool_tx.json -> json/datagrid.tool_request_tool_tx.json
+yaml/migrator/mod/inv/tool_request.yaml -> tool_request.yaml

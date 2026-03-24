@@ -1,0 +1,51 @@
+extends ../content
+//- ── MIGRATOR ──────────────────────────────────
+//- page: inv/part_tracetrans_editor
+//- owner: root
+//- status: converted
+//- passes: 3  version: 7
+//- last_run: 2026-02-27 18:36:20
+//- manual:
+//-   #1: +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts
+//-   #2: raw div with region= attribute — convert to +panel(region)
+//-   #3: raw div with region= attribute — convert to +panel(region)
+//- ─────────────────────────────────────────────
+block script
+  +script("inv",['js/part_tracetrans_editor.js'])
+  //- manual fix warnings removed — #1 +vsplit, #2/#3 panel regions resolved
+block content
+  +vsplit('410px')
+    +form#parttrans(style="display:inline")
+      +fitem('Part ID',{name:'PART_ID', readonlyx:true,requiredx:true,class:'textbox'})
+      +fitem('Trace ID',{name:'TRACE_ID', readonly:true,class:'textbox'})
+      +fitem('Unit Material Cost',{name:'UNIT_MATERIAL_COST',id:'~', requiredx:true, class:'numberspinner', min:0, precision:2, value:0})
+      +fitem('Expiry Date',{name:'EXPIRY_DATE',id:'~',  class:'datebox'})
+      div#traceprop
+        -for (var x=1; x<11; x++)
+          .fitem(id='TRACE_USER_'+x+'_LBL' style="display:none")
+            +label('')
+            +input({name:'TRACE_USER_'+x,class:'textbox','data-options':"validType:['length[1,80]']"})
+    div
+      #tbar
+        +form#gfilter
+          +label('From')
+          +datebox({name:'sdate', today:true, style:'width:100px;'})
+          +label('To')
+          +datebox({name:'edate', today:true, style:'width:100px;'})
+          +label('Part ID')
+          +combobox({_sqlid:'inv^partid', name:'pid'})
+      +datagrid#txgrid
+
+block style
+  style.
+    #parttrans .fitem{
+      margin-bottom: 8px !important;
+    }
+    
+    #tbar {
+      height:30px;
+      line-height:30px;  
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }

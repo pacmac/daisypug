@@ -1,0 +1,44 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "inv^po_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "PO ID", "width": 100 },
+    { "field": "VENDOR_ID", "title": "Vendor ID", "width": 100 },
+    { "field": "NAME", "title": "Vendor Name", "width": 200 },
+    { "field": "ORDER_DATE", "title": "Order Date", "width": 100 },
+    { "field": "DELIVERY_DATE", "title": "Dlvy Date", "width": 100 },
+    { "field": "STATUS", "title": "Status", "width": 80 }
+  ],
+  "filters": [
+    { "field": "VENDOR_ID", "title": "Vendor ID", "editor": "textbox" },
+    { "field": "NAME", "title": "Vendor Name", "editor": "textbox" },
+    { "field": "ORDER_DATE", "title": "Order Date", "editor": "datebox" },
+    { "field": "DELIVERY_DATE", "title": "Dlvy Date", "editor": "datebox" },
+    {
+      "field": "STATUS",
+      "title": "Status",
+      "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "H", "text": "On Hold" },
+            { "value": "R", "text": "Released" },
+            { "value": "C", "text": "Closed" },
+            { "value": "X", "text": "Cancelled" }
+          ]
+        }
+      }
+    }
+  ]
+}

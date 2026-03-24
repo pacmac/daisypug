@@ -1,0 +1,12 @@
+form.multi(_sqlid='nngall', asdpx='ax')
+  +fitem('Next Number ID',{id:'NNG_TYPE',name:'TYPE', _sqlid:'nng' ,required:true, 'data-options':"validType:'length[1,15]'",class:'combobox fkey fit' })
+  +fitem('Description',{id:'NNG_DESC',name:'DESCRIPTION', 'data-options':"validType:'length[1,255]'",class:'textbox' })
+  +fitem('Prefix',{id:'NNG_PREFIX',name:'PREFIX', 'data-options':"validType:'length[1,8]'",class:'textbox' })
+  +fitem('Next Number',{id:'NNG_NEXT',name:'NEXT_NUMBER', precision:0,min:1,class:'numberspinner' })
+
+  +fitem('Suffix',{name:'SUFFIX', class:'combobox','data-options':"data:[{text:'None',value:''},{text:'Year 4 Digits',value:'$Y4'},{text:'Year 2 Digits',value:'$Y2'},{text:'Month',value:'$M'},{text:'Month Name',value:'M3'},{text:'-Year 4 Digits',value:'-$Y4'},{text:'-Year 2 Digits',value:'-$Y2'},{text:'-Month',value:'-$M'},{text:'-Month Name',value:'-M3'},{text:'YYMMDD',value:'YYMMDD'},{text:'YYYYMMDD',value:'YYYYMMDD'},{text:'-YYMMDD',value:'-YYMMDD'},{text:'-YYYYMMDD',value:'-YYYYMMDD'}]", default:'$Y4' })
+
+  +fitem('Suffix User Defined',{id:'SUFFIX_UDF',name:'SUFFIX_UDF',class:'textbox' ,'data-options':"validType:'length[1,5]'"})
+  +fitem('Decimal Digits',{name:'DECIMAL_PLACES',class:'numberspinner' ,value:1,min:1,max:10,precision:0})
+  +fitem('Table Name',{id:'TABLE_NAME1', name:'TABLE_NAME', required:true, readonly:true, class:'combobox'})
+  +fitem('Column Name',{id:'COLUMN_NAME1',name:'COLUMN_NAME', required:true ,readonly:true, class:'combobox'})

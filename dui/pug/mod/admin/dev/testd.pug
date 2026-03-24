@@ -1,0 +1,25 @@
+extends ../../content
+block script
+  script.
+    $.dui.page.udfid = function(){
+      ajaxget('/',{_sqlid:'admin^udfid',_func:'get'},function(udfs){
+        $('form#custman input[textboxname="UDF_LAYOUT_ID"]').combobox('loadData',udfs);
+      })
+    }
+
+    $( document ).ready(function() {
+      
+      butEn('sx');
+      
+      $.dui.page.udfid();
+
+
+    })
+block content
+
+  +tabs#bhtabs(style='min-width:800px;' fit="true" tabPosition="left")
+
+    div(title='Customers' iconCls="icon-app")
+      form#custman.single.load(_sqlid='admin^bhave' asdpx='s')
+        input(type="hidden" name="appid" value="admin^dev^testf")
+        +fitem('UDF Layout',{class:'combobox',name:'UDF_LAYOUT_ID'})

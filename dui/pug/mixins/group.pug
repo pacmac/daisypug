@@ -1,0 +1,58 @@
+//- Grouping Mixins
+//- Purpose: Organizing related content into containers.
+//- DaisyUI Components: card, indicator, join, list
+
+//- ============================================================================
+//- CARD
+//- ============================================================================
+mixin card(opts)
+  - var options = opts || {}
+  .card&attributes(options)
+    block
+
+mixin card_body(title, opts)
+  - var options = opts || {}
+  .card-body&attributes(options)
+    if title
+      h2.card-title= title
+    block
+
+mixin card_actions(opts)
+  - var options = opts || {}
+  .card-actions&attributes(options)
+    block
+
+//- ============================================================================
+//- INDICATOR
+//- ============================================================================
+mixin indicator(opts)
+  - var options = opts || {}
+  .indicator&attributes(options)
+    block
+
+mixin indicator_item(text, opts)
+  - var options = opts || {}
+  span.indicator-item&attributes(options)= text
+
+//- ============================================================================
+//- JOIN
+//- ============================================================================
+mixin join(opts)
+  - var options = opts || {}
+  .join&attributes(options)
+    block
+
+//- ============================================================================
+//- LIST
+//- ============================================================================
+mixin list(opts)
+  - var options = opts || {}
+  ul.list&attributes(options)
+    block
+
+mixin list_row(opts)
+  - var options = opts || {}
+  li.list-row&attributes(options)
+    block
+
+

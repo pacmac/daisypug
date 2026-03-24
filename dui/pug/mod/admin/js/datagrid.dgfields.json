@@ -1,0 +1,6 @@
+{
+  "id": "dgfields",
+  "sourceFile": "admin/js/reports.js",
+  "lineNumber": 293,
+  "configPreview": "('loadData',{\"total\":data.fsql.length,\"rows\":data.fsql}"
+}

@@ -1,0 +1,29 @@
+extends ../content
+block script
+  +script("user",['js/leaveForm.js'])
+block content
+  +split
+    +panel('center')
+      +tabs(data-options="fit:true, tabPosition:'left'")
+        +tab-item#evts1("Leave Form",{iconCls:"icon-app",selected:"true"})
+          form#leaveForm(asdpx='ax' _sqlid='admin^user_leaveApplication' mode="add").lock
+            +fitem('User ID',{class:'textbox',name:'UID',id:'~',readonly:true})
+            +fitem('Leave Balance',{class:'textbox',id:'BALANCE',readonly:true})
+        
+            +fitem('Leave Type',{id:'~',required:true, name:"TYPE" ,class:'combobox','data-options':"editable:false,data:[{value:'Annual Leave',text:'Annual',selected:true},{value:'Medical Leave',text:'Medical'},{value:'Unpaid Leave',text:'Unpaid'},{value:'Advanced Leave',text:'Advanced'},{value:'Compassionate Leave',text:'Compassionate'},{value:'Hospitalisation Leave',text:'Hospitalisation'},{value:'Maternity Leave',text:'Maternity'},{value:'Marriage Leave',text:'Marriage'},{value:'Paternity Leave',text:'Paternity'},{value:'Other Leave',text:'Other'},{value:'MakeUp',text:'MakeUp'},{value:'Time Off',text:'Time Off'}]"})
+            +fitem('Reason',{id:'~',required:true, name:"REASON" ,class:'combobox','data-options':"editable:false,data:[{value:'Personal Reasons',text:'Personal Reasons',selected:true},{value:'Doctor Visit',text:'Doctor Visit'},{value:'Child Care',text:'Child Care'},{value:'Education/Exams',text:'Education/Exams'},{value:'Other',text:'Other'}]"})
+            
+            +fitem('Comments',{id:'~', name:"COMMENTS" ,class:'textbox'})
+
+            +fieldset('Date')
+              +fitem('From',{id:'~',class:'datebox', name:'START_DATE',style:"width:125px;", 'data-options':"sharedCalendar:'#sc'"})
+                span(style="display:inline-block;width:10px;")
+                +input({id:'~',class:'combobox',name:'START_PERIOD',style:"width:65px;left:10px",'data-options':"editable:false,data:[{value:'AM',text:'AM',selected:true},{value:'PM',text:'PM'}]"})
+              +fitem('To',{id:'~',class:'datebox', name:'END_DATE',style:"width:125px;"  ,'data-options':"sharedCalendar:'#sc'"})
+                span(style="display:inline-block;width:10px;")
+                +input({id:'~',class:'combobox',name:'END_PERIOD',style:"width:65px;left:10px",'data-options':"editable:false,data:[{value:'AM',text:'AM',selected:true},{value:'PM',text:'PM'}]"})
+              div#sc(class='easyui-calendar')
+              
+              +fitem('Days',{class:'numberspinner',name:'DAYS',id:'~',readonly:true,value:0})
+        +tab-item#xtrx1("Leave History",{iconCls:"icon-app"})
+          #hist(fit="true")

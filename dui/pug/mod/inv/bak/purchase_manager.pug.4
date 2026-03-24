@@ -1,0 +1,80 @@
+extends ../content
+block style
+  style.
+    div#toolbut {
+      position: relative;
+      top: -3px;
+    }
+    td[field=LINE_NO] {
+      background: linear-gradient(to bottom,#F9F9F9 0,#efefef 100%);
+    } td[field=LINE_NO] > .datagrid-cell {
+      color: #000000;
+    }
+    
+    form[class*="grid-"] {
+      padding: 20px 22px 10px 0 !important;  
+    } 
+    
+    form[class*="grid-"] .fitem {
+      margin-right: 0;
+    }
+
+block script
+  script: include js/purchase_manager.js
+block content
+  +layout({border:false})
+    +region('west', { style: "width:400px; background:#FAFAFA;", collapsible: "false" })
+      +form#pohead.multi.fit(_sqlid='inv^pohead' asdpx='adx')
+        +layout({border:false})
+          +region('north', { style: "height:520px;background:#FAFAFA;" })
+
+            +fitem('Order ID',{id:'~', name:'ID', class:'qbe fkey fit navi autonum', panelWidth:'230px', validType:['length[1,30]']})
+            +fitem('Status',{name:'STATUS', id:'~', required:true, class:'combobox',style:'width:130px;','data-options':"editable:false,panelHeight:'auto'"})
+                          
+            +fitem('Vendor ID',{name:'VENDOR_ID', id:'~' ,class:'combobox',required:true})
+            +fitem('Name',{id:'~',name:'NAME', class:'textbox',readonly:true})
+            +fitem('Order Date',{name:'ORDER_DATE', class:'datebox today'})
+            +fitem('Required Date',{name:'REQUIRED_DATE', class:'datebox'})            
+            +fitem('Reference #',{name:'REFERENCE_ID',  class:'textbox'})
+            +fitem('Buyer',{name:'BUYER_ID',  class:'textbox'})
+            +fitem('Payment Terms',{name:'PAYMENT_TERM', id:'~',_sqlid:'inv^paymentTermid',class:'combobox',required:true})
+            +fitem('Ship Via',{name:'SHIP_VIA', class:'combobox'})
+
+            +fitem('Currency',{name:'CURRENCY_ID', id:'~', class:'combobox' ,style:'width:110px;',required:true,'data-options':"editable:false,panelHeight:'auto'"})
+              +input({name:'CURRENCY_RATE', id:'~', class:'numberbox',style:'width:90px;',required:true,precision:8})
+            +fitem('GST Code / Rate %',{name:'GST_ID', id:'~', class:'combobox' , style:'width:110px;',required:true,'data-options':"editable:false,panelHeight:'auto'"})
+              +input({name:'GST_RATE', id:'~', class:'numberbox',style:'width:90px;',readonly:true,precision:1})
+          
+            +fieldset('Totals')
+              +fitem('Pre-Tax',{name:'PRETAX',class:'numberbox',readonly:true,precision:2})
+              +fitem('GST',{name:'GST',class:'numberbox',readonly:true,precision:2})
+              +fitem('Grand',{name:'GRAND',class:'numberbox',readonly:true,precision:2})
+          +region('center', {  })
+            +tabs(data-options="plain:true,justified:true")
+              div(title="Contact")
+                +fitem('Name',{id:'~',name:'CONTACT_PERSON', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Phone',{id:'~',name:'CONTACT_PHONE', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Fax',{id:'~',name:'CONTACT_FAX', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Email',{id:'~',name:'CONTACT_EMAIL', class:'textbox',validType:['email']})
+
+              div(title="Ship To")
+                +fitem('Address 1',{name:'SHIPTO_ADDR_1', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 2',{name:'SHIPTO_ADDR_2', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 3',{name:'SHIPTO_ADDR_3', class:'textbox',validType:['length[1,50]']})
+              
+              div(title="Remit To")  
+                +fitem('Address 1',{id:'~',name:'REMIT_ADDR_1', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 2',{id:'~',name:'REMIT_ADDR_2', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 3',{id:'~',name:'REMIT_ADDR_3', class:'textbox',validType:['length[1,50]']})
+
+              div(title="Notes")
+                .fitem(style="margin-top:0")
+                  label(style="margin-bottom:8px;left:-8px;") Order Notes
+                  +input({eui:'textbox',name:'NOTES','data-options':"multiline:true", style:'height:150px;width:345px'})
+
+              div.files(title='Files' fit="true" _iconCls="icon-pclip" style="padding:4px 0 0 4px")
+                div(style="width:380px;")
+                  +filegrid#pofiles(data-options="fit:true")
+                  
+    +region('center', {  })
+      #polines

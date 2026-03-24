@@ -1,0 +1,21 @@
+extends ../content
+
+block script
+  script: include js/quote_item_man.js
+
+block content
+  form#main(asdpx="ax" _sqlid="sales^quoteitems").multi.fit
+    
+    +vsplit()
+      +panel('west')
+        +fitem('ID',{id: 'ITEM_ID', name:'ID', _sqlid:'sales^quoteitemid', class:'combobox fkey fit',validType:['length[1,30]'],required:true,'data-options':"groupField:'CLASS_DESC'"})
+        +fitem('Item Class',{id:'CLASS', name:'CLASS',_sqlid:'sales^quoteitemclassColsid', class:'combobox'})
+        +fitem('Unit Price',{id:'UNIT_PRICE',name:'~',class:'numberbox dyn',value:p,min:0,precision:2})
+        +fitem('Source',{id:'SOURCE',name:'~',class:'textbox navi fit dyn'})
+        +fitem('UOM ID',{id:'ITEM_UOM_ID', name:'UOM_ID', _sqlid:'inv^unitsid', class:'combobox dyn'})
+        +fitem('Notes',{eui:'textbox',name:'NOTES','data-options':"multiline:true", style:'height:250px;width:345px'})
+
+      +panel('center', {  })
+        +input({eui:'textbox',id:'ITEM_DESCRIPTION',name:'DESCRIPTION','data-options':"multiline:true", style:'height:100%;width:90%'})
+
+        

@@ -1,0 +1,244 @@
+extends ../../../layout/layout
+
+block content
+  +content("Searchbox API Test", "Tests jQuery plugin API methods with DIRECT initialization (NO parser)")
+    +section("Test Inputs", "Target elements for testing API methods")
+      +form({cols: 2})
+        +fitem("Basic Searchbox:")
+          +searchbox({id: 'target', class: 'input-bordered w-full', prompt: 'Type to search...'})
+        +fitem("Second Searchbox:")
+          +searchbox({id: 'target2', class: 'input-bordered w-full', prompt: 'Another search'})
+
+    +section("API Methods", "Click buttons to test each method")
+      .grid.grid-cols-1.gap-4.mb-4(class="sm:grid-cols-2 lg:grid-cols-4")
+        div
+          h3.font-medium.mb-2 Search Methods
+          .space-y-2
+            button.btn.btn-sm.btn-primary.w-full#test-getValue getValue()
+            button.btn.btn-sm.btn-primary.w-full#test-setValue setValue('test')
+            button.btn.btn-sm.btn-primary.w-full#test-menu menu()
+            button.btn.btn-sm.btn-primary.w-full#test-getName getName()
+            button.btn.btn-sm.btn-primary.w-full#test-selectName selectName()
+
+        div
+          h3.font-medium.mb-2 Menu Operations
+          .space-y-2
+            button.btn.btn-sm.btn-secondary.w-full#test-populate Populate Menu
+            button.btn.btn-sm.btn-secondary.w-full#test-select1 Select Item 1
+            button.btn.btn-sm.btn-secondary.w-full#test-select2 Select Item 2
+            button.btn.btn-sm.btn-secondary.w-full#test-clear Clear Menu
+
+        div
+          h3.font-medium.mb-2 State Methods
+          .space-y-2
+            button.btn.btn-sm.btn-accent.w-full#test-disable disable()
+            button.btn.btn-sm.btn-accent.w-full#test-enable enable()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly readonly()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly-false readonly(false)
+            button.btn.btn-sm.btn-accent.w-full#test-options options()
+
+        div
+          h3.font-medium.mb-2 Inherited Methods
+          .space-y-2
+            button.btn.btn-sm.btn-info.w-full#test-textbox textbox()
+            button.btn.btn-sm.btn-info.w-full#test-isValid isValid()
+            button.btn.btn-sm.btn-info.w-full#test-resize resize(350)
+
+    +section("Test Output", "Results from API method calls")
+      +testOutput("output")
+        | Click buttons above to test API methods.
+        | Results will appear here...
+
+    +section("Event Log", "Events (onChange, search) logged here")
+      +testOutput("eventLog")
+
+  //- Load dependencies in correct order
+  script(src="/assets/js/textbox-helper.js")
+  script(src="/assets/js/searchbox-helper.js")
+
+  //- Test script
+  script.
+    $(function() {
+      var $output = $('#output');
+      var $eventLog = $('#eventLog');
+      
+      // Mock search data
+      var mockData = [
+        { name: 'item1', text: 'Apple' },
+        { name: 'item2', text: 'Banana' },
+        { name: 'item3', text: 'Cherry' },
+        { name: 'item4', text: 'Date' },
+        { name: 'item5', text: 'Elderberry' }
+      ];
+
+      // Helper to log output with visual separation
+      function log(msg) {
+        $output.append(msg + '\n\n');
+        console.log(msg);
+      }
+
+      // Helper to log events
+      function logEvent(msg) {
+        var timestamp = new Date().toLocaleTimeString();
+        $eventLog.append('[' + timestamp + '] ' + msg + '\n');
+        console.log('[EVENT]', msg);
+      }
+
+      // Clear output on initialization
+      $output.text('');
+      $eventLog.text('');
+
+      // Initialize searchboxes with searcher callback
+      log('Initializing searchbox with searcher callback...');
+      $('#target').searchbox({
+        searcher: function(queryValue) {
+          logEvent('searcher() called with query: "' + queryValue + '"');
+          // Filter mock data
+          var results = mockData.filter(function(item) {
+            return item.text.toLowerCase().indexOf(queryValue.toLowerCase()) >= 0;
+          });
+          // Populate menu
+          var $menu = $('#target').searchbox('menu');
+          $menu.empty();
+          results.forEach(function(item) {
+            $menu.append('<li><a href="#" data-name="' + item.name + '">' + item.text + '</a></li>');
+          });
+          // Show menu if results exist
+          if (results.length > 0) {
+            $menu.parent().removeClass('hidden');
+          } else {
+            $menu.parent().addClass('hidden');
+          }
+        }
+      });
+
+      // Initialize second searchbox
+      $('#target2').searchbox({
+        searcher: function(queryValue) {
+          logEvent('target2 searcher: "' + queryValue + '"');
+        }
+      });
+
+      log('Searchbox initialized. Click buttons to test API methods.');
+      log('─────────────────────────────────────────────────────────────────');
+
+      //- ====================================================================
+      //- Search Methods Tests
+      //- ====================================================================
+      $('#test-getValue').click(function() {
+        var val = $('#target').searchbox('getValue');
+        log('► getValue() = "' + val + '"');
+      });
+
+      $('#test-setValue').click(function() {
+        $('#target').searchbox('setValue', 'test value');
+        log('► setValue("test value") - done');
+      });
+
+      $('#test-menu').click(function() {
+        var $menu = $('#target').searchbox('menu');
+        log('► menu() returned element: ' + $menu[0].tagName + ', class=' + $menu.attr('class'));
+        log('  Menu has ' + $menu.find('li').length + ' items');
+      });
+
+      $('#test-getName').click(function() {
+        var name = $('#target').searchbox('getName');
+        log('► getName() = "' + name + '"');
+      });
+
+      $('#test-selectName').click(function() {
+        $('#target').searchbox('selectName', 'item2');
+        log('► selectName("item2") - selected');
+      });
+
+      //- ====================================================================
+      //- Menu Operations Tests
+      //- ====================================================================
+      $('#test-populate').click(function() {
+        var $menu = $('#target').searchbox('menu');
+        $menu.empty();
+        mockData.forEach(function(item) {
+          $menu.append('<li><a href="#" data-name="' + item.name + '">' + item.text + '</a></li>');
+        });
+        $menu.parent().removeClass('hidden');
+        log('► Menu populated with ' + mockData.length + ' items');
+      });
+
+      $('#test-select1').click(function() {
+        $('#target').searchbox('selectName', 'item1');
+        var name = $('#target').searchbox('getName');
+        var value = $('#target').searchbox('getValue');
+        log('► Selected: name=' + name + ', value=' + value);
+      });
+
+      $('#test-select2').click(function() {
+        $('#target').searchbox('selectName', 'item2');
+        var name = $('#target').searchbox('getName');
+        var value = $('#target').searchbox('getValue');
+        log('► Selected: name=' + name + ', value=' + value);
+      });
+
+      $('#test-clear').click(function() {
+        var $menu = $('#target').searchbox('menu');
+        $menu.empty();
+        $menu.parent().addClass('hidden');
+        log('► Menu cleared and hidden');
+      });
+
+      //- ====================================================================
+      //- State Methods Tests
+      //- ====================================================================
+      $('#test-disable').click(function() {
+        $('#target').searchbox('disable');
+        log('► disable() - input disabled');
+      });
+
+      $('#test-enable').click(function() {
+        $('#target').searchbox('enable');
+        log('► enable() - input enabled');
+      });
+
+      $('#test-readonly').click(function() {
+        $('#target').searchbox('readonly');
+        log('► readonly() - input is now readonly');
+      });
+
+      $('#test-readonly-false').click(function() {
+        $('#target').searchbox('readonly', false);
+        log('► readonly(false) - readonly removed');
+      });
+
+      $('#test-options').click(function() {
+        var opts = $('#target').searchbox('options');
+        log('► options() = ' + JSON.stringify(opts, function(k, v) {
+          return typeof v === 'function' ? '[Function]' : v;
+        }, 2));
+      });
+
+      //- ====================================================================
+      //- Inherited Methods Tests
+      //- ====================================================================
+      $('#test-textbox').click(function() {
+        var $elem = $('#target').searchbox('textbox');
+        log('► textbox() returned element: ' + $elem[0].tagName + ' with id=' + $elem.attr('id'));
+      });
+
+      $('#test-isValid').click(function() {
+        var valid = $('#target').searchbox('isValid');
+        log('► isValid() = ' + valid);
+      });
+
+      $('#test-resize').click(function() {
+        $('#target').searchbox('resize', 350);
+        log('► resize(350) - width set to 350px');
+      });
+
+      //- ====================================================================
+      //- Initial status
+      //- ====================================================================
+      log('✅ All event handlers attached.');
+      log('✅ Type in search box to trigger searcher callback.');
+      log('✅ Use "Populate Menu" button to show search results.');
+      log('✅ Click menu items or use "Select Item" buttons to test selection.');
+      log('');
+    });

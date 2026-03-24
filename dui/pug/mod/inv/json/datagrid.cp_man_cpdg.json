@@ -1,0 +1,109 @@
+{
+  "id": "cpdg",
+  "url": "/",
+  "method": "get",
+  "asdpx": "aed",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "inv^cprop_item",
+    "_dgrid": "y"
+  },
+  "striped": true,
+  "singleSelect": true,
+  "fit": true,
+  "fitColumns": true,
+  "columns": [
+    [
+      {
+        "field": "CP_ID",
+        "hidden": true
+      },
+      {
+        "field": "LINE_NO",
+        "title": "#",
+        "width": 25,
+        "fixed": true
+      },
+      {
+        "field": "SALES_ORDER_ID",
+        "title": "Sales Order Ref",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "PERMIT",
+        "title": "Permit",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "CUST_PO",
+        "title": "Cust PO",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "CUST_PART_ID",
+        "title": "Cust Part #",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "PART_ID",
+        "title": "Our Part #",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "LOCN",
+        "title": "Location",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "NCR_ID",
+        "title": "NCR Ref",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "QTY_RECV",
+        "title": "Qty",
+        "width": 35,
+        "fixed": true
+      },
+      {
+        "field": "ACTION",
+        "title": "Action",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "BASE_ID",
+        "title": "Job ID",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "COC_ID",
+        "title": "COC IDs",
+        "width": 80,
+        "fixed": true,
+        "hidden": true
+      },
+      {
+        "field": "DATE_RETURN",
+        "title": "Return Date",
+        "width": 80,
+        "fixed": true,
+        "hidden": true,
+        "formatter": "tz2date"
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Description",
+        "width": 200
+      }
+    ]
+  ]
+}

@@ -1,0 +1,16 @@
+extends ../content
+
+
+block script
+  script: include js/copa.js
+
+block content
+  +hsplit('100%')
+    +panel('north')
+      form#filters(style="--fitem-label-w:100px")
+        +v-group('Job')
+          +fitem('Status',{name:'JOBSTATUS', id:'~' ,class:'combobox', 'data-options':"default:'R',panelHeight:'auto',data:[{value:'R',text:'RELEASED',selected:true},{value:'C',text:'CLOSED'}]"})
+          +fitem('Start Close',{name:'START_CLOSE', id:'~',class:'datebox today'})
+          +fitem('End Close',{name:'END_CLOSE', id:'~' , class:'datebox today'})    
+    
+        +datagrid#copa

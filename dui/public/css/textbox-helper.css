@@ -1,0 +1,34 @@
+.daisy-textbox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.daisy-textbox .textbox-inner {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  width: 100%;
+}
+.daisy-textbox .textbox-addon,
+.daisy-textbox .textbox-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.daisy-textbox .textbox-addon {
+  flex-wrap: wrap;
+}
+.daisy-textbox .textbox-button {
+  margin-left: auto;
+}
+.daisy-textbox .textbox-label {
+
+  font-weight: 600;
+  color: var(--color-base-content);
+}
+.daisy-textbox .textbox-invalid .input-bordered {
+  border-color: var(--color-error);
+}
+.daisy-textbox .textbox-invalid .input {
+  box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.5);
+}

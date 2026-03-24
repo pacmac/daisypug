@@ -1,0 +1,7 @@
+# dui-backup-clean: sales/quote_man
+# 2026-03-09T12:21:54.035374
+
+html/dui/mod/sales/quote_man.pug -> quote_man.pug
+html/dui/mod/sales/js/quote_man.js -> js/quote_man.js
+html/dui/mod/sales/json/datagrid.quote_man_qlines.json -> json/datagrid.quote_man_qlines.json
+yaml/migrator/mod/sales/quote_man.yaml -> quote_man.yaml

@@ -1,0 +1,150 @@
+$.dui.page.efrm = $('#eserver > form');
+$.dui.page.logon = $('#logon');
+$.dui.page.login = $('#login');
+$.dui.page.emup = $('input#emuser,input#empass');
+
+$.dui.page.logonsel = function(rec){
+  switch(rec.value){
+    case "smtp":
+    case "smtpa":
+      $('#smtp').show();
+      if(rec.value == 'smtpa'){
+        $.dui.page.login.show();
+        $.dui.page.emup.textbox('required',true); 
+      } else {
+        $.dui.page.login.hide();
+        $.dui.page.emup.textbox('required',false);         
+      }
+      break;
+    default:
+      $('#smtp').hide();
+      $.dui.page.emup.textbox('required',false);       
+  }
+}
+
+$.dui.page.logon.combobox({
+  panelHeight:'auto',
+  data: [{text:'NONE',value:'none'},{text:'SMTP',value:'smtp'},{text:'SMTP-LOGIN',value:'smtpa'}],
+  onSelect: $.dui.page.logonsel
+});
+
+
+// Wait for Document Load
+$.page.ready(function() {
+  //var kpath = process.env.GRP_DATA+'/public/files/cologo.pug';
+  // $('#cologo').img('src',kpath);
+  $('#main').tabs({
+    onSelect:function(tit,idx){
+      if(tit=='Databases') {
+        setTimeout(function(){butEn('asx')},500);
+      }
+    }
+  })
+
+  $('#engine').combobox({
+    panelHeight: 'auto',
+    data:[
+      {value:'MYSQL',text:'MYSQL'},
+      {value:'MSSQL.2000',text:'MSSQL V:2000'},
+      {value:'MSSQL.2005',text:'MSSQL V:2005'},
+      {value:'MSSQL.2008',text:'MSSQL V:2008'},
+      {value:'MSSQL.2008R2',text:'MSSQL V:2008R2'},
+      {value:'MSSQL.2012',text:'MSSQL V:2012'},
+      {value:'MSSQL.2014',text:'MSSQL V:2014'},
+      {value:'VMCOM',text:'VMFG COM Server'}
+    ]
+  })
+
+  $('#testmail').linkbutton({
+    iconCls: 'icon-email',
+    text: 'Test Send',
+    onClick: function(){
+      var recip = $('input#testrecip').val();
+      var vars = {_sqlid:'admin^testmail',_func:'get'};
+      if(recip) vars.recip = recip;
+      ajaxget('/',vars,function(res){alert(res.msg);})
+    }
+  })
+
+  $('#_agree').combobox({
+    data:[
+      {value:'docs/dis/eula.pdf',text:'License Agreement'},
+      {value:'docs/dis/sla.pdf',text:'Service Agreement'}
+    ],
+    disabled: false,
+    panelHeight: 'auto',
+    onSelect: function(rec){
+      
+      if(typeof(window.viewdoc) != 'function') window.viewdoc = function(url){
+        var con = $('#content');
+        var oset = 0;
+        $('#docview')
+          .panel('resize',{height:con.innerHeight() - oset-20,width:con.innerWidth() - oset})
+          .panel('move',{top:con.offset().top+oset/2,left:con.offset().left+oset/2})
+          .window('open');
+        $('#docview > iframe').attr('src',url);        
+      }
+      
+      viewdoc(rec.value);
+    }
+  })
+
+  $('#conid').combobox({
+    disabled: false,
+    data: $.dui.pdata.dbs,
+
+    onSelect: function(rec){
+      var frm = $(this).closest('form');
+      if(rec.source=='pm2') {
+        var ro = true;
+        delete rec.conid;
+        frm.form('load',rec);
+        butEn('x'); 
+      }
+      else {
+        var ro = false;
+        $(this).combobox('formLoad');
+        butEn('xsd');  
+      }
+      
+      $.each(frm.find('input[textboxname]').not('.fkey'),function(){$(this).textbox('readonly',ro)});
+    }
+  }).combobox('enable');
+
+  /*
+  $('#security #ip').textbox({
+    onChange: function(nv,ov){
+      return;
+      var me = $(this);
+      if($.dui.page.tout) return false;
+      me.textbox('setValue',nv.replace(/ /g,''));
+      cl(nv.replace(/ /g,''))
+      setTimeout(function(){delete $.dui.page.tout},1000);
+    }
+  })
+  */
+  
+  $('#security #RA').combobox({
+    panelHeight:'auto', 
+    data:[
+      {text:'Yes - Restricted',value:'r',selected:true},
+      {text:'Yes - Unrestricted',value:'y'},
+      {text:'No',value:'n'}
+    ],
+    
+    onSelect: function(rec){
+      if(rec.value=='y') $('div#iplist').hide();
+      else $('div#iplist').show(); 
+    }  
+  })  
+  
+  
+  $('form').on('loadDone',function(){
+    $(this).form('reselect');
+  }).on('success',function(jq,data){
+    //cl(data.res.data);
+    msgbox(data.res.msg);
+    if(data.res.restart=='y') setTimeout(function(){location.reload(true)},5000)
+  })
+  
+})

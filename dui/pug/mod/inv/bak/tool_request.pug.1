@@ -1,0 +1,315 @@
+extends ../content
+
+block content
+  
+  +layout({border:false})
+    +panel('west', { style: "width:400px; background:#FAFAFA;", collapsible: "false" })
+      //-.fitem
+        label OPERATOR ID
+        input#OPERATOR_SCAN(required="required").bcscan 
+      //-+fitem('Operator ID',{name:'OPERATOR_SCAN',id:'~',required:true,class:'textbox'})
+      //-br
+      +fitem('Operator ID',{id:'~', name:'OPERATOR_ID', class:'combobox bcscan sub-on', required:true,'data-options':"iconCls:'icon-barcode'"}).bcscan
+      +fitem('Operator NAME',{id:'OPERATOR_NAME',readonly:true,class:'textbox'})
+      +fitem('Part ID',{name:'PART_ID', id:'~', required:true ,class:'combobox navi fit','data-options':"validType: ['inList']"})
+      +fitem('Trans Qty',{name:'QTY',id:'~', required:true, class:'numberspinner', min:0, precision:2, value:0})
+      +fitem('Part Description',{id:'PART_DESC',readonly:true,class:'textbox','data-options':"multiline:true",style:'height:150px;'})
+      
+      br
+      div.center
+        +button('Clear',{id:'clr', name:'CLR',iconCls:'icon-cancel-big','data-options':"size:'large'"})
+        +button('Add',{id:'add', name:'ADD',iconCls:'icon-tools_in-big','data-options':"size:'large'"})        
+    
+    +panel('center', {  })
+      #tool_tx
+     
+//- CLS
+  +layout()
+    +panel('north', { style: "height:100px;background:#FAFAFA;padding:12px;", collapsible: "false" })
+      +layout()
+        +panel('center', { style: "display:inline-block" })
+          a#clr(href="#" name="CLR" iconCls="icon-cancel-big"  data-options="toggle:true, group:'g1'") Clear
+          a#add(href="#" name="ADD" iconCls="icon-tools_in-big"  data-options="toggle:true, group:'g1'") Add
+    +panel('center', { style: "height:100%;background:#FAFAFA;margin-top: 25px;" })
+      +layout()
+        +panel('west', { style: "display:inline-block;width:400px" })
+          +fitem('Input Operator ID',{name:'OPERATOR_SCAN',id:'~',required:true,class:'textbox'})
+          br
+          +fitem('Operator ID',{name:'OPERATOR_ID',id:'~',readonly:true,class:'textbox'})
+          +fitem('Operator NAME',{id:'OPERATOR_NAME',readonly:true,class:'textbox'})
+          +fitem('Part ID',{name:'PART_ID', id:'~', required:true ,class:'combobox navi fit','data-options':"validType: ['inList']"})
+          +fitem('Trans Qty',{name:'QTY',id:'~', required:true, class:'numberspinner', min:0, precision:2, value:0})
+        +panel('center', { style: "width:30%;height:100%;left:550px" })
+          #tool_tx
+
+  +layout(data-options="fit:true,border:false")
+    +panel('north', { style: "height:150%;background:#FAFAFA;padding:12px;", collapsible: "false" })
+      +panel('north', { style: "display:inline-block" })
+        
+        //-a#new(href="#" name="NEW" iconCls="icon-add" data-options="toggle:true, group:'g1'") New
+        a#clr(href="#" name="CLR" iconCls="icon-cancel-big"  data-options="toggle:true, group:'g1'") Clear
+
+        a#add(href="#" name="ADD" iconCls="icon-tools_in-big"  data-options="toggle:true, group:'g1'") Add
+        //-a#upd(href="#" name="UPD"  data-options="toggle:true, group:'g1'") Update
+
+      +panel('south', { style: "height:100%;background:#FAFAFA;margin-top: 25px;" })
+        +layout(fit="true")
+          +panel('west', { style: "display:inline-block;width:400px" })
+            +fitem('Input Operator ID',{name:'OPERATOR_SCAN',id:'~',required:true,class:'textbox'})
+            br
+            +fitem('Operator ID',{name:'OPERATOR_ID',id:'~',readonly:true,class:'textbox'})
+            +fitem('Operator NAME',{id:'OPERATOR_NAME',readonly:true,class:'textbox'})
+            +fitem('Part ID',{name:'PART_ID', id:'~', required:true ,class:'combobox navi fit','data-options':"validType: ['inList']"})
+            +fitem('Trans Qty',{name:'QTY',id:'~', required:true, class:'numberspinner', min:0, precision:2, value:0})
+          +panel('center', { style: "width:30%;height:100%;left:550px" })
+            #tool_tx
+
+                 
+
+block script
+  script.
+
+    $.dui.page.opts = {
+      editor: 'inline',
+      striped: true,
+      url: '/',
+      queryParams: {
+          _func:'get',
+          _sqlid:'inv^tool_request',
+          _dgrid:'y',
+          OPERATOR_ID:''
+      },
+
+      rownumbers: false,
+      fitColumns: true,
+      fit: true,
+      columns: [[
+        {field:'PENDING_ID', hidden:true},
+        {field:'PART_ID',title:'Part ID',width:100,fixed:true},
+        {field:'DESCRIPTION',title:'Part Description',width:200,fixed:true},
+        {field:'BAL_QTY',title:'Bal Qty',width:200,fixed:true},
+        
+        {field:'QTY',title:'Qty',fixed:true,width:100,align:'right',editor:{type:'numberspinner',options:{
+          precision:2,
+          min:0
+        }}},
+        
+        ]],
+        loadFilter: function(data){
+          if(!data || (!data.rows && data.length==0)) data = {rows:[],total:0}
+          return data;
+        },
+        onSelect:function(idx,row){
+           var dg=$('#tool_tx');
+            dg.datagrid('options').tbar.dgre_add.linkbutton('disable')
+           dg.datagrid('options').tbar.dgre_insert.linkbutton('disable')
+            dg.datagrid('options').tbar.dgre_edit.linkbutton('disable')  
+
+
+        //nn.numberbox('options').max = v.BAL_QTY;
+        //nn.numberspinner('setValue', nn.numberspinner('getValue'));
+
+
+        } ,
+        onEndEdit: function(idx,row,chg){        
+            if (row.QTY>row.BAL_QTY){
+              msgbox('Qty cannot more than Bal Qty')
+            }
+            else {
+              var url = "/?_sqlid=inv^tool_request";
+              var data = clone(row);
+
+              ajaxget(url,data,function(data){})                   
+            }
+  
+          
+
+        }     
+    }
+    $.dui.page.bcemp=function(val){
+      if (val){
+        var eid=$('#OPERATOR_ID');
+        var ename=$('#OPERATOR_NAME');
+
+        var empId =val.substring(2,val.length-1);
+
+        ajaxget("/",{"_func":"get","_sqlid":"vwltsa^empall","ID":empId,"SITE_ID":"DEFAULT"},function(emp){
+          console.log(emp)
+          if (emp) {
+            if(emp=={}){}
+            else {
+              eid.textbox('setValue',emp.ID);
+              ename.textbox('setValue',emp.FIRST_NAME +' '+emp.LAST_NAME);
+              ajaxget("/",{"_func":"get","_sqlid":"inv^tool_request","OPERATOR_ID":emp.ID, _dgrid:'y'},function(res1){
+                $('#tool_tx').datagrid('loadData',res1);
+              })              
+            }
+
+          }
+         // else {
+         //   eid.textbox('setValue',"");
+         //   ename.textbox('setvalue',"");
+         // }
+          
+        })
+
+      }
+
+    }
+
+
+    // Top Buttons
+    $('#bigbut a').linkbutton({
+      disabled: true,
+      size:'large',
+      iconAlign:'top',
+    })
+
+    $.dui.page.clrScreen=function(){
+       // $('#OPERATOR_SCAN').textbox('setValue','');
+        $('#OPERATOR_ID').combobox('clear');
+        
+        $('#OPERATOR_NAME').textbox('setValue','');
+        $('#PART_ID').combobox('clear');
+        $('#QTY').numberspinner('setValue',0);
+        $('#tool_tx').datagrid('loadData',{rows:[],total:0});
+        $('#PART_DESC').textbox('clear')
+       
+    }
+
+    $.dui.page.add_pending=function(){
+        var eid=$('#OPERATOR_ID').combobox('getValue');
+        var pid=$('#PART_ID').combobox('getValue');
+        var qty=$('#QTY').numberspinner('getValue');
+        if ((eid.length>0) && (pid.length>0)){
+          if (qty>0 ){
+            var d = new Date();         
+            var mth=d.getMonth()+1;
+            var dt = d.getFullYear()+'-'+mth+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+            ajaxget("/",{"_func":"add","_sqlid":"inv^tool_request","PART_ID":pid,"OPERATOR_ID":eid,"QTY":qty,"TRANSACTION_DATE":dt},function(res){
+              ajaxget("/",{"_func":"get","_sqlid":"inv^tool_request","OPERATOR_ID":eid, _dgrid:'y'},function(res1){
+                $('#tool_tx').datagrid('loadData',res1);
+                $('#PART_ID').combobox('clear');
+                $('#QTY').numberspinner('setValue',0);
+                $('#PART_DESC').textbox('clear')
+              })
+            })
+          }
+        }
+    }
+    $('a#clr').linkbutton({
+      onClick:function(){
+        $.dui.page.clrScreen()
+      }
+    })
+
+    $('a#add').linkbutton({
+      onClick:function(){
+        $.dui.page.add_pending()
+      }
+    })
+
+
+    $('#PART_ID').combobox({
+      url:"/?_func=get&_sqlid=inv^partids",
+      loadFilter:function(data){
+        var part_filter=$.dui.bhave.part_filter;
+
+
+        var d1 = data.filter(function(d){
+          return (d.BAL_QTY>0 && d.TRACEABLE=='N' && d.DIM_TRACKED=='N' && d.value.indexOf(part_filter)==0) 
+        })
+        return d1;
+      },
+      onSelect:function(v){
+        //console.log(v)
+        var nn = $('#QTY');
+        nn.numberbox('options').max = v.BAL_QTY;
+        nn.numberspinner('setValue', nn.numberspinner('getValue'));
+
+        $('#PART_DESC').textbox('setValue',v.DESCRIPTION)
+      }
+    })
+    $('#OPERATOR_ID').combobox({
+      url:"/?_func=get&_sqlid=vwltsa^empid",
+      loadFilter:function(data){
+        var d1 = data.filter(function(d){
+          return d.ACTIVE=='Y' 
+        })
+
+        return d1;
+      },
+      onSelect:function(v){
+
+          ajaxget("/",{"_func":"get","_sqlid":"vwltsa^empall","ID":v.value,"SITE_ID":"DEFAULT"},function(emp){
+          //console.log(emp)
+          if (emp) {
+            if(emp=={}){}
+            else {
+
+              $('#OPERATOR_NAME').textbox('setValue',emp.FIRST_NAME +' '+emp.LAST_NAME);
+              ajaxget("/",{"_func":"get","_sqlid":"inv^tool_request","OPERATOR_ID":emp.ID, _dgrid:'y'},function(res1){
+                $('#tool_tx').datagrid('loadData',res1);
+              })              
+            }
+
+          }
+         // else {
+         //   eid.textbox('setValue',"");
+         //   ename.textbox('setvalue',"");
+         // }
+          
+        })
+
+      }
+    })
+
+
+
+    $(document).ready(function(){
+
+        // barcode scanner (min 4 chars)
+      /*bcscan(function(bc){
+        console.log("bcode: " + bc);
+        var bc_emp=bc.substr(1,bc.length)
+        var bcs = $('#OPERATOR_ID');  
+ 
+        if(!bcs.combobox('exists',bc_emp)) return msgbox(bc_emp+' is not valid.');
+        else bcs.combobox('select',bc_emp);
+      },4);
+      */
+       bcscan(function(bc){
+  
+          //console.log(bc);
+          switch (bc.pre){
+            case "1":
+              var emp = $('#OPERATOR_ID');
+              var exists = emp.combobox('exists',bc.data);
+              emp.combobox('select',bc.data);
+              break;
+          }   
+
+        },4);
+      var dg=$('#tool_tx')
+        dg.datagrid('rowEditor',$.dui.page.opts)
+        dg.datagrid('columns',$('#dgre_tb'));
+        dg.datagrid('options').tbar.dgre_add.linkbutton('disable')
+      
+ 
+      
+      $('a#clr').linkbutton('enable',true)
+      $('a#add').linkbutton('enable',true)
+      $('a#upd').linkbutton('enable',true)
+      
+      setTimeout(function(){$('#OPERATOR_ID').textbox('textbox').focus()},100);
+
+    })
+
+
+block style
+  style.
+
+    +linkbutton
+      margin-left: 16px;
+    }
+

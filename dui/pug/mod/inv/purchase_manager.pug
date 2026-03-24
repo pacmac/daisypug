@@ -1,0 +1,59 @@
+extends ../content
+block script
+  script: include js/purchase_manager.js
+block content
+  +vsplit('32em')
+    +panel('west')
+      +form#pohead(class='multi fit form', _sqlid='inv^pohead', asdpx='adx')
+        +hsplit('50em')
+          +panel('north')
+            +fitem('Order ID',{id:'~', name:'ID', class:'searchbox fkey fit navi autonum', panelWidth:'230px', validType:['length[1,30]'],sbref:'po_ids'})
+            +fitem('Status',{name:'STATUS', id:'~', required:true, class:'combobox','data-options':"editable:false,panelHeight:'auto'"})
+                          
+            +fitem('Vendor ID',{name:'VENDOR_ID', id:'~' ,class:'searchbox',required:true, sbref:'vendorall_sbox'})
+            +fitem('Name',{id:'~',name:'NAME', class:'textbox',readonly:true})
+            +fitem('Order Date',{name:'ORDER_DATE', class:'datebox today'})
+            +fitem('Required Date',{name:'REQUIRED_DATE', class:'datebox'})            
+            +fitem('Reference #',{name:'REFERENCE_ID',  class:'textbox'})
+            +fitem('Buyer',{name:'BUYER_ID',  class:'textbox'})
+            +fitem('Payment Terms',{name:'PAYMENT_TERM', id:'~',_sqlid:'inv^paymentTermid',class:'combobox',required:true})
+            +fitem('Ship Via',{name:'SHIP_VIA', class:'combobox'})
+            +h-group('Rates')
+              +fitem('Currency',{name:'CURRENCY_ID', id:'~', class:'combobox',required:true,'data-options':"editable:false,panelHeight:'auto'"})
+                +input({name:'CURRENCY_RATE', id:'~', class:'numberbox',required:true,precision:8})
+              +fitem('GST Code / Rate %',{name:'GST_ID', id:'~', class:'combobox',required:true,'data-options':"editable:false,panelHeight:'auto'"})
+                +input({name:'GST_RATE', id:'~', class:'numberbox',readonly:true,precision:1})
+          
+            +v-group('Totals')
+              +fitem('Pre-Tax',{name:'PRETAX',class:'numberbox',readonly:true,precision:2})
+              +fitem('GST',{name:'GST',class:'numberbox',readonly:true,precision:2})
+              +fitem('Grand',{name:'GRAND',class:'numberbox',readonly:true,precision:2})
+
+          +panel('south')          
+            +tabs(data-options="plain:true,justified:true")
+              +tab-item('Contact', {iconCls:'icon-contact'})
+                +fitem('Name',{id:'~',name:'CONTACT_PERSON', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Phone',{id:'~',name:'CONTACT_PHONE', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Fax',{id:'~',name:'CONTACT_FAX', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Email',{id:'~',name:'CONTACT_EMAIL', class:'textbox',validType:['email']})
+
+              +tab-item('Ship To', {iconCls:'icon-address'})
+                +fitem('Address 1',{name:'SHIPTO_ADDR_1', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 2',{name:'SHIPTO_ADDR_2', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 3',{name:'SHIPTO_ADDR_3', class:'textbox',validType:['length[1,50]']})
+              
+              +tab-item('Remit To', {iconCls:'icon-money'})
+                +fitem('Address 1',{id:'~',name:'REMIT_ADDR_1', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 2',{id:'~',name:'REMIT_ADDR_2', class:'textbox',validType:['length[1,50]']})
+                +fitem('Address 3',{id:'~',name:'REMIT_ADDR_3', class:'textbox',validType:['length[1,50]']})
+
+              +tab-item('Notes', {iconCls:'icon-notes'})
+                .fitem
+                  +label('Order Notes')
+                  +input({eui:'textbox',name:'NOTES','data-options':"multiline:true"})
+
+              +tab-item('Files',{iconCls:'icon-file'})
+                +filegrid#pofiles(data-options="fit:true")
+                  
+    +panel('center')
+      +datagrid#polines

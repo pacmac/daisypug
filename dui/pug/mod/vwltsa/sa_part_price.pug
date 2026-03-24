@@ -1,0 +1,29 @@
+
+form#price(_sqlid:'vwltsa^part_price' asdpx="ax")
+  +fitem('Part ID',{id:'~', name:'PART_ID', _sqlid:'vwltsa^partid', class:'combobox navi', panelWidth:'230px', required:true})
+  +fitem('Currency ID',{id:'~', name:'CURRENCY_ID', _sqlid:'admin^curr_ids', class:'combobox'})
+  +fitem('Unit Price',{name:'UNIT_PRICE', class:'numberbox', min:0, precision:2, value:0 })
+
+script.
+  $('#PART_ID').combobox({
+    onSelect: function(rec){
+      var me = $(this);
+      cl(me.combobox('options'));
+    }
+  })
+
+  $('#CURRENCY_ID').combobox({
+    onSelect: function(rec){
+      var me = $(this);
+      
+      ajaxget('/',{
+        _func:'get',
+        _sqlid: 'vwltsa^part_price',
+        CURRENCY_ID: rec.value,
+        PART_ID: $('#PART_ID').combobox('getValue') 
+      },function(res){
+        cl(res);
+      })
+      cl(me.combobox('options'));
+    }
+  })

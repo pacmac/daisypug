@@ -1,0 +1,8 @@
+extends ../content 
+block script 
+  //-+script("dqm",["js/cpar_man.config.js","js/ncr_main.inc.js"])
+  script: include js/cpar_man.config.js
+  script: include js/ncr_main.inc.js
+block content
+  -var ptype = 'cpar'
+  include _ncr_inc.pug

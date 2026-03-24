@@ -1,0 +1,34 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "inv^receipt_ids_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",             "title": "Receipt ID",    "width": 100 },
+    { "field": "VENDOR_ID",         "title": "Vendor ID",     "width": 100 },
+    { "field": "NAME",              "title": "Vendor Name",   "width": 200 },
+    { "field": "PO_ID",             "title": "PO ID",         "width": 100 },
+    { "field": "ACT_DELIVERY_DATE", "title": "Delivery Date", "width": 100 },
+    { "field": "CREATE_DATE",       "title": "Create Date",   "width": 100 }
+  ],
+  "filters": [
+    { "field": "VENDOR_ID", "title": "Vendor ID", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "inv^vendorid" }
+      }
+    },
+    { "field": "NAME", "title": "Vendor Name", "editor": "textbox" },
+    { "field": "PO_ID", "title": "PO ID", "editor": "textbox" },
+    { "field": "ACT_DELIVERY_DATE", "title": "Delivery Date", "editor": "datebox" },
+    { "field": "CREATE_DATE", "title": "Create Date", "editor": "datebox" }
+  ]
+}

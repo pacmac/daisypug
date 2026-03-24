@@ -1,0 +1,43 @@
+page: rent_man
+module: dqm
+created_at: '2026-03-18T00:00:00+08:00'
+created_by: dui-init
+dui_status: migrated
+migrated_at: '2026-03-19T17:17:00+08:00'
+migrated_by: dui-migrate-v1.2
+mode: regen
+dui_verify:
+  verified_at: '2026-03-19T17:33:00+08:00'
+  verified_by: dui-test
+  console_errors: 0
+  data_loads: blocked
+  structural_pass: true
+  blocked_reason: 'Remote Pure3d data server returning 500 on all _sqlid requests'
+  tabs:
+    - { label: 'Dates', opens: true }
+    - { label: 'Specs', opens: true }
+    - { label: 'Job Usage', opens: true }
+    - { label: 'Freight', opens: true }
+    - { label: 'Purchase', opens: true }
+  lifecycle:
+    select_record: blocked
+    add_new: skip
+    save: skip
+    delete_dialog: skip
+    navigate: skip
+  overall: incomplete
+files:
+  pug: html/dui/mod/dqm/rent_man.pug
+  js: html/dui/mod/dqm/js/rent_man.js
+  json:
+    - html/dui/mod/dqm/json/datagrid.rent_man_joblist.json
+conversions:
+  - extends ../content + block structure
+  - easyui-combobox GAUGE_ID → searchbox with sbref:gauge_ids
+  - fieldset → v-group (6 instances)
+  - div(title=) → +tab-item() for both tab sets
+  - bare #jobusage/#joblist → +datagrid mixin
+  - raw .fitem (NOTES) → +fitem textarea
+  - dwap.page → $.page.fn (13 functions)
+  - dwap.bhave → $.dui.bhave
+  - theme-violating CSS stripped (hardcoded colors)

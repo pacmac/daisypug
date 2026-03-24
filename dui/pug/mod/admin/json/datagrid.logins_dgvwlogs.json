@@ -1,0 +1,20 @@
+{
+  "striped": true,
+  "fitColumns": true,
+  "rownumbers": true,
+  "singleSelect": true,
+  "columns": [
+    { "field": "select", "checkbox": true },
+    { "field": "devic", "title": "Dev", "width": 30 },
+    { "field": "devid", "hidden": true },
+    { "field": "dev", "title": "Device ID" },
+    { "field": "ua", "title": "Dev Type", "width": 80 },
+    { "field": "ip", "title": "IP Address" },
+    { "field": "login", "title": "Login", "formatter": "datetimef", "width": 130 },
+    { "field": "uphr", "title": "Up Hrs", "align": "right", "width": 50 },
+    { "field": "last", "title": "Last", "formatter": "timef", "width": 70 },
+    { "field": "maxage", "title": "Expires", "formatter": "timef", "width": 70 },
+    { "field": "nwlev", "title": "Net %", "align": "right", "width": 50 },
+    { "field": "batlev", "title": "Bat %", "align": "right", "width": 50 }
+  ]
+}

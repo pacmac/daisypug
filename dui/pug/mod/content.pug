@@ -1,0 +1,59 @@
+mixin _init
+  -
+    const ce = console.error
+    const cl = console.log;  
+    
+    /*
+      Data available:
+      =============== 
+      1. $.xx   : (globals)
+      2. fn.xx  : (appfunc)
+      3. mobile : (bool)
+      4. req    : (obj)
+      5. ronly  : (bool)
+    */
+    
+    // common vars
+    const _ronly    = ronly;
+    const _mixins   = pug_mixins.fitem == true;
+    const _mobile   = mobile;
+    const _route    = req._route;
+    const _pageid   = req.pageid;
+    
+    // cl(`ronly:${ronly}, mix:${_mixins}, mob:${_mobile}, page:${_pageid}`);
+
+  // Always include DaisyUI component mixins
+  // Path relative to /html/dui/mod/ (where content.pug is):
+  // From /html/dui/mod/ → ../mixins/mixins reaches /html/dui/mixins/mixins
+  include ../mixins/mixins
+
+  if !_mixins
+    include ./mixins.pug
+
++_init()
+
+//data-scripts — DISABLED: now loaded client-side via /api/init
+//- ronly, pdata, bhave are resolved client-side from $.dui._bhave and /api/init response
+block start
+
+//content-header
+block head
+
+//content-styles
+block style
+
+//content-scripts
+block script
+
+//content-content
+block content
+
+//content-footer
+block foot
+
+//content-last
+block end
+  if $.isdev
+    script console.debug(`[content.pug]:extended page (${'!{req.query._page}'})`)
+
++qbemodal

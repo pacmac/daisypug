@@ -1,0 +1,44 @@
+extends ../content
+block style
+  style.
+    #tbar {
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }
+    
+    .partrow {
+      background-color:rgba(230, 230, 250, 0.3);
+      color:black;
+    }
+    
+    .negative {
+      color: red;	    
+    }
+    
+    .demand,
+    .datagrid-header td[field=DEMAND_DOC],
+    .datagrid-header td[field=DEMAND_QTY] {
+      color: blue;   
+    }
+
+    .supply,
+    .datagrid-header td[field=SUPPLY_DOC],
+    .datagrid-header td[field=SUPPLY_QTY] {
+      color: green;    
+    }
+
+block content
+  #partplan
+  #tbar
+    div(style="display:inline-block")
+      form#gfilter
+        +fitem('Part Filter',{class:'qbe navi fit', id:'PART_ID_',name:'PART_ID' },{class:'inline'})
+        label Product Code
+        input(class="combobox navi fit" _sqlid="vwltsa^productcodeid" name="PCODE" required="true" data-options="editable:false" id="PCODE_")
+        +fitem('Status Filter',{class:'combobox',name:'REPORT_TYPE','data-options':"data:[{text:'All Parts',value:'ALL'},{text:'Shortages',value:'SHORTAGE'},{text:'Open Orders',value:'RLS'}],editable:false"})
+    span.vert-sep(style="margin:0 8px;")
+    div#colsel(style="display:inline-block;")
+
+block script
+  +script("inv",['js/part_plan.js'])

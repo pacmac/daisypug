@@ -1,0 +1,9 @@
+extends ../content 
+block script
+  script: include js/dg_empstat.js
+block content 
+  #max-grid(asdpx='')
+    .datagrid-filter.static
+      label Operator
+      +combobox#empid.all(style='width:120px;' _sqlid = "vwltsa^empid" name='EMPLOYEE_ID')
+  include dg_filter.inc.pug

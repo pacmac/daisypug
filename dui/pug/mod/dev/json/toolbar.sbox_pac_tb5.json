@@ -1,0 +1,19 @@
+{
+  "title": "JSON Toolbar",
+  "icon": "database",
+  "asdpx": "aed",
+  "toolbar": [
+    { "type": "field", "label": "Part", "id": "TB5_PART", "name": "PART_ID",
+      "editor": { "type": "combobox", "options": {
+        "data": [{"text":"All","value":""},{"text":"A8000","value":"A8000"},{"text":"B1000","value":"B1000"}],
+        "editable": false } } },
+    { "type": "field", "label": "Status", "name": "STATUS",
+      "editor": { "type": "combobox", "options": {
+        "data": [{"text":"All","value":""},{"text":"Active","value":"A"},{"text":"Inactive","value":"I"}],
+        "editable": false } } },
+    { "type": "sep" },
+    { "id": "tb5_refresh", "text": "Refresh", "icon": "refresh-cw" },
+    { "type": "sep" },
+    { "id": "tb5_export", "text": "Export", "icon": "download", "disabled": true }
+  ]
+}

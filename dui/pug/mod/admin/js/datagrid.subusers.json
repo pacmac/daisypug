@@ -1,0 +1,45 @@
+{
+  "id": "subusers",
+  "columns": [
+    [
+      {
+        "field": "userid",
+        "title": "User ID",
+        "width": 75,
+        "fixed": true
+      },
+      {
+        "field": "uname",
+        "title": "User Name",
+        "fixed": false,
+        "width": 200,
+        "formatter": null
+      }
+    ]
+  ],
+  "options": {
+    "method": "get",
+    "fit": true,
+    "fitColumns": true,
+    "rownumbers": true,
+    "striped": true,
+    "columns": [
+      [
+        {
+          "field": "userid",
+          "title": "User ID",
+          "width": 75,
+          "fixed": true
+        },
+        {
+          "field": "uname",
+          "title": "User Name",
+          "fixed": false,
+          "width": 200,
+          "formatter": null
+        }
+      ]
+    ]
+  },
+  "sourceFile": "admin/js/events.js"
+}

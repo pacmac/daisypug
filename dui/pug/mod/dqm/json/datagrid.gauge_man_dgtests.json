@@ -1,0 +1,17 @@
+{
+  "fit": true,
+  "fitColumns": true,
+  "striped": true,
+  "columns": [[
+    { "field": "TEST_ID", "hidden": true },
+    { "field": "PROC_SEQ", "title": "Seq", "width": 30, "fixed": true },
+    { "field": "TICK_SEQ", "title": "#", "width": 30, "fixed": true },
+    { "field": "LTYPE", "title": "VB", "width": 40, "hidden": true },
+    { "field": "TITLE", "title": "Title" },
+    { "field": "CRITERIA", "title": "Pass-Fail Criteria", "formatter": "$.page.fn.criteriaFmt" },
+    { "field": "VALUE", "title": "Result", "align": "right", "width": 75, "fixed": true },
+    { "field": "VAR", "title": "Variance", "align": "right", "width": 75, "fixed": true },
+    { "field": "STATUS", "title": "Status", "width": 75, "fixed": true, "styler": "$.page.fn.statusStyler" },
+    { "field": "NOTES", "title": "Notes & Observations", "width": 1000 }
+  ]]
+}

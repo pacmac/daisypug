@@ -1,0 +1,44 @@
+extends ../content
+//- ── MIGRATOR ──────────────────────────────────
+//- page: inv/inv_gpass
+//- owner: root
+//- status: clean
+//- passes: 11  version: 7
+//- last_run: 2026-02-27 15:29:17
+//- ─────────────────────────────────────────────
+block content
+  +vsplit()
+    +panel('west')
+      +form#gphead(class='multi fit form', _sqlid='inv^gp_head', asdpx='adx')
+
+        +fitem('Gate Pass ID',{_sqlid:'inv^gatepass_qbe', id:'~', name:'GP_ID',class:'qbe fkey fit navi autonum ', panelWidth:'230px', validType:['length[1,30]']})
+        //-br
+        +fitem('GP Type',{id:'~', name:'GP_TYPE', class:'combobox', required:true})
+        +fitem('Cust / Vendor ID',{id:'~', name:'GP_TYPE_ID', class:'combobox', required:true})
+        +fitem('Cust / Vendor Name',{id:'~', name:'NAME', class:'textbox',readonly:true})
+        +fitem('Tx Date',{id:'~',name:'GP_DATE', class:'datebox today', required:true}) 
+        +fitem('Tx Type',{id:'~',required:true, name:"TX_TYPE" ,class:'combobox','data-options':"editable:false,data:[{value:'S',text:'Shipment'},{value:'R',text:'Return'}]"})
+
+      
+        +tabs#gptabs(data-options="plain:true,justified:true,fit:true")
+
+          +tab-item('Contact',{iconCls:'icon-contact'})
+            +fitem('Contact Name',{name:'CONTACT_PERSON', class:'textbox' ,readonly:false})
+            +fitem('Phone',{name:'CONTACT_PHONE', class:'textbox' ,readonly:false})
+            +fitem('Fax',{name:'CONTACT_FAX', class:'textbox' ,readonly:false})
+            +fitem('Email',{name:'CONTACT_EMAIL', class:'textbox',readonly:false})
+
+          +tab-item('Address',{iconCls:'icon-address'})
+            +v-group('Ship To / From',{style:'margin-top:12px;'})
+              +fitem('Address 1',{name:'ADDR_1', class:'textbox',readonly:false})
+              +fitem('Address 2',{name:'ADDR_2', class:'textbox',readonly:false})
+              +fitem('Address 3',{name:'ADDR_3', class:'textbox',readonly:false})
+
+          +tab-item('Notes',{iconCls:'icon-notes'})
+            +input({class:'textbox ronly-on', name:'NOTES','data-options':"multiline:true", style:'height:200px;width:100%'})
+
+    +panel('center')
+      +datagrid#gplines
+
+block script 
+  +script("inv",['js/inv_gpass.js'])

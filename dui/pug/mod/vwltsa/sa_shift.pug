@@ -1,0 +1,58 @@
+extends ../content 
+
+mixin break(text,id,dis)
+  +fitem(text,{name:id+'_START', class:'timespinner shift-time','data-options':"value:''", style:'width:60px;'})
+    +input({name:id+'_END', class:'timespinner shift-time', style:'width:60px;','data-options':"value:''"})
+    +input({id:id+'_DUR', class:'textbox duration','data-options':"value:''", style:'width:40px;',readonly:true})
+    if !dis
+      +input({id:id+'_ON', class:'combobox duration','data-options':"value:'0', data:[{value:'1',text:'ON'},{value:'0',text:'OFF'}]", style:'width:55px;'})
+
+block content     
+  +tabs#shiftabs(fit="true")
+
+    #shiftid(title='Shift Definition')
+      form.multi(_sqlid='vwltsa^shiftall', asdpx='ax' data-lbut="ax" data-ebut="ax")
+        +fitem('ID',{name:'ID', _sqlid:'vwltsa^shiftid', class:'combobox fkey fit', required:true, validType:['length[1,15]'], panelHeight:'auto'})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox'})
+        +fitem('Active',{name:'ACTIVE', class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N', selected:true}],editable:false",required:true})
+        +fitem('Type',{name:'SHIFT_TYPE', class:'combobox','data-options':"data:[{text:'Operator',value:'O'},{text:'Resource',value:'R'}],editable:false",required:true})
+
+        +fieldset('Shift Grace Periods',{id:'graces',style:"margin-top:20px;"})
+          +fitem('Before Clock IN',{name:'SHIFT_BEG_BEF_WIN', class:'numberspinner','data-options':"precision:0, value:0, suffix:' mins'"})
+          +fitem('After Clock IN',{name:'SHIFT_BEG_AFT_WIN', class:'numberspinner','data-options':"precision:0, value:0, suffix:' mins'"})
+          +fitem('Before Clock OUT',{name:'SHIFT_END_BEF_WIN', class:'numberspinner','data-options':"precision:0, value:0, suffix:' mins'"})
+          +fitem('After Clock OUT',{name:'SHIFT_END_AFT_WIN', class:'numberspinner','data-options':"precision:0, value:0, suffix:' mins'"})
+          +fitem('Inter-Job Lag',{name:'BTWN_JOB_LAG_TIME', class:'numberspinner','data-options':"precision:0, value:0, suffix:' mins'"})
+          +fitem('Before/After Break',{name:'BREAKS_WINDOW', class:'numberspinner','data-options':"precision:0, value:0, suffix:' mins'"})
+        
+        +fieldset('Break/Meal',{id:'break'})
+          +fitem('Indirect ID',{name:'INDIRECT_ID',_sqlid:'vwltsa^indid', class:'combobox'})
+    
+    #sa_shift_day(title='Daily Timing')
+      form.multi(_sqlid='vwltsa^shiftdayall', asdpx='ax' data-lbut="ax" data-ebut="ax")
+        +fitem('ID',{name:'SHIFT_ID', _sqlid:'vwltsa^shiftid', class:'combobox fkey fit', required:true, validType:['length[1,15]'],panelHeight:'auto'})
+        +fitem('Shift Type',{id:'SHIFT_TYPE', class:'textbox',readonly:true})
+        +fitem('Shift Span',{name:'SHIFT_START', class:'timespinner shift-time shift-time','data-options':"value:'00:00'", style:'width:60px;'})
+          +input({name:'SHIFT_END', class:'timespinner shift-time',style:'width:60px;','data-options':"value:'23:59'"})
+          +input({id:'SHIFT_DUR', class:'textbox duration','data-options':"value:''", style:'width:40px;',readonly:true})
+        +fieldset('Breaks')
+          +break('Break 0','MEAL')
+          +break('Break 1','BREAK1')
+          +break('Break 2','BREAK2')
+          +break('Break 3','BREAK3')
+          +break('Break 4','BREAK4')
+          +break('Break 5','BREAK5')
+          +break('Break 6','BREAK6')
+          +break('Break 7','BREAK7')
+      
+    div(style='padding:0px', title='Daily Overrides' data-options="__disabled:true")
+      include sa_shiftor.pug
+
+block style
+  style.
+    .fitem > input.duration + span.textbox {
+        margin-left: 6px;
+    }
+    
+block script               
+  script: include js/sa_shift.js

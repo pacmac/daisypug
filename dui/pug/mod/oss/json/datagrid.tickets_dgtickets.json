@@ -1,0 +1,34 @@
+{
+  "url": "/",
+  "singleSelect": true,
+  "striped": true,
+  "fitColumns": true,
+  "fit": true,
+  "queryParams": { "_sqlid": "oss^tickets", "_func": "get" },
+  "toolbar": [
+    { "type": "field", "label": "Starting", "id": "tb_start", "name": "START_DATE", "editor": { "type": "datebox", "options": { "class": "month" } } },
+    { "type": "field", "label": "Ending", "id": "tb_end", "name": "END_DATE", "editor": { "type": "datebox", "options": { "class": "today" } } }
+  ],
+  "columns": [[
+    { "field": "TX_ID", "title": "ID", "width": 40, "fixed": true },
+    { "field": "STATUS", "title": "Status", "width": 100, "fixed": true },
+    { "field": "TX_DATE", "title": "TX Date", "width": 100, "fixed": true, "formatter": "$.dui.fmt.date" },
+    { "field": "CUSTOMER_ID", "title": "Cust ID", "width": 100, "fixed": true },
+    { "field": "TX_USER_ID", "title": "User ID", "width": 100, "fixed": true },
+    { "field": "SERVICE_TYPE", "title": "Service Type", "width": 100, "fixed": true },
+    { "field": "SERVICE_CLASS", "title": "Service Class", "width": 100, "fixed": true },
+    { "field": "TX_QTY", "title": "Qty", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.number" },
+    { "field": "TX_STARTDATE", "hidden": true },
+    { "field": "TX_STARTTIME", "hidden": true },
+    { "field": "TX_ENDDATE", "hidden": true },
+    { "field": "TX_ENDTIME", "hidden": true },
+    { "field": "RATE_PIECE", "title": "$ / Pce", "width": 60, "align": "right", "formatter": "$.dui.fmt.number" },
+    { "field": "RATE_HOUR", "title": "$ / Hr", "width": 60, "align": "right", "formatter": "$.dui.fmt.currency" },
+    { "field": "HOURS_WORKED", "title": "Work Hrs", "width": 60, "align": "right", "formatter": "$.dui.fmt.number" },
+    { "field": "MULTIPLIER", "title": "Multiply", "width": 60, "align": "right", "formatter": "$.dui.fmt.number" },
+    { "field": "HOURS_CHARGE", "title": "Charge Hrs", "width": 60, "align": "right", "formatter": "$.dui.fmt.number" },
+    { "field": "MISC_CHARGE", "title": "Misc $", "width": 60, "align": "right", "formatter": "$.dui.fmt.currency" },
+    { "field": "TOTAL_CHARGE", "title": "Total $", "width": 60, "align": "right", "formatter": "$.dui.fmt.currency" },
+    { "field": "NOTES", "hidden": true }
+  ]]
+}

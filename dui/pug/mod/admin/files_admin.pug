@@ -1,0 +1,91 @@
+form(asdpx='x' style="height:100%;")
+  +layout(fit="true")
+    +panel(region="west" style="width:450px;xborder:none;")
+      .fitem
+        label Check Type
+        +combobox#chktype(type='text')
+      
+      .fbuts.center
+        a#gobut(href='#' data-options="iconCls:'icon-gear'") Execute
+
+    +panel(region="center" fit="true")
+      #chktable
+
+script.
+  
+  $('#chktable').datagrid({
+    striped:true,
+
+    toolbar: [{
+      id: 'dg2excel',
+      disabled: false
+    }],
+  
+    columns:[[
+      {field:'tsid',title:'File ID'},
+      {field:'deleted',title:'Deleted'},
+      {field:'date',title:'Date',formatter:function(val,row,idx){
+        var ts = parseInt(row.tsid.split('.')[0]);
+        return isodate(new Date(ts),true);
+      }},
+      {field:'fname',title:'File Name'},
+      {field:'path',title:'File Path'}
+    ]] 
+  })
+  
+  $('a#gobut').linkbutton({
+    disabled:true,
+    onClick: function(){
+      var mode = $(this).data('mode');
+      switch(mode){
+        case "dbchk":
+          vars = {_sqlid:'admin^files_dbchk',_func:'get'}
+          break;
+
+        case "dbdel":
+          vars = {_sqlid:'admin^files_dbchk',_func:'get',delete:true}
+          break;
+ 
+        case "fichk":
+          vars = {_sqlid:'admin^files_fichk',_func:'get'}
+          break;
+
+        case "fidel":
+          vars = {_sqlid:'admin^files_fichk',_func:'get',delete:true}
+          break; 
+        
+        default:
+          return msgbox('Not Implemented');  
+      }
+      
+      $('#chktable').datagrid('loadData',[]); 
+      
+      if(mode.indexOf('del') != -1) confirm(function(yn){if(yn) go();});
+      else go();
+      
+      function go(){
+         // show mask, message.
+        
+        ajaxget('/',vars,function(res){
+          if(res.ferr.length==0) msgbox('No errors found.')
+          else $('#chktable').datagrid('loadData',res.ferr); 
+        })
+      }
+         
+    }
+  })
+  
+  $('#chktype').combobox({
+    panelHeight: 'auto',
+    data:[
+      {value:'dbchk',text:'List Orphan Records'},
+      {value:'dbdel',text:'Delete Orphan Records'},
+      {value:'fichk',text:'List Orphan Files'},
+      {value:'fidel',text:'Delete Orphan Files'},
+    ],
+    
+    onSelect: function(rec){
+      $('a#gobut').data('mode',rec.value).linkbutton('enable'); 
+    }
+  })
+  

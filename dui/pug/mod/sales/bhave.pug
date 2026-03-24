@@ -1,0 +1,58 @@
+extends ../content
+
+block script
+  script: include js/bhave.js
+
+block content
+
+  +tabs#bhtabs( data-options="tabPosition:'left'")
+    
+    // contacts
+    +tab-item('Contacts',{iconCls:"icon-contact"})
+      form#conman.single.load(_sqlid='admin^bhave' asdpx='s')
+        input(type="hidden" name="appid" value="sales^contact_man")
+        +fitem('UDF Layout',{class:'combobox',name:'UDF_LAYOUT_ID'})
+        +fieldset('Combo Items')
+          +fitem('Lead Stage',{id:'~', name:'stage_id', class:'edit'})
+          +fitem('Lead Status',{id:'~', name:'status_id', class:'edit'})
+          +fitem('Industry',{id:'~', name:'industry_id', class:'edit'})
+    
+    // customers
+    +tab-item('Customers',{iconCls:"icon-app"})
+      form#custman.single.load(_sqlid='admin^bhave' asdpx='s')
+        input(type="hidden" name="appid" value="sales^config^masters")
+        +fitem('UDF Layout',{class:'combobox',name:'UDF_LAYOUT_ID'})
+        +fitem('Due Days',{class:'numberbox',name:'DUE_DAYS',min:1,max:365,value:1})
+
+    // quotes
+    +tab-item('Quote Manager',{iconCls:"icon-app"})
+      form#quoteman.single.load(_sqlid='admin^bhave' asdpx='s')
+        input(type="hidden" name="appid" value="sales^quote_man")
+        +fitem('UDF Layout',{class:'combobox',name:'UDF_LAYOUT_ID'})
+        +fitem('Follow Up Days',{class:'numberspinner',name:'FOLLOWUP_DAYS',min:1,max:365,value:7,precision:0})
+        +fitem('Expiry Days',{class:'numberspinner',name:'EXPIRY_DAYS',min:1,max:365,value:30,precision:0})
+        
+    // sales
+    +tab-item('Sales Manager',{iconCls:"icon-customer"})
+      form#salesman.single.load(_sqlid='admin^bhave' asdpx='s')
+        input(type="hidden" name="appid" value="sales^sa_sorder")
+        +fitem('Line Increment',{name:'SOL_INC', class:'combobox','data-options':"data:[{text:'1',value:'1',selected:true},{text:'10',value:'10'}]" })
+        +fitem('Revison Message',{name:'REV_MSG', class:'textbox','data-options':'multiline:true',style:'height:50px;', value:'Rev change from $OLD_REV to $NEW_REV on $DATE by $USER.'})
+        +fitem('Header UDF Layout',{class:'combobox',name:'HEADER_UDF_LAYOUT_ID'})
+        +fitem('Line UDF Layout',{class:'combobox',name:'UDF_LAYOUT_ID'})
+        
+        +fitem('Part > Line Maps',{name:'MAP_LINE_PART', class:'textbox','data-options':"multiline:true,validType:['isJSON']",style:'height:100px;'})
+        +v-group('Forecast')
+          +fitem('budget',{name:'budget', class:'numberspinner' ,value:'0',min:10, precision:2})
+          +fitem('Curr List',{name:'fc_curr', class:'textbox' })
+          +fitem('Curr Rate',{name:'fc_currrate', class:'textbox' })
+          +fitem('budget Hrs',{name:'bg_hrs', class:'numberspinner' ,value:'0',min:10, precision:2})
+          +fitem('Hrs RC Excl',{name:'fc_actualhrs_resclass_excluded', class:'textbox' })
+    
+    // shipments
+    +tab-item('Shipment',{iconCls:"icon-ship"})
+      form#cprop.single.load(_sqlid='admin^bhave' asdpx='s' style='--fitem-label-w:10rem')
+        input(type="hidden" name="appid" value="sales^sa_ship")
+        +fitem('Save All Lines',{name:'SAVEALL_LINES', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+        +fitem('COC Link',{name:'COC_LINK', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+        +fitem('Allow Negative Stock',{name:'NEGATIVE_STOCK', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })

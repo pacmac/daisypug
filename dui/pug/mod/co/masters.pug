@@ -1,0 +1,17 @@
+extends ../content
+block script
+  +script('co',['js/masters.js'])
+block content
+  +tabs(data-options="fit:true, tabPosition:'top'" )
+
+    #type(title='Calendar Type')
+      form#TYPE.multi(_sqlid='co^cal_activity_type', asdpx='ax')
+        +fitem('Type ID',{id:'~',name:'CAL_TYPE_ID', class:'combobox fkey navi fit',_sqlid:'co^cal_type_ids', required:true, validType:'length[1,15]'})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox','data-options':"validType:['length[1,100]']"})
+        +fitem('Colour Code',{name:'COLOUR_CODE', class:'combobox colours','data-options':"validType:['length[1,10]']"})
+    
+    #class(title='Calendar Class')
+      form#CLASS.multi(_sqlid='co^cal_class', asdpx='ax')
+        +fitem('Class ID',{id:'~',name:'CAL_CLASS_ID',  class:'combobox fkey navi fit',_sqlid:'co^cal_class_ids', required:true, validType:'length[1,15]','data-options':"groupField:'CAL_TYPE_ID'"})
+        +fitem('Type ID',{name:'CAL_TYPE_ID', class:'combobox',_sqlid:'co^cal_type_ids', required:true, validType:'length[1,15]'})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox','data-options':"validType:['length[1,100]']"})   

@@ -1,0 +1,29 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^qphids_sbox",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "PLAN_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "SO Ref", "width": 100 },
+    { "field": "TYPE", "title": "Plan Type", "width": 120 },
+    { "field": "PLAN_ID", "title": "Plan ID", "width": 100 },
+    { "field": "PLAN_VER", "title": "Plan Version", "width": 120 },
+    { "field": "GAUGE_TYPE", "title": "Gauge Type", "width": 100 },
+    { "field": "SAMPLE_QTY", "title": "Sample Qty", "width": 80, "align": "right" }
+  ],
+  "filters": [
+    { "field": "TYPE", "title": "Plan Type", "editor": "textbox" },
+    { "field": "PLAN_ID", "title": "Plan ID", "editor": "textbox" },
+    { "field": "GAUGE_TYPE", "title": "Gauge Type", "editor": "textbox" }
+
+  ]
+}

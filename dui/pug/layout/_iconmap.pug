@@ -1,0 +1,54 @@
+//- _iconmap.pug — icon mapping system
+//- JSON source of truth: layout/json/icons-lucide.json, layout/json/icons-bootstrap.json
+-
+    // Load pre-resolved flat maps (EUI iconCls → icon name)
+    // Try multiple paths — templateDir varies by render context:
+    //   mod/<module>/  → ../../layout/json/  (page templates)
+    //   html/dui/      → layout/json/        (dashboard_sidebar)
+    //   html/dui/layout/ → ./json/           (layout.pug itself)
+    function _loadIconJson(name) {
+      return fn.pug.jsonRead('../../layout/json/' + name)
+          || fn.pug.jsonRead('layout/json/' + name)
+          || fn.pug.jsonRead('./json/' + name)
+          || {};
+    }
+    const _lucideMap = _loadIconJson('icons-lucide');
+    const _bsMap = _loadIconJson('icons-bootstrap');
+    const _lucideDefault = _lucideMap._default || 'circle-alert';
+    const _bsDefault = _bsMap._default || 'question-circle';
+
+    // Runtime selector — resolves EUI iconCls → icon name, passes through raw Lucide names
+    const getIcon = (cls, useBootstrap) => {
+      if (!cls) return '';
+      if (useBootstrap) return _bsMap[cls] || _bsDefault;
+      return _lucideMap[cls] || cls;  // pass through unmapped strings as raw Lucide names
+    };
+
+//- ============================================================================
+//- +icon(cls, opts) — SHARED icon renderer, used by ALL components
+//- ============================================================================
+//- cls:  EUI iconCls (e.g. 'icon-part') or raw Lucide name (e.g. 'search')
+//- opts.size:    'sm' (14px) | 'md' (16px, default) | 'lg' (20px)
+//- opts.color:   DaisyUI color class (e.g. 'text-primary')
+//- opts.opacity: opacity class (e.g. 'opacity-70')
+//- opts.bold:    true → stroke-width 2.75 (via .icon-bold class)
+//- opts.cls:     extra classes
+mixin icon(cls, opts)
+  -
+    var o = opts || {}
+    var resolved = cls ? getIcon(cls) : ''
+    var sizeMap = { sm: 'w-3.5 h-3.5', md: 'w-4 h-4', lg: 'w-5 h-5' }
+    var sizeClass = sizeMap[o.size] || sizeMap.md
+    var classes = [sizeClass, 'flex-shrink-0']
+    if (o.bold) classes.push('icon-bold')
+    if (o.autocolor) classes.push(nextIconColor())
+    else if (o.color) classes.push(o.color)
+    if (o.opacity) classes.push(o.opacity)
+    if (o.cls) classes.push(o.cls)
+  if resolved
+    span(data-lucide=resolved class=classes.join(' '))
+
+//- Inject icon map into page HTML for client-side JS (nav-plugin, tree-plugin, etc.)
+mixin _duiIconScript()
+  script.
+    $.dui.icons = !{JSON.stringify(_lucideMap)};

@@ -1,0 +1,64 @@
+//-+layout({border:false})
+  +panel('west', { style: "width:400px; background:#FAFAFA;", collapsible: "false" })
+    +form#mac2key.fit( asdpx='adx')
+      +layout({border:false})
+        +panel('north', { style: "height:600px;background:#FAFAFA;" })
+
+
+          +fitem('Mac Address',{ id:'mac', required:true,class:'textbox'})
+          +fitem('User count',{id:'uc', required:true, class:'combobox',  'data-options':"panelWidth:'250px'"})
+          //-.fbuts.center
+            +linkbutton#keygen(icon='icon-verified' style="margin-left:10px;margin-top:5px")
+          +fitem('Key',{ id:'key', class:'textbox'})
++layout({border:false})
+  +fitem('Mac Address',{ id:'mac', required:true,class:'textbox'})
+  +fitem('User count',{id:'uc', required:true, class:'combobox',  'data-options':"panelWidth:'250px'"})
+
+  //-.fbuts.center
+    +linkbutton#keygen(icon='icon-verified' style="margin-left:10px;margin-top:5px")
+  +fitem('Key',{ id:'key', class:'textbox'})
+
+
+script.
+  mac2key=function(mac,uc){
+        function pad(n){
+          if(n<10) return "0"+n; return n.toString()
+        }
+       // console.log('mac:',mac,",uc:",uc);
+        if (mac){
+          if (uc==undefined) return '-';
+          else {
+            var mar=mac.toLowerCase().split(mac.charAt(2)), k=[],ux=pad((uc+88)%100);
+            for (var i=0;i<mar.length;i++){ k.push(pad(((mar[i][0].charCodeAt() + mar[i][1].charCodeAt()) * (i+1) * uc) % 100));}
+            return k[5]+k[4]+ux[0]+k[3]+k[2]+ux[1]+k[1]+k[0];
+          }
+        }
+        else return '-';
+    },
+    
+  keycount=function(key){return (key[4].toString()+key[9].toString()) - 88;},
+  keyok=function(mac,key){var uc = this.keycount(key); if(this.mac2key(mac,uc)==key) return true; return false;},
+  $(document).ready(function() {
+
+     var uc=[];
+     for(x=1;x<=20;x++){
+       uc.push({"text":x,"value":x});
+
+     }
+     $('#uc1').slider({
+       max:20
+     })
+     $('#uc').combobox({
+       editable:false,
+       data:uc,
+       onSelect:function(val){
+                   var mac=$('#mac').textbox('getValue');
+         // var uc=$('#uc').combobox('getValue');
+          var key = mac2key(mac,val.value);
+          $('#key').textbox('setValue',key);
+       }
+     })
+
+
+  })
+  

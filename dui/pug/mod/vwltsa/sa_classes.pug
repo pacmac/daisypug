@@ -1,0 +1,34 @@
+extends ../content 
+
+block script 
+  script: include js/sa_classes.js
+block content 
+  +tabs(data-options="fit:true" )
+    #sa_woclass(title='Jobs')
+      form.multi(_sqlid='vwltsa^wocall', asdpx='ax' data-lbut="ax" data-ebut="ax")
+        +input({name:'TABLE_NAME', type:'hidden' ,value:'WORK_ORDER'})
+        +input({name:'COLUMN_NAME', type:'hidden' ,value:'BASE_ID'})
+        +fitem('Class ID',{name:'ID', _sqlid:'vwltsa^wocid', class:'combobox fkey',validType:['length[1,15]'],required:true})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox' , validType:['length[1,255]']})
+        +fitem('Prefix',{name:'PREFIX', class:'textbox' , validType:['length[1,8]']})
+        +fitem('Suffix',{name:'SUFFIX', class:'combobox', default:'$Y4','data-options':"data:[{text:'None',value:''},{text:'Year 4 Digits',value:'$Y4'},{text:'Year 2 Digits',value:'$Y2'},{text:'Month',value:'$M'},{text:'Month Name',value:'M3'},{text:'-Year 4 Digits',value:'-$Y4'},{text:'-Year 2 Digits',value:'-$Y2'},{text:'-Month',value:'-$M'},{text:'-Month Name',value:'-M3'},{text:'YYMMDD',value:'YYMMDD'},{text:'YYYYMMDD',value:'YYYYMMDD'},{text:'-YYMMDD',value:'-YYMMDD'},{text:'-YYYYMMDD',value:'-YYYYMMDD'}]"})
+        +fitem('Next Number',{name:'NEXT_NUMBER', class:'numberspinner', value:1, precision:0, min:1})
+        +fitem('Decimal Digits',{name:'DECIMAL_PLACES', class:'numberspinner', value:1, min:1, max:5, precision:0})
+    #res_class( title='Resources')
+      form.multi(_sqlid='vwltsa^resclassall', asdpx='ax' data-lbut="ax" data-ebut="ax")
+        +fitem('Class ID',{name:'ID', _sqlid:'vwltsa^resclassid', class:'combobox fkey','data-options':"validType:['length[1,15]']",required:true})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox' , validType:['length[1,255]']})
+    #tolerance_class( title='Tolerance')
+      form.multi(_sqlid='vwltsa^tolclassall', asdpx='ax' data-lbut="ax" data-ebut="ax")
+        +fitem('Class ID',{name:'ID', _sqlid:'vwltsa^tolclassid', class:'combobox fkey',validType:['length[1,15]'],required:true})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox' , validType:['length[1,255]']}) 
+block style  
+  style.
+    .fitem .ftype{
+      width:75px;
+      margin-left:12px; 
+    }
+    .fitem .w12 {
+      width:12px;
+      display:inline-block
+    }

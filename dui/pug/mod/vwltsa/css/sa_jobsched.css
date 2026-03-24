@@ -1,0 +1,183 @@
+/* === Job bar palette — theme-aware (shared with sa_jobplan) === */
+:root {
+  --jp-red: oklch(0.82 0.08 15);
+  --jp-grn: oklch(0.88 0.10 145);
+  --jp-ora: oklch(0.86 0.08 65);
+  --jp-blu: oklch(0.86 0.08 250);
+  --jp-gry: oklch(0.88 0.00 0);
+  --jp-bar-text: oklch(0.25 0 0);
+}
+[data-theme="dark"] {
+  --jp-red: oklch(0.45 0.12 15);
+  --jp-grn: oklch(0.45 0.12 145);
+  --jp-ora: oklch(0.48 0.10 65);
+  --jp-blu: oklch(0.45 0.10 250);
+  --jp-gry: oklch(0.40 0.00 0);
+  --jp-bar-text: oklch(0.90 0 0);
+}
+
+#job_schedule {
+  display: flex;
+  flex-direction: column;
+}
+
+#job_schedule table {
+  border-bottom: 1px solid var(--color-base-300);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Override DaisyUI .table padding — schedule needs zero cell padding for density */
+#job_schedule th,
+#job_schedule td {
+  padding: 0;
+  vertical-align: top;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+#job_schedule tbody tr td {
+  border-width: 1px 1px 0 0;
+  border-color: var(--color-base-300);
+  border-style: solid;
+  background-color: var(--color-base-100);
+}
+
+/* Header row sticky on top */
+#job_schedule thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: var(--color-base-200);
+  text-align: center;
+  padding: 2px 4px;
+  font-size: 11px;
+}
+
+/* === Floating focus panel === */
+.panel.opnfocus {
+  min-height: 20px;
+  min-width: 300px;
+  position: absolute;
+  top: 100px;
+  left: 500px;
+  background: var(--color-base-200);
+}
+
+/* === Plain input (stats fields) === */
+input.plain {
+  border: none;
+  background: inherit;
+  width: 30px;
+  font-weight: bold;
+}
+
+/* === Sched column header — day numbers === */
+#job_schedule thead th[data-field="sched"] {
+  padding: 0;
+  white-space: nowrap;
+}
+
+#job_schedule thead th[data-field="sched"] span {
+  display: inline-block;
+  text-align: right;
+  border-right: 1px solid var(--color-base-300);
+  box-sizing: border-box;
+  line-height: 24px;
+}
+
+/* === Row hover === */
+#job_schedule tbody tr:hover {
+  background-color: var(--color-base-200);
+}
+
+/* === Bar cell — operation bars container === */
+td[data-field="sched"] .datagrid-cell {
+  padding: 0;
+  position: relative;
+  min-height: 20px;
+  height: 100%;
+}
+
+td[data-field="sched"] .datagrid-cell .opwr {
+  position: relative;
+}
+
+/* === Operation bars (ibar) === */
+td[data-field="sched"] .datagrid-cell div.ibar {
+  border-right: 1px solid var(--color-base-100);
+  border-left: 1px solid var(--color-base-100);
+  display: inline-block;
+  min-height: 14px;
+  position: absolute;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+td[data-field="sched"] .datagrid-cell div.ibar:hover {
+  z-index: 100;
+  border: 1px solid var(--color-error);
+}
+
+td[data-field="sched"] .datagrid-cell div.ibar.bar-status {
+  background-image: url(../img/blu-0.5.png);
+  background-repeat: no-repeat;
+}
+
+/* === Want-date arrows === */
+td[data-field="sched"] .datagrid-cell div.arrow-up,
+td[data-field="sched"] .datagrid-cell div.arrow-left,
+td[data-field="sched"] .datagrid-cell div.arrow-right {
+  width: 0;
+  height: 0;
+  padding: 0;
+  position: absolute;
+  display: inline-block;
+  z-index: 2;
+}
+
+td[data-field="sched"] .datagrid-cell div.arrow-up {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--color-success);
+  top: 5px;
+}
+
+td[data-field="sched"] .datagrid-cell div.arrow-left {
+  display: none;
+  border-top: 7px solid transparent;
+  border-right: 8px solid var(--color-error);
+  border-bottom: 7px solid transparent;
+  top: 2px;
+}
+
+td[data-field="sched"] .datagrid-cell div.arrow-right {
+  border-top: 7px solid transparent;
+  border-left: 8px solid var(--color-info);
+  border-bottom: 7px solid transparent;
+  top: 2px;
+}
+
+/* === Day-of-week header coloring (weekends orange) === */
+#job_schedule thead th span.dow_0,
+#job_schedule thead th span.dow_6 {
+  color: orange;
+}
+
+/* === Job bar background colors (theme-aware, shared vars from sa_jobplan) === */
+/* Scoped to #job_schedule to override td background-color */
+#job_schedule .bg-red { background-color: var(--jp-red); color: var(--jp-bar-text); }
+#job_schedule .bg-grn { background-color: var(--jp-grn); color: var(--jp-bar-text); }
+#job_schedule .bg-ora { background-color: var(--jp-ora); color: var(--jp-bar-text); }
+#job_schedule .bg-blu { background-color: var(--jp-blu); color: var(--jp-bar-text); }
+#job_schedule .bg-gry { background-color: var(--jp-gry); color: var(--jp-bar-text); }
+
+/* === Excessive runtime highlight === */
+.maxrun {
+  opacity: 0.6;
+}
+
+/* === Priority highlight === */
+.prio {
+  font-weight: bold;
+}

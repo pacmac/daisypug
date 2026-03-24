@@ -1,0 +1,95 @@
+{
+  "fit": true,
+  "fitColumns": true,
+  "rownumbers": false,
+  "striped": true,
+  "asdpx": "aed",
+  "url": "/?_func=get&_sqlid=dqm^qpdata",
+  "columns": [
+    [
+      { "field": "TEST_ID", "hidden": true },
+      { "field": "PROC_SEQ", "hidden": true },
+      { "field": "TICK_SEQ", "hidden": true },
+      {
+        "field": "BOOL_TEXT",
+        "title": "Pass-Fail Criteria",
+        "width": 200,
+        "fixed": true
+      },
+      {
+        "field": "VLOW",
+        "title": "Lower Limit",
+        "align": "right",
+        "width": 75,
+        "formatter": "fixed",
+        "fixed": true
+      },
+      {
+        "field": "VNOM",
+        "title": "Nominal",
+        "align": "right",
+        "width": 75,
+        "formatter": "fixed",
+        "fixed": true
+      },
+      {
+        "field": "VUPP",
+        "title": "Upper Limit",
+        "align": "right",
+        "width": 75,
+        "formatter": "fixed",
+        "fixed": true
+      },
+      {
+        "field": "VAR",
+        "title": "Variance",
+        "align": "right",
+        "width": 75,
+        "editor": { "type": "label" },
+        "formatter": "fixed",
+        "fixed": true
+      },
+      {
+        "field": "STATUS",
+        "title": "Status",
+        "width": 75,
+        "editor": { "type": "label" },
+        "styler": "passfail",
+        "fixed": true
+      },
+      {
+        "field": "VALUE",
+        "title": "Result",
+        "align": "right",
+        "formatter": "fixed",
+
+        "width": 75,
+        "editor": {
+          "type": "numberbox",
+          "options": { "precision": 5, "align": "right" }
+        },
+        "fixed": true
+      },
+      {
+        "field": "GAUGE_ID",
+        "title": "Gauge ID",
+        "width": 200,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "url": "?_func=get&_sqlid=dqm^gauge&_combo=y",
+            "groupField": "GAUGE_TYPE",
+            "panelWidth": 200,
+            "editable": false
+          }
+        }
+      },
+      {
+        "field": "NOTES",
+        "title": "Notes & Observations",
+        "editor": { "type": "text" },
+        "width": 1000
+      }
+    ]
+  ]
+}

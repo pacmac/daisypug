@@ -1,0 +1,66 @@
+{
+  "id": "dgdesc",
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "inv^pn_descformula",
+    "_dgrid": true,
+    "CLASS_ID": ""
+  },
+  "columns": [
+    [
+      {
+        "field": "SEQ_NO",
+        "title": "SEQ",
+        "width": 60,
+        "align": "center",
+        "editor": {
+          "type": "numberbox",
+          "options": {
+            "readonly": true
+          }
+        }
+      },
+      {
+        "field": "CLASS_ID",
+        "title": "Class",
+        "width": 100
+      },
+      {
+        "field": "FIELD_TYPE",
+        "title": "Field Type",
+        "width": 150,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "data": [
+              {
+                "value": "FIXED",
+                "text": "FIXED"
+              },
+              {
+                "value": "DATA",
+                "text": "DATA"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "field": "DATA_STR",
+        "title": "Field Data",
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "cls": "upper",
+            "validType": [
+              "length[1,25]"
+            ]
+          }
+        },
+        "width": 150
+      }
+    ]
+  ]
+}

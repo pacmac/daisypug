@@ -1,0 +1,41 @@
+extends ../content
+block script
+  +script("inv",['js/part_tracetrans_editor.js'])
+block content
+  +vsplit('410px')
+    +panel(region="west" style="width:410px;background:#FAFAFA;" collapsible="false")
+      +form#parttrans(style="display:inline")
+        +fitem('Part ID',{name:'PART_ID', readonlyx:true,requiredx:true,class:'textbox'})
+        +fitem('Trace ID',{name:'TRACE_ID', readonly:true,class:'textbox'})
+        +fitem('Unit Material Cost',{name:'UNIT_MATERIAL_COST',id:'~', requiredx:true, class:'numberspinner', min:0, precision:2, value:0})  
+        +fitem('Expiry Date',{name:'EXPIRY_DATE',id:'~',  class:'datebox'})  
+        div#traceprop
+          -for (var x=1; x<11; x++)
+            .fitem(id='TRACE_USER_'+x+'_LBL')
+              +label('')
+              +input({name:'TRACE_USER_'+x,class:'textbox','data-options':"validType:['length[1,80]']"})
+    //-div(region="center" style="border:none; padding:0px;")
+    +panel('center')
+      
+      #tbar
+        +form#gfilter
+          +label('From')
+          input.datebox.today(name="sdate" style="width:100px;")
+          +label('To')
+          input.datebox.today(name="edate" style="width:100px;")
+          +label('Part ID')
+          input.combobox(_sqlid="inv^partid" name="pid" )
+      +datagrid#txgrid
+block style
+  style.
+    #parttrans .fitem{
+      margin-bottom: 8px !important;
+    }
+    
+    #tbar {
+      height:30px;
+      line-height:30px;  
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }

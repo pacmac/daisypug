@@ -1,0 +1,26 @@
+{
+  "title": "User Logins",
+  "iconCls": "users",
+  "toolbar": [
+    { "id": "but_user_msg", "text": "Message", "icon": "message-square", "disabled": true },
+    { "id": "but_user_logout", "text": "Logout", "icon": "log-out", "disabled": true }
+  ],
+  "fitColumns": true,
+  "rownumbers": true,
+  "selectOnCheck": true,
+  "singleSelect": false,
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "admin^logins"
+  },
+  "columns": [
+    { "field": "select", "checkbox": true },
+    { "field": "icon", "width": 24 },
+    { "field": "uid", "width": 100, "title": "UID" },
+    { "field": "ip", "width": 100, "title": "IP Address" },
+    { "field": "login", "width": 130, "title": "Login", "formatter": "datetimef" },
+    { "field": "maxage", "width": 80, "title": "Expires In" },
+    { "field": "last", "width": 350, "title": "Last Page" }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "rentlist",
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "oss^linkrents",
+    "_func": "get",
+    "_dgrid": "y"
+  },
+  "fit": true,
+  "rownumbers": true,
+  "singleSelect": true,
+  "striped": true,
+  "columns": [
+    [
+      { "field": "CONSOL_ID", "hidden": true },
+      { "field": "RENTAL_ID", "title": "Rental ID", "width": 100, "fixed": true },
+      { "field": "LINE_NO", "title": "Line", "width": 40, "fixed": true },
+      { "field": "TYPE", "title": "Rental Type", "width": 100, "fixed": true },
+      { "field": "QTY", "title": "Area / Qty", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.number" },
+      { "field": "UNIT_COST", "title": "Unit Cost", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.currency" },
+      { "field": "TOTAL_COST", "title": "Total Cost", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.currency" },
+      { "field": "DESCRIPTION", "title": "Description", "width": 200 }
+    ]
+  ]
+}

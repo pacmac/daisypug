@@ -1,0 +1,6 @@
+{
+  "id": "xtrx",
+  "sourceFile": "admin/js/xevents.js",
+  "lineNumber": 33,
+  "configPreview": "({\n\t\trownumbers: true,\n      toolbar:'#tbar',\n      fit:true,\n      fitColumns:true,\n      queryParams: frm2dic($('form#gfilter')),\n      checkOnSelec..."
+}

@@ -1,0 +1,776 @@
+/*
+ CLS, 171109, 2.2.705
+ 1, $.page.fn.saverows(), resolved DB - Not such field error. 
+ CLS, 171116, 2.2.707
+ 1, $.page.fn.saverows(), included WOREF field when save rows
+  CLS 180605, 2.2.723
+ added bhave setting, COC_LINK. if set to Yes, the Ship Qty cannot more than COC QTY
+
+*/
+$.page.fn.trace_onChange = function (nv, ov) {
+  function reject(alert) {
+    setTimeout(function () {
+      if (alert) msgbox(alert);
+      me.numberspinner("setValue", ov);
+    });
+  }
+  nv = parseInt(nv);
+  var me = $(this);
+  var dg = $("#shiplines");
+  //20181023,CLS
+  // get the line.WOREF
+  var woref = dg.datagrid("getSelected").WOREF;
+  var tdg = $("#tracedg");
+  var row = tdg.datagrid("getSelected");
+  var idx = tdg.datagrid("getRowIndex", row);
+  var bob = tdg.datagrid("getEditor", { index: idx, field: "BAL_QTY" });
+
+  var row1 = tdg.datagrid("getRows");
+
+  // first validate against the trace balance.
+  var tbal = parseInt($(bob.target).numberbox("getValue"));
+  var tsum = parseInt(nv);
+  if (woref == "" || !woref) {
+    if (tsum > tbal) return reject("Quantity exceeds available " + tbal); // trace-bal check.
+  }
+  var rbal = dg.datagrid("getSelected").QTY_BAL;
+  var tsum = 0;
+
+  var data1 = dg.datagrid("getData").rows;
+  cl("data1", data1);
+  data1.map(function (d) {
+    if (d.TRACE) {
+      var tt = d.TRACE;
+      tt.map(function (t) {
+        row1.map(function (r) {
+          if (t.TRACE_ID == r.TRACE_ID) tsum += parseFloat(r.QTY);
+        });
+      });
+    }
+  });
+};
+
+// also fires on click.
+$.page.fn.notrace_onChange = function (nv, ov) {
+  var me = $(this);
+  var dg = $("#shiplines");
+  var mode = $("#MODE").combobox("getValue");
+  var row = dg.datagrid("getSelected");
+  if (mode == "S") var max = row.QTY_BAL;
+  else var max = row.QTY - row.QTY_BAL;
+  if (nv > max) {
+    setTimeout(function () {
+      me.numberspinner("setValue", ov);
+    });
+  }
+  console.log("notrace_onChange", nv, ov);
+};
+
+// trace-line click
+$.page.fn.traceclk = function () {
+  function go() {
+    var dlg = $("div#traced");
+    dlg.dialog("open");
+  }
+
+  var dg = $("#shiplines");
+  var tdg = $("#tracedg");
+  var row = dg.datagrid("getSelected");
+  tdg.datagrid("loadData", row.TRACE || []);
+  cl("traceclk", row.TRACE);
+  if (row.TRACE) return go(); // data is already loaded.
+
+  row.SHIP_ID = $("#SHIPMENT_ID").textbox("getValue");
+
+  var data = tdg.datagrid("getColumnOption", "TRACE_ID").editor.options.data;
+
+  var woref = dg.datagrid("getSelected").WOREF;
+
+  var qtybal = dg.datagrid("getSelected").QTY_BAL;
+
+  ajaxget(
+    "/",
+    {
+      _func: "get",
+      _sqlid: "sales^sol_trace",
+      _combo: "y",
+      PART_ID: row.PART_ID,
+      LINE_NO: row.LINE_NO,
+      SHIP_ID: row.SHIP_ID,
+      SOREF: row.SOREF,
+      MODE: $("#MODE").combobox("getValue"),
+    },
+    function (res) {
+      if (woref) {
+        res.cbo = [];
+        res.cbo.push({ value: woref, text: woref, BAL_QTY: qtybal });
+        tdg.datagrid("getColumnOption", "QTY").editor.options.data = {
+          max: qtybal,
+          min: 0,
+        };
+      }
+      tdg.datagrid("getColumnOption", "TRACE_ID").editor.options.data = res.cbo;
+
+      console.log("1", row.TRACE);
+      console.log("2", res.dg);
+      row.TRACE = res.dg;
+
+      tdg.datagrid("loadData", row.TRACE || []);
+
+      go();
+    },
+  );
+};
+
+$.page.fn.enable = function (tf) {
+  if (tf === true) {
+    $("form#shiphead").removeClass("form-lock");
+    $("#shiplines").datagrid("readonly", false);
+    $("#traced").removeClass("lock");
+  } else {
+    //butEn('apx');
+    $("form#shiphead").addClass("form-lock");
+    $("#shiplines").datagrid("readonly", true);
+    $("#ship_all").linkbutton("disable");
+    $("#traced").addClass("lock");
+  }
+};
+
+// trace ID selection.
+$.page.fn.trace = function (me, rec) {
+  var tdg = $("#tracedg");
+  var rows = tdg.datagrid("getRows");
+
+  var exi = false;
+  rows.map(function (e) {
+    if (e.TRACE_ID == rec.value) exi = true;
+  });
+  if (exi)
+    return setTimeout(function () {
+      me.combobox("clear");
+      msgbox("[" + rec.value + "] already selected.");
+    });
+
+  var row = tdg.datagrid("getSelected");
+  var idx = tdg.datagrid("getRowIndex", row);
+  var bal = tdg.datagrid("getEditor", { index: idx, field: "BAL_QTY" });
+  $(bal.target).numberbox("setValue", rec.BAL_QTY);
+  var qty = tdg.datagrid("getEditor", { index: idx, field: "QTY" });
+  $(qty.target).numberbox("set", { max: rec.BAL_QTY, min: 0 });
+};
+
+$.page.fn.opts = {
+  editor: "inline",
+
+  _tbarPrepend: $(
+    '<a id="ship_all" class="easyui-linkbutton" iconCls="icon-list" disabled="true">Ship All</a><span class="vert-sep" /><a id="trace_go" class="easyui-linkbutton" iconCls="icon-barcode" disabled="true">Trace</a>',
+  ),
+
+  tbarPrepend: $(
+    '<a id="ship_all" class="easyui-linkbutton" iconCls="icon-list" disabled="true">Ship All</a><span class="vert-sep" />',
+  ),
+
+  addData: {
+    QTY: 1,
+    SALES_ORDER_ID: "#ID",
+  },
+
+  striped: true,
+  url: "/",
+  queryParams: {
+    _func: "get",
+    _sqlid: "sales^ship_lines",
+    _dgrid: "y",
+    SHIPMENT_ID: "",
+  },
+
+  onRowContextMenu: function (e) {
+    return e.preventDefault();
+  },
+
+  loadFilter: function (data) {
+    if (!data || (!data.rows && data.length == 0))
+      data = { rows: [], total: 0 };
+
+    data.rows.map(function (e, i) {
+      e.LINE_NO = i + 1;
+    });
+
+    return data;
+  },
+
+  rownumbers: false,
+  fitColumns: true,
+  fit: true,
+  columns: [
+    [
+      { field: "_INFO", hidden: true },
+      {
+        field: "TRACE",
+        hidden: true,
+        width: 300,
+        _formatter: function (val) {
+          return jsonString(val);
+        },
+      },
+      { field: "SHIP_ID", hidden: true },
+      { field: "LINE_NO", title: "#", width: 25, fixed: true },
+      {
+        field: "TRACEABLE",
+        title: "TRC",
+        width: 35,
+        fixed: true,
+        align: "center",
+        formatter: function (val, row, idx) {
+          if (val == "Y")
+            return '<div title="Traced" class="trace-line icon icon-trace _easyui-tooltip"></div>';
+          else return "<div />";
+        },
+      },
+
+      { field: "ORDER_LINE_NO", title: "SO Line", width: 50, fixed: true },
+      { field: "CUST_PO_LINE_NO", title: "PO LN", width: 50, fixed: true },
+      {
+        field: "QTY",
+        title: "Qty Reqd",
+        width: 60,
+        fixed: true,
+        align: "right",
+      },
+      {
+        field: "QTY_BAL",
+        title: "Qty Bal",
+        width: 60,
+        fixed: true,
+        align: "right",
+        formatter: function (val, row, idx) {
+          {
+            var title = `<span title=\"${row._INFO}\" class=\"easyui-tooltip\">${val}</span>`;
+            return title;
+          }
+        },
+      },
+      {
+        field: "SHIP_QTY",
+        title: "Qty OUT",
+        width: 60,
+        fixed: true,
+        align: "right",
+        styler: function (val, row, idx) {
+          if (val < 0) return { class: "fg-red" };
+        },
+        editor: {
+          type: "numberspinner",
+          options: {
+            precision: 2,
+            min: 0,
+            value: 0,
+            id: "ship_qty",
+            readonly: false,
+            onChange: $.page.fn.notrace_onChange,
+          },
+        },
+      },
+      { field: "UNIT_PRICE", hidden: true },
+      {
+        field: "TOTAL_PRICE",
+        align: "right",
+        title: "Total Price",
+        width: 70,
+        fixed: true,
+        formatter: eui.currency,
+      },
+      {
+        field: "WANT_DATE",
+        title: "Want Date",
+        width: 80,
+        fixed: true,
+        formatter: eui.date,
+      },
+      { field: "CUST_PART_ID", title: "Cust Part Ref", width: 100 },
+      { field: "CUST_PART_DESCRIPTION", title: "Ref Description", width: 150 },
+      { field: "PART_ID", title: "Our Part ID", width: 100 },
+      { field: "PART_DESCRIPTION", title: "Our Part Description", width: 150 },
+      { field: "PART_UOM", title: "UOM", width: 50, coloff: true },
+      {
+        field: "WOREF",
+        title: "Job Reference",
+        formatter: function (val) {
+          if (val) return val.replace(/\^/g, ".");
+        },
+      },
+      { field: "CP_REF", title: "CP Reference", width: 120, coloff: true },
+      { field: "COC_QTY", title: "COC Qty", width: 60, coloff: true },
+      { field: "QTY_SHIP", title: "Shipped Qty", width: 60, coloff: true },
+    ],
+  ],
+
+  onSelect: function (idx, row) {
+    if (busy($(this))) return; // this is firing twice because of click-cell / begin edit.
+
+    var sid = $("#SHIPMENT_ID").textbox("getValue");
+    var dg = $(this);
+    if (row.TRACEABLE == "Y") {
+      $.page.fn.traceclk();
+      dg.datagrid("getColumnOption", "SHIP_QTY").editor.options.readonly = true;
+    } else if (!sid) {
+      dg.datagrid("getColumnOption", "SHIP_QTY").editor.options.readonly =
+        false;
+    }
+  },
+
+  onBeforeLoad: function (qp) {
+    var fdat = $("#shiphead").form("getData");
+    if (!fdat.SHIPMENT_ID) return false;
+  },
+
+  onEndEdit: function (idx, row, chg) {
+    $.page.fn.totals();
+  },
+
+  onLoadSuccess: function () {
+    setTimeout(function () {
+      $.page.fn.totals();
+    });
+  },
+};
+
+// delete zero-qty rows & save.
+$.page.fn.saverows = function (id) {
+  var mode = $("#MODE").combobox("getValue");
+  var soid = $("#SO_ID").textbox("getValue");
+
+  var dg = $("#shiplines");
+  var idx = 1,
+    dels = [],
+    rows = [];
+  var data = clone(dg.datagrid("getData").rows);
+
+  data.map(function (e, i) {
+    if (e.SHIP_QTY == 0) dels.push(i);
+    else {
+      if (mode == "R") e.SHIP_QTY *= -1;
+      e.LINE_NO = idx;
+      idx++;
+      dg.datagrid("updateRow", { index: i, row: e });
+      var trc = {};
+      if (e.TRACE)
+        e.TRACE.map(function (e) {
+          trc[e.TRACE_ID] = parseFloat(e.QTY);
+        });
+      rows.push({
+        SO_LINENO: e.ORDER_LINE_NO,
+        LINE_NO: e.LINE_NO,
+        QTY: e.SHIP_QTY,
+        TRACE: trc,
+        PART_ID: e.PART_ID,
+        WOREF: e.WOREF,
+        SO_ID: soid,
+      });
+    }
+  });
+
+  if ($.dui.bhave.SAVEALL_LINES != "y")
+    dels.reverse().map(function (e) {
+      dg.datagrid("deleteRow", e);
+    });
+  var rowdat = jsonString(rows);
+
+  console.log(rowdat); // [{"SO_LINENO":2,"LINE_NO":1,"QTY":1,"TRACE":{"1":0,"12W3":1}}]
+  ajaxget(
+    "/",
+    {
+      _sqlid: "sales^ship_lines",
+      _func: "add",
+      LINE_NO: rowdat,
+      SHIPMENT_ID: id,
+    },
+    function (res) {
+      if (res.error == false) {
+        var shp = $("#SHIPMENT_ID");
+        shp.textbox("setValue", id);
+        //shp.combobox('reload');
+      }
+    },
+  );
+};
+
+$.page.fn.totals = function () {
+  var dg = $("#shiplines");
+  var rows = dg.datagrid("getData").rows;
+  var fdat = frm2dic($("form#shiphead"));
+
+  var rows = dg.datagrid("getData").rows;
+  //included to check the ship qty, if total ship qty =0 then diabled to save button
+  var qShp = 0;
+  rows.map(function (e) {
+    qShp += e.SHIP_QTY * 1;
+  });
+
+  if (qShp != 0) butEn("asdx");
+  else butEn("adx");
+
+  //cl(data);
+};
+
+$.page.fn.isloading = function () {
+  return $("#shiplines").form("options").loading;
+};
+
+$.page.fn.defudf = function () {
+  var udf = $("#UDF_LAYOUT_ID");
+  udf.combobox("setValue", $.dui.bhave.UDF_LAYOUT_ID);
+  udf.combobox("reselect");
+};
+$.page.fn.udfid = function () {
+  $("#UDF_LAYOUT_ID").combobox({
+    url: "/?_func=get&_combo=y&_sqlid=sales^udfid",
+  });
+};
+
+$(document).ready(function () {
+  $("#SHIPMENT_ID").qbe({ defid: "ship_ids" });
+
+  $("#SO_ID").qbe({
+    queryParams: {
+      MODE: "S",
+      _sqlid: "sales^ship_soids_qbe",
+    },
+    onDemand: true,
+    valueField: "ID",
+    fields: [
+      { field: "value", title: "SO ID", editor: "textbox" },
+      { field: "CUST_ID", title: "Customer ID", editor: "textbox" },
+      { field: "CUST_NAME", title: "Customer Name", editor: "textbox" },
+      { field: "CUST_PO", title: "Customer PO", editor: "textbox" },
+      {
+        field: "DATE",
+        title: "Order Date",
+        editor: "datebox",
+        formatter: eui.date,
+      },
+      { field: "STATUS", title: "Status", editor: "textbox" },
+      { field: "CURRENCY_ID", title: "Currency", editor: "textbox" },
+      { field: "GST_ID", title: "GST", editor: "textbox" },
+    ],
+
+    onSelect: function (row) {
+      var rec = row.value;
+
+      if ($.dui.bhave.COC_LINK == "y")
+        msgbox(
+          "**<b>COC Link set to YES.</b>**\n Ship Qty cannot exceed COC Qty",
+        );
+
+      var dg = $("#shiplines");
+      var me = $(this);
+
+      var shp = $("#SHIPMENT_ID").textbox("getValue");
+      if (shp == "") {
+        ajaxget(
+          "/",
+          { _sqlid: "sales^sohead", _func: "get", ID: rec },
+          function (head) {
+            $("#shiphead").form("preload", head);
+            ajaxget(
+              "/",
+              {
+                _sqlid: "sales^ship_solines",
+                _func: "get",
+                _dgrid: "y",
+                SALES_ORDER_ID: rec,
+                MODE: $("#MODE").combobox("getValue"),
+              },
+              function (lines) {
+                lines.rows.map(function (e) {
+                  e.ORDER_LINE_NO = e.LINE_NO;
+                  e.SHIP_QTY = 0;
+                });
+
+                $("#shiplines").datagrid("loadData", lines);
+                $("#ship_all").linkbutton("enable");
+              },
+            );
+          },
+        );
+      }
+
+      /* ==== */
+    },
+    preload: true,
+  });
+  toolbut([
+    {
+      id: "print_in",
+      iconCls: "icon-form",
+      text: "Invoice",
+      disabled: false,
+      noText: false,
+      onClick: function () {
+        printmen({ id: "sales^sa_ship^commercial_invoice_format_1" });
+      },
+    },
+    {
+      id: "print_do",
+      iconCls: "icon-form",
+      text: "D/O",
+      disabled: false,
+      noText: false,
+      onClick: function () {
+        printmen({ id: "sales^sa_ship^delivery_order" });
+      },
+    },
+    {},
+  ]);
+
+  $("#but_add").on("done", function () {
+    $.page.fn.enable(true);
+
+    $("#shiplines").datagrid("loadData", []);
+
+    $("#MODE").combobox("select", "S");
+    $("#MODE").combobox("readonly", false);
+
+    var shp = $("#SHIPMENT_ID");
+    shp.textbox("required", false);
+    shp.textbox("readonly", true);
+
+    butEn("dx");
+  });
+
+  $("#X_RATE").numberbox({
+    onChange: function () {
+      if (!$.page.fn.isloading()) $.page.fn.totals();
+    },
+  });
+
+  // Ship / return.
+  $("#MODE").combobox({
+    _readonly: true,
+    editable: false,
+    panelHeight: "auto",
+    data: [
+      { text: "Shipment", value: "S" },
+      { text: "Return", value: "R" },
+    ],
+
+    onSelect: function (rec) {
+      var me = $(this);
+      var val = rec.value;
+      var opt = {
+        S: { col: "grn", txt: "Qty OUT" },
+        R: { col: "red", txt: "Qty IN" },
+      }[rec.value];
+
+      var dg = $("#shiplines");
+
+      if (me.combobox("options").clicked) {
+        $("form#shiphead").form("reset");
+        dg.datagrid("loadData", []);
+        setTimeout(function () {
+          me.combobox("select", val);
+          $("#SO_ID").qbe("options").queryParams.MODE = val;
+        });
+      }
+
+      me.combobox("textbox")
+        .removeClass("bg-grn bg-red")
+        .addClass("bg-" + opt.col);
+
+      var col = dg.datagrid("getColumnOption", "SHIP_QTY");
+      var div = $(
+        ".datagrid-header-row > td[field=SHIP_QTY] > div > span:first",
+      );
+      col.title = opt.txt;
+
+      if (rec.value == "R") var txt = "Return All";
+      else var txt = "Ship All";
+
+      $("#ship_all").linkbutton({ text: txt });
+      div
+        .text(col.title)
+        .removeClass("fg-grn fg-red")
+        .addClass("fg-" + opt.col);
+    },
+  });
+
+  $("#shiplines")
+    .datagrid("rowEditor", $.page.fn.opts)
+    .datagrid("columns", $("#dgre_tb"));
+
+  // Hide Buttons.
+  setTimeout(function () {
+    var tbar = $("#shiplines").datagrid("options").tbar;
+    tbar.dgre_add.hide();
+    tbar.dgre_del.hide();
+    tbar.dgre_edit.hide();
+  });
+
+  // Ship All Button.
+  $("#ship_all").linkbutton({
+    onClick: function () {
+      $(this).linkbutton("disable");
+      var dg = $("#shiplines");
+      var mode = $("#MODE").combobox("getValue");
+      dg.datagrid("getData").rows.map(function (e, i) {
+        if (e.TRACEABLE == "Y") msgbox("Line " + e.LINE_NO + " is traceable.");
+        else {
+          if (mode == "R") e.SHIP_QTY = e.QTY - e.QTY_BAL;
+          else e.SHIP_QTY = e.QTY_BAL;
+          dg.datagrid("updateRow", { index: i, row: e });
+        }
+      });
+    },
+  });
+
+  // Trace Data
+  $("#tracedg")
+    .datagrid()
+    .datagrid("rowEditor", {
+      fit: true,
+      fitColumns: true,
+      editor: "inline",
+      striped: true,
+
+      addData: {
+        BAL_QTY: 0,
+        QTY: 0,
+      },
+
+      onEndEdit: function (idx, row, chg) {
+        var me = $(this);
+        var data = me.datagrid("getRows");
+
+        var sl = $("#shiplines");
+        var rowSL = sl.datagrid("getSelected");
+        var idx = sl.datagrid("getRowIndex", rowSL);
+        var qty = 0;
+        data.map(function (e) {
+          console.log("##", e.TRACE_ID, "$$");
+          if (e.TRACE_ID == "" && rowSL.WOREF == "") {
+            msgbox("missing TRACE ID and WOREF");
+            e.QTY = 0;
+            return false;
+          }
+          if (e.TRACE_ID == "") e.TRACE_ID = rowSL.WOREF;
+
+          qty += parseFloat(e.QTY);
+        });
+        sl.datagrid("updateRow", {
+          index: idx,
+          row: {
+            TRACE: data,
+            SHIP_QTY: qty,
+          },
+        });
+      },
+      onCancelEdit: function (index, row) {
+        row.editing = false;
+        $(this).datagrid("refreshRow", index);
+      },
+      columns: [
+        [
+          {
+            field: "TRACE_ID",
+            title: "Trace ID",
+            width: 100,
+            editor: {
+              type: "combobox",
+              options: {
+                onSelect: function (rec) {
+                  var me = $(this);
+                  cl("tcid:", rec);
+                  $.page.fn.trace(me, rec);
+                },
+              },
+            },
+          },
+
+          {
+            field: "BAL_QTY",
+            title: "Qty Bal",
+            width: 70,
+            fixed: true,
+            editor: {
+              type: "numberbox",
+              options: {
+                readonly: true,
+              },
+            },
+          },
+
+          {
+            field: "QTY",
+            title: "Qty OUT",
+            width: 70,
+            fixed: true,
+            editor: {
+              type: "numberspinner",
+              options: {
+                precision: 2,
+                min: 0,
+                value: 0,
+                readonly: false,
+                onChange: function (value) {
+                  $.page.fn.trace_onChange;
+                },
+              },
+            },
+          },
+        ],
+      ],
+    });
+
+  $("div#traced").dialog({
+    iconCls: "icon-trace",
+    onClose: function () {
+      $("#tracedg").datagrid("editButs", { ok: "click" });
+      $("#shiplines").datagrid("editButs", { ok: "click" });
+    },
+    onBeforeClose: function () {
+      cl("onbeforeClose");
+      var me = $("#tracedg");
+      var data = me.datagrid("getRows");
+
+      var sl = $("#shiplines");
+      var rowSL = sl.datagrid("getSelected");
+      var idx = sl.datagrid("getRowIndex", rowSL);
+      var qty = 0;
+      data.map(function (e) {
+        if (e.TRACE_ID == "" && rowSL.WOREF == "") {
+          msgbox("missing TRACE ID and WOREF");
+          e.QTY = 0;
+          return false;
+        }
+        if (e.TRACE_ID == "") e.TRACE_ID = rowSL.WOREF;
+        qty += parseFloat(e.QTY);
+      });
+      sl.datagrid("updateRow", {
+        index: idx,
+        row: {
+          TRACE: data,
+          SHIP_QTY: qty,
+        },
+      });
+    },
+  });
+
+  $("form#shiphead")
+    .on("loadDone", function (jq, data) {
+      $.page.fn.enable(false);
+
+      // only fires when loading saved do
+      $("#shiplines").datagrid("load", {
+        _func: "get",
+        _sqlid: "sales^ship_lines",
+        _dgrid: "y",
+        SHIPMENT_ID: data.SHIPMENT_ID,
+      });
+
+      $("#MODE").combobox("reselect");
+    })
+    .on("success", function (jq, mr) {
+      // only save lines if head saved success & we have shipper number.
+      if (mr.res._next) $.page.fn.saverows(mr.res._next);
+    });
+});

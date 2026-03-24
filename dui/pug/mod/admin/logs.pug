@@ -1,0 +1,40 @@
+pre#logdata
+  code
+
+style.
+  pre#logdata {
+
+    padding-left:12px;
+
+  }
+  
+  span.head {
+    color:red;
+    font-weight:bold;
+    line-height: 1.5rem;
+  }
+
+
+script.
+  function prep(txt){
+    var out=[], omits = /MemoryStore is not|as it will leak|past a single process./;
+    txt.split('\n').map(function(e){
+      var top = e.match(/^[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}:/);
+      if(top) e = '<span class="head">'+e+'</span>';
+      if(!omits.test(e) && e.length > 0) out.push(e);
+      
+    });
+    return out.join('\n');
+  }
+  
+  ajaxget('/',{_sqlid:'admin^logs',_func:'get'},function(logs){
+    //logs += logs;
+    $('#logdata > code').html(prep(logs))
+  })
+  
+  
+
+
+
+  
+  

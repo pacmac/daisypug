@@ -1,0 +1,28 @@
+extends ../content 
+block content 
+  #max-grid(asdpx='')
+    .datagrid-filter.static
+      label Operator
+      +combobox#empid.all(style='width:120px;' _sqlid = "vwltsa^empid" name='EMPLOYEE_ID')
+  include dg_filter.inc.pug
+
+block script
+  script: include js/dg_clockins.js
+block style  
+  style.
+    .datagrid-row > td > div.datagrid-cell > div {
+      width:20px;
+      height:20px;
+      display:inline-block;
+    }
+    
+    div.thold {
+      background: url('../icons/clock_red.png') no-repeat scroll center / 14px auto;  
+    } div.run {
+      background: url('../icons/wrench.png') no-repeat scroll center / 14px auto;
+    } div.setup {
+      background: url('../icons/calculator.png') no-repeat scroll center / 14px auto;
+    } div.indir {
+      background: url('../icons/clean.png') no-repeat scroll center / 14px auto; 
+    }
+    

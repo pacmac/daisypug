@@ -1,0 +1,11 @@
+extends ../content 
+block content 
+  +tabs(data-options="fit:true" )
+    +tab-item('Cause Group', {iconCls:"icon-flag_red"})
+      form.multi#cause_class(_sqlid='dqm^causeclassall', asdpx='ax')
+        +fitem('Cause Class',{name:'ID',_sqlid:'dqm^causeclassid',class:'combobox fkey'})
+        +fitem('Description',{name:'DESCRIPTION',class:'textbox'})
+    +tab-item('Cert Modules', {iconCls:"icon-cp-plan"})
+      form.multi#module_type(_sqlid='dqm^moduletypeall', asdpx='ax' )
+        +fitem('Type ID',{name:'ID',_sqlid:'dqm^moduletypeid',class:'combobox fkey'})
+        +fitem('Description',{name:'DESCRIPTION',class:'textbox'})

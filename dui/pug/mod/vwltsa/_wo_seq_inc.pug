@@ -1,0 +1,136 @@
+//-
+  171217 - PAC 2.2.377
+  1. Added PREV_RESOURCE_ID
+
+include ../../mixins/mixins
+
+form#seqf.single.changeonly.flex.flex-col.flex-1.min-h-0(_sqlid='vwltsa^seq' mode="upd")
+  +fitem(null, {name:'WORKORDER_BASE_ID', id:'WORKORDER_BASE_ID', type:'hidden'})
+  +fitem(null, {name:'WORKORDER_LOT_ID', id:'WORKORDER_LOT_ID', type:'hidden', value:'1'})
+  +fitem(null, {name:'WORKORDER_SPLIT_ID', id:'WORKORDER_SPLIT_ID', type:'hidden', value:'0'})
+  +fitem(null, {name:'SETUP_COMPLETED', type:'hidden', value:'N'})
+  +fitem(null, {name:'WORKORDER_SUB_ID', id:'WORKORDER_SUB_ID', type:'hidden'})
+  +fitem(null, {name:'WOREF', id:'WOREF', type:'hidden'})
+  +fitem(null, {name:'SEQUENCE_NO', id:'SEQUENCE_NO', type:'hidden'})
+
+  +tabs#seqtabs
+    +tab-item('Main', {iconCls:"aicon-tools"})
+      div.three
+        div
+
+          +fieldset('Status')
+            +fitem('Closed Date',{name:'CLOSE_DATE', id:'~', class:'datebox', readonly:true})
+            +fitem('Operation Status',{name:'STATUS', id:'~', class:'combobox sub-on', 'data-options':"editable:false,data:[{text:'Un-Released',value:'U'},{text:'Released',value:'R'},{text:'Closed',value:'C'},{text:'Cancelled',value:'X'}]"})
+
+          span.unlock_
+            +fieldset('Resource')
+              +fitem('Resource ID',{name:'RESOURCE_ID', id:'~', class:'combobox', 'data-options':'editable:false,data:$.dui.pdata.resid'})
+              //-+fitem('Previous Res ID',{name:'PREV_RESOURCE_ID', class:'textbox sub-off', readonly:true})
+              +fitem('Resource Class ID',{name:'RESOURCE_CLASS_ID', id:'~', class:'textbox', readonly:true})
+              +fitem('Cost Per Hr',{name:'COST_PER_HR', id:'~', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+              +fitem('Setup Completed',{name:'SETUP_COMPLETED',class:'combobox','data-options':"data:[{value:'N',text:'No'},{value:'Y',text:'Yes'}]"})
+
+            //- OFF in free-mode
+            if $.runmode!='free'
+              +fieldset('Operation Template',{id:'opn_class_id'})
+                +fitem('Template ID',{name:'CLASS_ID', id:'~', class:'combobox', 'data-options':'editable:false,data:$.dui.pdata.seqclsid'})
+                +fitem('Description',{name:'CLASS_DESCRIPTION', id:'~', class:'textbox', readonly:true})
+
+            if $.planplus
+              +fieldset('Plan Plus')
+                +fitem('Min Move Qty',{name:'MIN_MOVE_QTY', id:'~', class:'numberspinner', 'data-options':"precision:2, value:0"})
+                +fitem('Min Move Hrs',{name:'MIN_MOVE_HRS', id:'~', class:'numberspinner', 'data-options':"precision:2, value:0"})
+
+        div.unlock__
+          +fieldset('Dates')
+            +fitem('Schedule Start',{name:'SCHED_START_DATE', class:'datebox', readonly:true})
+            +fitem('Schedule End',{name:'SCHED_FINISH_DATE', class:'datebox', readonly:true})
+
+          +fieldset('Quantities')
+            +fitem('Qty Type',{name:'QTY_TYPE', id:'~', class:'combobox', 'data-options':"editable:false,data:[{value:'QTYPER',text:'QTY PER',selected:true},{value:'FIXED',text:'FIXED QTY'}]"})
+            +fitem('Qty Per',{name:'QTY_PER', id:'~', class:'numberspinner','data-options':"precision:2, value:1, onChange:$.page.fn.seq.change"})
+            +fitem('Calc Run Qty',{name:'CALC_END_QTY', id:'~', class:'numberbox sub-on', 'data-options':"precision:2, value:0", readonly:true})
+            +fitem('Qty Complete',{name:'COMPLETED_QTY', id:'SEQ_COMPLETED_QTY', class:'numberbox', 'data-options':"precision:2, value:0",'data-divisor':'#CALC_END_QTY', readonly:true})
+            +fitem('Qty Deviated',{name:'DEVIATED_QTY', id:'~', class:'numberbox', 'data-options':"precision:2, value:0", 'data-divisor':'#CALC_END_QTY', readonly:true})
+          +fieldset('Last Modified')
+            +fitem('User ID',{name:'LAST_MODIFIED_USER_ID',class:'textbox',readonly:true})
+            +fitem('Date',{name:'LAST_MODIFIED_DATE', class:'datebox', readonly:true})
+
+    +tab-item('Setup / Run', {iconCls:"aicon-wrench", class:"unlock__"})
+
+      +fieldset('Setup')
+
+        +fitem('Est Setup Hrs',{name:'SETUP_HRS', id:'~', class:'numberspinner','data-options':"increment:0.25, precision:2, value:0"})
+        +fitem('Act Setup Hrs',{name:'ACT_SETUP_HRS',class:'numberbox','data-options':"precision:2, value:0", 'data-divisor':'#SETUP_HRS', readonly:true})
+
+      +fieldset('Run')
+        +fitem('Run Type',{name:'RUN_TYPE', id:'~', class:'combobox', 'data-options':"editable:false,data:[{value:'MIN/PC',text:'Minutes Per Piece'},{value:'HRS/PC',text:'Hours Per Piece'},{value:'PCS/MIN',text:'Pieces Per Minute'},{value:'PCS/HR',text:'Pieces Per Hour'},{value:'HRS/JOB',text:'Fixed Hours'}]"})
+        +fitem('Run-Type Value',{name:'RUN', id:'~', class:'numberspinner','data-options':"precision:2, value:0, increment:0.05, onChange:$.page.fn.seq.change"})
+
+        +fitem('Est Run Hrs',{name:'RUN_HRS',id:'~', class:'numberbox','data-options':"precision:2, value:0", readonly:true})
+        +fitem('Act Run Hrs',{name:'ACT_RUN_HRS',class:'numberbox','data-options':"precision:2, value:0", 'data-divisor':'#RUN_HRS', readonly:true})
+
+    +tab-item('Costing', {iconCls:"icon-money"})
+      div.three
+        div
+
+          //- OFF in free-version
+          if $.runmode != 'free'
+            +fitem('Cost Units',{name:'COST_UM', id:'~', class:'combobox','data-options':"data:$.dui.pdata.unitsid"})
+            +fitem('Costed Qty',{name:'COST_QTY',class:'numberbox','data-options':"precision:2, value:0"})
+
+            +fieldset('Cost Items')
+              +fitem(bhave._global.COST_LABEL_1||'Fixture/Tool',{id:'~',name:'COST_MATL', class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:bhave._global.EN_COST_LABEL_1==="true"})
+              +fitem(bhave._global.COST_LABEL_2||'Sub Contract',{id:'~',name:'COST_SUBCON', class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:bhave._global.EN_COST_LABEL_2==="true"})
+              +fitem(bhave._global.COST_LABEL_3||'Tools/Gauges',{id:'~',name:'COST_TOOLING', class:'numberbox',readonly:bhave._global.EN_COST_LABEL_3==="true"})
+              +fitem(bhave._global.COST_LABEL_4||'Other Costs',{id:'~',name:'COST_OTHERS', class:'numberbox',readonly:bhave._global.EN_COST_LABEL_4==="true"})
+              +fitem('Total Costs',{id:'~',name:'COST_TOTAL', class:'numberbox', 'data-options':"value:0, prefix:'$', precision:2", readonly:true})
+
+          +fieldset('Actual Cost')
+            +fitem('Material',{name:'ACT_MATERIAL_COST',class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+            +fitem('Labor',{name:'ACT_LABOR_COST', class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+            +fitem('Overhead',{name:'ACT_BURDEN_COST',class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+            +fitem('SubContract',{name:'ACT_SUBCON_COST',class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+            +fitem('Gauge/Royalty',{name:'ACT_RENTAL_COST',class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+
+        //- OFF in free-version
+        if $.runmode != 'free'
+          div
+              +fieldset('Cost Items Description')
+                +fitem(bhave._global.COST_LABEL_1||'Fixture/Tool',{name:'COST_MATL_DESCRIPTION',id:'~', class:'textbox',readonlyx:true})
+                +fitem(bhave._global.COST_LABEL_2||'Sub Contract',{name:'COST_SUBCON_DESCRIPTION',id:'~', class:'textbox',readonlyx:true})
+                +fitem(bhave._global.COST_LABEL_3||'Tools/Gauges',{name:'COST_TOOLING_DESCRIPTION',id:'~', class:'textbox'})
+                +fitem('Other Costs',{name:'COST_OTHERS_DESCRIPTION',id:'~', class:'textbox'})
+
+    //- OFF in free-version
+    if $.runmode != 'free'
+      +tab-item('User Fields', {iconCls:"list", class:"unlock__"})
+        +fieldset('UDF Configuration')
+          +fitem('UDF Layout',{name:'UDF_LAYOUT_ID',id:'SEQ_UDF_LAYOUT_ID', class:'combobox', 'data-options':'data:$.dui.pdata.udfid'})
+
+        +fieldset('User Fields')#seq_udf
+          //- +udf-subon not available in DUI — UDF fields managed by dynadd plugin
+
+    //- OFF in free-version
+    if $.runmode != 'free'
+      +tab-item('Specifications', {iconCls:"file-text"})
+        +tabs
+
+          +tab-item('Resource', {iconCls:"aicon-group_gear", class:"unlock__"})
+            +input({class:'textarea spec', name:'SPEC', id:'SPEC'})
+
+          +tab-item('Material', {iconCls:"warehouse", class:"unlock__"})
+            +input({class:'textarea spec', name:'MATERIAL_SPEC', id:'~'})
+
+      +tab-item('Parts', {iconCls:"icon-part"})
+        #MATERIAL_DG
+
+      +tab-item('Quality', {iconCls:"ruler"})
+        +fitem('Linked NCR ID(s)',{id:'ncrid',name:'NCR_ID',class:'textarea',readonly:true})
+
+      //- OMS custom — only shown for OMS group
+      //- TODO: +custom('oms') + +oms_wo_seq_inc_rental() — requires custom mixin loader
+      //- The mixin is defined in html/dui/mod/custom/dis/mixins.pug but needs
+      //- a proper include mechanism for DUI fragments
+
+  script(type="text/javascript"): include js/_wo_seq.inc.js

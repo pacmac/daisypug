@@ -1,0 +1,19 @@
+extends ../content
+
+block script
+  script: include js/tool_request.js
+
+block content
+  +vsplit('400px')
+    +panel('west')
+      +form(class='fit', _sqlid='inv^tool_request')
+        +fitem('Operator ID',{id:'~', name:'OPERATOR_ID', class:'searchbox bcscan', required:true, sbref:'operator'})
+        +fitem('Operator NAME',{id:'OPERATOR_NAME',readonly:true,class:'textbox'})
+        +fitem('Part ID',{name:'PART_ID', id:'~', required:true, class:'searchbox navi fit', sbref:'part'})
+        +fitem('Trans Qty',{name:'QTY',id:'~', required:true, class:'numberspinner', min:1, precision:0, value:1})
+        +fitem('Part Description',{id:'PART_DESC',readonly:true,class:'multiline',rows:10})
+        .btn-group
+          +button('Clear',{id:'clr', icon:'x', color:'warning', size:'sm'})
+          +button('Add',{id:'add', icon:'wrench', color:'primary', size:'sm'})
+    +panel('center')
+      +datagrid#tool_tx

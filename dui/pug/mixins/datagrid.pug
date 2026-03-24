@@ -1,0 +1,199 @@
+//- ============================================================================
+//- Datagrid Mixin — Pure DaisyUI table
+//- Server-renders column headers from JSON config. Data rows added by JS.
+//- Replaces the legacy EUI dual-view structure (view1/view2 split was a
+//- workaround for frozen columns before CSS position:sticky existed).
+//- ============================================================================
+
+mixin datagrid(opts = {})
+  -
+    var dgId = attributes.id || null
+    var pgName = fn.pug.pageName || ''
+    var cfg = dgId ? (fn.pug.jsonRead('datagrid.' + pgName + '_' + dgId) || fn.pug.jsonRead('datagrid.' + dgId)) : null
+
+    // Handle both flat and nested column arrays: [[cols]] or [cols]
+    var colsArray = (cfg && cfg.columns) ? cfg.columns : []
+    var columns = (Array.isArray(colsArray) && colsArray.length > 0 && Array.isArray(colsArray[0])) ? colsArray[0] : colsArray
+
+    // Build table CSS classes from config options
+    var tableCls = ['table', 'table-sm', 'table-pin-rows', 'w-full']
+    if (!cfg || cfg.striped !== false) tableCls.push('table-zebra')
+    if (cfg && cfg.fitColumns) tableCls.push('dg-fit-columns')
+
+    // Store config options as data attributes for the plugin to read
+    var dataAttrs = {}
+    if (cfg) {
+      if (cfg.url) dataAttrs['data-url'] = cfg.url
+      if (cfg.method) dataAttrs['data-method'] = cfg.method
+      if (cfg.singleSelect) dataAttrs['data-single-select'] = 'true'
+      if (cfg.striped) dataAttrs['data-striped'] = 'true'
+      if (cfg.fitColumns) dataAttrs['data-fit-columns'] = 'true'
+      if (cfg.fit) dataAttrs['data-fit'] = 'true'
+      if (cfg.rownumbers) dataAttrs['data-rownumbers'] = 'true'
+      if (cfg.pagination) dataAttrs['data-pagination'] = 'true'
+      if (cfg.queryParams && cfg.queryParams._sqlid) dataAttrs['data-sqlid'] = cfg.queryParams._sqlid
+    }
+
+  -
+    // asdpx toolbar string: each character enables a CRUD button (a=Add, d=Delete, e=Edit)
+    // toolbar can also be an array of mixed items:
+    //   - buttons: {id, text, icon, disabled} (no type, or type:'button')
+    //   - fields:  {type:'field', label, id, name, editor:{type,options}} — rendered as +fitem
+    // Either form triggers toolbar rendering.
+    var dgAsdpx = (cfg && cfg.asdpx) ? cfg.asdpx : ''
+    var toolbarItems = (cfg && Array.isArray(cfg.toolbar)) ? cfg.toolbar : []
+    var toolbarButtons = toolbarItems.filter(function(t) { return t.type !== 'field'; })
+    var toolbarFields = toolbarItems.filter(function(t) { return t.type === 'field'; })
+    var dgTitle = (cfg && cfg.title) ? cfg.title : ''
+    var dgIcon = (cfg && cfg.iconCls) ? cfg.iconCls : ''
+    // Column chooser — enabled when any column has coloff:true
+    var coloffCols = columns.filter(function(c) { return c.coloff; })
+    var hasColoff = coloffCols.length > 0
+    var hasToolbar = dgAsdpx.length > 0 || toolbarItems.length > 0 || (cfg && cfg.toolbar === true) || dgTitle || hasColoff
+    // Editor columns (computed early for toolbar + modal conditionals)
+    var editorCols = columns.filter(function(c) { return c.editor; })
+
+  //- ========================================================================
+  //- Datagrid Toolbar — delegates to +toolbar mixin (single source of truth)
+  //- ========================================================================
+  if hasToolbar
+    +toolbar({title: dgTitle, icon: dgIcon, asdpx: dgAsdpx, size: 'sm', toolbar: toolbarItems})(id=dgId)
+      if hasColoff
+        +menubutton(icon="columns-3" menu-id=dgId + '_colmenu' position="end" menu-class="!w-auto")
+          each col in columns
+            if col.title && !col.hidden && !col.checkbox
+              li
+                label.flex.items-center.gap-2.cursor-pointer.px-2.py-1
+                  input.checkbox.checkbox-xs(type="checkbox" data-field=col.field checked=!col.coloff)
+                  span.text-xs= col.title
+      block
+
+  //- OLD INLINE TOOLBAR — commented out, kept until +toolbar delegation is proven
+  //- if hasToolbar
+  //-   .flex.items-center.gap-1.px-2.py-1.bg-base-200.border-b.border-base-300(id=dgId + '_toolbar', class=dgTitle ? '' : (toolbarFields.length > 0 ? '' : 'justify-end'))
+  //-     if dgTitle
+  //-       .flex.items-center.gap-1.flex-1.font-semibold.text-sm
+  //-         if dgIcon
+  //-           +icon(dgIcon, {opacity: 'opacity-70'})
+  //-         span= dgTitle
+  //-     if toolbarFields.length > 0
+  //-       +form(class="flex items-center gap-4 flex-1 pt-0", id=dgId + '_filter')
+  //-         each fld in toolbarFields
+  //-           -
+  //-             var inp = { name: fld.name || fld.id, class: fld.editor ? fld.editor.type : 'textbox' }
+  //-             if (fld.id) inp.id = fld.id
+  //-             var eo = (fld.editor && fld.editor.options) || {}
+  //-             if (eo.required) inp.required = true
+  //-             if (eo.readonly) inp.readonly = true
+  //-             if (eo.editable === false) inp['data-options'] = (inp['data-options'] || '') + 'editable:false'
+  //-             if (eo._sqlid) inp._sqlid = eo._sqlid
+  //-             var dop = []
+  //-             if (eo.data) dop.push('data:' + JSON.stringify(eo.data))
+  //-             if (eo.editable === false) dop.push('editable:false')
+  //-             if (eo.panelHeight) dop.push("panelHeight:'" + eo.panelHeight + "'")
+  //-             if (dop.length) inp['data-options'] = dop.join(',')
+  //-             // Add navi and fit classes for toolbar fields
+  //-             inp.class = (inp.class || '') + ' navi fit'
+  //-           +fitem(fld.label, inp)
+  //-     if dgAsdpx.indexOf('a') > -1
+  //-       button.btn.btn-ghost.btn-xs.gap-1.opacity-40.pointer-events-none(type="button" id=dgId + '_add')
+  //-         +icon('plus', {size: 'sm'})
+  //-         | Add
+  //-     if dgAsdpx.indexOf('e') > -1
+  //-       button.btn.btn-ghost.btn-xs.gap-1.opacity-40.pointer-events-none(type="button" id=dgId + '_edit')
+  //-         +icon('square-pen', {size: 'sm'})
+  //-         | Edit
+  //-     if dgAsdpx.indexOf('d') > -1
+  //-       button.btn.btn-ghost.btn-xs.gap-1.opacity-40.pointer-events-none(type="button" id=dgId + '_del')
+  //-         +icon('trash-2', {size: 'sm'})
+  //-         | Delete
+  //-     each btn in toolbarButtons
+  //-       -
+  //-         var btnOpts = {id: btn.id, size: 'xs', style: 'ghost', icon: btn.icon}
+  //-         if (btn.disabled) btnOpts.disabled = true
+  //-         if (btn.alwaysEnabled) btnOpts['data-always-enabled'] = ''
+  //-       +button(btn.text || '', btnOpts)
+  //-     block
+
+  .overflow-auto.flex-1.min-h-0.bg-base-100&attributes(attributes)
+    //- Column templates — cloned by renderColumns() for dynamic column creation
+    template(data-dg-th)
+      th
+    template(data-dg-td)
+      td
+    template(data-dg-tr)
+      tr.hover.cursor-pointer
+    table(class=tableCls.join(' '))&attributes(dataAttrs)
+      thead
+        tr
+          if cfg && cfg.rownumbers
+            th.w-8.bg-base-200 #
+          each col in columns
+            if !col.hidden && !col.checkbox
+              -
+                var thStyle = col.width ? 'width:' + col.width + 'px' : ''
+                var thCls = (col.align === 'right' ? 'text-right' : '')
+                if (col.coloff) thCls = (thCls ? thCls + ' ' : '') + 'coloff'
+              th(data-field=col.field, class=thCls, style=thStyle)= col.title || ''
+          th
+      tbody
+        template
+          tr.hover.cursor-pointer
+            if cfg && cfg.rownumbers
+              td.text-center.opacity-50.bg-base-200
+            each col in columns
+              if !col.checkbox
+                -
+                  var tdCls = (col.align === 'right' ? 'text-right' : '')
+                  if (col.hidden || col.coloff) tdCls = (tdCls ? tdCls + ' ' : '') + 'coloff'
+                td(data-field=col.field, data-formatter=col.formatter || false, data-styler=col.styler || false, class=tdCls)
+                  .datagrid-cell
+            td(data-filler)
+
+  //- ========================================================================
+  //- Row Editor Modal — server-rendered from column editor definitions
+  //- Only rendered when at least one column has an `editor` property.
+  //- The datagrid plugin references this by ID: `${dgId}_editor`
+  //- Double-click a row opens this modal; toolbar Edit button also opens it.
+  //- ========================================================================
+  if editorCols.length > 0
+    +modal(title="Edit Row", titlebar, iconCls="square-pen", bordered)&attributes({id: dgId + '_editor', 'max-w': 'lg'})
+      //- Hidden key fields (columns with hidden:true but no editor)
+      each col in columns
+        if col.hidden && !col.editor
+          input(type="hidden" id=dgId + '_' + col.field name=col.field)
+      each col in editorCols
+        -
+          var inp = { name: col.field, class: col.editor.type }
+          inp.id = dgId + '_' + col.field
+          var eo = col.editor.options || {}
+          // Direct attributes
+          if (eo.required) inp.required = true
+          if (eo.readonly) inp.readonly = true
+          if (eo.value !== undefined) inp.value = eo.value
+          // Remote combobox
+          if (eo._url) inp._sqlid = eo._url
+          if (eo._sqlid) inp._sqlid = eo._sqlid
+          // Searchbox — sbref can be at editor level or inside options
+          if (col.editor.sbref || eo.sbref) inp.sbref = col.editor.sbref || eo.sbref
+          // Build data-options string from structured properties
+          var dop = []
+          if (eo.data) dop.push('data:' + JSON.stringify(eo.data))
+          if (eo.validType) dop.push("validType:" + JSON.stringify(eo.validType))
+          if (eo.precision !== undefined) dop.push('precision:' + eo.precision)
+          if (eo.min !== undefined) dop.push('min:' + eo.min)
+          if (eo.panelWidth) dop.push('panelWidth:' + eo.panelWidth)
+          if (eo.panelHeight) dop.push("panelHeight:'" + eo.panelHeight + "'")
+          if (eo.cls) dop.push("cls:'" + eo.cls + "'")
+          if (eo.init === false) dop.push('init:false')
+          if (dop.length) inp['data-options'] = dop.join(',')
+        if col.hidden && !col.coloff
+          input(type="hidden" id=inp.id name=inp.name)
+        else if col.coloff
+          +fitem(col.title, inp, {class: 'coloff', 'data-field': col.field})
+        else if eo.multiline
+          +spec(col.title, {id: inp.id, name: inp.name})
+        else
+          +fitem(col.title, inp)
+      +modal-footer
+        button.btn.btn-primary.btn-sm(type="button" data-action="save") Save

@@ -1,0 +1,56 @@
+{
+  "id": "boms",
+  "url": "/",
+  "type": null,
+  "queryParams": {
+    "_func": "get",
+    "_dgrid": true,
+    "_sqlid": "inv^partbom",
+    "PART_ID": null
+  },
+  "fit": true,
+  "striped": true,
+  "singleSelect": true,
+  "fitColumns": true,
+  "columns": [
+    [
+      {
+        "field": "PART_ID",
+        "hidden": true,
+        "title": ""
+      },
+      {
+        "field": "LINE_NO",
+        "title": "Line #"
+      },
+      {
+        "field": "_EXIST",
+        "title": "Exists"
+      },
+      {
+        "field": "ITEM_ID",
+        "title": "Item ID"
+      },
+      {
+        "field": "QTY",
+        "title": "Qty"
+      },
+      {
+        "field": "REV",
+        "title": "Rev"
+      },
+      {
+        "field": "UOM_ID",
+        "title": "UOM"
+      },
+      {
+        "field": "QOH",
+        "title": "QOH"
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Description"
+      }
+    ]
+  ]
+}

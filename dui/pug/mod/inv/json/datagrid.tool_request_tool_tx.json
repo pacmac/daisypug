@@ -1,0 +1,56 @@
+{
+  "id": "tool_tx",
+  "url": "/",
+  "asdpx": "ade",
+  "queryParams": {
+    "_sqlid": "inv^tool_request",
+    "_func": "get",
+    "_dgrid": "y",
+    "OPERATOR_ID": ""
+  },
+  "rownumbers": false,
+  "fitColumns": true,
+  "fit": true,
+  "striped": true,
+  "columns": [
+    [
+      {
+        "field": "PENDING_ID",
+        "hidden": true
+      },
+      {
+        "field": "PART_ID",
+        "title": "Part ID",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Part Description",
+        "width": 200,
+        "fixed": true
+      },
+      {
+        "field": "BAL_QTY",
+        "title": "Bal Qty",
+        "width": 200,
+        "fixed": true,
+        "align": "right"
+      },
+      {
+        "field": "QTY",
+        "title": "Qty",
+        "width": 100,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0
+          }
+        }
+      }
+    ]
+  ]
+}

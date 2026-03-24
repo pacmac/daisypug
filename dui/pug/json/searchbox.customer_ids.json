@@ -1,0 +1,48 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "vwltsa^custall_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",          "title": "Customer ID",  "width": 100 },
+    { "field": "NAME",           "title": "Customer Name","width": 200 },
+    { "field": "ADDR_1",         "title": "Address 1",    "width": 150 },
+    { "field": "ADDR_2",         "title": "Address 2",    "width": 150 },
+    { "field": "ADDR_3",         "title": "Address 3",    "width": 150 },
+    { "field": "CONTACT_PERSON", "title": "Contact",      "width": 120 },
+    { "field": "CONTACT_PHONE",  "title": "Phone",        "width": 100 },
+    { "field": "CONTACT_fax",    "title": "Fax",          "width": 100 },
+    { "field": "CONTACT_EMAIL",  "title": "@",            "width": 150 },
+    { "field": "CURRENCY_ID",    "title": "Currency",     "width": 70 },
+    { "field": "GST_ID",         "title": "GST",          "width": 60 }
+  ],
+  "filters": [
+    { "field": "NAME", "title": "Customer Name", "editor": "textbox" },
+    { "field": "ADDR_1", "title": "Address 1", "editor": "textbox" },
+    { "field": "ADDR_2", "title": "Address 2", "editor": "textbox" },
+    { "field": "ADDR_3", "title": "Address 3", "editor": "textbox" },
+    { "field": "CONTACT_PERSON", "title": "Contact", "editor": "textbox" },
+    { "field": "CONTACT_PHONE", "title": "Phone", "editor": "textbox" },
+    { "field": "CONTACT_fax", "title": "Fax", "editor": "textbox" },
+    { "field": "CONTACT_EMAIL", "title": "@", "editor": "textbox" },
+    { "field": "CURRENCY_ID", "title": "Currency", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "admin^curr" }
+      }
+    },
+    { "field": "GST_ID", "title": "GST", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "admin^gst" }
+      }
+    }
+  ]
+}

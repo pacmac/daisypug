@@ -1,0 +1,180 @@
+//-
+  PAC 171108 - 2.2.
+  1. Moved attachments from Engineering to new Tab.
+
+  PAC 190223 - 3.
+  1. Added runmode = free Options (defined in sa_jobman.pug)
+
+include ../../mixins/mixins
+
+mixin notavail()
+  H2 This functionality not available in free version.
+
+style.
+  tr td span.dgicon {
+    display: inline-block;
+    height: 16px;
+    margin-right: 2px;
+    position: relative;
+    top: 6px;
+    width: 20px;
+  }
+
+  #bomimp form {
+    padding: 8px;
+  }
+
+form#basf.single.changeonly.flex.flex-col.flex-1.min-h-0(_sqlid='vwltsa^bas' mode="upd" asdpx="nx" data-lbut="nx" data-ebut="snx" data-loadby="name")
+  +fitem(null, {name:'SUB_ID', type:'hidden'})
+  +fitem(null, {name:'WOREF', type:'hidden'})
+
+  +tabs#bastabs
+    +tab-item('Main', {iconCls:"aicon-tools"})
+      div.three
+        div
+          +fitem('Job ID',{id:'BASE_ID', name:'BASE_ID', class:'textbox sub-on',readonly:true})
+          +fitem('Job Class',{id:'WO_CLASS', name:'WO_CLASS', class:'textbox',readonly:true})
+
+          if $.runmode == 'free'
+            +fitem('Job Type',{id:'WO_TYPE',name:'WO_TYPE', readonly:true, required:true, value:'MAKE_STAGED', class:'combobox sub-on','data-options':"editable:false,data:[{text:'Make To Order - Staged',value:'MAKE_STAGED'}]"})
+
+          else
+            +fitem('Job Type',{id:'WO_TYPE',name:'WO_TYPE', required:true,value:'MAKE_STAGED', class:'combobox sub-on','data-options':"editable:false,data:[{text:'Component Part',value:'COMP'},{text:'Make To Stock',value:'FG'},{text:'Make To Order - Staged',value:'MAKE_STAGED'},{text:'Make To Order - Un-Staged',value:'MAKE_NOSTAGE'}]"})
+
+          div
+            +fitem('Run Qty',{id:'DESIRED_QTY',name:'DESIRED_QTY', class:'numberspinner sub-on',value:1,required:true})
+            +fitem('Completed Qty',{id:'COMPLETED_QTY',name:'COMPLETED_QTY', class:'numberbox sub-off', readonly:true, precision:2, 'data-divisor':'#DESIRED_QTY'})
+
+            if $.runmode!='free'
+              +fitem('COC Qty',{id:'~',name:'COC_QTY', class:'numberbox sub-off',readonly:true,precision:2, 'data-divisor':'#DESIRED_QTY'})
+              +fitem('Shipped Qty',{id:'~',name:'SHIPPED_QTY', class:'numberbox sub-off',readonly:true,precision:2, 'data-divisor':'#DESIRED_QTY'})
+              +fitem('Gate Pass Qty',{name:'GATEPASS_QTY', class:'numberbox sub-off',readonly:true,precision:2, 'data-divisor':'#DESIRED_QTY'})
+
+          +fitem('Job Status',{id:'WO_STATUS', name:'STATUS', class:'combobox sub-on', 'data-options':"editable:false,data:[{text:'Un-Released',value:'U',selected:true},{text:'Released',value:'R'},{text:'Closed',value:'C'},{text:'Cancelled',value:'X'}]"})
+          +fitem('Priority',{id:'PRIORITY', name:'PRIORITY', class:'numberspinner',value:100,precision:0,min:0,max:100})
+
+          if $.runmode!='free'
+            +fitem('Lead Time (Days)',{id:'LEAD_TIME', name:'LEAD_TIME', class:'numberspinner',value:0,precision:0,min:0,max:28})
+          +fitem('Planning Sequence',{id:'~', name:'SUB_SEQUENCE', class:'numberspinner',precision:0,min:0,increment:1})
+
+        //- OFF in free version
+        if $.runmode != 'free'
+          div
+
+            +fieldset('Sales Order',{id:"SO_INFO"})
+              +fitem('Customer ID',{id:'~', name:'CUSTOMER_ID', class:'combobox sub-on',_sqlid:'vwltsa^custid'})
+              +fitem('Order Ref',{id:'SALES_ORDER_REF', name:'~', class:'combobox sub-on',_sqlidx:'vwltsa^sorefs', 'data-options':"groupField:'CUST_ID'"})
+              +fitem('Order Rev',{name:'SALES_ORDER_REV_NO', id:'~', class:'numberspinner', value:0, precision:0, min:0})
+              .fbuts
+                +button('Clear',{id:'SOREF_DEL',iconCls:'icon-delete', class:'btn-xs btn-ghost'})
+              +fitem('Sales Order',{name:'SALES_ORDER_ID', id:'~', class:'textbox',readonly:true})
+              +fitem('Line No',{name:'SALES_ORDER_LINE_NO', id:'~', class:'numberbox', precision:0, min:1, readonly:true})
+
+        //- free version
+        else
+          div(style="display:none;visibility:hidden;")
+            +fitem(null, {name:'SALES_ORDER_REF', id:'SALES_ORDER_REF', type:'hidden', class:'sub-on'})
+
+    +tab-item('Dates', {iconCls:"icon-calendar"})
+      +fitem('Create Date',{name:'CREATE_DATE', class:'datebox',readonly:true})
+      +fitem('Printed Date',{name:'PRINTED_DATE', class:'datebox',readonly:true})
+      +fitem('Closed Date',{name:'CLOSE_DATE', class:'datebox',readonly:true})
+      +fitem('Status Change',{name:'STATUS_DATE', class:'datebox',readonly:true})
+      +fieldset('Planning')
+        +fitem('Want Date',{name:'DESIRED_WANT_DATE', id:'~', class:'datebox today'})
+        +fitem('Release Date',{id:'DESIRED_RLS_DATE', name:'DESIRED_RLS_DATE', class:'datebox'})
+        +fitem('Start Date',{name:'SCHED_START_DATE', class:'datebox',readonly:true})
+        +fitem('End Date',{name:'SCHED_FINISH_DATE', class:'datebox',readonly:true})
+
+    +tab-item('Costing', {iconCls:"icon-money"})
+
+      //- OFF in free version
+      if $.runmode  != 'free'
+        +fieldset('Estimator')
+          +fitem('Cost',{name:'ESTIMATOR_COST',id:'~', class:'numberbox',readonly:false,precision:2,value:0, prefix:'$'})
+
+      +fieldset('Total')
+        +fitem('Estimated Cost',{name:'EST_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem('Total Costs Items',{name:'COST_TOTAL',class:'numberbox bg-grn', 'data-options':"value:0, prefix:'$', precision:2", readonly:true})
+        +fitem('Total Actual Costs',{name:'ACT_TOTAL_COST',class:'numberbox', 'data-options':"value:0, prefix:'$', precision:2", readonly:true})
+        +fitem('Grand Total Costs',{name:'GRAND_TOTAL_COST',class:'numberbox', 'data-options':"value:0, prefix:'$', precision:2", readonly:true})
+
+      //- OFF in free version
+      if $.runmode != 'free'
+        +fieldset('Cost Items')
+          +fitem(bhave._global.COST_LABEL_1||'Fixture/Tool',{name:'COST_MATL',class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+          +fitem(bhave._global.COST_LABEL_2||'Sub Contract',{name:'COST_SUBCON',class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+          +fitem(bhave._global.COST_LABEL_3||'Tools/Gauges',{name:'COST_TOOLING',class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+          +fitem('Other Costs',{name:'COST_OTHERS', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+
+      //- OFF in free version
+      if $.runmode != 'free'
+        +fieldset('Actual Cost',{id:"COST_INFO"})
+            +fitem('Material',{name:'ACT_MATERIAL_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+            +fitem('Labor',{name:'ACT_LABOR_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+            +fitem('Overhead',{name:'ACT_BURDEN_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+            +fitem('SubContract',{name:'ACT_SUBCON_COST',id:'~', class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+            +fitem('Gauge/Royalty',{name:'ACT_RENTAL_COST',id:'~', class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+
+    //- OFF in free version
+    if $.runmode != 'free'
+      +tab-item('Engineering', {iconCls:"settings"})
+        div.three
+          div
+            +fieldset('Linked Part')
+              +fitem('Part ID',{id:'PART_ID', name:'PART_ID', class:'combobox', 'data-options':'data:$.dui.pdata.partid'})
+              +fitem('UOM',{id:'UOM_ID',  class:'textbox',readonly:true})
+              +fitem('Product Code',{id:'PRODUCT_CODE', name:'PRODUCT_CODE', class:'textbox',readonly:true})
+              +fitem('Part Alias',{id:'PART_ALIAS', name:'PART_ALIAS', class:'textbox',readonly:true})
+              +fitem('Part Rev',{name:'PART_REV_NO', class:'textbox',readonly:true})
+
+              .flex.gap-2.mt-4
+                +button('Delete',{id:'PART_DEL',iconCls:'icon-delete',size:'sm'})
+                +button('Import BOM',{id:'BOM_IMPORT',iconCls:'icon-org',size:'sm'})
+
+            +fieldset('General')
+              +fitem('Engineered By',{name:'ENGINEERED_BY', class:'textbox','data-options':"panelHeight:'auto',value:$.dui.udata.uname"})
+              +fitem('Drawing ID',{name:'DRAWING_ID', class:'textbox',validType:['length[1,30]']})
+              +fitem('Drawing Rev',{name:'DRAWING_REV_NO', class:'textbox',validType:['length[1,8]']})
+
+    //- OFF in free version
+    if $.runmode != 'free'
+      +tab-item('Attachments', {iconCls:"icon-pclip"})
+        +filegrid#basfiles(data-options="fit:true")
+
+    //- OFF in free version
+    if $.runmode != 'free'
+      +tab-item('User Fields', {iconCls:"list"})
+        div
+          +fieldset('UDF Configuration')
+            +fitem('UDF Layout',{id:'UDF_LAYOUT_ID',class:'combobox',name:'UDF_LAYOUT_ID', 'data-options':'data:$.dui.pdata.udfid'})
+
+          +fieldset('User Fields')#udf
+            //- +udf-subon not available in DUI — UDF fields managed by dynadd plugin
+    //- OFF in free version
+    if $.runmode != 'free'
+      +tab-item('Specs', {iconCls:"file-text"})
+        +input({class:'textarea spec', name:'LONG_SPEC',id:'~'})
+
+    //- ON in free version
+    if $.runmode == 'free'
+      +tab-item('Quality', {iconCls:"shield-check"})
+        +notavail
+
+    //- OFF in free version
+    else
+      +tab-item('Quality', {iconCls:"shield-check"})
+        div.three
+
+          div
+            +fieldset('Test Plan')
+              +fitem(null, {name:'_PLAN_ID', type:'hidden'})
+              +fitem('Plan ID',{class:'textbox sub-on' ,id:'QC_PLAN_ID', name:'QC_PLAN_ID'})
+              +fitem('Test ID',{id:'QC_TEST_ID', class:'textbox', readonly:true})
+              .fbuts.center
+                +button('New Test',{id:'TESTADD',iconCls:'clipboard'})
+
+          div(title="Compliance & Test Certificates")
+            table#cocdata
+
+  script(type="text/javascript"): include js/_wo_bas.inc.js

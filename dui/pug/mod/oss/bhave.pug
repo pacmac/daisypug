@@ -1,0 +1,21 @@
+extends ../content
+block content
+  +tabs
+    +tab-item("Consolidation",{id:'otime',  iconCls:'icon-sum'})
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', type:'hidden',value:'oss^consol'})
+        +v-group('Hour Multipliers')
+          +fitem('Standard',{name:'JOB_MULTI_STD', class:'numberspinner', 'data-options': "value:1, min:1, max:10, precision:2,increment:0.1"})
+          +fitem('Overtime',{name:'JOB_MULTI_WKE', class:'numberspinner', 'data-options': "value:2, min:1, max:10, precision:2,increment:0.1"})
+          +fitem('Holiday',{name:'JOB_MULTI_HOL', class:'numberspinner', 'data-options': "value:2.5, min:1, max:10, precision:2,increment:0.1"})
+        +v-group('Rules')
+          +fitem('Prevent Date Overlap',{name:'DATE_OLAP', class:'combobox', 'data-options':"editable:false, data:[{value:'y',text:'YES', selected:true},{value:'n',text:'NO'}]"})
+
+    +tab-item("Rental",{id:'rent',  iconCls:'icon-lease'})
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', type:'hidden',value:'oss^lease'})
+        +fitem('Unique Line Types',{name:'UNIQUE_LINES', class:'combobox', 'data-options':"editable:false, data:[{value:'y',text:'YES', selected:true},{value:'n',text:'NO'}]"})
+
+    +tab-item("Tickets",{id:'ticket', iconCls:'icon-ticket'})
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', type:'hidden',value:'oss^ticket'})

@@ -1,0 +1,49 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "vwltsa^operators_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",         "title": "Operator ID",    "width": 100 },
+    { "field": "LAST_NAME",     "title": "Last Name",      "width": 120 },
+    { "field": "FIRST_NAME",    "title": "First Name",     "width": 120 },
+    { "field": "COUNTRY",       "title": "Country",        "width": 80 },
+    { "field": "DEPARTMENT_ID", "title": "Department ID",  "width": 120 },
+    { "field": "SHIFT_ID",      "title": "Shift ID",       "width": 80 },
+    { "field": "ACTIVE",        "title": "Active",         "width": 60 }
+  ],
+  "filters": [
+    { "field": "LAST_NAME", "title": "Last Name", "editor": "textbox" },
+    { "field": "FIRST_NAME", "title": "First Name", "editor": "textbox" },
+    { "field": "COUNTRY", "title": "Country", "editor": "textbox" },
+    { "field": "DEPARTMENT_ID", "title": "Department ID", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "vwltsa^depid1" }
+      }
+    },
+    { "field": "SHIFT_ID", "title": "Shift ID", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "vwltsa^shiftid" }
+      }
+    },
+    { "field": "ACTIVE", "title": "Active", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "Y", "text": "Yes" },
+            { "value": "N", "text": "No" }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+extends ../content
+
+block content
+  +vsplit()
+    +panel('west', { title: 'West Panel (30%)' })
+      +form({class:'fit'})
+        //- Component showcase — one of each fitem input type
+        +fitem('Combobox Navi',{id:'~', name:'TEST_ID', class:'combobox fkey navi', 'data-options':"data:[{text:'Alpha',value:'ALPHA'},{text:'Bravo',value:'BRAVO'},{text:'Charlie',value:'CHARLIE'}]"})
+        +fitem('Combobox',{id:'~', name:'CB_PLAIN', class:'combobox', 'data-options':"data:[{text:'Option A',value:'A'},{text:'Option B',value:'B'}]"})
+        +fitem('Bool Combo',{id:'~', name:'ACTIVE', class:'combobox', 'data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+        +v-group('Dates')
+          +fitem('Textbox',{id:'~', name:'NAME', eui:'textbox', validType:['length[1,50]']})
+          +fitem('Datebox',{id:'~', name:'START_DATE', eui:'datebox'})
+        +v-group('Numbers')
+          +fitem('Numberbox',{id:'~', name:'COST', eui:'numberbox', precision:2})
+          +fitem('Numberspinner',{id:'~', name:'QTY', eui:'numberspinner', value:0, precision:0, min:0})
+        +fitem('Searchbox',{id:'~', name:'SEARCH', eui:'searchbox', prompt:'Search...'})
+        +fitem('Passwordbox',{id:'~', name:'PWD', eui:'passwordbox'})
+        +fitem('Plain Input',{id:'~', name:'PLAIN', validType:['length[1,80]']})
+        +tabs(data-options="fit:true, tabPosition:'top'")
+          +tab-item("General",{icon:"settings", selected:"true"})
+            +fitem('Status',{name:'W_STATUS', class:'combobox', 'data-options':"data:[{text:'Active',value:'Y'},{text:'Inactive',value:'N'}]"})
+            +fitem('Notes',{name:'W_NOTES', class:'textbox'})
+          +tab-item("Specs",{icon:"file-text"})
+            +spec('Specifications',{id:'~', name:'SPEC', 'data-options':"multiline:true,validType:['length[1,255]']",'rows':10})
+          +tab-item("Dimensions",{icon:"ruler"})
+            p Dimensions content
+          +tab-item("Quality",{icon:"shield-check"})
+            p Quality content
+          +tab-item("Tracking",{icon:"map-pin"})
+            p Tracking content
+          +tab-item("Costs",{icon:"dollar-sign"})
+            p Costs content
+
+    +hsplit('30%')
+      +panel('north', { title: 'North Panel' })
+        +datagrid()#testgrid
+
+      +hsplit
+        +panel('north', {})
+          +tabs(data-options="fit:true, tabPosition:'top'")
+            +tab-item("Details",{selected:"true"})
+              p Details tab content goes here.
+            +tab-item("Notes")
+              p Notes tab content goes here.
+            +tab-item("History")
+              p History tab content goes here.
+
+        +vsplit('50%')
+          +panel('west', { title: 'South-West' })
+            +form.two
+              +fitem('First Name',{name:'FNAME', class:'textbox'})
+              +fitem('Last Name',{name:'LNAME', class:'textbox'})
+              +fitem('Email',{name:'EMAIL', class:'textbox'})
+              +fitem('Phone',{name:'PHONE', class:'textbox'})
+              +fitem('Status',{name:'STATUS', class:'combobox', 'data-options':"data:[{text:'Active',value:'Y'},{text:'Inactive',value:'N'}]"})
+              +fitem('Date',{name:'DATE', class:'datebox'})
+          +panel('east', { title: 'South-East' })
+            p South-east content

@@ -1,0 +1,55 @@
+/* STATUS BARS */
+.bar {width:100%;}
+.datagrid-row-over:not(.datagrid-row-selected) {background:inherit;}
+
+.ulbar {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;  
+}.ulbar > li {
+  display: inline-block;
+  border:1px solid var(--color-base-300);
+  padding: 0 4px;
+  background-repeat:no-repeat;
+  background-size: 60%;
+  color: var(--color-base-content);
+  width:100px;
+  border-right-width: 0;
+} .ulbar > li:last-child {
+  border-right-width:1px;
+} .ulbar > li.active {
+  /*border-color: blue !important;*/
+} .ulbar > li.active + li {
+  border-left-color: var(--color-info);
+} .ulbar > li.late {
+  border-color: var(--color-error);
+} .ulbar > li.late + li {
+  border-left-color: var(--color-error);
+}
+
+.ulbar.single {
+  margin-right:10px;
+} .ulbar.single li {
+  width:100% !important;
+} .ulbar.single li:last-child {
+  border-right-width:1px !important;
+}
+
+.ulbar li.red {background-image:url('../img/red-0.5.png')}
+.ulbar li.ora {background-image:url('../img/ora-0.5.png')}
+.ulbar li.grn {background-image:url('../img/grn-0.5.png')}
+.ulbar li.blu {background-image:url('../img/blu-0.5.png')}
+.ulbar li.gry {background: var(--color-base-200);}
+.ulbar > li:hover {color:var(--color-error);background-color:var(--color-base-200)}
+
+/* PRINT */
+.a4p table td, .a4p td .ulbar {
+  font-size: 3mm;
+} .a4p .ulbar > li {
+  width:20%;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  margin: 2px 0;
+} .a4p .ulbar > li:nth-child(5){
+  border-right-width:1px;
+}

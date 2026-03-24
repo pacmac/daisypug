@@ -1,0 +1,12 @@
+#vweblt_mcstat
+  form.max-grid(asdpx='')
+    .datagrid-filter
+      +linkbutton#dgc_but(plain='true', iconcls='icon-edit', tid='data', href='#')
+      #p.easyui-progressbar(style='height: 10px; width:80px; float:right; margin: 8px 10px;', text='', data-easyui-warning="easyui-progressbar")
+    
+    table#data()
+    #win(style='padding:1em;', closed='true', maximizable='false', minimizable='false', collapsible='false', title='Edit Columns', iconcls='icon-save')
+      ul#tt.easyui-tree(data-easyui-warning="easyui-tree")
+  
+  script(src='./mcstat.js', type='text/javascript')
+  script(type="text/javascript"): include js/mc_stat.js

@@ -1,0 +1,6 @@
+{
+  "id": "calendar",
+  "sourceFile": "co/js/calendar.js",
+  "lineNumber": 24,
+  "configPreview": "('options');\n  dwap.page.ymds.push(val.ymd);\n  var dow = val.date.getDay();\n  var moy = val.date.getMonth(); \n  var date = getGetOrdinal(val.date.getD..."
+}

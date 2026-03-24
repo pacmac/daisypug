@@ -1,0 +1,36 @@
+{
+  "id": "xhstry",
+  "columns": [
+    [
+      {
+        "field": "DATA_DEFINITION",
+        "title": "Type",
+        "width": 150
+      },
+      {
+        "field": "DOCUMENT_ID",
+        "title": "Doc Id",
+        "width": 150
+      }
+    ]
+  ],
+  "options": {
+    "readonly": true,
+    "url": "/?_func=get&_sqlid=admin^xhistory",
+    "columns": [
+      [
+        {
+          "field": "DATA_DEFINITION",
+          "title": "Type",
+          "width": 150
+        },
+        {
+          "field": "DOCUMENT_ID",
+          "title": "Doc Id",
+          "width": 150
+        }
+      ]
+    ]
+  },
+  "sourceFile": "admin/js/xevents.js"
+}

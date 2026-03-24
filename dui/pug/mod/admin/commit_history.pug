@@ -1,0 +1,62 @@
+extends ../content 
+block style 
+  style.
+    div#toolbut {
+      position: relative;
+      top: -3px;
+    }
+    
+    .datagrid-header-check>input[type=checkbox] {
+      display: none;
+    } 
+        
+    #dgtbar a {
+      margin-left:8px;
+    }
+    
+block content
+  +tabs#usertabs(fit="true")
+
+    div.noborder#commits(title='Commit History' iconCls="icon-dbgo")
+      +layout()
+        div(region="north" style="height:60px;").noborder
+          #tbar(style="margin-bottom:5px")
+            form#gfilter
+              label.text-primary(style="padding-right: 0.5em") After
+              +datebox#sdate.month(name="sdate" style="padding-left: 1em; width:100px;margin-right:10px")
+              
+              label.text-primary(style="padding-right: 0.5em;padding-left: 1em") Before
+              +datebox#edate.today(name="edate" style="width:100px;")
+
+              label.text-primary(style="padding-right: 0.5em;padding-left: 1em") Status
+              +combobox#fstat(style="width:100px;" data-options = "data:[{value:'applied',text:'Applied',selected:true},{value:'unapplied',text:'Unapplied'}]",panelHeight="auto")
+
+              label.text-primary(style="padding-right: 0.5em;padding-left: 1em") Type
+              +combobox#ftype(style="width:100px;" data-options = "data:[{value:'',text:'All Types',selected:true},{value:'ui',text:'User Interface'},{value:'rep',text:'Reports'},{value:'libs',text:'Global Libs'},{value:'ep',text:'End Points'},{value:'sqla',text:'SQL All Types'},{value:'sqlf',text:'SQL Data Fixes'},{value:'sqls',text:'SQL Schema'},{value:'other',text:'Others'}]", panelHeight="auto")
+              
+              a#butGo(style="margin-left:1em")
+              a#dg2excel(style="margin-left:1em")
+              
+        div(region="south" style="height:96%;").noborder
+          table#commits(fit="true")
+
+    //-div.noborder#filetab(title="Files" iconCls="icon-folder")
+      +layout()
+        div(region="west" style="width:70%;").noborder
+          table#dgfiles(title="Latest File") 
+        div.flock(region="center").noborder
+          table#dghist(title="Selected File History")     
+    
+        #dgtbar
+          a#dgbutre
+          a#dgbutup
+          a#dgbutmr
+          +fitem('Hide Locked',{id:'hlock', class:'combobox',style:{width:'60px'},'data-options':"editable:false, panelHeight:'auto', data:[{text:'YES',value:'y', selected:true},{text:'NO',value:'n'}]" })
+          +fitem('Filter',{id:'upfilt',class:'combobox'})
+      
+    //-div.noborder#sqltab(title="Database" iconCls="icon-dbgo")
+      table#dgsql TEST
+
+
+block script       
+  +script("admin",["js/commit_history.js"])

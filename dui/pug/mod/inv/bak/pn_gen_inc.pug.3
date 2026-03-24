@@ -1,0 +1,55 @@
+style.
+  form#generator > .frow {
+    margin-top:0;
+    height:22px;
+    display: inline-flex;
+  }
+  
+  form#generator > .frow > label {width:140px;max-width:unset;text-transform:capitalize;}
+  form#generator > .frow .textbox {width: 205px;}
+
+  input#GEN_ID.test + span.textbox:not(.textbox-invalid) {
+    background-color: #CAFFD8;
+  }
+  
+  #pngenwin #results > .fbuts {
+    background: #FEFEFE;
+    padding: 8px 0;
+    margin: 12px 0 0 0;
+    width: 100%;
+    border-top: 1px solid #CCCCCC;
+  }
+  
+  form#generator{
+    column-count: 1;
+    /*
+    margin-left: 20px;
+    margin-top: 20px;    
+    border: 1px solid #DDDDDD;
+    left: -10px;
+    position: relative;
+    padding: 10px 0 10px 10px;
+    border-radius: 6px;
+    */
+    max-width:760px;
+    padding:10px 0;
+  }
+  
+div#genhead
+  +fitem('Class ID',{id:'GEN_CLASS_ID'})
+  
++form#generator(class='hide', style="margin-left:20px;margin-top:20px;")
+
++form#results
+  +fitem('Part ID',{id:'GEN_ID', class:'textbox',readonly:true, validType:['length[1,30]']})
+  +fitem('UOM',{id:'GEN_UOM',readonly:true, class:'textbox'})
+  +fitem('Traceable',{id:'GEN_TRACEABLE',readonly:true,class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+  
+  +fitem('Description',{id:'GEN_DESC',readonly:true, class:'textbox','data-options':"multiline:true,height:100"},{class:'spec'})
+  
+  .fbuts.center
+    a#butgo
+    a#butcancel
+    
+  
+  script(src='js/pn_gen.js')

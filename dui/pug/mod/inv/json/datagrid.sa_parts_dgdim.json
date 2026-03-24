@@ -1,0 +1,66 @@
+{
+  "id": "dgdim",
+  "title": "Piece Balances",
+  "striped": true,
+  "rownumbers": true,
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "inv^partdim_bal",
+    "_func": "get",
+    "PART_ID": null
+  },
+  "fit": true,
+  "fitColumns": true,
+  "columns": [
+    [
+      {
+        "field": "PART_ID",
+        "hidden": true
+      },
+      {
+        "field": "LENGTH",
+        "title": "Length",
+        "formatter": "$.page.fn.dec4",
+        "align": "right",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "WIDTH",
+        "title": "Width",
+        "formatter": "$.page.fn.dec4",
+        "align": "right",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "HEIGHT",
+        "title": "Height",
+        "formatter": "$.page.fn.dec4",
+        "align": "right",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "PIECES_BAL",
+        "title": "Pieces",
+        "align": "right",
+        "width": 50,
+        "fixed": true
+      },
+      {
+        "field": "_UOM_TOTAL",
+        "title": "Total",
+        "align": "right",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "TRACE_ID",
+        "title": "Trace ID",
+        "width": 80,
+        "fixed": false
+      }
+    ]
+  ]
+}

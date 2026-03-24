@@ -1,0 +1,60 @@
+{
+  "url": "/",
+  "fit": true,
+  "fitColumns": true,
+  "striped": true,
+  "rownumbers": false,
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "sales^ship_lines",
+    "_dgrid": "y",
+    "SHIPMENT_ID": ""
+  },
+  "toolbar": [
+    { "id": "ship_all", "text": "Ship All", "icon": "list", "disabled": true },
+    { "id": "print_in", "text": "Invoice", "icon": "file-text" },
+    { "id": "print_do", "text": "D/O", "icon": "file-output" }
+  ],
+  "columns": [
+    [
+      { "field": "_INFO", "hidden": true },
+      { "field": "TRACE", "hidden": true, "width": 300 },
+      { "field": "SHIP_ID", "hidden": true },
+      { "field": "LINE_NO", "title": "#", "width": 25, "fixed": true },
+      { "field": "TRACEABLE", "title": "TRC", "width": 35, "fixed": true, "align": "center", "formatter": "$.page.fn.traceable" },
+      { "field": "ORDER_LINE_NO", "title": "SO Line", "width": 50, "fixed": true },
+      { "field": "CUST_PO_LINE_NO", "title": "PO LN", "width": 50, "fixed": true },
+      { "field": "QTY", "title": "Qty Reqd", "width": 60, "fixed": true, "align": "right" },
+      { "field": "QTY_BAL", "title": "Qty Bal", "width": 60, "fixed": true, "align": "right", "formatter": "$.page.fn.qtyBalTip" },
+      {
+        "field": "SHIP_QTY",
+        "title": "Qty OUT",
+        "width": 60,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0,
+            "value": 0,
+            "id": "ship_qty",
+            "readonly": false
+          }
+        }
+      },
+      { "field": "UNIT_PRICE", "hidden": true },
+      { "field": "TOTAL_PRICE", "align": "right", "title": "Total Price", "width": 70, "fixed": true, "formatter": "$.dui.fmt.currency" },
+      { "field": "WANT_DATE", "title": "Want Date", "width": 80, "fixed": true, "formatter": "$.dui.fmt.date" },
+      { "field": "CUST_PART_ID", "title": "Cust Part Ref", "width": 100 },
+      { "field": "CUST_PART_DESCRIPTION", "title": "Ref Description", "width": 150 },
+      { "field": "PART_ID", "title": "Our Part ID", "width": 100 },
+      { "field": "PART_DESCRIPTION", "title": "Our Part Description", "width": 150 },
+      { "field": "PART_UOM", "title": "UOM", "width": 50, "coloff": true },
+      { "field": "WOREF", "title": "Job Reference", "formatter": "$.page.fn.woref" },
+      { "field": "CP_REF", "title": "CP Reference", "width": 120, "coloff": true },
+      { "field": "COC_QTY", "title": "COC Qty", "width": 60, "coloff": true },
+      { "field": "QTY_SHIP", "title": "Shipped Qty", "width": 60, "coloff": true }
+    ]
+  ]
+}

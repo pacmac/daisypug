@@ -1,0 +1,124 @@
+extends ../content 
+//-
+  PAC 171130 - 2.2.167
+  1. Added daily shift hours fieldset.    
+  PAC 180523 3.9
+  1. Removed CLS Console log of backend $.globals causing page crash
+  2. Added check to see if plan$.planplus is enabled
+  3. Show / Hide Plan $.planplus tab based on Item #2
+  4. Show Advance Tab when adding new Resource ID
+//- ## Backend code only accessible in Jade template
+
+block content 
+  mixin shift(label,day)
+    .fitem
+      label=label
+      +timespinner(type='text' _name=day+'_START' style="width:65px;" data-options="value:'09:00'")
+      span(style="display:inline-block;width:10px;")
+      +timespinner(type='text' _name=day+'_END' style="width:65px;" data-options="value:'18:00'")
+      span(style="display:inline-block;width:10px;")
+      +numberspinner(_name=day+'_UNITS' style="width:50px;" data-options="min:0, value:2, precision:0")
+
+  form.multi#resall(_sqlid='vwltsa^resall', asdpx='ax' data-lbut="ax" data-ebut="ax").fit.disable
+    +layout(fit="true")
+      div.bg-base-200(region="west" style="width:400px")
+        +fitem('Resource ID',{id:'~', name:'ID', _sqlid:'vwltsa^resourceid', class:'combobox fkey fit',validType:['length[1,15]']})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox',validType:['length[1,255]']})
+        +fitem('Type',{name:'TYPE', id:'~', default:'W', required:true})
+        +fitem('Active',{name:'ACTIVE', class:'combobox','data-options':"data:[{text:'Yes',value:'Y', selected:true},{text:'NO',value:'N'}],editable:false",required:true})
+        +fitem('Cost Per Hour',{name:'COST_PER_HR', class:'numberspinner', value:0, min:0,  precision:2,increment:0.10})
+        +fitem('Resource Class',{name:'CLASS_ID', _sqlid:'vwltsa^resourceclassid', class:'combobox' , 'data-options':"editable:false" })
+        +fitem('Tolerance Class',{name:'TOLERANCE_CLASS', _sqlid:'vwltsa^tolclassid', class:'combobox' , 'data-options':"editable:false" })    
+
+        br
+        +fieldset('Planning')
+          +fitem('Planning Exclude',{name:'PLANNING_EXCLUDE', class:'combobox','data-options':"data:[{text:'Yes',value:'1'},{text:'NO',value:'0'}],editable:false",required:true})
+          +fitem('Number of Units',{id:'~',name:'UNIT', class:'numberspinner', value:1, min:1, max:100, precision:0,increment:1})
+          +fitem('Hours/Day',{id:'~',name:'HRS_PER_DAY', class:'numberspinner', value:1, min:0, max:24, precision:0,increment:1})
+          if $.runmode != 'free'
+            +fitem('Max Hrs Per Piece',{name:'MAX_HRS_PER_PIECE', class:'numberspinner', value:0, min:0,  precision:2,increment:0.10})
+            +fitem('Percent Overload',{name:'OVERLOAD_PERCENT', class:'numberspinner', value:0, min:0, max:100, precision:0,increment:5})
+          
+          //-if $.planplus
+            +fitem('Alt Resources',{id:'~', name:'ALT_RESOURCES', _sqlid:'vwltsa^resourceid', class:'combobox', 'data-options':"multiple:true"}) 
+
+
+      div(region="center")
+        
+        +tabs#maintab(data-options="plain:true,fit:true")
+          
+          //-#res_groups( title='Groups')
+            form(asdpx='').multi
+              .combobox-filter
+                label Resource ID
+                +combobox#resid.fkey(name='ID', x_sqlid='resid')
+                label Description
+                input#resdesc.text(type='text' readonly="readonly")
+      
+            .yscroll
+              ul#res_tree(style="display:none;overflow-y:auto;height:110%" _sqlid="restree")
+          
+          if(!$.planplus)
+            div(title='Capacity' fit="true")
+              +fieldset('Daily Capacity',{style:'margin-top:12px;'})
+                +fitem('Monday Hrs',{name:'MON_HRS', class:'numberspinner', value:8, min:0, max:24, precision:2,increment:0.25})
+                +fitem('Tuesday Hrs',{name:'TUE_HRS', class:'numberspinner', value:8, min:0, max:24, precision:2,increment:0.25})
+                +fitem('Wednesday Hrs',{name:'WED_HRS', class:'numberspinner', value:8, min:0, max:24, precision:2,increment:0.25})
+                +fitem('Thursday Hrs',{name:'THU_HRS', class:'numberspinner', value:8, min:0, max:24, precision:2,increment:0.25})
+                +fitem('Friday Hrs',{name:'FRI_HRS', class:'numberspinner', value:8, min:0, max:24, precision:2,increment:0.25})
+                +fitem('Saturday Hrs',{name:'SAT_HRS', class:'numberspinner', value:8, min:0, max:24, precision:2,increment:0.25})
+                +fitem('Sunday Hrs',{name:'SUN_HRS', class:'numberspinner', value:8, min:0, max:24, precision:2,increment:0.25})
+
+          if($.planplus)
+            div(title='Capacity' fit="true")
+              .two(style="margin-top:12px;")
+                div#plusshifts(style="width:440px;")
+                  +fieldset('Daily Shifts')
+                    +fitem('Monday',{id:'~', name:'MON_SHIFT_ID', _sqlidXXX:'vwltsa^shiftid', class:'combobox', required:true, panelHeight:'auto'})            
+                    +fitem('Tuesday',{name:'TUE_SHIFT_ID', class:'combobox shift', required:true, panelHeight:'auto'})
+                    +fitem('Wednesday',{name:'WED_SHIFT_ID', class:'combobox shift', required:true, panelHeight:'auto'})
+                    +fitem('Thursday',{name:'THU_SHIFT_ID', class:'combobox shift', required:true, panelHeight:'auto'})
+                    +fitem('Friday',{name:'FRI_SHIFT_ID', class:'combobox shift', required:true, panelHeight:'auto'})
+                    +fitem('Saturday',{name:'SAT_SHIFT_ID',class:'combobox shift', required:true, panelHeight:'auto'})
+                    +fitem('Sunday',{name:'SUN_SHIFT_ID', class:'combobox shift', required:true, panelHeight:'auto'})
+                div
+                  +fieldset('Shift Hours')  
+                    +fitem('Shift ID',{id:'SHIFT_ID', _sqlid:'vwltsa^shiftid', class:'combobox', readonly:true,panelHeight:'auto'})
+                    
+                    +fitem('Shift',{id:'SHIFT_START', class:'timespinner shift-time shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'SHIFT_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+    
+                    +fitem('Meal',{id:'MEAL_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'MEAL_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                    
+                    +fitem('Break 1',{id:'BREAK1_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'BREAK1_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                    
+                    +fitem('Break 2',{id:'BREAK2_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'BREAK2_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                    
+                    +fitem('Break 3',{id:'BREAK3_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'BREAK3_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+
+                    +fitem('Break 4',{id:'BREAK4_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'BREAK4_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+
+                    +fitem('Break 5',{id:'BREAK5_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'BREAK5_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                    +fitem('Break 6',{id:'BREAK6_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'BREAK6_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                    +fitem('Break 7',{id:'BREAK7_START', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+                      +input({id:'BREAK7_END', class:'timespinner shift-time',readonly:true,'data-options':"value:''", style:'width:99px;'})
+          if($.planplus)
+            div(title='Members' fit="true")
+              #dggroup
+
+          div#Main(title='Specifications' fit="true")
+            +input({class:'textbox spec', name:'SPEC', 'data-options':"multiline:true", style:"height:100%;width:100%;"}) 
+
+  if !$.planplus
+    div#capor_win
+      include capor_inc.pug
+
+block script               
+  script: include js/sa_resources.js

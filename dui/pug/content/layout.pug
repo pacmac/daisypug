@@ -1,0 +1,44 @@
+extends ../layout/layout
+block content
+  +content("Layout Engine Test", "Testing EasyUI-compatible CSS Grid Layouts")
+
+    +section("Basic 3-Region Layout", "North, Center, South")
+      +layout({ style: 'height: 300px;' })
+        +region('north', { title: 'Header', height: '50px' })
+          p North content
+        +region('center', { title: 'Main Content' })
+          p Center content is flexible
+        +region('south', { title: 'Footer', height: '80px' })
+          p South content
+
+    +section("Full 5-Region Layout", "North, South, West, East, Center")
+      +layout({ style: 'height: 400px;' })
+        +region('north', { title: 'North Region', height: '60px' })
+          .flex.items-center.h-full.px-4
+            span App Header
+        +region('west', { title: 'Navigation', width: '150px' })
+          ul.menu.bg-base-200.w-full
+            li: a Link 1
+            li: a Link 2
+        +region('center', { title: 'Workspace' })
+          .p-4
+            p This is the center workspace. It expands to fill available space.
+        +region('east', { title: 'Properties', width: '150px' })
+          .p-2 Property Panel
+        +region('south', { height: '30px' })
+          .px-2 Ready
+
+    +section("Nested Layout", "Layout inside Center region")
+      +layout({ style: 'height: 400px;' })
+        +region('west', { title: 'Explorer', width: '200px' })
+          p Explorer Tree
+        +region('center', { title: 'Editor Area' })
+          +layout({ fit: false, style: 'height: 100%; border:none' })
+            +region('north', { title: 'Tabs', height: '40px' })
+              .flex.gap-2.p-1
+                .badge.badge-primary file1.js
+                .badge file2.js
+            +region('center')
+              .bg-base-300.h-full.p-4
+                code // code goes here
+                pre function hello() { console.log("world"); }

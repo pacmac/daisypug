@@ -1,0 +1,222 @@
+extends ../content 
+block style 
+  style.
+    input[type="checkbox"] {
+      margin-left:14px;
+    }
+
+block script     
+  //-+script("admin",["js/reports.js"])
+  script: include js/reports.js
+block content
+  +form.fit#repform(_sqlid="admin^template" asdpx='ax' mode="upd")
+    +layout(fit="true")
+      div(region="west" style="width:400px;")
+        +fitem('Module',{id:'modid', required:true, class:'combobox'})
+        +fitem('Application',{id:'appid', required:true, class:'combobox navi fit'})
+
+        div
+          +input({id:'~', name:'app',  type:'hidden'})
+          +input({id:'~', name:'_newid',  type:'hidden'})
+          +input({name:'rowid',  type:'hidden'})
+          +fitem('Report ID',{id:'~',name:'id', class:'combobox fkey fit novali noupper'})
+          +input({name:'rowid',  type:'hidden'})
+          +fitem('Menu Name',{id:'name',name:'name', class:'textbox', required:true})
+          +fitem('Report Engine',{id:'engine', name:'csql', required: true})            
+          +fitem('Document Ref',{id:'~',name:'docref', class:'textbox'})
+          
+          br
+          +fitem('File Name',{id:'ifile',name:'ifile', class:'textbox', required:true })
+          
+          div(style="margin-left:20px").inline
+            +label({text:'Installed Folders',style:'width:140px;display:inline-block;'})
+
+            +input({type:'checkbox',id:'site', class:'lock'})
+            +label('Site')
+            
+            +input({type:'checkbox', id:'group', class:'lock'})
+            +label('Group')
+            
+            +input({type:'checkbox', id:'standard', class:'lock'})
+            +label('Standard')
+            
+          +fitem('Up/Down-load Folder',{id:'class'})            
+          
+      div(region="center" title="JSON Filter Definition Array" style="padding:4px;")
+        +tabs#usertabs(fit="true")
+          div.noborder#filetab(title="JSON" _iconCls="icon-folder")
+            +textbox(id="fsql" name='fsql' prompt="JSON Statement" data-options="multiline:true,validType:['isJSON']" style="width:100%;height:100%;padding:6px;")
+          
+          //- DEV ONLY
+          if $.isdev
+            div.noborder#filetab(title="Fields" _iconCls="icon-folder")
+              #dgfields
+
+            script.
+              $.dui.page.dgGrid = function(value){
+
+                if (value=="validator") var pValue="validator";
+                else var pValue="!validator";
+                  var dg = $('#dgfields');
+                  var opt = dg.datagrid('options');
+
+                  var row = dg.datagrid('getSelected');
+                console.log(row);
+
+                  var requiredFields={'validator':['func','action','msg'],'!validator':['label','required','readonly','id']};
+                  var optionalFields={'!validator':['sqlid','class','target']};
+                  var readOnlyFields={'validator':['label','sqlid','required','readonly','class','target','id'],'!validator':['func','action','msg']};
+          
+                  var reqs = requiredFields[pValue];
+                  var opts = optionalFields[pValue];
+                  var ro = readOnlyFields[pValue];
+          
+                  if (reqs){
+                    reqs.map( r => {
+                        opt.tbar.form.find(`input[textboxname=${r}]`).textbox('readonly',false);  
+                      opt.tbar.form.find(`input[textboxname=${r}]`).textbox('required',true);   
+                    })
+                  }
+                  if (opts){
+                    opts.map( o => {
+                      opt.tbar.form.find(`input[textboxname=${o}]`).textbox('readonly',false);  
+                      opt.tbar.form.find(`input[textboxname=${o}]`).textbox('required',false);   
+                    })   
+                  }
+                  if (ro){
+                    ro.map( r => {
+                      opt.tbar.form.find(`input[textboxname=${r}]`).textbox('required',false); 
+                      opt.tbar.form.find(`input[textboxname=${r}]`).textbox('readonly',true);   
+                    })   
+                  }
+
+                  opt.tbar.form.find(`input[textboxname=_data]`).textbox('setValue',JSON.stringify(row.data,null,4));
+              }
+              
+              $('#dgfields').datagrid({
+          
+                striped:true,
+                loadMsg:'',
+                rownumbers:false, 
+                singleSelect:true,    
+                
+                onSelect: function(index,row){
+                 $.dui.page.dgGrid(row.type,row)
+                },
+            
+                __data: [
+                  {
+                    "type": "textbox",
+                    "label": "PO ID",
+                    "id": "PID",
+                    "target": "ID",
+                    "required": true,
+                    "readonly": true
+                  }  
+                ],
+            
+                columns:[[
+             
+                  /*
+                  {field:'select',checkbox:true},
+                  */
+                  
+                  {field:'type',title:'Type',editor:{
+                    type:'combobox',
+                    options:{
+                      data: [
+                        {text:'Combo',value:'combobox'},
+                        {text:'Number',value:'numberbox'},
+                        {text:'Text',value:'textbox'},
+                        {text:'Date',value:'datebox'},
+                        {text:'Hidden',value:'hidden'},
+                        {text:'Validator',value:'validator'},
+                      ],
+                      onSelect:function(nv){
+                        $.dui.page.dgGrid(nv.value)
+                    }
+                    },
+            
+                  }},
+                  {field:'id',title:'Id',editor:'textbox'},
+                  {field:'label',title:'Label',editor:'textbox'},
+                   {field:'target',title:'Target',editor:'textbox'},
+                  {field:'sqlid',title:'Sqlid',editor:'textbox'},
+                  {field:'required',title:'Required',editor:{type:'combobox',options:{data:[{text:'true',value:'true'},{text:'false',value:'false'}]}}},
+                  {field:'readonly',title:'ReadOnly',editor:{type:'combobox',options:{data:[{text:'true',value:'true'},{text:'false',value:'false'}]}}},
+                   {field:'class',title:'Class',editor:'textbox'},
+                   {field:'func',title:'Func',editor:'textbox',width:100},
+                   {field:'data',title:'Data',formatter:function(value,row){return JSON.stringify(value);}},
+                    {field:'_data',title:'Data',type:hidden,editor:{type:'textbox',options:{height:150,multiline:true,validType:['isJSON']}}},
+                   {field:'action',title:'Action',editor:{type:'combobox',options:{data:[{text:'deny',value:'deny'}]}}},
+                   {field:'msg',
+                   title:'Msg',
+                   width:1000,
+                       fixed     : false,
+                      editor    : {
+                        type    : 'textbox',
+                        options : {
+                          readonly  : false,
+                          multiline : true,
+                          height    : 150,
+                          style     : 'padding:1em;',
+                          icons: [{
+                            iconCls   : 'icon-edit',
+                            style     : 'height:20px;width:20px;',
+                            handler   : function(e){
+                              var tgt = $(e.data.target);
+                              if($('body').find('#msg_pop').length==0) {
+                                var dlog = $('<div id="msg_pop" class="dialog" />');
+                                $('body').append(dlog);
+                                var tbox = $('<textarea class="fit verdana" />');
+                                var mask = $('.window-mask');
+                                var wmzi = null; 
+                                dlog.append(tbox);
+                                dlog.dialog({
+                                  height	  : window.innerHeight - 50,
+                        	      	width	    : 420,
+                                  modal	    : true,
+                                  onOpen    : function(){
+                                    wmzi = mask.css('z-index');
+                                    var pan = dlog.parent('.panel.window');
+                                    var panzi = parseInt(pan.css('z-index'));
+                                    mask.css('z-index',panzi -1).show()
+                                    var txt = $(tgt).textbox('getValue');
+                                    tbox.val(txt);
+                                  },
+                                  
+                                  onClose   : function(){
+                                    var txt = tbox.val();
+                                    $(tgt).textbox('setValue',txt);
+                                    tbox.val('');
+                                    mask.css('z-index',wmzi).hide();
+                                  }
+                                })
+                              }
+                              
+                              else var dlog = $('#msg_pop');
+                              dlog.dialog('open');
+                            }
+                          }]
+                        }
+                      }
+                   },
+                  /*
+                  {'field':''},
+                  {'field':''},
+                  */
+                  
+                ]],
+                   onBeforeLoad: function(qp){
+
+                },      
+                
+              }).datagrid('rowEditor',{
+                twoColumns    : true,
+                selectOnCheck : true,
+                checkOnSelect : true,
+                singleSelect  : true,
+                editor        : 'form',
+                
+              });
+            

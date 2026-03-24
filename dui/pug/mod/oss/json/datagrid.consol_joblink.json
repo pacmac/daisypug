@@ -1,0 +1,58 @@
+{
+  "id": "joblink",
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "oss^linkjobs",
+    "_func": "get",
+    "_dgrid": "y",
+    "CONSOL_ID": ""
+  },
+  "fit": true,
+  "rownumbers": true,
+  "singleSelect": true,
+  "striped": true,
+  "asdpx": "ed",
+  "columns": [
+    [
+      { "field": "CONSOL_ID", "hidden": true },
+      { "field": "WOREF", "title": "Job Ref", "width": 120, "formatter": "eui.ref2text" },
+      { "field": "SALES_ORDER_REF", "title": "Order ID / Line", "width": 120, "formatter": "eui.ref2text" },
+      { "field": "WO_CLASS", "title": "Job Class", "width": 100 },
+      { "field": "PART_ID", "title": "Part ID", "width": 100 },
+      { "field": "STD_QTY", "title": "Total Qty", "width": 80, "align": "right", "formatter": "$.dui.fmt.integer" },
+      { "field": "RATE_PIECE", "title": "Rate $Piece", "width": 80, "align": "right", "formatter": "$.dui.fmt.currency" },
+      { "field": "PCE_COST", "title": "Piece Cost", "width": 80, "align": "right", "formatter": "$.dui.fmt.currency" },
+      { "field": "TOT_HRS", "title": "Actual Hrs", "width": 80, "align": "right", "formatter": "$.dui.fmt.number" },
+      { "field": "RATE_HOUR", "title": "Rate Hour", "width": 80, "align": "right", "formatter": "$.dui.fmt.currency" },
+      {
+        "field": "STD_HRS",
+        "title": "Std Hrs",
+        "width": 80,
+        "align": "right",
+        "formatter": "$.page.fn.num2",
+        "editor": { "type": "numberspinner", "options": { "precision": 2, "increment": 0.25 } }
+      },
+      { "field": "STD_COST", "title": "Std Cost", "width": 80, "align": "right", "formatter": "$.dui.fmt.currency" },
+      {
+        "field": "WKE_HRS",
+        "title": "O/T Hrs",
+        "width": 80,
+        "align": "right",
+        "formatter": "$.page.fn.num2",
+        "editor": { "type": "numberspinner", "options": { "precision": 2, "increment": 0.25 } }
+      },
+      { "field": "WKE_COST", "title": "O/T Cost", "width": 80, "align": "right", "formatter": "$.dui.fmt.currency" },
+      {
+        "field": "HOL_HRS",
+        "title": "Hol Hrs",
+        "width": 80,
+        "align": "right",
+        "formatter": "$.page.fn.num2",
+        "editor": { "type": "numberspinner", "options": { "precision": 2, "increment": 0.25 } }
+      },
+      { "field": "HOL_COST", "title": "Hol Cost", "width": 80, "align": "right", "formatter": "$.dui.fmt.currency" },
+      { "field": "_HRLY_COST", "title": "Hourly Cost", "width": 80, "align": "right", "formatter": "$.page.fn.hourlyCost" },
+      { "field": "TOT_COST", "title": "Total Cost", "width": 80, "align": "right", "formatter": "$.dui.fmt.currency" }
+    ]
+  ]
+}

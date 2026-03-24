@@ -1,0 +1,162 @@
+extends ../../../layout/layout
+
+block content
+  +content("Combo Component - API Testing", "Test all core 8 methods: options, getValue, setValue, clear, reset, showPanel, hidePanel, destroy")
+    +section("1. Live Component")
+      div.mb-4
+        label.label
+          span.label-text Combo with Static Data:
+        +combo({id: 'live-combo', placeholder: 'Select a country...', data: [{text: 'United States', value: 'us'}, {text: 'Canada', value: 'ca'}, {text: 'Mexico', value: 'mx'}, {text: 'Brazil', value: 'br'}, {text: 'Argentina', value: 'ar'}]})
+
+      p.text-gray-600.mt-2 Click the dropdown button or focus the input to see options.
+
+    +section("2. Method Tests")
+      .grid.grid-cols-2.gap-4
+
+        //- getValue
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 getValue()
+          button.btn.btn-sm.btn-primary(onclick="testGetValue()") Test
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+            code#result-getValue (result will appear here)
+
+        //- setValue
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 setValue(value)
+          input.input.input-bordered.input-sm.w-full.mb-2(type="text" id="setValue-input" placeholder="Enter a value (us, ca, mx, br, ar)")
+          button.btn.btn-sm.btn-primary(onclick="testSetValue()") Set Value
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+            code#result-setValue (result will appear here)
+
+        //- clear
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 clear()
+          button.btn.btn-sm.btn-warning(onclick="testClear()") Clear
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+            code#result-clear (result will appear here)
+
+        //- reset
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 reset()
+          button.btn.btn-sm.btn-info(onclick="testReset()") Reset
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+            code#result-reset (result will appear here)
+
+        //- showPanel
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 showPanel()
+          button.btn.btn-sm.btn-accent(onclick="testShowPanel()") Show Panel
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+            code#result-showPanel (result will appear here)
+
+        //- hidePanel
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 hidePanel()
+          button.btn.btn-sm.btn-accent(onclick="testHidePanel()") Hide Panel
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+            code#result-hidePanel (result will appear here)
+
+        //- options (getter)
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 options() - Get Current
+          button.btn.btn-sm.btn-secondary(onclick="testOptionsGet()") Get Options
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8.overflow-auto
+            code#result-optionsGet (result will appear here)
+
+        //- options (setter)
+        div.p-4.border.rounded
+          h3.font-semibold.mb-2 options(opts) - Set Data
+          button.btn.btn-sm.btn-secondary(onclick="testOptionsSet()") Add New Data
+          div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+            code#result-optionsSet (result will appear here)
+
+    +section("3. Callback Tests")
+      div.p-4.border.rounded
+        h3.font-semibold.mb-2 onSelect Callback
+        p.text-gray-600.mb-2 Select an item from the combo above. The callback should log the selected record.
+        div.mt-2.p-3.bg-gray-100.rounded.min-h-12
+          code#callback-log (Callback events will appear here)
+
+    +section("4. Cleanup")
+      div.p-4.border.rounded
+        h3.font-semibold.mb-2 destroy()
+        p.text-gray-600.mb-2 Removes all event handlers and internal data.
+        button.btn.btn-sm.btn-error(onclick="testDestroy()") Destroy Component
+        div.mt-2.p-2.bg-gray-100.rounded.min-h-8
+          code#result-destroy (result will appear here)
+
+    script.
+      // Initialize combo
+      $(document).ready(function() {
+        var $combo = $('#live-combo');
+        
+        // Initialize with onSelect callback
+        $combo.combo({
+          onSelect: function(record) {
+            var log = $('#callback-log');
+            var text = 'Selected: ' + record.text + ' (value: ' + record.value + ')';
+            log.html(log.html() + '<br>' + text);
+          }
+        });
+      });
+
+      // Test functions
+      function testGetValue() {
+        var $combo = $('#live-combo');
+        var value = $combo.combo('getValue');
+        $('#result-getValue').text('getValue() returned: "' + value + '"');
+      }
+
+      function testSetValue() {
+        var $combo = $('#live-combo');
+        var value = $('#setValue-input').val();
+        $combo.combo('setValue', value);
+        $('#result-setValue').text('setValue("' + value + '") called. Input value: ' + $combo.combo('getValue'));
+      }
+
+      function testClear() {
+        var $combo = $('#live-combo');
+        $combo.combo('clear');
+        $('#result-clear').text('clear() called. Input value: "' + $combo.combo('getValue') + '"');
+      }
+
+      function testReset() {
+        var $combo = $('#live-combo');
+        $combo.combo('reset');
+        $('#result-reset').text('reset() called. Input value: "' + $combo.combo('getValue') + '"');
+      }
+
+      function testShowPanel() {
+        var $combo = $('#live-combo');
+        $combo.combo('showPanel');
+        $('#result-showPanel').text('showPanel() called. Panel should be visible.');
+      }
+
+      function testHidePanel() {
+        var $combo = $('#live-combo');
+        $combo.combo('hidePanel');
+        $('#result-hidePanel').text('hidePanel() called. Panel should be hidden.');
+      }
+
+      function testOptionsGet() {
+        var $combo = $('#live-combo');
+        var opts = $combo.combo('options');
+        $('#result-optionsGet').text('options() returned: ' + JSON.stringify(opts, null, 2));
+      }
+
+      function testOptionsSet() {
+        var $combo = $('#live-combo');
+        var newData = [
+          {text: 'France', value: 'fr'},
+          {text: 'Germany', value: 'de'},
+          {text: 'Italy', value: 'it'}
+        ];
+        $combo.combo('options', {data: newData});
+        $('#result-optionsSet').text('options({data: [...]}) called. Panel now has 3 new countries.');
+      }
+
+      function testDestroy() {
+        var $combo = $('#live-combo');
+        $combo.combo('destroy');
+        $('#result-destroy').text('destroy() called. Component removed. Try clicking the combo now - no events should fire.');
+      }

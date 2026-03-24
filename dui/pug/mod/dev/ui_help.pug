@@ -1,0 +1,49 @@
+extends ../content
+
+block content
+  +hsplit('120px')
+    +panel('north')
+      +vsplit('25%').no-border
+        +panel('west')
+          +form
+            +fitem('Component',{id:'~', name:'COMPONENT', class:'combobox remember', 'data-options':"editable:false, panelWidth:'250px', data:[{text:'Overview',value:'overview',icon:'info'},{text:'Button',value:'button',icon:'mouse-pointer-click'},{text:'Datagrid',value:'datagrid',icon:'table-2'},{text:'Form',value:'form',icon:'file-input'},{text:'Grouping Components',value:'group',icon:'group'},{text:'Input Widgets',value:'input',icon:'text-cursor-input'},{text:'Menu & Navigation',value:'menu',icon:'menu'},{text:'MenuButton',value:'menubutton',icon:'chevrons-down'},{text:'Migration Map',value:'maptable',icon:'map'},{text:'Modal',value:'modal',icon:'app-window'},{text:'Page Lifecycle',value:'page-lifecycle',icon:'refresh-cw'},{text:'Print & Reports',value:'print',icon:'printer'},{text:'Remember',value:'remember',icon:'database'},{text:'Split & Panel',value:'split-panel',icon:'columns-2'},{text:'Tabs',value:'tabs',icon:'layout-list'},{text:'Toolbar',value:'toolbar',icon:'grip-horizontal'},{text:'Topnav',value:'topnav',icon:'panel-top'},{text:'Tree',value:'tree',icon:'git-branch-plus'}]"})
+        +panel('east')
+          #help-summary.p-3.text-base-content.opacity-70
+            p Select a component to view its documentation.
+
+    +panel('center')
+      +tabs#help-tabs.remember(data-options="fit:true, tabPosition:'top'")
+        +tab-item('Overview', {selected:'true', icon:'info'})
+          #tab-overview.p-4.overflow-auto
+            p.text-base-content.opacity-50 Select a component from the dropdown above.
+        +tab-item('Mixins', {icon:'puzzle'})
+          #tab-mixins.p-4.overflow-auto
+        +tab-item('Parameters', {icon:'sliders-horizontal'})
+          #tab-parameters.p-4.overflow-auto
+        +tab-item('Examples', {icon:'flask-conical'})
+          #tab-examples.p-4.overflow-auto
+            +tabs#example-tabs(data-options="tabPosition:'top'")
+              +tab-item('Preview', {selected:'true', icon:'eye'})
+                #example-preview.p-4
+              +tab-item('Code', {icon:'code'})
+                #example-code.p-4
+                  pre
+                    code.language-pug
+        +tab-item('Output', {icon:'play'})
+          #tab-output.p-4.overflow-auto
+            +tabs#output-tabs(data-options="tabPosition:'top'")
+              +tab-item('Pug', {selected:'true', icon:'file-code'})
+                #output-pug.p-4
+              +tab-item('JS', {icon:'braces'})
+                #output-js.p-4
+              +tab-item('HTML', {icon:'code-xml'})
+                #output-html.p-4
+              +tab-item('Rendered', {icon:'monitor'})
+                #output-rendered.p-4.flex.flex-col.flex-1.min-h-0.h-full
+        +tab-item('JS API', {icon:'terminal'})
+          #tab-jsapi.p-4.overflow-auto
+        +tab-item('Notes', {icon:'notebook-pen'})
+          #tab-notes.p-4.overflow-auto
+
+block script
+  script: include js/ui_help.js

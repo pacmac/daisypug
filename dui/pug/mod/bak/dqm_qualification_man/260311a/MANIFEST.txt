@@ -1,0 +1,5 @@
+# dui-backup-clean: dqm/qualification_man
+# 2026-03-11T16:39:37.237714
+
+html/dui/mod/dqm/qualification_man.pug -> qualification_man.pug
+yaml/migrator/mod/dqm/qualification_man.yaml -> qualification_man.yaml

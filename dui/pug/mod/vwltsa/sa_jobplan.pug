@@ -1,0 +1,51 @@
+extends ../content
+
+block style
+  style: include css/ulbar.css
+  style: include css/sa_jobplan.css
+
+block script
+  script: include js/sa_jobplan.js
+
+block content
+  -if($.license.mod.indexOf('vwltsa^planplus')>-1) var planplus = true; else var planplus = false;
+
+  #job_planner(style="height:100%;overflow-y:hidden;" asdpx="")
+
+    +datagrid#jplandg
+      if(!planplus)
+        +button('Unplan', {id: 'uplan', icon: 'x', size: 'xs', style: 'ghost', 'data-always-enabled': ''})
+      a#dg2excel.btn.btn-ghost.btn-xs(data-always-enabled)
+        +icon('file-spreadsheet', {size: 'sm'})
+      .toolbar-sep.self-stretch.mx-1
+      button#bak.btn.btn-ghost.btn-xs(data-always-enabled)
+        +icon('chevron-left', {size: 'sm'})
+      button#fwd.btn.btn-ghost.btn-xs(data-always-enabled)
+        +icon('chevron-right', {size: 'sm'})
+      .toolbar-sep.self-stretch.mx-1
+      a#stats.btn.btn-ghost.btn-xs(href="#" data-always-enabled) Planner Stats
+
+    ul#opnmenu.menu.menu-sm.bg-base-100.text-base-content.rounded-box.shadow-lg.p-2(style="position:fixed; z-index:9999; display:none; width:160px;")
+      if(!planplus)
+        li: a(data-name="up") Move Up
+        li: a(data-name="down") Move Down
+        li: hr
+        li: a(data-name="uplan") Un-Plan
+        li: a.opacity-40.pointer-events-none(data-name="aplan") Auto-Plan
+        li: hr
+      else
+        li: a(data-name="lock") Lock Start
+        li: a(data-name="unlock") Unlock Start
+        li: hr
+      li: a(data-name="open") View Job
+      li: a(data-name="focus") Job Focus
+      li: a(data-name="hilite") Job Highlight
+
+    #appprog.easyui-progressbar(style="width:25%;left:50%;margin-left:-12.5%;position:absolute;top:50%;z-index:100000;border-color:red;background:white;color:black;display:none;" value="0")
+
+  #priowin.easyui-window(style="width:520px; height:70%;" closed="true" title="Job Priorities" iconCls="icon-flag_grn")
+    #priodg
+
+  if !planplus
+    div#capor_win
+      include _capor_inc.pug

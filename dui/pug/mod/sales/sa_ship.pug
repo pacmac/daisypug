@@ -1,0 +1,70 @@
+extends ../content
+
+block script
+  //-+script('sales',['js/sa_ship.js'])
+  script: include js/sa_ship.js
+block content
+  +vsplit()
+    +panel('west')
+      +form#shiphead.multi.fit(_sqlid='sales^ship_head' asdpx='adx')
+        +fitem('Shipment ID',{id:'~', name:'SHIPMENT_ID',class:'searchbox fkey fit navi', panelWidth:'230px', validType:['length[0,30]'] ,sbref:"ship_ids"})
+        +fitem('Ship / Return',{id:'~', name:'MODE', class:'combobox', required:true})
+        
+        +fitem('Order ID',{id:'~', name:'SO_ID', class:'searchbox', required:true, sbref:'ship_soids' })
+        +fitem('Customer Name',{id:'~', name:'CUST_NAME', class:'textbox sub-off',readonly:true})
+        
+        +fitem('Ship Date',{name:'SHIPMENT_DATE', class:'datebox today', required:true})      
+        +fitem('PO Number',{name:'CUST_PO', class:'textbox sub-off',readonly:true})
+        +fitem('Invoice ID',{name:'INVOICE_ID', class:'textbox sub-off',readonly:true})
+      
+      
+
+             
+    +panel('center')
+      +tabs#shiptabs(data-options="plain:true,justified:true")
+        +tab-item('Line Items',{iconCls:"icon-list"})
+          +datagrid#shiplines
+        +tab-item("Contact",{iconCls:"icon-user",selected:"true"})
+          +fitem('Contact Name',{name:'CONTACT_PERSON', class:'textbox sub-off' ,readonly:true})
+          +fitem('Phone',{name:'CONTACT_PHONE', class:'textbox sub-off' ,readonly:true})
+          +fitem('Fax',{name:'CONTACT_FAX', class:'textbox sub-off' ,readonly:true})
+          +fitem('Email',{name:'CONTACT_EMAIL', class:'textbox sub-off',readonly:true})
+
+        +tab-item("Address",{iconCls:"icon-address"})
+          +v-group('Ship To',{style:'margin-top:12px;'})
+            +fitem('Address 1',{name:'ADDR_1', class:'textbox sub-off',readonly:true})
+            +fitem('Address 2',{name:'ADDR_2', class:'textbox sub-off',readonly:true})
+            +fitem('Address 3',{name:'ADDR_3', class:'textbox sub-off',readonly:true})
+        
+          +v-group('Bill To')       
+            +fitem('Contact Name',{name:'BILL_TO_PERSON', class:'textbox sub-off',readonly:true})
+            +fitem('Phone',{name:'BILL_TO_PHONE', class:'textbox sub-off',readonly:true})
+            +fitem('Fax',{name:'BILL_TO_FAX', class:'textbox sub-off',readonly:true})
+            +fitem('Email',{name:'BILL_TO_EMAIL', class:'textbox sub-off',readonly:true})
+
+        +tab-item("Notes",{iconCls:"icon-notes"})
+          +fitem('Invoice Notes',{name:'INVOICE_NOTES', class:'textarea textarea-bordered ronly-on', multiline:true})
+          +fitem('Packing Notes',{name:'SHIPMENT_SPEC', class:'textarea textarea-bordered ronly-on', multiline:true})
+          +fitem('Order Notes',{name:'ORDER_NOTES', class:'textarea textarea-bordered sub-off', multiline:true, readonly:true})
+          +fitem('Revision Notes',{name:'REV_NOTES',id:'~', class:'textarea textarea-bordered sub-off', multiline:true, readonly:true})
+
+        +tab-item("Invoice",{id:"invoice", iconCls:"icon-form"})
+          +v-group('Options',{id:'inv_opts'})
+            +fitem('Currency / X-Rate',{name:'CURRENCY_ID', class:'textbox sub-off',readonly:true,style:'width:60px;margin-right:5px;'})
+              +input({name:'~', id:'X_RATE', class:'numberbox',style:'width:50px;', precision:3,value:1, required:true})
+            +fitem('GST Code / Rate',{name:'GST_ID', id:'~', class:'textbox', readonly:true, style:'width:60px;margin-right:5px;'})
+              +input({name:'GST_RATE', id:'~', class:'numberbox',style:'width:50px;', readonly:true, precision:1, suffix:'%'})
+          
+          +v-group('Invoice Currency',{id:'inv_curr'})
+            +fitem('Pre-GST Total',{name:'CUR_SUBT_AMOUNT', id:'~', class:'numberbox',precision:2, prefix:'$',readonly:true})
+            +fitem('GST Amount',{name:'CUR_GST_AMOUNT', id:'~', class:'numberbox',precision:2, prefix:'$',readonly:true})
+            +fitem('Total Amount',{name:'CUR_TOTAL_AMOUNT', id:'~', class:'numberbox',precision:2, prefix:'$',readonly:true})
+          
+          +v-group('Home Currency',{id:'inv_home'})
+            +fitem('Pre-GST Total',{name:'SUBT_AMOUNT', id:'~', class:'numberbox',precision:2, prefix:'$',readonly:true})
+            +fitem('GST Amount',{name:'GST_AMOUNT', id:'~', class:'numberbox',precision:2, prefix:'$',readonly:true})
+            +fitem('Total Amount',{name:'TOTAL_AMOUNT', id:'~', class:'numberbox',precision:2, prefix:'$',readonly:true})
+      
+
+    +dialog#traced(style="width:300px;height:250px;" title="Trace Details" closed="true" modal="true" titlebar iconCls="scan-line")
+      +datagrid#tracedg

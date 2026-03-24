@@ -1,0 +1,48 @@
+extends ../content
+block script
+  script: include js/qualification_man.js
+block content
+  +form#qualification.multi(_sqlid='dqm^qualification', asdpx='xa', mode="add", data-lbut="x", data-ebut="nsx").fit
+    +vsplit('400px')
+      +panel('west')
+        +fitem('ID',{class:'combobox fkey fit',id:'~', name:'ID',_sqlid:'dqm^qualification_ids','data-options':"required:true"})
+        +fitem('Type',{id:'~',name:'TYPE',class:'combobox',required:true,'data-options':'editable:false'})
+        +fitem('Class',{id:'~',name:'CLASS',class:'combobox',required:true,'data-options':'editable:false'})
+        +fitem('Description',{id:'~',name:'DESCRIPTION',class:'textbox'})
+        +fitem('Serial Number',{id:'~',name:'SERIAL_NO',class:'textbox'})
+        +fitem('Status',{id:'~',name:'STATUS',class:'combobox',required:true,'data-options':'editable:false'})
+
+      +panel('center')
+        +tabs#gmtabs
+          +tab-item('Qualification',{iconCls:'icon-date'})
+            +v-group()
+              +fitem('Method',{id:'~',name:'METHOD',class:'combobox',required:true,'data-options':'editable:false'})
+
+            +v-group('Dates')
+              +fitem('Initial',{id:'~',name:'INITIAL_DATE',class:'datebox'})
+              +fitem('Expiry',{id:'~',name:'EXPIRY_DATE',class:'datebox'})
+            +v-group('Periodic')
+              +fitem('Freq Unit',{id:'~',name:'CYCLE_TYPE',class:'combobox',required:true,'data-options':"editable:false,data:[{text:'DAYS',value:'DAYS'},{text:'WEEKS',value:'WEEKS'},{text:'MONTHS',value:'MONTHS'}]"})
+              +fitem('Freq Value',{id:'~',name:'CYCLE_TIME',class:'numberspinner',precision:0,value:1})
+
+            +v-group('Last')
+              +fitem('Completed',{id:'~',name:'COMPLETED_DATE',class:'datebox'})
+              +fitem('Doc Ref',{id:'~',name:'DOC_REF',class:'textbox'})
+              +fitem('Done by',{id:'~',name:'DONE_BY',class:'textbox'})
+            +v-group('Next')
+              +fitem('Due Date',{id:'~',name:'DUE_DATE',required:true,class:'datebox'})
+              +fitem('Due Alert Days',{id:'~',name:'DUE_DATE_ALERT_DAYS',class:'numberspinner',precision:0,value:1})
+
+          +tab-item('Specification',{iconCls:'icon-qp'})
+            +datagrid#dg_spec
+
+          +tab-item('Results',{iconCls:'icon-qtest'})
+            +datagrid#dg_result
+
+          +tab-item('Attachments',{iconCls:'icon-pclip'})#Main
+            +filegrid#qmfiles(data-options="fit:true")
+
+          +tab-item('User Fields',{iconCls:'icon-udf'})
+            +v-group('UDF Group',{style:'margin-top:10px;'})
+              +fitem('UDF Layout',{id:'UDF_LAYOUT_ID',class:'combobox', name:'UDF_LAYOUT_ID'})
+              +udf

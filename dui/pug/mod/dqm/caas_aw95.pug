@@ -1,0 +1,31 @@
+extends ../content 
+block script 
+  //-+script("dqm",["js/caas_aw95.js"])
+  script: include js/caas_aw95.js
+block content 
+  +form#caas.multi.fit(_sqlid='dqm^caas_aw95' asdpx='ax')
+    +vsplit('430px').no-border
+      +panel('west')
+        +fitem('Tracking ID',{id:'~', name:'FORM_NO', class:'qbe fkey fit navi autonum', panelWidth:'230px', validType:['length[1,30]']})
+        br
+        +fitem('Status',{name:'STATUS', id:'~',  class:'textbox', readonly:true, value:'DRAFT'})
+        +fitem('Date',{name:'FORM_DATE', class:'datebox today'})
+        +fitem('Job ID',{name:'WOREF', id:'~',  class:'qbe',required:true})
+        +fitem('Part ID',{name:'PART_ID',id:'~',   class:'textbox'})
+        +fitem('Eligibility',{name:'ELIGIBILITY',id:'~',class:'combobox','data-options':"data:[{value:'Yes',text:'Yes',selected:true},{value:'No',text:'No'},{value:'N/A',text:'N/A'}],panelHeight:'auto'"})
+        +fitem('Quantity',{name:'QTY',id:'~',class:'numberspinner',precision:0, min:0, value:0})
+        +fitem('UOM ID',{id:'~', name:'UOM_ID', required:true, class:'combobox', _sqlid:'inv^unitsid'})
+        +fitem('Serial No',{name:'SERIAL_NO', class:'textbox',required:true})
+        +fitem('Work Status',{name:'STATUS_WORK', id:'~', required:true, class:'combobox',style:'-width:130px;','data-options':"editable:false,panelHeight:'auto'"})
+        +fitem('New Parts Option',{name:'NEW_PARTS_OPTION', id:'~', required:true, class:'combobox',style:'-width:130px;','data-options':"editable:true,panelHeight:'auto'"})
+        +fitem('Used Parts Option',{name:'USED_PARTS_OPTION', id:'~', required:true, class:'combobox',style:'-width:130px;','data-options':"editable:true,panelHeight:'auto'"})
+        +fitem('Signatory Name',{name:'SIGNATORY_NAME', class:'textbox',required:true})
+        +fitem('Approval No',{name:'APPROVAL_NO', class:'textbox',required:true})
+
+        +filegrid#aw95files(data-options="fit:true")
+      +panel('center')
+        +hsplit('50%')
+          +panel('north', { title: "Description" })#sqlxml
+            +input({eui:'textbox',name:'DESCRIPTION','data-options':"multiline:true", style:'height:100%;width:100%'})
+          +panel('center', { title: "Remarks" })
+            +input({eui:'textbox',name:'REMARKS','data-options':"multiline:true", style:'height:100%;width:100%'})  

@@ -1,0 +1,37 @@
+input(name='PLAN_VER' type="hidden")
+input(name='SAMPLE_TYPE' type="hidden")
+input#TYPE(name='TYPE' type="hidden")
+input(name='TEST_ID' type="hidden")
+
+div#GAUGEdiv
+  +fitem('Gauge Type',{name:'GAUGE_TYPE', id:'~'})
+  +fitem('Gauge ID',{name:'GAUGE_ID', id:'~'})
+  +fitem('Plan ID',{name:'PLAN_ID', id:'GAUGE_PLAN_ID'})
+
+div#JOBdiv
+  +fitem('Job ID',{name:'WOREF', id:'~', class:'combobox'})
+  +fitem('Job Qty',{name:'TEST_QTY', id:'WO_QTY', class:'numberbox', readonly:true})
+
+div#ALLdiv
+  +fitem('Test Sample Qty',{name:'TEST_SAMPLE_QTY', id:'~', class:'numberbox', readonly:true})
+  +fitem('Test Date',{name:'CREATE_DATE', id:'~', class:'datebox'})
+
+div#TEMPdiv
+  +fitem('Temperature',{name:'TEMPERATURE', class:'textbox'})
+
+div#NAMEdiv
+  +fitem('Performed By',{name:'CALIBRATED_BY', id:'~'})
+    input(name='CALIBRATED_BY_EMAIL' type="hidden")#CALIBRATED_BY_EMAIL
+  +fitem('Reviewed By',{name:'REVIEWED_BY', id:'~'})
+    input(name='REVIEWED_BY_EMAIL' type="hidden")#REVIEWED_BY_EMAIL
+
+div#NOTEdiv
+  +fitem('Calibration Standards',{name:'CALIBRATION_STANDARDS', id:'~', class:'multiline', style:'height:100px'})
+  +fitem('Remarks',{name:'REMARKS', id:'~', class:'multiline', style:'height:100px'})
+
+div#STATdiv
+  +fitem('Status',{name:'STATUS', id:'~', class:'textbox', readonly:true})
+  +fitem('Overall Result',{name:'RESULT', id:'~', class:'textbox', readonly:true})
+  +fitem('Closed Date',{name:'CLOSED_DATE', id:'~', class:'datebox'})
+  +button('Close Test',{id:'close', size:'xs', color:'primary', class:'self-center'})
+

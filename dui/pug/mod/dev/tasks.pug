@@ -1,0 +1,644 @@
+extends ../content
+
+block style
+  style.
+    /* Task nav items — color-mix hover/active (no Tailwind equivalent) */
+    .task-nav-item {
+      width: 100%;
+      text-align: left;
+      border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+      border-radius: var(--rounded-box, 10px);
+      padding: 10px 12px;
+      background: color-mix(in srgb, var(--color-base-100) 94%, var(--color-base-content) 6%);
+      transition: border-color 120ms ease, background 120ms ease;
+      cursor: pointer;
+    }
+    .task-nav-item:hover {
+      border-color: color-mix(in srgb, var(--color-primary) 36%, transparent);
+    }
+    .task-nav-item.is-active {
+      border-color: color-mix(in srgb, var(--color-primary) 58%, transparent);
+      background: color-mix(in srgb, var(--color-primary) 10%, var(--color-base-100) 90%);
+    }
+    /* Step interactivity — pseudo-selectors + color-mix */
+    .step-check { cursor: pointer; user-select: none; padding: 2px 4px; border-radius: 4px; font-size: 14px; }
+    .step-check:hover { background: color-mix(in srgb, var(--color-primary) 15%, transparent); }
+    .step-check.busy { opacity: 0.3; pointer-events: none; }
+    .step-delete { opacity: 0.3; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+    .step-delete:hover { opacity: 1; background: color-mix(in srgb, var(--color-error) 15%, transparent); color: var(--color-error); }
+    /* Step notes toggle */
+    .step-notes-btn { opacity: 0.25; cursor: pointer; padding: 2px 4px; border-radius: 4px; font-size: 12px; }
+    .step-notes-btn:hover { opacity: 0.7; }
+    .step-notes-btn.loaded { opacity: 0.6; color: var(--color-info); }
+    /* Step row zebra */
+    .step-row:nth-child(even of .step-row) { background: color-mix(in srgb, var(--color-base-content) 4%, transparent); }
+
+block content
+  #task-shell.fit
+    +vsplit('30%')
+      +panel('west', {title: 'Tasks'})
+        #task-browser.flex.flex-col.h-full.min-h-0
+          div(class="flex flex-col gap-1.5 p-2 border-b border-base-300")
+            div(class="flex gap-1.5")
+              select#filter-user.select.select-bordered.select-sm.flex-1
+                option(value='') All Users
+              select#filter-status.select.select-bordered.select-sm.flex-1
+                option(value='active') Active
+                option(value='all') All (incl. completed)
+            input#task-search.input.input-bordered.input-sm.w-full(type='search' placeholder='Filter tasks...')
+          #task-count.text-xs.opacity-60.uppercase.tracking-wider.px-3.py-1 loading...
+          #task-list(class="flex-1 min-h-0 overflow-auto flex flex-col gap-1 px-2.5 pb-3")
+          .p-2
+            +button('New Task', {id: 'btn-new-task', color: 'primary', size: 'sm', icon: 'plus', class: 'w-full'})
+
+      +panel('center', {title: 'Task Details'})
+        #task-detail.flex.flex-col.h-full.min-h-0.p-5.overflow-auto
+          .p-10.text-center.opacity-55.text-sm#task-empty Select a task from the list
+
+    //- New task modal
+    +modal#new-task-modal(title="New Task" titlebar icon-cls="plus" no-form)
+      +fitem('Task Name', {id: 'nt-name', name: 'nt-name', placeholder: 'e.g. fix-login-bug'})
+      +fitem('Title', {id: 'nt-title', name: 'nt-title', placeholder: 'Human-readable task title'})
+      .fitem
+        +label('Steps')
+        .fitem-body
+          .flex.flex-col.gap-1#nt-steps
+            div(class="flex gap-1.5 items-center step-input-row")
+              input.input.input-bordered.input-sm.flex-1.step-title-input(type='text' placeholder='Step 1 title')
+              button.btn.btn-xs.btn-ghost.btn-remove-step(type='button') &times;
+          .mt-1
+            +button('Add Step', {id: 'btn-add-nt-step', size: 'xs', style: 'ghost', icon: 'plus'})
+      +modal-footer
+        +button('Create Task', {id: 'btn-save-task', color: 'primary', size: 'sm'})
+
+block script
+  script.
+    $.page.ready(function() {
+      var tasks = [];
+      var activeName = null;
+
+      var $list = $('#task-list');
+      var $count = $('#task-count');
+      var $detail = $('#task-detail');
+      var $search = $('#task-search');
+      var $filterUser = $('#filter-user');
+      var $filterStatus = $('#filter-status');
+      var webkey = "kampong";
+
+      // Status → DaisyUI badge color
+      var statusColors = {
+        active: 'warning', started: 'warning', created: 'info',
+        planned: 'info', completed: 'success'
+      };
+
+
+      /*
+      function mcpp(tool, args, cb) {
+        $.ajax({
+          url: '/api/mcpp/' + tool,
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(args || {}),
+          dataType: 'json',
+          success: function(data) { cb(null, data); },
+          error: function(xhr) {
+            var msg = 'Request failed';
+            try { msg = JSON.parse(xhr.responseText).msg || msg; } catch(e) {}
+            cb(msg);
+          }
+        });
+      }
+      */
+
+      // ── mcpp API ──
+      // PAC added webkey for project selection
+      function mcpp(tool, args, cb) {
+        var payload = $.extend({}, args || {}, { key: webkey });
+        $.ajax({
+          url: '/api/mcpp/' + tool,
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(payload),
+          dataType: 'json',
+          success: function(data) { cb(null, data); },
+          error: function(xhr) {
+            var msg = 'Request failed';
+            try { msg = JSON.parse(xhr.responseText).msg || msg; } catch(e) {}
+            cb(msg);
+          }
+        });
+      }
+
+      // ── Helpers ──
+      function esc(s) { return $('<span>').text(s || '').html(); }
+      function escA(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;'); }
+
+      function badge(text, status) {
+        var c = statusColors[(status || '').toLowerCase()] || 'ghost';
+        return '<span class="badge badge-sm badge-' + c + '">' + esc(text) + '</span>';
+      }
+
+      function metaCard(label, value) {
+        return '<div class="bg-base-200/60 rounded-lg p-2.5 border border-base-300">' +
+          '<div class="text-[10px] uppercase tracking-wider opacity-50 mb-0.5">' + label + '</div>' +
+          '<div class="text-sm break-words">' + esc(String(value)) + '</div>' +
+        '</div>';
+      }
+
+      function noteBlock(text) {
+        return '<div class="border-l-4 border-primary/40 bg-base-200/40 rounded-r-lg p-3 text-sm leading-relaxed whitespace-pre-wrap">' + esc(text) + '</div>';
+      }
+
+      // ── Load task list ──
+      function loadTasks() {
+        var showCompleted = $filterStatus.val() === 'all';
+        mcpp('plan_task_list', { show_all: true, show_completed: showCompleted }, function(err, data) {
+          if (err || !data.success) {
+            $count.text('Error: ' + (err || data.error));
+            return;
+          }
+          tasks = data.result.tasks || [];
+
+          // Build user filter options
+          var users = {};
+          tasks.forEach(function(t) { if (t.user) users[t.user] = true; });
+          var curUser = $filterUser.val();
+          $filterUser.find('option:not(:first)').remove();
+          Object.keys(users).sort().forEach(function(u) {
+            $filterUser.append('<option value="' + escA(u) + '">' + esc(u) + '</option>');
+          });
+          if (curUser) $filterUser.val(curUser);
+
+          renderList();
+        });
+      }
+
+      // ── Render task list ──
+      function renderList() {
+        var q = ($search.val() || '').trim().toLowerCase();
+        var userFilter = $filterUser.val();
+
+        var filtered = tasks.filter(function(t) {
+          if (userFilter && t.user !== userFilter) return false;
+          if (q) {
+            var hay = (t.id + ' ' + t.name + ' ' + t.title + ' ' + (t.user || '')).toLowerCase();
+            if (hay.indexOf(q) === -1) return false;
+          }
+          return true;
+        });
+
+        $count.text(filtered.length + ' of ' + tasks.length + ' tasks');
+        $list.empty();
+
+        filtered.forEach(function(t) {
+          var html =
+            '<button type="button" class="task-nav-item' + (t.name === activeName ? ' is-active' : '') + '" data-name="' + escA(t.name) + '">' +
+              '<div class="flex items-center gap-2">' +
+                '<span class="text-xs font-bold opacity-50 min-w-7">[' + t.id + ']</span>' +
+                badge(t.status || 'planned', t.status || 'planned') +
+              '</div>' +
+              '<div class="text-sm font-semibold leading-tight mt-0.5">' + esc(t.title || t.name) + '</div>' +
+              '<div class="flex gap-2 mt-0.5 text-xs opacity-55">' +
+                '<span>' + esc(t.user || '') + '</span>' +
+                '<span class="opacity-40">' + esc(t.name || '') + '</span>' +
+              '</div>' +
+            '</button>';
+          $list.append(html);
+        });
+
+        if (!filtered.length) {
+          $list.append('<div class="p-10 text-center opacity-55 text-sm">No tasks match the current filters.</div>');
+        }
+      }
+
+      // ── Load task detail ──
+      function loadDetail(name) {
+        activeName = name;
+        $list.find('.task-nav-item').each(function() {
+          $(this).toggleClass('is-active', $(this).data('name') === name);
+        });
+
+        $detail.html('<div class="p-10 text-center opacity-55 text-sm">Loading...</div>');
+
+        mcpp('plan_task_show', { name: name }, function(err, data) {
+          if (err || !data.success) {
+            $detail.html('<div class="p-10 text-center opacity-55 text-sm">Error: ' + esc(err || data.error || 'Unknown') + '</div>');
+            return;
+          }
+
+          var r = data.result;
+          var html = '';
+          var isTaskActive = (r.status_label || '').toLowerCase() !== 'completed';
+
+          // ── Header ──
+          html += '<div class="flex items-center gap-3 flex-wrap mb-4">';
+          html += '<h2 class="text-xl font-extrabold m-0">' + esc(r.context_title || r.context_name) + '</h2>';
+          html += badge(r.status_label || '—', r.status_label);
+          html += '</div>';
+
+          // ── Meta grid ──
+          html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-5">';
+          html += metaCard('Task ID', r.context_id);
+          html += metaCard('Name', r.context_name);
+          html += metaCard('Last Event', r.last_event || '—');
+          if (r.active_task_number) {
+            html += metaCard('Active Step', '#' + r.active_task_number);
+          }
+          html += '</div>';
+
+          // ── Goal ──
+          if (r.goal) {
+            html += '<div class="mb-4">';
+            html += '<h3 class="text-sm font-bold opacity-70 mb-2">Goal</h3>';
+            html += noteBlock(r.goal);
+            html += '</div>';
+          }
+
+          // ── Plan ──
+          if (r.plan) {
+            html += '<div class="mb-4">';
+            html += '<h3 class="text-sm font-bold opacity-70 mb-2">Plan</h3>';
+            html += noteBlock(r.plan);
+            html += '</div>';
+          }
+
+          // ── Steps ──
+          var steps = r.tasks || [];
+          var visibleSteps = steps.filter(function(s) { return !s.is_deleted; });
+          if (visibleSteps.length || isTaskActive) {
+            var done = visibleSteps.filter(function(s) { return s.status === 'complete' || s.status === 'completed'; }).length;
+            html += '<div class="mb-4">';
+            html += '<h3 class="text-sm font-bold opacity-70 mb-2">Steps (' + done + '/' + visibleSteps.length + ' done)</h3>';
+
+            visibleSteps.forEach(function(s) {
+              var isDone = s.status === 'complete' || s.status === 'completed';
+              var isActive = s.task_number === r.active_task_number;
+              // Step row
+              html += '<div class="step-row flex items-center gap-2 py-1.5 px-2.5 rounded-lg" data-step-num="' + s.task_number + '">';
+              html += '<span class="text-xs font-bold opacity-45 w-6 text-right shrink-0">' + s.task_number + '</span>';
+              html += '<span class="step-check shrink-0 ' + (isDone ? 'text-success' : 'opacity-30') + '" data-step="' + s.task_number + '" data-done="' + (isDone ? '1' : '0') + '" title="' + (isDone ? 'Completed' : 'Click to mark done') + '">' + (isDone ? '&#10003;' : '&#9675;') + '</span>';
+              html += '<span class="flex-1 text-sm' + (isDone ? ' line-through opacity-50' : '') + '">' + esc(s.title) + '</span>';
+              if (isActive) html += '<span class="badge badge-xs badge-primary">&larr; active</span>';
+              html += '<span class="step-notes-btn shrink-0" data-step-notes="' + s.task_number + '" title="Show notes">&#9776;</span>';
+              if (isTaskActive && !isDone) html += '<span class="step-delete text-xs shrink-0" data-step="' + s.task_number + '" title="Delete step">&times;</span>';
+              html += '</div>';
+              // Step notes area (hidden, loaded on demand)
+              html += '<div class="step-notes-area hidden ml-14 mb-1" data-notes-for="' + s.task_number + '"></div>';
+            });
+
+            // Add step input
+            if (isTaskActive) {
+              html += '<div class="flex items-center gap-1.5 mt-2 ml-8">';
+              html += '<input type="text" id="new-step-title" class="input input-bordered input-sm flex-1" placeholder="New step title..." data-task="' + escA(r.context_name) + '">';
+              html += '<button type="button" class="btn btn-xs btn-primary btn-outline" id="btn-add-step">Add</button>';
+              html += '</div>';
+            }
+            html += '</div>';
+          }
+
+          // ── Notes (non-goal, non-plan) ──
+          var notes = (r.notes || []).filter(function(n) {
+            return n.kind !== 'goal' && n.kind !== 'plan';
+          });
+          if (notes.length) {
+            html += '<div class="mb-4">';
+            html += '<h3 class="text-sm font-bold opacity-70 mb-2">Notes (' + notes.length + ')</h3>';
+            html += '<div class="flex flex-col gap-2">';
+            notes.forEach(function(n) {
+              var h = '';
+              if (n.kind && n.kind !== 'note') {
+                var kc = n.kind === 'goal' ? 'text-success' : n.kind === 'plan' ? 'text-info' : '';
+                h += '<div class="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-1 ' + kc + '">' + esc(n.kind) + '</div>';
+              }
+              h += '<div class="whitespace-pre-wrap">' + esc(n.note) + '</div>';
+              html += '<div class="border-l-4 border-primary/40 bg-base-200/40 rounded-r-lg p-3 text-sm leading-relaxed">' + h + '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+          }
+
+          // ── Actions ──
+          if (isTaskActive) {
+            html += '<div class="flex gap-2 pt-4 mt-auto border-t border-base-300">';
+            html += '<button type="button" class="btn btn-sm btn-success btn-outline" id="btn-complete-task" data-name="' + escA(r.context_name) + '">Complete Task</button>';
+            html += '</div>';
+          }
+
+          $detail.html(html);
+        });
+      }
+
+      // ── Step notes CRUD ──
+      function renderStepNotes(notes, stepNum) {
+        var h = '';
+        if (notes.length) {
+          notes.forEach(function(n) {
+            h += '<div class="flex items-start gap-1 mb-1 group" data-note-id="' + n.id + '">';
+            h += '<div class="border-l-2 border-info/30 bg-base-200/30 rounded-r p-2 text-xs leading-relaxed whitespace-pre-wrap flex-1">' + esc(n.note || n) + '</div>';
+            h += '<button type="button" class="step-note-del shrink-0 text-xs opacity-0 group-hover:opacity-50 hover:!opacity-100 hover:text-error px-1 cursor-pointer" data-note-id="' + n.id + '" data-step="' + stepNum + '" title="Delete note">&times;</button>';
+            h += '</div>';
+          });
+        } else {
+          h += '<div class="text-xs opacity-40 py-1 italic">No notes for this step.</div>';
+        }
+        // Add note input
+        h += '<div class="flex items-center gap-1 mt-1">';
+        h += '<input type="text" class="input input-bordered input-xs flex-1 step-note-input" placeholder="Add note..." data-step="' + stepNum + '">';
+        h += '<button type="button" class="btn btn-xs btn-ghost step-note-add" data-step="' + stepNum + '">Add</button>';
+        h += '</div>';
+        return h;
+      }
+
+      function loadStepNotes(stepNum, $area, $btn) {
+        if ($area.hasClass('loaded')) {
+          $area.toggleClass('hidden');
+          return;
+        }
+        $area.html('<div class="text-xs opacity-40 py-1">Loading...</div>').removeClass('hidden');
+        mcpp('plan_task_switch', { name: activeName }, function(err) {
+          if (err) { $area.html('<div class="text-xs text-error py-1">Error</div>'); return; }
+          mcpp('plan_step_notes_get', { number: stepNum }, function(err, data) {
+            if (err || !data.success) {
+              $area.html('<div class="text-xs text-error py-1">Error loading notes</div>');
+              return;
+            }
+            var notes = (data.result && data.result.notes) || [];
+            $area.html(renderStepNotes(notes, stepNum)).addClass('loaded');
+            if (notes.length) $btn.addClass('loaded');
+          });
+        });
+      }
+
+      function addStepNote(stepNum, text, $area, $btn) {
+        mcpp('plan_task_switch', { name: activeName }, function(err) {
+          if (err) { $.messager.show({ msg: 'Cannot switch task', cls: 'error' }); return; }
+          mcpp('plan_step_notes_set', { number: stepNum, text: text }, function(err2, data2) {
+            if (err2 || !data2.success) {
+              $.messager.show({ msg: 'Cannot add note: ' + (err2 || data2.error || 'Unknown'), cls: 'error' });
+              return;
+            }
+            // Reload notes
+            $area.removeClass('loaded');
+            loadStepNotes(stepNum, $area, $btn);
+          });
+        });
+      }
+
+      function deleteStepNote(stepNum, noteId, $area, $btn) {
+        mcpp('plan_task_switch', { name: activeName }, function(err) {
+          if (err) { $.messager.show({ msg: 'Cannot switch task', cls: 'error' }); return; }
+          mcpp('plan_step_notes_delete', { number: stepNum, id: noteId }, function(err2, data2) {
+            if (err2 || !data2.success) {
+              $.messager.show({ msg: 'Cannot delete note: ' + (err2 || data2.error || 'Unknown'), cls: 'error' });
+              return;
+            }
+            $area.removeClass('loaded');
+            loadStepNotes(stepNum, $area, $btn);
+          });
+        });
+      }
+
+      // ── Step actions ──
+      function markStepDone(taskName, stepNum, $el) {
+        $el.addClass('busy').text('...');
+        mcpp('plan_task_switch', { name: taskName }, function(err, data) {
+          if (err || !data.success) {
+            $el.removeClass('busy').html('&#9675;');
+            $.messager.show({ msg: 'Cannot switch to task: ' + (err || data.error || 'Unknown'), cls: 'error' });
+            return;
+          }
+          mcpp('plan_step_done', { number: stepNum }, function(err2, data2) {
+            if (err2 || !data2.success) {
+              $el.removeClass('busy').html('&#9675;');
+              $.messager.show({ msg: 'Cannot complete step: ' + (err2 || data2.error || 'Unknown'), cls: 'error' });
+              return;
+            }
+            $.messager.show({ msg: 'Step ' + stepNum + ' completed', cls: 'success' });
+            loadDetail(taskName);
+            loadTasks();
+          });
+        });
+      }
+
+      function addStep(taskName, title) {
+        mcpp('plan_task_switch', { name: taskName }, function(err, data) {
+          if (err || !data.success) {
+            $.messager.show({ msg: 'Cannot switch to task: ' + (err || data.error || 'Unknown'), cls: 'error' });
+            return;
+          }
+          mcpp('plan_step_new', { title: title, task: taskName }, function(err2, data2) {
+            if (err2 || !data2.success) {
+              $.messager.show({ msg: 'Cannot add step: ' + (err2 || data2.error || 'Unknown'), cls: 'error' });
+              return;
+            }
+            $.messager.show({ msg: 'Step added', cls: 'success' });
+            loadDetail(taskName);
+          });
+        });
+      }
+
+      function deleteStep(taskName, stepNum) {
+        $.messager.confirm('Delete Step', 'Delete step ' + stepNum + '?', function(ok) {
+          if (!ok) return;
+          mcpp('plan_task_switch', { name: taskName }, function(err, data) {
+            if (err || !data.success) {
+              $.messager.show({ msg: 'Cannot switch to task: ' + (err || data.error || 'Unknown'), cls: 'error' });
+              return;
+            }
+            mcpp('plan_step_delete', { number: stepNum, task: taskName }, function(err2, data2) {
+              if (err2 || !data2.success) {
+                $.messager.show({ msg: 'Cannot delete step: ' + (err2 || data2.error || 'Unknown'), cls: 'error' });
+                return;
+              }
+              $.messager.show({ msg: 'Step ' + stepNum + ' deleted', cls: 'success' });
+              loadDetail(taskName);
+            });
+          });
+        });
+      }
+
+      function completeTask(taskName) {
+        $.messager.confirm('Complete Task', 'Mark task "' + taskName + '" as completed?', function(ok) {
+          if (!ok) return;
+          var $btn = $('#btn-complete-task').prop('disabled', true).text('Completing...');
+
+          var other = null;
+          for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].name !== taskName && tasks[i].status !== 'completed') {
+              other = tasks[i].name;
+              break;
+            }
+          }
+          if (!other) {
+            $btn.prop('disabled', false).text('Complete Task');
+            $.messager.show({ msg: 'No other active task to switch to — cannot complete the only task.', cls: 'warning' });
+            return;
+          }
+
+          mcpp('plan_task_switch', { name: other }, function(err, data) {
+            if (err || !data.success) {
+              $btn.prop('disabled', false).text('Complete Task');
+              $.messager.show({ msg: 'Cannot switch away: ' + (err || data.error || 'Unknown'), cls: 'error' });
+              return;
+            }
+            mcpp('plan_task_complete', { name: taskName }, function(err2, data2) {
+              if (err2 || !data2.success) {
+                $btn.prop('disabled', false).text('Complete Task');
+                $.messager.show({ msg: 'Cannot complete task: ' + (err2 || data2.error || 'Unknown'), cls: 'error' });
+                return;
+              }
+              $.messager.show({ msg: 'Task "' + taskName + '" completed', cls: 'success' });
+              loadDetail(taskName);
+              loadTasks();
+            });
+          });
+        });
+      }
+
+      // ── Events ──
+      $list.on('click', '.task-nav-item', function() {
+        var name = $(this).data('name');
+        if (name) loadDetail(name);
+      });
+
+      $detail.on('click', '.step-check', function() {
+        var $el = $(this);
+        if ($el.data('done') === 1 || $el.hasClass('busy')) return;
+        var stepNum = $el.data('step');
+        if (!activeName || !stepNum) return;
+        markStepDone(activeName, stepNum, $el);
+      });
+
+      $detail.on('click', '#btn-complete-task', function() {
+        var name = $(this).data('name');
+        if (name) completeTask(name);
+      });
+
+      $detail.on('click', '#btn-add-step', function() {
+        var $input = $('#new-step-title');
+        var title = $input.val().trim();
+        var taskName = $input.data('task');
+        if (!title) { $input.focus(); return; }
+        addStep(taskName, title);
+      });
+
+      $detail.on('keydown', '#new-step-title', function(e) {
+        if (e.which === 13) {
+          e.preventDefault();
+          $('#btn-add-step').click();
+        }
+      });
+
+      $detail.on('click', '.step-delete', function() {
+        var stepNum = $(this).data('step');
+        if (activeName && stepNum) deleteStep(activeName, stepNum);
+      });
+
+      // Step notes toggle
+      $detail.on('click', '.step-notes-btn', function() {
+        var $btn = $(this);
+        var stepNum = $btn.data('step-notes');
+        var $area = $detail.find('[data-notes-for="' + stepNum + '"]');
+        if ($area.length) loadStepNotes(stepNum, $area, $btn);
+      });
+
+      // Add step note
+      $detail.on('click', '.step-note-add', function() {
+        var stepNum = $(this).data('step');
+        var $input = $detail.find('.step-note-input[data-step="' + stepNum + '"]');
+        var text = $input.val().trim();
+        if (!text) { $input.focus(); return; }
+        var $area = $detail.find('[data-notes-for="' + stepNum + '"]');
+        var $btn = $detail.find('.step-notes-btn[data-step-notes="' + stepNum + '"]');
+        addStepNote(stepNum, text, $area, $btn);
+      });
+
+      // Add step note on Enter
+      $detail.on('keydown', '.step-note-input', function(e) {
+        if (e.which === 13) {
+          e.preventDefault();
+          var stepNum = $(this).data('step');
+          $detail.find('.step-note-add[data-step="' + stepNum + '"]').click();
+        }
+      });
+
+      // Delete step note
+      $detail.on('click', '.step-note-del', function() {
+        var noteId = $(this).data('note-id');
+        var stepNum = $(this).data('step');
+        var $area = $detail.find('[data-notes-for="' + stepNum + '"]');
+        var $btn = $detail.find('.step-notes-btn[data-step-notes="' + stepNum + '"]');
+        deleteStepNote(stepNum, noteId, $area, $btn);
+      });
+
+      $search.on('input', function() { renderList(); });
+      $filterUser.on('change', function() { renderList(); });
+      $filterStatus.on('change', function() { loadTasks(); });
+
+      // ── New task modal ──
+      $('#btn-new-task').on('click', function() {
+        document.getElementById('new-task-modal').showModal();
+      });
+
+      // Add step input in new task modal (distinct ID from detail view)
+      $('#btn-add-nt-step').on('click', function() {
+        var num = $('#nt-steps .step-input-row').length + 1;
+        $('#nt-steps').append(
+          '<div class="flex gap-1.5 items-center step-input-row">' +
+            '<input class="input input-bordered input-sm flex-1 step-title-input" type="text" placeholder="Step ' + num + ' title">' +
+            '<button type="button" class="btn btn-xs btn-ghost btn-remove-step">&times;</button>' +
+          '</div>'
+        );
+      });
+
+      $('#nt-steps').on('click', '.btn-remove-step', function() {
+        if ($('#nt-steps .step-input-row').length > 1) {
+          $(this).closest('.step-input-row').remove();
+        }
+      });
+
+      $('#btn-save-task').on('click', function() {
+        var name = $('#nt-name').val().trim();
+        var title = $('#nt-title').val().trim();
+
+        if (!name) {
+          $.messager.show({ msg: 'Task name (slug) is required.', cls: 'warning' });
+          return;
+        }
+
+        var steps = [];
+        $('#nt-steps .step-title-input').each(function() {
+          var v = $(this).val().trim();
+          if (v) steps.push(v);
+        });
+
+        var payload = { name: name };
+        if (title) payload.title = title;
+        if (steps.length) payload.steps = steps;
+
+        var $btn = $(this).prop('disabled', true).text('Creating...');
+
+        mcpp('plan_task_new', payload, function(err, data) {
+          $btn.prop('disabled', false).text('Create Task');
+          if (err || !data.success) {
+            $.messager.show({ msg: 'Error: ' + (err || data.error || 'Unknown'), cls: 'error' });
+            return;
+          }
+          document.getElementById('new-task-modal').close();
+          $('#nt-name, #nt-title').val('');
+          $('#nt-steps').html(
+            '<div class="flex gap-1.5 items-center step-input-row">' +
+              '<input class="input input-bordered input-sm flex-1 step-title-input" type="text" placeholder="Step 1 title">' +
+              '<button type="button" class="btn btn-xs btn-ghost btn-remove-step">&times;</button>' +
+            '</div>'
+          );
+          loadTasks();
+          if (name) {
+            setTimeout(function() { loadDetail(name); }, 500);
+          }
+        });
+      });
+
+      // ── Init ──
+      loadTasks();
+    });

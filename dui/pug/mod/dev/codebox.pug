@@ -1,0 +1,110 @@
+extends ../content
+
+block content
+  .p-6.overflow-auto.space-y-6
+
+    //- ── Title ──────────────────────────────────────────────────────────────
+    .text-base.font-bold Gate Pass — Doc Type / Doc ID not loading in Add Line popup
+    .text-xs.opacity-50.mb-2 Task #186 · inv_gpass.js · datagrid-plugin.js · datagrid.pug
+
+    //- ── Root Causes ────────────────────────────────────────────────────────
+    .text-xs.font-semibold.uppercase.tracking-widest.opacity-40.mb-1 Root Causes
+
+    +mockup_code
+      +code_line('RC-1').text-error RC-1 — Wrong modal selector (root of all failures)
+      +code_line('~')
+        | inv_gpass.js:23-24 targets:  $('#_dgform > form input[textboxname=DOC_TYPE')
+      +code_line('~')
+        | #_dgform does not exist in DUI.  Modal ID is #gplines_editor.
+      +code_line('~')
+        | DUI inputs use  name=  not  textboxname=  (EUI convention).
+      +code_line('~')
+        | Both jQuery objects are always empty → every .combobox() / .textbox()
+      +code_line('~')
+        | call silently no-ops.  All four failures below cascade from here.
+      +code_line('').text-warning
+      +code_line('RC-2').text-warning RC-2 — DOC_TYPE combobox has no dropdown data
+      +code_line('~')
+        | datagrid.gplines.json editor options for DOC_TYPE have no  data[]  array.
+      +code_line('~')
+        | datagrid.pug:129 only emits data-options when eo.data is present.
+      +code_line('~')
+        | Combobox widget initialised with zero options.  Intended fix via
+      +code_line('~')
+        | loadData() → combobox('loadData', doc) never executes (RC-1).
+      +code_line('').text-warning
+      +code_line('RC-3').text-warning RC-3 — DOC_TYPE onSelect handler never attached
+      +code_line('~')
+        | inv_gpass.js:27-48  dgDocType.combobox({onSelect:...})  targets the same
+      +code_line('~')
+        | empty jQuery object.  Selecting a DOC_TYPE value cannot enable DOC_ID
+      +code_line('~')
+        | or set the qbe _sqlid endpoint.
+      +code_line('').text-warning
+      +code_line('RC-4').text-warning RC-4 — DOC_ID permanently readonly
+      +code_line('~')
+        | JS column def starts DOC_ID with  readonly:true.  The onSelect handler
+      +code_line('~')
+        | was meant to toggle it on DOC_TYPE change.  Because RC-1 breaks the
+      +code_line('~')
+        | wire-up, DOC_ID remains locked readonly for the entire session.
+      +code_line('').text-warning
+      +code_line('RC-5').text-warning RC-5 — loadData() gated on GP_ID
+      +code_line('~')
+        | form#gphead.on('loadDone') returns early if !data.GP_ID  (line 311).
+      +code_line('~')
+        | For a new Gate Pass record, the init code never runs at all.
+      +code_line('~')
+        | Even for existing GP records, RC-1 to RC-4 still apply.
+
+    //- ── Rectification Steps ────────────────────────────────────────────────
+    .text-xs.font-semibold.uppercase.tracking-widest.opacity-40.mb-1 Rectification Steps
+
+    +mockup_code
+      +code_line('5').text-success Step 5 — Fix modal selectors  (inv_gpass.js:23-24)
+      +code_line('~')
+        | FROM:  $('#_dgform > form input[textboxname=DOC_TYPE')
+      +code_line('~')
+        |   TO:  $('#gplines_editor [name=DOC_TYPE]')
+      +code_line('~')
+        | FROM:  $('#_dgform > form input[textboxname=DOC_ID')
+      +code_line('~')
+        |   TO:  $('#gplines_editor [name=DOC_ID]')
+      +code_line('~')
+        | Fixes RC-1 and unblocks the entire init chain.
+      +code_line('').text-success
+      +code_line('6').text-success Step 6 — Move init to Add-button open event  (inv_gpass.js)
+      +code_line('~')
+        | Extract lines 16-48 (DOC_TYPE loadData + onSelect wire-up) into a
+      +code_line('~')
+        | named helper  initLineEditor().  Call it:
+      +code_line('~')
+        |   a) from loadData() as before (existing GP record loaded), AND
+      +code_line('~')
+        |   b) from #gplines_add click handler, before showModal() opens.
+      +code_line('~')
+        | Fixes RC-5: new GP records now also get the combobox initialised.
+      +code_line('').text-success
+      +code_line('7').text-info Step 7 — Verify onSelect logic for all DOC_TYPE values
+      +code_line('~')
+        | NIL → DOC_ID readonly, not required
+      +code_line('~')
+        | SO  → DOC_ID editable, required, _sqlid = sales^sor_qbe  (+CUST_ID)
+      +code_line('~')
+        | WO  → DOC_ID editable, required, _sqlid = inv^gp_opnrefs_qbe
+      +code_line('~')
+        | Confirm  qbeDocId.qbe('options').dlog.dg.datagrid('reload')
+      +code_line('~')
+        | is compatible with the DUI qbe plugin API (not EUI).
+      +code_line('').text-info
+      +code_line('8').text-info Step 8 — Verify Edit flow restores DOC_TYPE + DOC_ID state
+      +code_line('~')
+        | populateEditor() sets raw inp.value — bypasses combobox widget API.
+      +code_line('~')
+        | Check if combobox('setValue') needed post-populate to show label.
+      +code_line('~')
+        | DOC_ID readonly state must reflect restored DOC_TYPE:
+      +code_line('~')
+        |   NIL  → stays readonly
+      +code_line('~')
+        |   SO/WO → becomes editable (trigger initLineEditor onSelect logic)

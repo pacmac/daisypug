@@ -1,0 +1,30 @@
+//-
+  PAC 171107 - 2.2.113
+  1. Removed inline style for filters.
+
+
++split
+  +panel('north', { style: "height:130px" })
+    +form#partquery(class='fit form', asdpx="px")
+      div.two.ui-grid-a
+        div.ui-block-a(style="max-width:440px;") 
+          +fitem({text:'Part ID'},{id:'QRY_PART_ID',name:'PART_ID', _sqlid:'inv^partid', class:'combobox navi','data-options':"panelWidth:'250px'"},{style:'margin-bottom:8px'},{'data-role':'fieldcontain'})
+          +fitem('Trace ID',{id:'TRACE_ID',name:'TRACE_ID',class:'combobox  navi', disabled:true})
+          +fitem('Job Reference',{name:'WOREF',id:'WOREF', _sqlid:'vwltsa^seqid',class:'combobox navi', 'data-options': "_groupField:'BASE_ID'", disabled:true})              
+          
+        div.ui.block-b(style="max-width:400px;")
+          +fitem('Date From',{name:'DATE_FROM', class:'datebox'},{style:'margin-bottom:8px'})
+          +fitem('Date To',{name:'DATE_TO', class:'datebox'})
+          +fitem('Availability',{id:'BALQTY',class:'textbox sub-off', readonly:true})
+  
+  +panel('center')
+    +datagrid#tracedg
+
+script(src='html/eui/inv/js/part_trans.query.js')
+style.
+  tr.last > td {
+    xborder-bottom-color: blue;
+  } tr.last > td[field="RUNNING_TOTAL"]{
+    font-weight: bold;
+  }
+  

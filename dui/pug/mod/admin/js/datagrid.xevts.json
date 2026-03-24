@@ -1,0 +1,6 @@
+{
+  "id": "xevts",
+  "sourceFile": "admin/js/xevents.js",
+  "lineNumber": 7,
+  "configPreview": "({\n\t\teditor: 'form',\t\n\t\tstriped: true,\n\t\trownumbers: true,\n\n\t    singleSelect:true,\n\n\t    url: '/?_func=get&_sqlid=admin^xevents',\n\t    columns:[[\n\t  ..."
+}

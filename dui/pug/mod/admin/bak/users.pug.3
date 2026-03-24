@@ -1,0 +1,77 @@
+//- ── MIGRATOR ──────────────────────────────────
+//- page: admin/users
+//- owner: root
+//- status: converted
+//- passes: 2  version: 8
+//- last_run: 2026-02-28 18:37:22
+//- manual:
+//-   #1: raw div with region= attribute — convert to +panel(region)
+//-   #2: raw div with region= attribute — convert to +panel(region)
+//- ─────────────────────────────────────────────
+
+script.
+  dwap.page.menus = !{menus}
+
+script: include js/users.js
+
+.layout(data-options="fit:true,border:false")
+  //- [MANUAL FIX #1] raw div with region= attribute — convert to +panel(region)
+  .panel(region="west" style="width:400px; background: #FAFAFA;")
+    +form#users(class='multi', asdpx='ax', _sqlid='admin^user')
+      if $.runmode == 'free'
+        +fitem('Site ID',{name:'siteid', class:'combobox', _sqlid:'admin^cbo_siteid', value:'DEFAULT' })
+      else
+        +fitem('Site ID',{name:'siteid', class:'textbox', readonly:true, value:'DEFAULT' })
+      +fitem('User ID',{id:'UID',name:'userid', _sqlid:'admin^cbo_uid', class:'combobox fkey upper fit', required:true})
+      +fitem('User Authority',{id:'~',name:'user_auth', class:'combobox','data-options':"editable:false, data:[{text:'User',value:'0'},{text:'Advanced',value:'3'},{text:'Admin',value:'6'},{text:'Super',value:'10'}]" })
+      +fitem('Email Address',{name:'email', class:'validatebox', required:true,'data-options':"validType:'email'" })
+      +fitem('First Name',{id:'nfirst',name:'name_first', class:'textbox', required:true , validType:['length[1,25]']})
+      +fitem('Last Name',{name:'name_last', class:'textbox' , validType:['length[1,25]']})
+      +fitem('I.C. Number',{name:'ic_number', class:'textbox' })
+      +fitem('Position',{name:'position', class:'textbox' })
+      +fitem('Division',{name:'division', class:'combobox',_sqlid:'admin^cbo_div','data-options':"editable:false" })
+      +fitem('Department',{name:'department', class:'combobox',_sqlid:'admin^cbo_dep','data-options':"editable:false" })
+      +fitem('Theme',{id:'theme',name:'theme', class:'combobox' })
+      +fitem('Active',{id:'active',name:'utype', class:'combobox'})
+      +fitem('License Reserve',{name:'lic_reserve', class:'combobox','data-options':"editable:false, data:[{text:'Yes',value:'y'},{text:'No',value:'n',selected:true}]" })
+      +fitem('Remote Access',{name:'remote_access', class:'combobox','data-options':"editable:false, data:[{text:'Yes',value:'y'},{text:'No',value:'n',selected:true}]" })
+      
+      if $.isdev
+        +fitem('Language',{name:'language', class:'combobox','data-options':"editable:false, data:[{text:'English',value:'eng', selected:true},{text:'Simple Chinese',value:'chs'},{text:'Bahasa',value:'bah'}]" })
+      +input({name:'language', type:'hidden',value:'eng'})
+      
+      div
+        +fitem('Login Remind',{name:'login_remind', class:'numberbox',readonly:true })
+        +fitem('Last Pwd Fail Count',{name:'last_pwd_fail_count', class:'numberbox',readonly:true })
+        //-+fitem('Last Pwd Fail Date',{name:'last_pwd_fail_date', class:'datebox',readonly:true })
+        +fitem('Last Login',{name:'lastlogin', class:'datebox',readonly:true })
+        +fitem('Last Password',{name:'lastpwd', class:'datebox',readonly:true })
+        +fitem('Last Modified Date',{name:'last_modified_date', class:'datetimebox',readonly:true })
+        +fitem('Last Modified User',{name:'last_modified_user_id', class:'textbox',readonly:true })      
+  
+  //- [MANUAL FIX #2] raw div with region= attribute — convert to +panel(region)
+  .panel#remarks(region="center")
+    +tabs#usertabs(fit="true")
+      +tab-item('Access')#uatab
+        ul#adm_auth_t()
+      
+      +tab-item('Reports')#reptab
+        ul#reports(style="opacity:0.5;")
+      
+      +tab-item('Groups')#ugtab
+        ul#ugroups(style="opacity:0.5;" x_sqlid='usersgroupid')
+      
+      +tab-item('Events')#evtab
+        ul#events(style="opacity:0.5;")
+      
+      if $.license.mod.indexOf('user^leaveForm') > -1
+        div#lvltab(title="Leave" _style="padding:8px;" iconCls="icon-date" disabled="disabled")
+          +tabs(fit="true")
+            +tab-item('Entitlement')#uatab1
+              +datagrid#lvl
+            +tab-item('Records')#uatab2
+              +datagrid#hist
+
+  #mm.menu
+    div(onclick="dwap.page.ronly($(this))" data-options="iconCls:'aicon-lock'") Read-Only
+

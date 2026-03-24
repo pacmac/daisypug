@@ -1,0 +1,166 @@
+extends ../content
+
+block script
+  //-+script('co',['js/calendar.js'])
+  script: include js/calendar.js
+block content
+  +layout()
+    div.bg-base-200(region="north" style="height:40px")
+      div(style="margin-left:10px;")
+        #nav(style="display:inline-block;")
+          +linkbutton#bak(iconCls="icon-left" size="small" style="")
+          span.month
+          +linkbutton#fwd(iconCls="icon-right" size="small")
+        #buts(style="display:inline-block;")
+          span.vert-sep(style="margin:0 12px;margin-top: 6px;")
+          +linkbutton#rel(iconCls="icon-reload" size="small" style="margin-top: 6px;margin-right: 8px;")
+          #glob(style="margin-top: 6px;")
+          span.vert-sep(style="margin:0 12px;margin-top: 6px;")
+      
+    div(region="center" _style="height:40px;" fit="true")
+      #calendar
+      
+      +dialog#edit
+        form.fit
+          +input({type:'hidden',name:'_func',id:'~', value:'add'})
+          +input({type:'hidden',name:'_sqlid',value:'co^cal_schedule'})        
+          +input({type:'hidden',id:'~', name:'CAL_ID'})
+          +fitem('Task Type',{name:'CAL_TYPE_ID',id:'~',class:'combobox', _sqlid:'co^cal_activity_type',required:true})
+          +fitem('Task Class',{name:'CAL_CLASS_ID',id:'~',class:'combobox', _sqlid:'co^cal_class',required:true})
+          +fitem('Start Date',{name:'START_DATE',id:'~',class:'datebox',required:true})
+          +fitem('End Date',{name:'END_DATE',id:'~',class:'datebox',required:true})
+          +fitem('Remarks',{name:'REMARKS', id:'~',class:'textbox','data-options':"multiline:true,height:100"})  
+block style
+  style.
+
+    +linkbutton#nav
+      margin-top: 6px;  
+    } 
+
+    .add-icon::after {
+      content: "";
+      background: url(/../icons/add_cross.png);
+      opacity: 0.2;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: absolute; 
+    } .add-icon:hover::after {
+      opacity:1;
+    }
+    
+    .add-icon {
+      width:14px;
+      height:14px;
+      float:right;
+      position: relative;
+      display:inline-block;
+      top: 1px;
+      right: 4px;
+    }
+    
+    +dialog
+      padding: 12px 0;
+    }
+    
+    +dialog.fitem
+      width: 200px !important;
+    +dialog.fitem
+      width: 140px;
+    }
+    
+    .datagrid-cell {
+      padding: 0 1px;
+    }
+
+    .datagrid-header td, .datagrid-body td, .datagrid-footer td {
+      border-color: #325d81;
+      border-style: solid;
+    }
+    
+    .month {
+      vertical-align: -webkit-baseline-middle;
+      margin-left: 10px;
+      margin-right: 10px;
+      font-weight:bold;
+      width: 100px;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .datagrid-header {
+      background: -webkit-linear-gradient(top,#91b6d4 0,#edf3f8 100%);
+      font-weight:bold;
+    }
+    
+    .day-head {
+      background: #91b6d4;
+      text-align:left;
+      padding-left:6px;
+    }
+
+    .day-head.today {
+      background: #325d81;
+      color:white; 
+    }
+    
+    .day-head.today::after {
+      content:' - Today';
+    }
+    
+    ul.day-body {
+      margin:0;
+      padding:0;
+      min-height:75px;
+      list-style: none;
+    } 
+    
+    ul.day-body.wkend {
+      background:#EEEEEE;
+    } 
+    
+    ul.day-body.prvnxt {
+      background:#91b6d4;
+    }  
+    
+    ul.day-body > li {
+      color: black;
+      text-decoration:none;
+      border-top: 1px solid white;
+      position:relative;
+    } 
+
+    ul.day-body > li.contx {
+      _background: repeating-linear-gradient(45deg, #EEEEEE, #EEEEEE 1px, transparent 2px, transparent 10px) repeat scroll 0 0;
+    }  
+
+
+    ul.day-body > li.cont::before, ul.day-body > li.cont::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-color: transparent;
+      border-style: solid;
+    } ul.day-body > li.cont::before {
+      border-width: 0.40em;
+    } ul.day-body > li.cont::after {
+      border-width: 0.40em;
+      border-right-color: #91b6d4;
+      border-top-color: #91b6d4;
+    }
+
+    
+    ul.day-body > li:hover, li.hover {
+      font-weight:bold;
+      color: royalblue !important;
+    }
+
+    ul.day-body:hover:not(.prvnxt) {
+      background: #F8F8F8;
+    }
+
+    .datagrid-row-over {
+      background: inherit;
+    }

@@ -1,0 +1,89 @@
+extends ../content
+
+block content
+  +vsplit('380px')
+    +panel('west')
+      +form#hr-form(class='multi fit')
+        +fieldset('Employee Identity')
+          +fitem('Employee ID',{id:'~', name:'EMP_ID', class:'textbox', required:true, validType:['length[1,20]']})
+          +fitem('Title',{id:'~', name:'TITLE', class:'combobox', 'data-options':"data:[{text:'Mr',value:'Mr'},{text:'Mrs',value:'Mrs'},{text:'Ms',value:'Ms'},{text:'Dr',value:'Dr'},{text:'Prof',value:'Prof'}]"})
+          +fitem('First Name',{id:'~', name:'FIRST_NAME', class:'textbox', required:true, validType:['length[1,50]']})
+          +fitem('Last Name',{id:'~', name:'LAST_NAME', class:'textbox', required:true, validType:['length[1,50]']})
+          +fitem('ID / Passport No',{id:'~', name:'ID_NUMBER', class:'textbox', validType:['length[1,30]']})
+          +fitem('Date of Birth',{id:'~', name:'DOB', class:'datebox'})
+          +fitem('Gender',{id:'~', name:'GENDER', class:'combobox', 'data-options':"data:[{text:'Male',value:'M'},{text:'Female',value:'F'},{text:'Other',value:'O'}]"})
+          +fitem('Nationality',{id:'~', name:'NATIONALITY', class:'textbox', validType:['length[1,40]']})
+
+        +fieldset('Contact Details')
+          +fitem('Email',{id:'~', name:'EMAIL', class:'textbox', validType:['email','length[1,100]']})
+          +fitem('Mobile',{id:'~', name:'MOBILE', class:'textbox', validType:['length[1,20]']})
+          +fitem('Home Phone',{id:'~', name:'HOME_PHONE', class:'textbox', validType:['length[1,20]']})
+          +fitem('Address Line 1',{id:'~', name:'ADDRESS_1', class:'textbox', validType:['length[1,100]']})
+          +fitem('Address Line 2',{id:'~', name:'ADDRESS_2', class:'textbox', validType:['length[1,100]']})
+          +fitem('City',{id:'~', name:'CITY', class:'textbox', validType:['length[1,50]']})
+          +fitem('Province / State',{id:'~', name:'PROVINCE', class:'textbox', validType:['length[1,50]']})
+          +fitem('Postal Code',{id:'~', name:'POSTAL_CODE', class:'textbox', validType:['length[1,10]']})
+
+    +panel('center')
+      +tabs#hr-tabs(data-options="fit:true, tabPosition:'left'")
+        +tab-item('Employment',{iconCls:'icon-org', selected:'true'})
+          +form#emp-form(class='multi fit')
+            +fieldset('Position')
+              +fitem('Department',{id:'~', name:'DEPARTMENT', class:'combobox', required:true, 'data-options':"data:[{text:'Human Resources',value:'HR'},{text:'Finance',value:'FIN'},{text:'Operations',value:'OPS'},{text:'Sales',value:'SALES'},{text:'Engineering',value:'ENG'},{text:'IT',value:'IT'},{text:'Admin',value:'ADMIN'},{text:'Warehouse',value:'WH'}]"})
+              +fitem('Job Title',{id:'~', name:'JOB_TITLE', class:'textbox', required:true, validType:['length[1,60]']})
+              +fitem('Reports To',{id:'~', name:'REPORTS_TO', class:'textbox', validType:['length[1,50]']})
+              +fitem('Employment Type',{id:'~', name:'EMP_TYPE', class:'combobox', 'data-options':"data:[{text:'Full-Time',value:'FT'},{text:'Part-Time',value:'PT'},{text:'Contract',value:'CON'},{text:'Intern',value:'INT'},{text:'Temporary',value:'TMP'}]"})
+              +fitem('Status',{id:'~', name:'EMP_STATUS', class:'combobox', 'data-options':"data:[{text:'Active',value:'A',selected:true},{text:'On Leave',value:'L'},{text:'Suspended',value:'S'},{text:'Terminated',value:'T'},{text:'Resigned',value:'R'}]"})
+
+            +fieldset('Dates')
+              +fitem('Start Date',{id:'~', name:'START_DATE', class:'datebox', required:true})
+              +fitem('End Date',{id:'~', name:'END_DATE', class:'datebox'})
+              +fitem('Probation End',{id:'~', name:'PROBATION_END', class:'datebox'})
+
+        +tab-item('Compensation',{iconCls:'icon-money'})
+          +form#comp-form(class='multi fit')
+            +fieldset('Salary')
+              +fitem('Pay Grade',{id:'~', name:'PAY_GRADE', class:'combobox', 'data-options':"data:[{text:'Grade 1',value:'G1'},{text:'Grade 2',value:'G2'},{text:'Grade 3',value:'G3'},{text:'Grade 4',value:'G4'},{text:'Grade 5',value:'G5'},{text:'Grade 6',value:'G6'}]"})
+              +fitem('Base Salary',{id:'~', name:'BASE_SALARY', class:'numberbox', 'data-options':"precision:2, min:0, prefix:'$'"})
+              +fitem('Currency',{id:'~', name:'CURRENCY', class:'combobox', 'data-options':"data:[{text:'USD',value:'USD'},{text:'EUR',value:'EUR'},{text:'GBP',value:'GBP'},{text:'ZAR',value:'ZAR',selected:true}]"})
+              +fitem('Pay Frequency',{id:'~', name:'PAY_FREQ', class:'combobox', 'data-options':"data:[{text:'Monthly',value:'M',selected:true},{text:'Bi-Weekly',value:'BW'},{text:'Weekly',value:'W'}]"})
+
+            +fieldset('Bank Details')
+              +fitem('Bank Name',{id:'~', name:'BANK_NAME', class:'textbox', validType:['length[1,60]']})
+              +fitem('Branch Code',{id:'~', name:'BRANCH_CODE', class:'textbox', validType:['length[1,10]']})
+              +fitem('Account No',{id:'~', name:'ACCOUNT_NO', class:'textbox', validType:['length[1,20]']})
+              +fitem('Account Type',{id:'~', name:'ACCOUNT_TYPE', class:'combobox', 'data-options':"data:[{text:'Cheque',value:'CHQ'},{text:'Savings',value:'SAV'},{text:'Transmission',value:'TRANS'}]"})
+
+        +tab-item('Leave',{iconCls:'icon-calendar'})
+          +form#leave-form(class='multi fit')
+            +fieldset('Leave Balances')
+              +fitem('Annual Leave',{id:'~', name:'ANNUAL_LEAVE', class:'numberbox', 'data-options':"precision:1, min:0, value:0", readonly:true})
+              +fitem('Sick Leave',{id:'~', name:'SICK_LEAVE', class:'numberbox', 'data-options':"precision:1, min:0, value:0", readonly:true})
+              +fitem('Family Leave',{id:'~', name:'FAMILY_LEAVE', class:'numberbox', 'data-options':"precision:1, min:0, value:0", readonly:true})
+              +fitem('Study Leave',{id:'~', name:'STUDY_LEAVE', class:'numberbox', 'data-options':"precision:1, min:0, value:0", readonly:true})
+          +datagrid#leave-history
+
+        +tab-item('Qualifications',{iconCls:'icon-edit'})
+          +toolbar#qual-tb(title="Qualifications", icon="graduation-cap", asdpx="aed")
+          +datagrid#qualifications
+
+        +tab-item('Documents',{iconCls:'icon-pclip'})
+          +toolbar#doc-tb(title="Documents", icon="file-text", asdpx="aed")
+          +datagrid#documents
+
+        +tab-item('Emergency',{iconCls:'icon-alert-triangle'})
+          +form#emergency-form(class='multi fit')
+            +fieldset('Primary Contact')
+              +fitem('Contact Name',{id:'~', name:'EC_NAME_1', class:'textbox', validType:['length[1,60]']})
+              +fitem('Relationship',{id:'~', name:'EC_REL_1', class:'combobox', 'data-options':"data:[{text:'Spouse',value:'SPOUSE'},{text:'Parent',value:'PARENT'},{text:'Sibling',value:'SIBLING'},{text:'Child',value:'CHILD'},{text:'Friend',value:'FRIEND'},{text:'Other',value:'OTHER'}]"})
+              +fitem('Phone',{id:'~', name:'EC_PHONE_1', class:'textbox', validType:['length[1,20]']})
+              +fitem('Email',{id:'~', name:'EC_EMAIL_1', class:'textbox', validType:['email','length[1,100]']})
+
+            +fieldset('Secondary Contact')
+              +fitem('Contact Name',{id:'~', name:'EC_NAME_2', class:'textbox', validType:['length[1,60]']})
+              +fitem('Relationship',{id:'~', name:'EC_REL_2', class:'combobox', 'data-options':"data:[{text:'Spouse',value:'SPOUSE'},{text:'Parent',value:'PARENT'},{text:'Sibling',value:'SIBLING'},{text:'Child',value:'CHILD'},{text:'Friend',value:'FRIEND'},{text:'Other',value:'OTHER'}]"})
+              +fitem('Phone',{id:'~', name:'EC_PHONE_2', class:'textbox', validType:['length[1,20]']})
+              +fitem('Email',{id:'~', name:'EC_EMAIL_2', class:'textbox', validType:['email','length[1,100]']})
+
+        +tab-item('Notes',{iconCls:'icon-app'})
+          +input({id:'~', name:'NOTES', eui:'textbox', 'data-options':"multiline:true", style:'height:99%;width:99%'})

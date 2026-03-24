@@ -1,0 +1,24 @@
+//- Print/Report Modals
+//- Hidden modal elements for the report system (print-plugin.js).
+//- Included once in the dashboard layout via +print-modals.
+//- Uses +modal and +modal-footer from feedback.pug.
+
+mixin print-modals
+  //- Print Filter Dialog — shows report filters before running
+  +modal#dui-printopt(title="Report" max-w="sm" no-form)
+    form#pops
+      #filters
+      //- Template for dynamic filter fields — dynadd() clones this
+      //- instead of building its own layout. Matches +fitem structure.
+      template#dui-fitem-tpl
+        .mb-2.flex.items-center.gap-2
+          label.shrink-0(style="width:150px")
+          .flex-1
+            input.input.input-xs.input-bordered.w-full
+    +modal-footer
+      button.btn.btn-sm.btn-outline#dui-xls(type="button") Excel
+      button.btn.btn-sm.btn-primary#dui-pdf(type="button") Print
+
+  //- Document Viewer — full-screen modal with iframe for PDF/report display.
+  //- openPrintViewer() sets the iframe src and title, then calls showModal().
+  +docviewer#dui-print-viewer(title="Document Print" icon-cls="file-text")

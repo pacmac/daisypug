@@ -1,0 +1,184 @@
+extends ../content
+
+block script
+  script: include js/qp_everslik.js
+
+
+block content
+  form.multi.fit#main(_sqlid="dqm^everslik" asdpx="ax")
+    +vsplit('400px')
+      +panel('west')
+        +input({name:'USER_NAME', id:'~', type:'hidden'})
+        +fitem('Everslik ID',{id:'~', name:'ID', class:'searchbox fkey fit autonum', sbref:'everslik_ids'})
+
+        +v-group('')
+          +fitem('Job ID',{id:'~', name:'WOREF', class:'searchbox', required:true, sbref:'job'})
+          +fitem('Create Date',{name:'CREATE_DATE', class:'datebox today', readonly:true})
+
+        +v-group('')
+          +fitem('Status',{id:'~', name:'STATUS', value:'PENDING', required: true, class:'combobox','data-options':"data:[{value:'PENDING',text:'PENDING'},{value:'IN-PROCESS',text:'IN-PROCESS'},{value:'COMPLETED',text:'COMPLETED'}]"})
+
+          +fitem('Inspected By',{name:'USER_ID', id:'~', class:'combobox', required:true,_sqlid:'admin^usercbo'})
+          
+
+          +fitem('Qty',{name:'QTY', class:'numberspinner',precision:0, min:0, value:0, required:true})
+
+          +fitem('Coating System',{name:'COAT_SYSTEM', class:'combobox', required:true})
+          +fitem('Coating Spec / Rev',{name:'COAT_SPEC_ID', class:'combobox', required:true})
+            +input({id:'~',name:'COAT_SPEC_REV', class:'numberbox',precision:0, min:1,required:true, style:'width:30px;'})
+          +fitem('Serial Numbers',{name:'SERIAL_IDS', class:'textbox', 'data-options':"multiline:true",validType:['length[0,255]'], required:true})
+
+      +panel('center')
+        +tabs(data-options="fit:true")
+          +tab-item("Order Info", {iconCls:"icon-app"})
+            +fitem('Part ID',{id:'PART_ID', class:'textbox', readonly:true})
+            +fitem('Sales Order / Line',{id:'SALES_ORDER_ID', class:'textbox',readonly:true})
+              +input({id:'SALES_ORDER_LINE_NO', class:'numberbox',precision:0, min:1,readonly:true, style:'width:30px;'})
+            +fitem('Customer ID',{id:'CUSTOMER_ID', class:'textbox',readonly:true})
+            +fitem('Customer PO',{id:'CUST_PO', class:'textbox',readonly:true})
+            +fitem('Customer Part ID',{id:'CUST_PART_ID', class:'textbox',readonly:true})
+            +fitem('Part Description',{id:'CUST_PART_DESCRIPTION', class:'textbox',readonly:true})
+            +fitem('Project Name',{id:'USER_2', class:'textbox',readonly:true})
+            +fitem('Cust Prod / Proc ID',{id:'USER_1', class:'textbox',readonly:true})
+
+          +tab-item("Environment", {iconCls:"icon-bolt"})
+            table#enviro
+              tr.head
+                th(style="width:120px") Operation
+                th.center Blasting
+                th.center Phosphate
+                th.center Painting(Primer Coat)
+                th.center Painting(Top Coat)
+
+              tr.body
+                td Date & Time
+                td: +input({name:'ENV_DT_END_BLAST',class:'datetimebox', required:true,'data-options':"editable:false"})
+                td: +input({name:'ENV_DT_START_PHOS',class:'datetimebox', required:true,'data-options':"editable:false"})
+                td: +input({name:'ENV_DT_START_PAINT',class:'datetimebox', required:true,'data-options':"editable:false"})
+                td: +input({name:'ENV_DT_END_PAINT',class:'datetimebox', required:true,'data-options':"editable:false"})
+              tr.body#humid
+                td Relative Humidity
+                td: +input({name:'ENV_RH_END_BLAST',class:'numberspinner',precision:0, suffix:' %', required:true})
+                td: //+input({name:'ENV_RH_START_PHOS',class:'numberspinner',precision:0, suffix:' %', required:true})
+                td: +input({name:'ENV_RH_START_PAINT',class:'numberspinner',precision:0, suffix:' %', required:true})
+                td: +input({name:'ENV_RH_END_PAINT',class:'numberspinner',precision:0, suffix:' %', required:true})
+
+              tr.body
+                td Air Temp
+                td: +input({name:'ENV_AIR_END_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: //+input({name:'ENV_AIR_START_PHOS',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_AIR_START_PAINT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_AIR_END_PAINT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+              tr.body#dewpoint
+                td Dew Point Temp
+                td: +input({name:'ENV_DEW_END_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: //+input({name:'ENV_DEW_START_PHOS',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DEW_START_PAINT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DEW_END_PAINT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+
+              tr.body
+                td Equip used for above
+                td: +input({id:'~',name:'ENV_EQUIP_END_BLAST',class:'qbe equip', required:true})
+                td: //+input({id:'~',name:'ENV_EQUIP_START_PHOS',class:'qbe equip', required:true})
+                td: +input({id:'~',name:'ENV_EQUIP_START_PAINT',class:'qbe equip', required:true})
+                td: +input({id:'~',name:'ENV_EQUIP_END_PAINT',class:'qbe equip', required:true})
+
+              tr.body
+                td Surface temp.
+                td: +input({name:'ENV_SURF_END_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: //+input({name:'ENV_SURF_START_PHOS',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_SURF_START_PAINT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_SURF_END_PAINT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+
+              tr.body
+                td Equip for Surf temp.
+                td: +input({id:'~',name:'ENV_EQUIP_SURF_END_BLAST',class:'qbe equip',required:true})
+                td: //+input({id:'~',name:'ENV_EQUIP_SURF_START_PHOS',class:'qbe equip', required:true})
+                td: +input({id:'~',name:'ENV_EQUIP_SURF_START_PAINT',class:'qbe equip', required:true})
+                td: +input({id:'~',name:'ENV_EQUIP_SURF_END_PAINT',class:'qbe equip', required:true})
+
+          +tab-item("Pre-Inspect", {iconCls:"icon-notes"})
+            +fitem('Inspector',{id:'~',name:'PRE_INSPECTOR', class:'textbox', readonly:true})
+            +input({class:'textbox spec', name:'PRE_INSPECT_NOTES', 'data-options':"multiline:true"})
+            ul.checklist
+
+          +tab-item("Surface", {iconCls:"icon-bhave"})
+            div.two
+              div
+                +v-group('Air Cleanliness')
+                  +fitem('Blast Air',{name:'SURF_BLAST', class:'combobox', required:true, 'data-options':"data:[{value:'CLEAN',text:'Clean'},{value:'NOT-CLEAN',text:'Not Clean'}]"})
+                  +fitem('Coating Air',{name:'SURF_COAT', class:'combobox', required:true, 'data-options':"data:[{value:'CLEAN',text:'Clean'},{value:'NOT-CLEAN',text:'Not Clean'}]"})
+
+                +v-group('Solvent Pre-Clean')(id='surfsolv')
+                  +fitem('Type',{name:'SURF_SOLV_TYPE', grpid:'#surfsolv', class:'combobox'})
+
+                +v-group('Blast / Grit')
+                  +fitem('Type / Size',{name:'SURF_BLAST_TYPE', class:'combobox', required:true})
+                  +fitem('Blasting method',{name:'SURF_BLAST_METHOD', class:'combobox', required:true})
+                  +fitem('Original surface',{name:'SURF_BLAST_ORIG_SURF', class:'combobox', required:true})
+              div
+                +v-group('Surface Anchor Profile')
+                  +fitem('Coupon (&mu;m)',{name:'SURF_ANCH_COUPON', class:'numberspinner',precision:2, min:0, value:0})
+                  +fitem('Part (&mu;m)',{name:'SURF_ANCH_PART',class:'numberspinner',precision:2, min:0, value:0})
+                  +fitem('Method of measuring',{name:'SURF_ANCH_METHOD', class:'combobox', required:true})
+
+                +v-group('Surface Cleanliness')
+                  +fitem('Cleanliness requirement',{name:'SURF_CLEAN_REQUIREMENT', class:'combobox'})
+                  +fitem('Compliance',{name:'SURF_CLEAN_COMPLY', required:true, class:'combobox comply'})
+
+          +tab-item("Application", {iconCls:"icon-edit"})
+            div.two
+              +v-group('Phosphate')(id='appphos')
+                +fitem('Manufacturer',{name:'APP_PHOS_MFG', grpid:'#appphos', class:'combobox', required:true})
+                +fitem('Type',{name:'APP_PHOS_TYPE', class:'combobox', required:true})
+                +fitem('Colour',{name:'APP_PHOS_COLOUR', class:'combobox', required:true})
+                +fitem('Batch ID',{name:'APP_PHOS_BATCH', class:'textbox', required:true})
+              +v-group('')
+                +fitem('Bath Temp',{name:'APP_PHOS_TEMP', class:'numberspinner', precision:0, min:0, value:0,suffix:' &deg;C',required:true})
+                +fitem('Processing Time',{name:'APP_PHOS_PROCESS_TIME', class:'numberspinner',precision:0, min:0, value:0, suffix:' Minutes',required:true})
+                +fitem('Operator Name',{name:'APP_PHOS_OPERATOR', class:'textbox', required:true})
+              +v-group('Primer/Base Coat')(id='apppri')
+                +fitem('Manufacturer',{name:'APP_BASE_COAT_MFG', grpid:'#apppri', class:'combobox', required:true})
+                +fitem('Type',{name:'APP_BASE_COAT_TYPE', class:'combobox', required:true})
+                +fitem('Batch ID',{name:'APP_BASE_COAT_BATCH', class:'textbox', required:true})
+                +fitem('Solvent',{name:'APP_BASE_COAT_SOLVENT', class:'combobox', required:true})
+                +fitem('Dilution Ratio',{name:'APP_BASE_COAT_DILUTION_RATIO', class:'textbox', required:true})
+              +v-group('')
+                +fitem('Application Date',{name:'APP_BASE_COAT_APPDATE', class:'datetimebox', required:true})
+                +fitem('Set Point Temp',{name:'APP_BASE_COAT_POINT_TEMP', class:'numberspinner',precision:0, min:0, value:0,suffix:' &deg;C', required:true})
+                +fitem('Time Temp Reached',{name:'APP_BASE_COAT_TIME_IN', class:'datetimebox', required:true})
+                +fitem('Time Fall Beyond Temp',{name:'APP_BASE_COAT_TIME_REACHED', class:'datetimebox', required:true})
+                +fitem('Operator Name',{name:'APP_BASE_COAT_OPERATOR', class:'textbox', required:true})
+              +v-group('Top Coat')(id='appcoat')
+                +fitem('Manufacturer',{name:'APP_TOP_COAT_MFG', grpid:'#appcoat', class:'combobox', required:true})
+                +fitem('Type',{name:'APP_TOP_COAT_TYPE', class:'combobox', required:true})
+                +fitem('Batch ID',{name:'APP_TOP_COAT_BATCH', class:'textbox', required:true})
+                +fitem('Mixing Date / Time',{name:'APP_TOP_COAT_MIXING_DATE', class:'datetimebox', required:true})
+                +fitem('Solvent',{name:'APP_TOP_COAT_SOLVENT', class:'combobox', required:true})
+                +fitem('Dilution Ratio',{name:'APP_TOP_COAT_DILUTION_RATIO', class:'textbox', required:true})
+              +v-group('')
+                +fitem('Application Date',{name:'APP_TOP_COAT_APPDATE', class:'datetimebox', required:true})
+                +fitem('Set Point Temp',{name:'APP_TOP_COAT_POINT_TEMP', class:'textbox', required:true})
+                +fitem('Time Temp Reached',{name:'APP_TOP_COAT_TIME_IN', class:'datetimebox', required:true})
+                +fitem('Time Fall Beyond Temp',{name:'APP_TOP_COAT_TIME_REACHED', class:'datetimebox', required:true})
+                +fitem('Operator Name',{name:'APP_TOP_COAT_OPERATOR', class:'textbox', required:true})
+
+          +tab-item("Inspection", {iconCls:"icon-value"})
+            div.two
+              div
+                +v-group('Phosphate')
+                  +fitem('Visual',{name:'INSPECT_PHOS_VISUAL', required:true, class:'combobox comply', 'data-options':"data:[{value:'PASS',text:'Pass'},{value:'FAIL',text:'Fail'}]"})
+                  +fitem('Adhesion Test',{name:'INSPECT_PHOS_ADHESION_TEST', required:true, class:'combobox comply', 'data-options':"data:[{value:'PASS',text:'Pass'},{value:'FAIL',text:'Fail'}]"})
+                  +fitem('Phosphate weight',{name:'INSPECT_PHOS_WEIGHT', required:true, class:'numberspinner',precision:0, suffix:' g/m2' })
+                  +fitem('BMR + Phos. Thickness',{name:'INSPECT_PHOS_BMR_THICKNESS', required:true, class:'numberspinner',precision:1, suffix:' micron' })
+                +v-group('Final Inspection - Base Coat')
+                  +fitem('Visual',{name:'INSPECT_FINAL_BASE_VISUAL', required:true, class:'combobox comply', 'data-options':"data:[{value:'PASS',text:'Pass'},{value:'FAIL',text:'Fail'}]"})
+                  +fitem('Cure Test',{name:'INSPECT_FINAL_BASE_CURE_TEST', required:true, class:'combobox comply', 'data-options':"data:[{value:'PASS',text:'Pass'},{value:'FAIL',text:'Fail'}]"})
+                +v-group('DFT')
+                  +fitem('Excl BMR & Phos. Thickness',{name:'INSPECT_FINAL_BASE_DRYFILM_THICKNESS', required:true, class:'numberspinner',precision:1, suffix:' micron' })
+
+                +v-group('Final Inspection - Top Coat')
+                  +fitem('Visual',{name:'INSPECT_FINAL_TOP_VISUAL', required:true, class:'combobox comply', 'data-options':"data:[{value:'PASS',text:'Pass'},{value:'FAIL',text:'Fail'}]"})
+                  +fitem('Cure Test',{name:'INSPECT_FINAL_TOP_CURE_TEST', required:true, class:'combobox comply', 'data-options':"data:[{value:'PASS',text:'Pass'},{value:'FAIL',text:'Fail'}]"})
+                  +fitem('Adhesion test',{name:'INSPECT_FINAL_TOP_ADHESION_TEST', required:true, class:'combobox comply', 'data-options':"data:[{value:'PASS',text:'Pass'},{value:'FAIL',text:'Fail'}]"})
+                  +fitem('DFT Excl BMR & Phos. Thickness',{name:'INSPECT_FINAL_TOP_DRYFILM_THICKNESS', required:true, class:'numberspinner',precision:1, suffix:' micron' })

@@ -1,0 +1,195 @@
+extends ../content 
+
+block script
+  script: include js/sa_bhave.js
+  script.
+    /*CLS,230824, not working. the sol2wospec_cols multibox not working.
+    dwap.page.sol=function(){
+      var sol_data=[];
+      sol_data.push({text:'Cust Part Ref',value:'CUST_PART_ID'});
+      sol_data.push({text:'Cust Part Desc',value:'CUST_PART_DESCRIPTION'});
+      ajaxget('/',{_func:'get',_sqlid:'admin^bhave',appid:'sales^sa_sorder'},function(bh){
+          if (bh.UDF_LAYOUT_ID){
+              ajaxget('/',{_func:'get',_sqlid:'admin^udfall',ID:bh.UDF_LAYOUT_ID},function(data){
+                for(x=1;x<=10;x++){
+                  if(data['UDF_'+x])sol_data.push({text:data['UDF_'+x],value:'USER_'+x});
+                }
+                console.log(sol_data);
+                $('#sol2wospec_cols').multibox('loadData',sol_data);
+              })  ;                      
+          }
+      });      
+    }
+    dwap.page.sol();
+    */
+
+      
+block content   
+  +tabs#bhtabs(style='min-width:800px;' fit="true" tabPosition="left")
+
+        
+    div(title='Job Planner' iconCls="icon-org")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        .two
+          div(style="width:420px;")
+            br
+            +fieldset('Common Settings')
+              +input({name:'appid', type:'hidden',value:'vwltsa^sa_jobplan'})
+              +fitem('Plan Horizon (Weeks)',{name:'horiz', class:'numberspinner' ,value:'1'})
+              +fitem('SQL Batch Size',{name:'sqlops', class:'numberspinner' ,value:'200',min:10, precision:0})
+              +fitem('Plan Zero Hours',{name:'zerohrs_ok', class:'combobox' ,'data-options':"data:[{text:'NO',value:'n',selected:true},{text:'YES',value:'y'}]"})
+              +fitem('Balance Hrs Uses',{name:'hrscalc', class:'combobox' ,'data-options':"data:[{text:'Completed Hours',value:'HRS',selected:true},{text:'Completed Qty',value:'QTY'}]"})
+              +fitem('Apply Rate (mins)',{name:'apply_min', class:'numberspinner', value:5, min:0, precision:0})
+
+            +fieldset('Default Planner')           
+              +fitem('Enable Drag & Drop',{name:'ddon', class:'combobox' ,'data-options':"data:[{text:'NO',value:-1,selected:true},{text:'YES',value:1}]" })
+              +fitem('Calc Sub-Con Elapsed',{name:'subhours', class:'combobox' ,'data-options':"data:[{text:'NO',value:-1,selected:true},{text:'YES',value:1}]" })
+  
+            +fieldset('Advanced Planner')
+              +fitem('Minimum Run Mins',{name:'minmin', class:'numberspinner', value:5, min:1, precision:0})
+              +fitem('Reset Res Groups',{name:'reset_grpres', class:'combobox' ,'data-options':"data:[{text:'NO',value:-1,selected:true},{text:'YES',value:1}]" })
+
+              +fitem('Locked Job Start',{name:'lock_time', class:'combobox' ,'data-options':"data:[{text:'Date Only',value:'-1',selected:true},{text:'Date and Time',value:'1'}]"})
+
+              +fitem('Enable Move Hours',{name:'move_hours', class:'combobox' ,'data-options':"data:[{text:'NO',value:-1,selected:true},{text:'YES',value:1}]" })
+
+            if($.isdev)
+              +fieldset('Development')
+                +fitem('Advanced Planner',{name:'planplus',class:'combobox','data-options':"data:[{value:1,text:'Enable',selected:true},{value:-1,text:'Disable'}],panelHeight:'auto'"})
+
+          div#colours(style="margin-top:20px;") 
+            +fieldset('Display')
+              +fitem('Strip Leading Zeros',{name:'NOzeros', class:'combobox' ,'data-options':"data:[{text:'NO',value:-1,selected:true},{text:'YES',value:1}]" })
+              +fitem('Start Fullscreen',{name:'fscreen', class:'combobox' ,'data-options':"data:[{text:'NO',value:'n',selected:true},{text:'YES',value:'y'}]" })
+              +fitem('Show Long Run Time',{name:'showMaxrun', class:'combobox' ,'data-options':"data:[{text:'NO',value:'n'},{text:'YES',value:'y',selected:true}]" })  
+
+            +fieldset('Display Colours')
+              +fitem('Capacity Override',{name:'cor_col', class:'combobox colours'})
+              +fitem('Planned Job',{name:'pln_col', class:'combobox colours'})
+              +fitem('Un-Planned Job',{name:'unp_col', class:'combobox colours'})
+              +fitem('In-Process Job',{name:'act_col', class:'combobox colours'})
+              +fitem('Lead-Time Job',{name:'flt_col', class:'combobox colours'})
+              +fitem('Long Run Time',{name:'max_col', class:'combobox colours'})
+
+
+    div(title='Job Manager' iconCls="icon-tools")
+      template
+        form.single.load(_sqlid='admin^bhave'  asdpx='s')
+          .two
+            div(style="width:420px;")  
+              +fieldset('Validation',{style:"margin-top:12px;"})
+                +fitem('Schedule Fields',{name:'schedule_req', class:'combobox' ,'data-options':"editable:false, data:[{value:'Y',text:'YES'},{value:'N',text:'NO', selected:true}]"})
+                +fitem('Allow Lead Times',{name:'leadtime_ok', class:'combobox' ,'data-options':"editable:false, data:[{value:'Y',text:'YES', selected:true},{value:'N',text:'NO'}]"})
+                +fitem('Max Run Hours',{name:'maxrun_hrs', class:'numberspinner', value:100, min:1, precision:0})
+              
+              +fieldset('Default Values',{style:"margin-top:12px;"})
+                +input({name:'appid', type:'hidden',value:'vwltsa^sa_jobman'})
+                +fitem('Default Run Type',{name:'run_type', class:'combobox' ,'data-options':"data:[{value:'MIN/PC',text:'Minutes Per Piece'},{value:'HRS/PC',text:'Hours Per Piece'},{value:'DAYS/PC',text:'Days Per Piece'},{value:'PCS/MIN',text:'Pieces Per Minute'},{value:'PCS/HR',text:'Pieces Per Hour'},{value:'PCS/DAY',text:'Pieces Per Day'}]"})
+                +fitem('Default Qty Type',{name:'qty_type', class:'combobox' ,'data-options':"data:[{value:'QTYPER',text:'QTY PER'},{value:'FIXED',text:'FIXED QTY'}]"})
+        
+              +fieldset('Job Imports',{style:"margin-top:12px;"})
+                +fitem('Default Part ID',{name:'altpart', class:'combobox' , _sqlid:'inv^partid'}) 
+                +fitem('Default Resource ID',{name:'altres', class:'combobox' , _sqlid:'vwltsa^resid'})        
+
+              +fieldset('Auto FG-Receipt',{style:"margin-top:12px;"})
+                +fitem('Enable',{name:'auto_fg_receipt_enable', class:'combobox' ,'data-options':"editable:false, data:[{value:'Y',text:'YES', selected:true},{value:'N',text:'NO'}]"})
+                +fitem('Default Resource ID',{name:'auto_fg_receipt_res', class:'combobox' , _sqlid:'vwltsa^resid'})  
+                +fitem('Prev Opns Closed',{name:'auto_fg_prev_opns_closed', class:'combobox' ,'data-options':"editable:false, data:[{value:'Y',text:'YES', selected:true},{value:'N',text:'NO'}]"})
+            div(style="width:420px;")  
+              +fieldset('Allow Opn Changes When',{style:'margin-top:12px;'})
+                +fitem('Job Complete Qty',{name:'allowNewOpIfCompletedQtyMoreThanZero', class:'combobox' ,'data-options':"editable:false,data:[{value:'Y',text:'YES',selected:true},{value:'N',text:'NO'}]"})
+                +fitem('Job COC Qty',{name:'allowNewOpIfCOCQtyMoreThanZero', class:'combobox' ,'data-options':"editable:false,data:[{value:'Y',text:'YES',selected:true},{value:'N',text:'NO'}]"})
+        
+                +fitem('Opn Complete Qty ',{name:'allowOpnUpdateIfOpnCompletedQtyMoreThanZero', class:'combobox' ,'data-options':"editable:false,data:[{value:'Y',text:'YES'},{value:'N',text:'NO'}]"})
+      
+              +fieldset('Sales Order Line Imports',{style:"margin-top:12px;"})
+                +fitem('Fields',{name:'sol_fields', class:'combobox' ,'data-options':"editable:false, data:[{value:'n',text:'NONE'},{value:'q',text:'QTY ONLY'},{value:'w',text:'WANT DATE ONLY'},{value:'b',text:'QTY AND WANT DATE'}]"})
+                //-+fitem('Fields to WO Spec',{id:'~', name:'sol2wospec_cols', class:'easyui-multibox','data-options':"data:[{text:'Cust Part Ref',value:'CUST_PART_ID'},{text:'Cust Part Desc',value:'CUST_PART_DESCRIPTION'},{text:'User 1',value:'USER_1'},{text:'User 2',value:'USER_2'},{text:'User 3',value:'USER_3'},{text:'User 4',value:'USER_4'},{text:'User 5',value:'USER_5'} ,{text:'User 6',value:'USER_6'},{text:'User 7',value:'USER_7'},{text:'User 8',value:'USER_8'},{text:'User 9',value:'USER_9'},{text:'User 10',value:'USER_10'}     ]"})    
+                +fitem('Fields to WO Spec',{id:'~', name:'sol2wospec_cols', class:'easyui-multibox',_sqlid:'vwltsa^udf_multibox'})   
+                +fitem('Want Date Adjust Days',{name:'want_adj', class:'numberspinner' ,value:1,min:-100,max:100, precision:0}) 
+              +fieldset('Operation Part',{style:"margin-top:12px;"})
+                +fitem('Allow Consumable Parts',{name:'allowConsumableParts', class:'combobox' ,'data-options':"editable:false,data:[{value:'Y',text:'YES',selected:true},{value:'N',text:'NO'}]"})
+              +fieldset('Resource Select',{style:"margin-top:12px;"})
+                +fitem('Update Specifications',{name:'resource_select_update_spec', class:'combobox' ,'data-options':"editable:false,data:[{value:'Y',text:'YES',selected:true},{value:'N',text:'NO'},{value:'P',text:'PROMPT'}]"})
+              +fieldset('QBE Job Search',{style:"margin-top:12px;"})
+                +fitem('Job Search',{name:'qbe_job_search', class:'combobox' ,'data-options':"editable:false,data:[{value:'Y',text:'YES',selected:true},{value:'N',text:'NO'}]"})
+
+    div(title='Job Schedule' iconCls="aicon-gantt")
+      template
+        form.single.load(_sqlid='admin^bhave' asdpx='s')
+          input(type="hidden" name="appid" value="vwltsa^sa_jobsched")
+          +fitem('UDF Layout',{'data-options':"data:$.dui.pdata.udfid", id:'UDF_LAYOUT_ID',class:'combobox',name:'UDF_LAYOUT_ID'})
+          +fitem('Show Long Run Time',{name:'showMaxrun', class:'combobox' ,'data-options':"data:[{text:'NO',value:'n'},{text:'YES',value:'y',selected:true}]" }) 
+          +fitem('Horizon Days',{name:'horizon',class:'numberspinner inline',style:'width:60px;',min:14, max:140, precision:0, value:30})
+          +fitem('Filter By',{name:'filterBy', class:'combobox' ,'data-options':"data:[{text:'CUSTOMER_ID',value:'custid',selected:true},{text:'USER_1',value:'USER_1'},{text:'USER_2',value:'USER_2'},{text:'USER_3',value:'USER_3'},{text:'USER_4',value:'USER_4'},{text:'USER_5',value:'USER_5'},{text:'USER_6',value:'USER_6'},{text:'USER_7',value:'USER_7'},{text:'USER_8',value:'USER_8'},{text:'USER_9',value:'USER_9'},{text:'USER_10',value:'USER_10'}]" }) 
+          //-+fitem('Sort By',{name:'sortby', class:'combobox' ,'data-options':"data:[{text:'JOB',value:'woref'},{text:'PRIORITY',value:'priority'},{text:'WANTDATE',value:'wdate'}]" }) 
+
+    div(title='Operators' iconCls="icon-user")
+      template
+        form.single.load(_sqlid='admin^bhave' asdpx='s')
+          input(type="hidden" name="appid" value="vwltsa^config^sa_operators")
+          
+          br
+          +fieldset('General')
+            .fitem
+              label Default UDF
+              +combobox.pdata.udfid(type="text" name='defudf' data-options="data:$.dui.pdata.udfid")
+    
+          +fieldset('Tab Access')
+            +fitem('User Fields',{name:'udfen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+            +fitem('Resources',{name:'resen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+            +fitem('Certification',{name:'certen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+            +fitem('Qualifications',{name:'qualen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+            +fitem('NCRs',{name:'ncren' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+            +fitem('Attachments',{name:'docen' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+            +fitem('Rating',{name:'rating' ,class:'combobox','data-options':"panelHeight:'auto', data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+    div(title='Utilization' iconCls="aicon-group_gear")
+      template
+        form.single.load(_sqlid='admin^bhave' asdpx='s')
+          +input({name:'appid', type:'hidden',value:'vwltsa^dg_resutil'})
+          +fitem('Plan Horizon (Weeks)',{name:'horiz', class:'numberspinner' ,value:1}) 
+
+    div(title='Maint Manager' iconCls="icon-tools")
+      template
+        form#maint.single.load(_sqlid='admin^bhave' asdpx='s')
+          input(type="hidden" name="appid" value="vwltsa^maint_man")
+          .two
+            div(style="width:420px;")  
+              +fieldset('General')
+                +fitem('Default UDF',{class:'combobox' ,name:'defudf' ,'data-options':"data:$.dui.pdata.udfid"})
+                +fitem('Site Folder Name',{class:'textbox' ,name:'foldername',id:'~' })
+                +fitem('Events Order',{name:'eventsOrder', class:'combobox' ,'data-options':"data:[{text:'Event Date',value:'D'},{text:'Line No',value:'L'},{text:'Maint Type',value:'T',selected:true}]" }) 
+            div(style="width:420px;")        
+              +fieldset('Lists') 
+                +fitem('Status',{name:'CBO_STATUS', class:'edit first'})
+                +fitem('Type',{name:'CBO_TYPE', class:'edit first'})
+                +fitem('Class',{name:'CBO_CLASS', class:'edit first'})
+                +fitem('Method',{name:'CBO_MAINT_METHOD', class:'edit first'})
+                +fitem('Owner',{name:'CBO_OWNER_ID', class:'edit first'})
+                +fitem('Maint Type',{name:'CBO_MAINT_TYPE', class:'edit first'})
+    div(title='Job Tickets' iconCls="icon-ticket")
+      template
+        form.single.load(_sqlid='admin^bhave' asdpx='s')
+          +input({name:'appid', type:'hidden',value:'vwltsa^sa_ticket'})
+          +fitem('Std Utilization Hrs',{name:'STD_UTIL_HRS', class:'numberspinner' ,value:9.25,precision:2,step:0.25}) 
+          +fitem('Max Utilization %',{name:'MAX_UTIL_PCT', class:'numberspinner' ,value:100,precision:0,step:1}) 
+    div(title='Real-Time Queries' iconCls="aicon-tlights")
+      form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid', type:'hidden',value:'vwltsa^status^resources_charts'})
+
+        +fieldset('Efficiency')
+          +fitem('Horizon (Days)',{name:'EFFICIENCY_HORIZ', class:'numberspinner' ,min:1,max:360,value:90,precision:0,step:10}) 
+          +fitem('Resources',{name:'EFFICIENCY_RES', class:'easyui-multibox' ,_sqlid:'vwltsa^resourceid'}) 
+          +fitem('% Segment 1',{name:'EFFICIENCY_PCT_1', class:'textbox'})
+          +fitem('% Segment 2',{name:'EFFICIENCY_PCT_2', class:'textbox'})
+          +fitem('Color Segment 1',{name:'EFFICIENCY_COLOR_1', class:'combobox colours'})
+          +fitem('Color Segment 2',{name:'EFFICIENCY_COLOR_2', class:'combobox colours'})
+          +fitem('Color Segment 3',{name:'EFFICIENCY_COLOR_3', class:'combobox colours'})   
+        +fieldset('Effectiveness')
+          +fitem('Horizon (Days)',{name:'EFFECTIVENESS_HORIZ', class:'numberspinner' ,min:1,max:360,value:90,precision:0,step:10}) 
+          +fitem('Resources',{name:'EFFECTIVENESS_RES', class:'easyui-multibox' ,_sqlid:'vwltsa^resourceid'}) 
+          +fitem('% Segment 1',{name:'EFFECTIVENESS_PCT_1', class:'textbox'})
+          +fitem('% Segment 2',{name:'EFFECTIVENESS_PCT_2', class:'textbox'})
+          +fitem('Color Segment 1',{name:'EFFECTIVENESS_COLOR_1', class:'combobox colours'})
+          +fitem('Color Segment 2',{name:'EFFECTIVENESS_COLOR_2', class:'combobox colours'})
+          +fitem('Color Segment 3',{name:'EFFECTIVENESS_COLOR_3', class:'combobox colours'})

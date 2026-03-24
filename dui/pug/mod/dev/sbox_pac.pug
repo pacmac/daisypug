@@ -1,0 +1,617 @@
+extends ../content
+
+block content
+  -
+    // Sample tree data — navigation tree with theme-friendly icon colours
+    // cls adds DaisyUI colour classes to the <li>; Lucide icons inherit via currentColor
+    var navTreeData = [
+      { id: 'inv', text: 'Inventory', iconCls: 'icon-inout', cls: 'text-primary', state: 'open', children: [
+        { id: 'inv^sa_parts', text: 'Part Masters', iconCls: 'icon-part', cls: 'text-info' },
+        { id: 'inv^gate_pass', text: 'Gate Pass', iconCls: 'icon-gate_pass', cls: 'text-warning' },
+        { id: 'inv^stock', text: 'Stock Control', iconCls: 'icon-lists', cls: 'text-secondary', children: [
+          { id: 'inv^stock_in', text: 'Stock In', iconCls: 'icon-cart-in', cls: 'text-success' },
+          { id: 'inv^stock_out', text: 'Stock Out', iconCls: 'icon-ship', cls: 'text-error' }
+        ]}
+      ]},
+      { id: 'sa', text: 'Sales', iconCls: 'icon-money', cls: 'text-accent', children: [
+        { id: 'sa^quotation', text: 'Quotation', iconCls: 'icon-file' },
+        { id: 'sa^sorder', text: 'Sales Order', iconCls: 'icon-cart', cls: 'text-success' }
+      ]},
+      { id: 'admin', text: 'Admin', iconCls: 'icon-admin', children: [
+        { id: 'admin^users', text: 'User Manager', iconCls: 'icon-user', cls: 'text-error' },
+        { id: 'admin^logins', text: 'Logins', iconCls: 'icon-key', cls: 'text-warning' }
+      ]}
+    ]
+
+    // Sample tree data — checkbox tree (access control)
+    var checkTreeData = [
+      { id: 'mod_inv', text: 'Inventory', iconCls: 'icon-inout', state: 'open', children: [
+        { id: 'acc_parts', text: 'Part Masters', checked: true },
+        { id: 'acc_gp', text: 'Gate Pass', checked: true },
+        { id: 'acc_stock', text: 'Stock Control', checked: false }
+      ]},
+      { id: 'mod_sa', text: 'Sales', iconCls: 'icon-money', children: [
+        { id: 'acc_quot', text: 'Quotation', checked: true },
+        { id: 'acc_so', text: 'Sales Order', checked: false }
+      ]}
+    ]
+
+  +tabs({fit: true})#sbox-tabs.remember
+    +tab-item('Toolbar', {active: true})
+      +hsplit('85%')
+        +panel('north')
+          .p-4.flex.flex-col.gap-4
+            h3.font-semibold.text-sm.opacity-70 Toolbar mixin sandbox
+
+            //- 1. Simple toolbar with title and custom buttons
+            +toolbar#tb1(title="Shipment Lines", icon="package")
+              +button('Trace', {id: 'tb1_trace', size: 'xs', style: 'ghost', icon: 'scan-line'})
+              +button('Print Label', {id: 'tb1_label', size: 'xs', style: 'ghost', icon: 'printer'})
+
+            //- 2. Toolbar with CRUD buttons (asdpx)
+            +toolbar#tb2(asdpx="aed")
+
+            //- 3. Toolbar with title + CRUD + custom button
+            +toolbar#tb3(title="BOM Lines", icon="layers", asdpx="aed")
+              +toolbar-sep
+              +button('Validate', {id: 'tb3_val', size: 'xs', style: 'ghost', icon: 'check-circle'})
+
+            //- 4. Toolbar with no title, just buttons (right-aligned)
+            +toolbar#tb4
+              +button('Export', {id: 'tb4_export', size: 'xs', style: 'ghost', icon: 'download'})
+              +toolbar-sep
+              +button('Refresh', {id: 'tb4_refresh', size: 'xs', style: 'ghost', icon: 'refresh-cw'})
+
+            //- 5. JSON-driven toolbar with separators (from toolbar.sbox_pac_tb5.json)
+            +toolbar#tb5
+
+            //- 6. Size: sm — compact (datagrid style)
+            +toolbar#tb6(title="Size: sm", icon="minimize-2", asdpx="aed", size="sm")
+              +fitem('Locked',{name:'SM_LOCKED', class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N',selected:true}]"})
+              +fitem('Last Count',{name:'SM_LAST_COUNT',class:'datebox',readonly:true})
+              +fitem('Days',{name:'SM_DAYS',class:'numberbox', value:0, precision:0})
+              +toolbar-sep
+              +button('Action', {id: 'tb6_action', size: 'xs', style: 'ghost', icon: 'zap'})
+
+            //- 7. Size: md — default
+            +toolbar#tb7(title="Size: md (default)", icon="maximize", asdpx="aed")
+              +toolbar-sep
+              +button('Action', {id: 'tb7_action', size: 'sm', style: 'ghost', icon: 'zap'})
+
+            //- 8. Size: lg — prominent
+            +toolbar#tb8(title="Size: lg", icon="maximize-2", asdpx="aed", size="lg")
+              +toolbar-sep
+              +button('Action', {id: 'tb8_action', size: 'md', style: 'ghost', icon: 'zap'})
+
+            //- 9. Icon auto-colour — nextIconColor() cycles the palette
+            h3.font-semibold.text-sm.opacity-70.mt-2 Icon Auto-Colour — nextIconColor()
+            .flex.items-center.gap-4.flex-wrap
+              each name in ['search','settings','save','trash-2','download','refresh-cw','zap','heart','star','shield','bell','lock','eye','package']
+                .flex.items-center.gap-1.text-xs
+                  +icon(name, {autocolor: true, size: 'md'})
+                  span.opacity-50= name
+
+        +panel('center')
+          .flex.flex-col.h-full
+            //- Eval box
+            .flex.items-center.gap-2.px-3.py-2.bg-base-200.border-b.border-base-300
+              span.text-xs.font-mono.opacity-50 $&gt;
+              input#tb-eval.input.input-xs.input-bordered.font-mono.flex-1(type="text" placeholder="$('#tb2_add').button('enable')")
+              +button('Run', {id: 'tb-eval-run', size: 'xs', color: 'primary'})
+              +button('Clear', {id: 'tb-log-clear', size: 'xs', style: 'ghost'})
+            //- Event log
+            #tb-log.flex-1.overflow-auto.p-3.font-mono.text-xs.leading-relaxed.bg-base-100
+
+    +tab-item('Tree')
+      +vsplit('12%')
+        +panel('west', { title: 'Navigation Tree' })
+          .p-2
+            +tree-render#navTree
+              each node in navTreeData
+                +tree-node(node)
+
+        +hsplit('50%')
+          +panel('north', { title: 'Checkbox Tree (cascadeCheck: false)' })
+            .p-2
+              +tree-render({checkbox: true, cascadeCheck: false})#checkTree
+                each node in checkTreeData
+                  +tree-node(node)
+
+          +panel('center', { title: 'Dynamic Tree (loaded via JS)' })
+            .p-2
+              +tree#dynTree
+              .mt-2.flex.gap-2
+                +button('Load Data', {id: 'btn-load-tree', color: 'primary', size: 'sm'})
+                +button('Get Checked', {id: 'btn-get-checked', color: 'secondary', size: 'sm'})
+                +button('Expand All', {id: 'btn-expand-all', color: 'accent', size: 'sm'})
+                +button('Collapse All', {id: 'btn-collapse-all', color: 'ghost', size: 'sm'})
+
+    +tab-item('Vgroup')
+      style.
+        .vgroup-panel { padding: 0.5rem 0.75rem; }
+        .vgroup-panel h4 { font-size: 0.75rem; font-weight: 600; opacity: 0.45; margin-bottom: 0.5rem; }
+      +vsplit('400px')
+        +panel('west')
+          .vgroup-panel.flex.flex-col.gap-6
+            //- West: vgroup (default)
+            div
+              h4 vgroup (default)
+              form
+                +fitem('Part ID', {name:'WG_PART', class:'textbox'})
+                +fitem('Description', {name:'WG_DESC', class:'textbox'})
+                +v-group('Planning')
+                  +fitem('Priority', {name:'WG_PRI', class:'textbox'})
+                  +fitem('Lead Time', {name:'WG_LT', class:'textbox'})
+                +v-group('Dates')
+                  +fitem('Start', {name:'WG_START', class:'textbox'})
+                  +fitem('End', {name:'WG_END', class:'textbox'})
+            //- West: vgroup (primary is now default)
+            div
+              h4 vgroup (primary is now default)
+              form
+                +fitem('Part ID', {name:'WP_PART', class:'textbox'})
+                +fitem('Description', {name:'WP_DESC', class:'textbox'})
+                +v-group('Planning')
+                  +fitem('Priority', {name:'WP_PRI', class:'textbox'})
+                  +fitem('Lead Time', {name:'WP_LT', class:'textbox'})
+                +v-group('Dates')
+                  +fitem('Start', {name:'WP_START', class:'textbox'})
+                  +fitem('End', {name:'WP_END', class:'textbox'})
+            //- West: fieldset
+            div
+              h4 fieldset (existing)
+              form
+                +fitem('Part ID', {name:'WF_PART', class:'textbox'})
+                +fitem('Description', {name:'WF_DESC', class:'textbox'})
+                +fieldset('Planning')
+                  +fitem('Priority', {name:'WF_PRI', class:'textbox'})
+                  +fitem('Lead Time', {name:'WF_LT', class:'textbox'})
+                +fieldset('Dates')
+                  +fitem('Start', {name:'WF_START', class:'textbox'})
+                  +fitem('End', {name:'WF_END', class:'textbox'})
+        +panel('center')
+          .vgroup-panel.flex.flex-col.gap-6
+            //- East: vgroup (default)
+            div
+              h4 vgroup (default) — .two columns
+              form
+                div.two
+                  div
+                    +fitem('Part ID', {name:'EG_PART', class:'textbox'})
+                    +fitem('Description', {name:'EG_DESC', class:'textbox'})
+                    +fitem('Status', {name:'EG_STAT', class:'textbox'})
+                    +v-group('Sales Order')
+                      +fitem('Customer', {name:'EG_CUST', class:'textbox'})
+                      +fitem('Order Ref', {name:'EG_OREF', class:'textbox'})
+                      +fitem('Line No', {name:'EG_LINE', class:'textbox'})
+                  div
+                    +v-group('Costing')
+                      +fitem('Est Cost', {name:'EG_EST', class:'textbox'})
+                      +fitem('Act Cost', {name:'EG_ACT', class:'textbox'})
+                      +fitem('Total', {name:'EG_TOT', class:'textbox'})
+            //- East: vgroup (primary is now default)
+            div
+              h4 vgroup (primary is now default) — .two columns
+              form
+                div.two
+                  div
+                    +fitem('Part ID', {name:'EP_PART', class:'textbox'})
+                    +fitem('Description', {name:'EP_DESC', class:'textbox'})
+                    +fitem('Status', {name:'EP_STAT', class:'textbox'})
+                    +v-group('Sales Order')
+                      +fitem('Customer', {name:'EP_CUST', class:'textbox'})
+                      +fitem('Order Ref', {name:'EP_OREF', class:'textbox'})
+                      +fitem('Line No', {name:'EP_LINE', class:'textbox'})
+                  div
+                    +v-group('Costing')
+                      +fitem('Est Cost', {name:'EP_EST', class:'textbox'})
+                      +fitem('Act Cost', {name:'EP_ACT', class:'textbox'})
+                      +fitem('Total', {name:'EP_TOT', class:'textbox'})
+            //- East: fieldset (existing)
+            div
+              h4 fieldset (existing) — .two columns
+              form
+                div.two
+                  div
+                    +fitem('Part ID', {name:'EF_PART', class:'textbox'})
+                    +fitem('Description', {name:'EF_DESC', class:'textbox'})
+                    +fitem('Status', {name:'EF_STAT', class:'textbox'})
+                    +fieldset('Sales Order')
+                      +fitem('Customer', {name:'EF_CUST', class:'textbox'})
+                      +fitem('Order Ref', {name:'EF_OREF', class:'textbox'})
+                      +fitem('Line No', {name:'EF_LINE', class:'textbox'})
+                  div
+                    +fieldset('Costing')
+                      +fitem('Est Cost', {name:'EF_EST', class:'textbox'})
+                      +fitem('Act Cost', {name:'EF_ACT', class:'textbox'})
+                      +fitem('Total', {name:'EF_TOT', class:'textbox'})
+
+    +tab-item('Fitem')
+      .p-4
+        p Fitem sandbox content goes here.
+
+    +tab-item('Form')
+      //- style.
+        //- /* Scoped fitem experiment — promoted to forms.css */
+        //- .fitem { max-width: 24rem; padding-left: 4px; padding-right: 4px; }
+        //- .fitem > label { flex-shrink: 1; min-width: 4rem; }
+      +vsplit('25%')
+        +panel('west')
+          +form#qbe-demo-form(class='multi fit', _sqlid='inv^partall')
+            +fitem('Part ID (QBE + Navi)',{_sqlid:'inv^partid_qbe', id:'~', name:'ID', class:'qbe fkey fit navi', panelWidth:'230px', validType:['length[1,30]']})
+            +fitem('Part Class',{id:'~', name:'PART_CLASS_ID', class:'combobox','data-options':"data:[{text:'Component',value:'COMP'},{text:'Finished Goods',value:'FG'}]"})
+            +fitem('Description',{id:'~', name:'DESCRIPTION', class:'textbox', readonly:true})
+            +fitem('Search Part',{id:'SEARCH_PART', name:'SEARCH_PART', class:'searchbox'})
+        +panel('center')
+          +form#east-demo-form(class='multi fit')
+            +fitem('Part ID',{id:'EAST_PART_ID', name:'EAST_PART_ID', class:'textbox'})
+            +fitem('Description',{id:'EAST_DESC', name:'EAST_DESC', class:'textbox'})
+            +fitem('Part Class',{id:'EAST_CLASS', name:'EAST_CLASS', class:'combobox','data-options':"data:[{text:'Component',value:'COMP'},{text:'Finished Goods',value:'FG'}]"})
+            +fitem('Search',{id:'EAST_SEARCH', name:'EAST_SEARCH', class:'searchbox'})
+
+    +tab-item('Panels')
+      +vsplit('300px')
+        +panel('west', { title: 'L1 West' })
+          .p-4
+            p.text-sm Level 1 west panel
+            +fitem('Field A', {name:'PAN_A', class:'textbox'})
+            +fitem('Field B', {name:'PAN_B', class:'textbox'})
+        +hsplit('50%')
+          +panel('north', { title: 'L2 North' })
+            +vsplit('200px')
+              +panel('west', { title: 'L3 West' })
+                .p-4
+                  p.text-xs Level 3 nested west
+              +panel('center', { title: 'L3 Center' })
+                .p-4
+                  p.text-xs Level 3 nested center
+          +panel('center', { title: 'L2 Center' })
+            .p-4
+              p.text-sm Level 2 center panel
+              +fitem('Field C', {name:'PAN_C', class:'textbox'})
+
+    +tab-item('Big Data')
+      +form#bigdata-form
+        +fitem('Search Part',{id:'~', name:'BD_SEARCH', class:'searchbox fkey', sbref:'part'})
+        +fitem('Description',{id:'~', name:'BD_DESC', class:'textbox', readonly:true})
+        +fitem('Part Class',{id:'~', name:'BD_CLASS', class:'textbox', readonly:true})
+        +fitem('UOM',{id:'~', name:'BD_UOM', class:'textbox', readonly:true})
+        +fitem('Product Code',{id:'~', name:'BD_PRODUCT', class:'textbox', readonly:true})
+        +fitem('Traceable',{id:'~', name:'BD_TRACE', class:'textbox', readonly:true})
+        +fitem('Balance Qty',{id:'~', name:'BD_QTY', class:'textbox', readonly:true})
+
+    +tab-item('Multibox')
+      +vsplit('360px')
+        +panel('west', { title: 'Multibox Demos' })
+          .p-4.flex.flex-col.gap-6
+            //- Demo 1: Permissions (2 columns, striped)
+            .flex.flex-col.gap-1
+              label.text-xs.font-semibold.opacity-60 Permissions (2-col, striped)
+              .dropdown.w-full#mb-perms
+                div(tabindex="0" role="button").input.input-bordered.input-sm.w-full.flex.items-center.justify-between.cursor-pointer
+                  span.multibox-text.opacity-50 Select items...
+                  +icon('chevron-down', {size: 'xs'})
+                div(tabindex="0").dropdown-content.bg-base-100.border.border-base-300.rounded-box.shadow-lg.z-50.w-full.max-h-60.overflow-y-auto.mt-1.p-3
+                  .grid.grid-cols-2.gap-x-4.gap-y-1
+                    - var perms = ['View','Edit','Delete','Create','Export','Import','Print','Admin','Approve','Reject','Archive','Restore']
+                    each p, i in perms
+                      label.flex.items-center.gap-2.cursor-pointer.rounded.px-2.py-1.hover_bg-base-200(class=(i % 2 === 0 ? 'bg-base-200/50' : ''))
+                        input.checkbox.checkbox-xs.checkbox-primary(type="checkbox" value=p)
+                        span= p
+
+            //- Demo 2: Departments (1 column)
+            .flex.flex-col.gap-1
+              label.text-xs.font-semibold.opacity-60 Department (1-col)
+              .dropdown.w-full#mb-dept
+                div(tabindex="0" role="button").input.input-bordered.input-sm.w-full.flex.items-center.justify-between.cursor-pointer
+                  span.multibox-text.opacity-50 Select items...
+                  +icon('chevron-down', {size: 'xs'})
+                div(tabindex="0").dropdown-content.bg-base-100.border.border-base-300.rounded-box.shadow-lg.z-50.w-full.max-h-60.overflow-y-auto.mt-1.p-3
+                  .flex.flex-col.gap-y-1
+                    - var depts = ['Engineering','Production','Quality','Warehouse','Sales','Purchasing','Finance','HR']
+                    each d in depts
+                      label.flex.items-center.gap-2.cursor-pointer.rounded.px-2.py-1.hover_bg-base-200
+                        input.checkbox.checkbox-xs.checkbox-secondary(type="checkbox" value=d)
+                        span= d
+
+            //- Demo 3: Report Modules (3 columns)
+            .flex.flex-col.gap-1
+              label.text-xs.font-semibold.opacity-60 Report Modules (3-col)
+              .dropdown.w-full#mb-reports
+                div(tabindex="0" role="button").input.input-bordered.input-sm.w-full.flex.items-center.justify-between.cursor-pointer
+                  span.multibox-text.opacity-50 Select items...
+                  +icon('chevron-down', {size: 'xs'})
+                div(tabindex="0").dropdown-content.bg-base-100.border.border-base-300.rounded-box.shadow-lg.z-50.w-full.max-h-60.overflow-y-auto.mt-1.p-3
+                  .grid.grid-cols-3.gap-x-4.gap-y-1
+                    - var mods = ['INV','SALES','PURCH','PROD','QC','PLAN','FIN','HR','ADMIN','WMS','MRP','CRM']
+                    each m, i in mods
+                      label.flex.items-center.gap-2.cursor-pointer.rounded.px-2.py-1.hover_bg-base-200(class=(i % 2 === 0 ? 'bg-base-200/50' : ''))
+                        input.checkbox.checkbox-xs.checkbox-accent(type="checkbox" value=m)
+                        span= m
+
+            //- ── Mixin versions (compare with prototypes above) ──────────
+            .divider.my-2.text-xs.opacity-40 Mixin versions below
+            +fitem('Permissions (mixin)',{id:'mx-perms', name:'MX_PERMS', class:'multibox', 'data-options':"columns:2,data:[{text:'View',value:'View'},{text:'Edit',value:'Edit'},{text:'Delete',value:'Delete'},{text:'Create',value:'Create'},{text:'Export',value:'Export'},{text:'Import',value:'Import'},{text:'Print',value:'Print'},{text:'Admin',value:'Admin'},{text:'Approve',value:'Approve'},{text:'Reject',value:'Reject'},{text:'Archive',value:'Archive'},{text:'Restore',value:'Restore'}]"})
+            +fitem('Department (mixin)',{id:'mx-dept', name:'MX_DEPT', class:'multibox', 'data-options':"columns:1,striped:false,data:[{text:'Engineering',value:'ENG'},{text:'Production',value:'PROD'},{text:'Quality',value:'QC'},{text:'Warehouse',value:'WH'},{text:'Sales',value:'SALES'},{text:'Purchasing',value:'PURCH'},{text:'Finance',value:'FIN'},{text:'HR',value:'HR'}]"})
+            +fitem('Modules (mixin)',{id:'mx-reports', name:'MX_MODULES', class:'multibox', 'data-options':"columns:3,data:[{text:'INV',value:'INV'},{text:'SALES',value:'SALES'},{text:'PURCH',value:'PURCH'},{text:'PROD',value:'PROD'},{text:'QC',value:'QC'},{text:'PLAN',value:'PLAN'},{text:'FIN',value:'FIN'},{text:'HR',value:'HR'},{text:'ADMIN',value:'ADMIN'},{text:'WMS',value:'WMS'},{text:'MRP',value:'MRP'},{text:'CRM',value:'CRM'}]"})
+
+            //- Controls
+            .flex.gap-2.mt-2
+              +button('Get Values', {id: 'mb-get-vals', color: 'primary', size: 'xs'})
+              +button('Set Perms', {id: 'mb-set-vals', color: 'secondary', size: 'xs'})
+              +button('Clear All', {id: 'mb-clear', color: 'ghost', size: 'xs'})
+
+        +panel('center', { title: 'Event Log' })
+          .flex.flex-col.h-full
+            .flex.items-center.gap-2.px-3.py-2.bg-base-200.border-b.border-base-300
+              span.text-xs.font-mono.opacity-50 Multibox events
+              .flex-1
+              +button('Clear', {id: 'mb-log-clear', size: 'xs', style: 'ghost'})
+            #mb-log.flex-1.overflow-auto.p-3.font-mono.text-xs.leading-relaxed.bg-base-100
+
+    +tab-item('Left Tabs')
+      //- Tests the +tabs → +vtab bridge: tabPosition:'left' routes through +vtab internally
+      +tabs#lt-demo(data-options="tabPosition:'left',headerWidth:150")
+        +tab-item('Settings',{iconCls:"icon-admin"})
+          form
+            +fieldset('General')
+              +fitem('Company',{name:'LT_COMPANY', class:'textbox', value:'ACME Corp'})
+              +fitem('Active',{name:'LT_ACTIVE', class:'combobox', 'data-options':"data:[{text:'Yes',value:'y',selected:true},{text:'No',value:'n'}]"})
+            +fieldset('Numbering')
+              +fitem('Auto Number',{name:'LT_AUTONUM', class:'combobox', 'data-options':"data:[{text:'Auto',value:'AUTO',selected:true},{text:'Manual',value:'USER'}]"})
+              +fitem('Prefix',{name:'LT_PREFIX', class:'textbox', value:'INV-'})
+        +tab-item('Coatings',{iconCls:"icon-coat-resin"})
+          form
+            div.two
+              div
+                +fieldset('Main Lists')
+                  +fitem('Colour',{name:'LT_COLOUR', class:'combobox edit first'})
+                  +fitem('Spec ID',{name:'LT_SPEC', class:'combobox edit first'})
+                +fieldset('Surface Prep')
+                  +fitem('Solvent',{name:'LT_SOLVENT', class:'combobox edit first'})
+                  +fitem('Blast Type',{name:'LT_BLAST', class:'combobox edit first'})
+              div
+                +fieldset('Application')
+                  +fitem('Manufacturer',{name:'LT_MFG', class:'combobox edit first'})
+                  +fitem('Type',{name:'LT_TYPE', class:'combobox edit first'})
+                  +fitem('Colour',{name:'LT_APP_COLOUR', class:'combobox edit first'})
+        +tab-item('Operators',{iconCls:"icon-user"})
+          form
+            +fieldset('Tab Access')
+              +fitem('User Fields',{name:'LT_UDF', class:'combobox', 'data-options':"data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+              +fitem('Resources',{name:'LT_RES', class:'combobox', 'data-options':"data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+              +fitem('Certification',{name:'LT_CERT', class:'combobox', 'data-options':"data:[{text:'No',value:'n'},{text:'Yes',value:'y',selected:true}]"})
+        +tab-item('Analysis',{iconCls:"icon-chart"})
+          form
+            +fitem('Start Date',{name:'LT_FRDATE', class:'datebox'})
+            +fieldset('Report Settings')
+              +fitem('Top N',{name:'LT_TOPN', value:3, precision:0, min:1, class:'numberspinner'})
+              +fitem('Cost Threshold',{name:'LT_COST', value:500, precision:2, min:0, class:'numberspinner'})
+
+    +tab-item('Modal')
+      .p-6.flex.flex-col.items-center.gap-4
+        h3.font-semibold.text-lg $.modal.create() Demo
+        p.text-sm.opacity-70.max-w-md.text-center Click the button below to open a dynamically created modal dialog with auto-generated form fields.
+        +button('Open Modal Demo', {id: 'btn-modal-create', color: 'primary', size: 'sm', style: 'outline'})
+
+block script
+  script.
+    $.page.ready(function() {
+      // ── Toolbar sandbox — event log + eval ──────────────────────────
+      (function() {
+        var $log = $('#tb-log');
+        var seq = 0;
+
+        function tbLog(msg, cls) {
+          seq++;
+          var ts = new Date().toLocaleTimeString('en-GB', {hour12:false});
+          var line = '<div class="' + (cls || '') + '">'
+            + '<span class="opacity-40">' + ts + '</span> '
+            + '<span class="opacity-50">[' + seq + ']</span> '
+            + msg + '</div>';
+          $log.append(line);
+          $log[0].scrollTop = $log[0].scrollHeight;
+        }
+
+        // Wire all toolbar buttons — click event logging
+        $('[id^="tb1_"], [id^="tb2_"], [id^="tb3_"], [id^="tb4_"], [id^="tb5_"], [id^="tb6_"], [id^="tb7_"], [id^="tb8_"]').on('click', function() {
+          var id = this.id;
+          var text = $(this).text().trim();
+          var disabled = $(this).hasClass('pointer-events-none');
+          if (disabled) {
+            tbLog('<span class="text-warning">#' + id + '</span> (' + text + ') — disabled, no action', '');
+          } else {
+            tbLog('<span class="text-success">#' + id + '</span> (' + text + ') clicked', '');
+          }
+        });
+
+        // Eval box
+        function runEval() {
+          var code = $('#tb-eval').val().trim();
+          if (!code) return;
+          tbLog('<span class="text-info">eval:</span> <span class="opacity-70">' + code.replace(/</g,'&lt;') + '</span>');
+          try {
+            var result = new Function('return ' + code)();
+            if (result !== undefined) {
+              tbLog('<span class="text-success">→</span> ' + String(result));
+            }
+          } catch(e) {
+            tbLog('<span class="text-error">error:</span> ' + e.message);
+          }
+        }
+        $('#tb-eval-run').on('click', runEval);
+        $('#tb-eval').on('keydown', function(e) { if (e.key === 'Enter') runEval(); });
+
+        // Clear log
+        $('#tb-log-clear').on('click', function() { $log.empty(); seq = 0; });
+
+        tbLog('<span class="opacity-50">Toolbar sandbox ready. Click buttons above or eval JS below.</span>');
+        tbLog('<span class="opacity-50">Try: $(\'#tb2_add\').button(\'enable\')</span>');
+      })();
+
+      // Dynamic tree data for JS loading
+      var dynamicData = [
+        { id: 'd1', text: 'Documents', iconCls: 'icon-folder_page', state: 'open', children: [
+          { id: 'd1a', text: 'Invoices', iconCls: 'icon-file' },
+          { id: 'd1b', text: 'Contracts', iconCls: 'icon-file' },
+          { id: 'd1c', text: 'Templates', iconCls: 'icon-folder_page', children: [
+            { id: 'd1c1', text: 'Invoice Template', iconCls: 'icon-template' },
+            { id: 'd1c2', text: 'Contract Template', iconCls: 'icon-template' }
+          ]}
+        ]},
+        { id: 'd2', text: 'Images', iconCls: 'icon-folder_page', children: [
+          { id: 'd2a', text: 'Photos', iconCls: 'icon-pclip' },
+          { id: 'd2b', text: 'Icons', iconCls: 'icon-pclip' }
+        ]}
+      ];
+
+      // Load data button
+      $('#btn-load-tree').on('click', function() {
+        $('#dynTree').tree('loadData', dynamicData);
+      });
+
+      // Get checked button
+      $('#btn-get-checked').on('click', function() {
+        var checked = $('#checkTree').tree('getChecked');
+        alert('Checked: ' + checked.map(function(n) { return n.text; }).join(', '));
+      });
+
+      // Expand/collapse all
+      $('#btn-expand-all').on('click', function() {
+        $('#dynTree').tree('expandAll');
+      });
+      $('#btn-collapse-all').on('click', function() {
+        $('#dynTree').tree('collapseAll');
+      });
+
+      // Navigation tree — log selection
+      $('#navTree').tree({
+        onSelect: function(node) {
+          console.log('[navTree] selected:', node.id, node.text);
+        }
+      });
+
+      // Checkbox tree
+      $('#checkTree').tree({
+        checkbox: true,
+        cascadeCheck: false,
+        onCheck: function(node, checked) {
+          console.log('[checkTree] check:', node.id, node.text, checked);
+        }
+      });
+
+      // ── Multibox sandbox ─────────────────────────────────────────────
+      (function() {
+        var $log = $('#mb-log');
+        var seq = 0;
+
+        function mbLog(msg) {
+          seq++;
+          var ts = new Date().toLocaleTimeString('en-GB', {hour12:false});
+          $log.append('<div><span class="opacity-40">' + ts + '</span> <span class="opacity-50">[' + seq + ']</span> ' + msg + '</div>');
+          $log[0].scrollTop = $log[0].scrollHeight;
+        }
+
+        // Update display text when checkboxes change
+        function updateDisplay($mb) {
+          var $text = $mb.find('.multibox-text');
+          var checked = [];
+          $mb.find('input:checkbox:checked').each(function() {
+            checked.push(this.value);
+          });
+          if (checked.length === 0) {
+            $text.text('Select items...').addClass('opacity-50');
+          } else {
+            $text.text('Selected Items (' + checked.length + ')').removeClass('opacity-50');
+          }
+          return checked;
+        }
+
+        // Wire checkbox change events for all three demos
+        $('#mb-perms, #mb-dept, #mb-reports').each(function() {
+          var $mb = $(this);
+          var name = $mb.attr('id').replace('mb-', '');
+          $mb.on('change', 'input:checkbox', function() {
+            var checked = updateDisplay($mb);
+            var action = this.checked ? 'checked' : 'unchecked';
+            mbLog('<span class="text-info">' + name + '</span>: ' + action + ' <span class="text-accent">' + this.value + '</span> — total: ' + checked.length);
+          });
+        });
+
+        // Get values — prototypes (raw DOM) + mixin versions (plugin API)
+        $('#mb-get-vals').on('click', function() {
+          ['mb-perms', 'mb-dept', 'mb-reports'].forEach(function(id) {
+            var vals = [];
+            $('#' + id).find('input:checkbox:checked').each(function() { vals.push(this.value); });
+            mbLog('<span class="text-success">' + id + '</span>: ' + (vals.length ? vals.join(',') : '(none)'));
+          });
+          // Mixin versions via plugin API
+          var mxMap = { 'mx-perms': 'MX_PERMS', 'mx-dept': 'MX_DEPT', 'mx-reports': 'MX_MODULES' };
+          $.each(mxMap, function(id) {
+            var $mb = $('[data-for="' + id + '"]');
+            if ($mb.length) {
+              var val = $mb.multibox('getValue');
+              mbLog('<span class="text-success">' + id + '</span>: ' + (val || '(none)'));
+            }
+          });
+        });
+
+        // Set values programmatically
+        $('#mb-set-vals').on('click', function() {
+          // Prototype
+          var $mb = $('#mb-perms');
+          $mb.find('input:checkbox').prop('checked', false);
+          ['View', 'Edit', 'Print'].forEach(function(v) {
+            $mb.find('input:checkbox[value="' + v + '"]').prop('checked', true);
+          });
+          updateDisplay($mb);
+          mbLog('<span class="text-warning">perms</span>: set to View,Edit,Print');
+          // Mixin version
+          var $mxPerms = $('[data-for="mx-perms"]');
+          if ($mxPerms.length) {
+            $mxPerms.multibox('setValue', 'View,Edit,Print');
+            mbLog('<span class="text-warning">mx-perms</span>: set to View,Edit,Print');
+          }
+        });
+
+        // Clear all
+        $('#mb-clear').on('click', function() {
+          // Prototypes
+          $('#mb-perms, #mb-dept, #mb-reports').each(function() {
+            $(this).find('input:checkbox').prop('checked', false);
+            updateDisplay($(this));
+          });
+          // Mixin versions
+          $('[data-for="mx-perms"], [data-for="mx-dept"], [data-for="mx-reports"]').each(function() {
+            $(this).multibox('clear');
+          });
+          mbLog('<span class="text-error">all cleared</span>');
+        });
+
+        $('#mb-log-clear').on('click', function() { $log.empty(); seq = 0; });
+        mbLog('<span class="opacity-50">Multibox sandbox ready. Try the dropdowns on the left.</span>');
+      })();
+
+      // Modal create demo
+      $('#btn-modal-create').on('click', function() {
+        var dlg = $.modal.create({
+          id: 'sbox-demo',
+          title: 'Demo Dialog',
+          fields: [
+            { id: 'PART_ID', type: 'combobox',  label: 'Part', sqlid: 'inv^partid_qbe' },
+            { id: 'QTY',     type: 'numberbox', label: 'Quantity' },
+            { id: 'STATUS',  type: 'combobox',  label: 'Status',
+              data: [{ value: 'A', text: 'Active' }, { value: 'I', text: 'Inactive' }] }
+          ]
+        }, [
+          { text: 'OK', handler: function() {
+              var part = $('#sbox-demo [name="PART_ID"]').val();
+              var qty  = $('#sbox-demo [name="QTY"]').val();
+              var stat = $('#sbox-demo [name="STATUS"]').val();
+              alert('Part: ' + part + ', Qty: ' + qty + ', Status: ' + stat);
+              $('#sbox-demo').modal('close');
+          }}
+        ]);
+        dlg.modal('open');
+      });
+    });

@@ -1,0 +1,42 @@
+include ../../mixins/mixins
+form#subf.single.flex.flex-col.flex-1.min-h-0(_sqlid='vwltsa^sub' mode="upd")
+  +fitem(null, {name:'BASE_ID', type:'hidden'})
+  +fitem(null, {name:'WOREF', type:'hidden'})
+  +tabs
+    +tab-item('Main')
+      +fitem('Sub ID',{name:'SUB_ID',class:'textbox',readonly:true})
+      +fitem('Part ID',{name:'PART_ID',class:'combobox navi','data-options':'data:$.dui.pdata.partid'})
+      +fitem('Qty Per',{name:'QTY_PER',class:'numberspinner',value:'1'})
+
+      +fitem('Sub Sequence',{name:'SUB_SEQUENCE', class:'numberspinner',precision:0,min:0,increment:1})
+
+      +fieldset('Total',{style:'margin-top:16px;'})
+        +fitem('Estimated Cost',{name:'EST_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem('Total Costs Items',{name:'COST_TOTAL',class:'numberbox bg-grn', 'data-options':"value:0, prefix:'$', precision:2", readonly:true})
+        +fitem('Total Actual Costs',{name:'ACT_TOTAL_COST',class:'numberbox', 'data-options':"value:0, prefix:'$', precision:2", readonly:true})
+        +fitem('Grand Total Costs',{name:'GRAND_TOTAL_COST',class:'numberbox', 'data-options':"value:0, prefix:'$', precision:2", readonly:true})
+      +fieldset('Cost Items',{style:'margin-top:16px;'})
+        +fitem(bhave._global.COST_LABEL_1||'Fixture/Tool',{name:'COST_MATL',class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem(bhave._global.COST_LABEL_2||'Sub Contract',{name:'COST_SUBCON',class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem(bhave._global.COST_LABEL_3||'Tools/Gauges',{name:'COST_TOOLING',class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem('Other Costs',{name:'COST_OTHERS', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+
+      +fieldset('Actual Cost',{style:"margin-top:20px"})
+        +fitem('Material',{name:'ACT_MATERIAL_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem('Labor',{name:'ACT_LABOR_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem('Overhead',{name:'ACT_BURDEN_COST', class:'numberbox',readonly:true,precision:2,value:0, prefix:'$'})
+        +fitem('SubContract',{name:'ACT_SUBCON_COST', class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+        +fitem('Gauge/Royalty',{name:'ACT_RENTAL_COST',class:'numberbox','data-options':"value:0, prefix:'$', precision:2",readonly:true})
+    +tab-item('User Fields', {iconCls:"list"})
+      +fieldset('UDF Configuration',{style:"margin-top:12px;"})
+        +fitem('UDF Layout',{id:'SUB_UDF_LAYOUT_ID',class:'combobox',name:'UDF_LAYOUT_ID', 'data-options':'data:$.dui.pdata.udfid'})
+
+      +fieldset('User Fields')#sub_udf
+        div.three
+          div
+            -for (var x=1; x<=10; x++)
+              +fitem({text:'User Label '+x,id:'UDF_'+x},{name:'USER_'+x,class:'textbox sub-on','data-options':"validType:['length[1,80]']"},{'data-role':'fieldcontain'})
+          div
+            -for (var x=11; x<=20; x++)
+              +fitem({text:'User Label '+x,id:'UDF_'+x},{name:'USER_'+x,class:'textbox sub-on','data-options':"validType:['length[1,80]']"},{'data-role':'fieldcontain'})
+  script(type="text/javascript"): include js/_wo_sub.inc.js

@@ -1,0 +1,80 @@
+extends ../content 
+block script
+  //-+script("dqm",["js/gauge_inv.js"])
+  script: include js/gauge_inv.js
+block content
+  +hsplit('90px').no-border
+    +panel('north', { style: "padding:12px;" })
+      div#bigbut(style="display:inline-block")
+
+        div#job_en_buts
+          a(href="#" name="JOB-OUT" iconCls="icon-tools_out-big" data-options="toggle:true, group:'g1'") Job OUT
+          a(href="#" name="JOB-IN" iconCls="icon-tools_in-big" data-options="toggle:true, group:'g1'") Job IN
+        div#cal_en_buts
+          div.vsep
+          a(href="#" name="CAL-OUT" iconCls="icon-cal_out-big" data-options="toggle:true, group:'g1'") Calibrate OUT
+          a(href="#" name="CAL-IN" iconCls="icon-cal_in-big" data-options="toggle:true, group:'g1'") Calibrate IN
+        div#rep_en_buts
+          div.vsep
+          a(href="#" name="REP-OUT" iconCls="icon-repair_out-big" data-options="toggle:true, group:'g1'") Repair OUT
+          a(href="#" name="REP-IN" iconCls="icon-repair_in-big" data-options="toggle:true, group:'g1'") Repair IN
+        div#inv_en_buts
+          div.vsep
+          a(href="#" name="INV-OUT" iconCls="icon-gauge_out-big" data-options="toggle:true, group:'g1'") Gauge OUT
+          a(href="#" name="INV-IN" iconCls="icon-gauge_in-big" data-options="toggle:true, group:'g1'") Gauge IN
+
+      div.inline-block.ml-3
+        a#REPEAT(href="#" iconCls="icon-repeat-big" data-options="toggle:true") Repeat
+
+    +panel('center')
+      +vsplit('400px')
+        +panel('west')
+          form#gauge(asdpx='' _sqlid='dqm^gaugetrans' mode="add")
+            input#USER_ID( name='USER_ID' type='hidden' )
+            +fitem('Transaction Date',{name:'TRANSACTION_DATE',class:'datebox today'})
+            +fitem('Gauge Type',{id:'GTYPE', class:'textbox', readonly:"readonly"})
+            +fitem('Gauge ID',{id:'~',name:'GAUGE_ID', required:'required', class:'searchbox bcscan', 'data-options':"iconCls:'icon-barcode'", sbref:"gauge_ids"})
+            +fitem('Gauge Description',{id:'GAUGE_DESC', class:'textbox', readonly:'readonly'})
+
+            +fitem('Transaction Type',{name:'TYPE',id:'~',class:'textbox', readonly:"readonly"})
+
+            div#OPTIONS
+              +v-group#JOB()
+                +fitem('Operator ID',{id:'EMPLOYEE_ID',name:'EMPLOYEE_ID', class:'searchbox repeat bcscan', 'data-options':"iconCls:'icon-barcode'", sbref:"operator"})
+                +fitem('Job Reference',{id:'DOC_ID',name:'DOC_ID', class:'searchbox repeat bcscan', 'data-options':"iconCls:'icon-barcode',multiple:false",sbref:"job"})
+              +v-group#CAL.REP
+                +fitem('Vendor ID',{id:'VENDOR_ID',name:'VENDOR_ID', class:'searchbox repeat',sbref:"vendor_ids"})
+                +fitem('Document Ref',{id:'PO_REF',name:'PO_REF', class:'textbox repeat'})
+
+
+            +fitem('Notes',{name:'NOTES', class:'textbox repeat'})
+
+          div.text-center.mt-8
+            +button('Save',{id:'TXSAVE', iconCls:'icon-save-big', disabled:true, size:'large'})
+            +button('Cancel',{id:'TXCLR', iconCls:'icon-cancel-big', size:'large', class:'ml-3'})
+
+        +panel('center')
+          form#ginfo.lock(style="display:none;")
+            div
+              +fitem('ID',{name:'ID', class:'textbox' })
+              +fitem('Gauge Class',{name:'GAUGE_CLASS', class:'textbox' })
+              +fitem('Type',{id:'~',name:'GAUGE_TYPE', class:'textbox' })
+              +fitem('Manufacturer',{name:'MANUFACTURER', class:'textbox' })
+              +fitem('Model',{name:'MODEL', class:'textbox' })
+              +fitem('Operating Range',{name:'RANGE', class:'textbox' })
+              +fitem('Serial Number',{name:'SERIAL_NO', class:'textbox' })
+
+              +fitem('Notes / Specs',{name:'NOTES', class:'textbox', 'data-options':"multiline:true"})
+
+            div
+              +fitem('Last Calibration',{name:'LAST_CAL', class:'textbox' })
+              +fitem('Next Calibration',{name:'DUE_DATE', class:'textbox' })
+              +fitem('Usage Count',{name:'CYCLE_COUNT', class:'numberbox' , value:0})
+
+            div
+              +fitem('Last TX Type',{name:'INV_STAT', class:'textbox' })
+            div
+              +fitem('Status',{id:'GSTATUS',name:'STATUS', class:'combobox',_sqlid:"dqm^gaugestatusid_gaugeman"  })
+
+  //- Custom toolbar buttons (native DUI — toolbut() is broken in DUI)
+  

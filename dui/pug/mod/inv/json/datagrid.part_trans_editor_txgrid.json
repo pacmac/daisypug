@@ -1,0 +1,30 @@
+{
+  "id": "txgrid",
+  "fit": true,
+  "fitColumns": true,
+  "url": "/?_func=get&_sqlid=inv^invtrans",
+  "checkOnSelect": false,
+  "singleSelect": true,
+  "method": "get",
+  "striped": true,
+  "toolbar": [
+    { "type": "field", "label": "From",    "name": "sdate", "editor": { "type": "datebox",  "options": {} } },
+    { "type": "field", "label": "To",      "name": "edate", "editor": { "type": "datebox",  "options": {} } },
+    { "type": "field", "label": "Part ID", "name": "pid",   "editor": { "type": "combobox", "options": { "_sqlid": "inv^partid" } } }
+  ],
+  "columns": [
+    [
+      { "field": "EDIT",             "title": "Edit",       "checkbox": true },
+      { "field": "PART_ID",          "title": "Part ID",    "width": 200, "fixed": true },
+      { "field": "TRANSACTION_ID",   "title": "Tx ID",      "width": 80,  "fixed": true },
+      { "field": "DOCUMENT_ID",      "title": "Doc ID",     "width": 120, "fixed": true },
+      { "field": "TRANS_TYPE",       "title": "Tx Type",    "width": 80,  "fixed": true },
+      { "field": "QTY",              "title": "Tx Qty",     "width": 80,  "fixed": true },
+      { "field": "WOREF",            "title": "WO Ref",     "width": 120, "fixed": true },
+      { "field": "TRACE_ID",         "title": "Trace ID",   "width": 120, "fixed": true },
+      { "field": "USER_ID",          "title": "Created By", "width": 120, "fixed": true },
+      { "field": "NOTES",            "title": "Notes",      "width": 120, "fixed": true },
+      { "field": "TRANSACTION_DATE", "title": "Tx Date",    "formatter": "$.dui.fmt.date", "width": 180, "fixed": true }
+    ]
+  ]
+}

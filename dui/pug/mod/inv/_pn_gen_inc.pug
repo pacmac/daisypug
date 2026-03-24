@@ -1,0 +1,74 @@
+//- Part Number Generator Modal
+//- Included by sa_parts.pug — uses +modal, +fitem, +modal-footer from feedback.pug
+
+style.
+  #pngenwin #genhead,
+  #pngenwin #generator {
+    --fitem-label-w: 140px;
+  }
+  #pngenwin #genhead .frow > label,
+  #pngenwin #generator .frow > label {
+    text-transform: capitalize;
+  }
+
++modal#pngenwin(title="Add New Part", max-w="lg", no-form)
+  form
+    div#genhead
+      +fitem('Class ID',{id:'GEN_CLASS_ID', class:'combobox'})
+      br
+    div#generator.hidden_
+    div#results
+      +fitem('Part ID',{id:'GEN_ID', class:'textbox', readonly:true, validType:['length[1,30]']})
+      +fitem('UOM',{id:'GEN_UOM', class:'textbox', readonly:true})
+      +fitem('Traceable',{id:'GEN_TRACEABLE', class:'combobox', readonly:true, 'data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+      +fitem('Description',{id:'GEN_DESC', class:'textbox', readonly:true, 'data-options':"multiline:true,height:100"})
+  +modal-footer
+    button#butgo.btn.btn-primary.btn-sm(disabled) Apply
+script: include js/pn_gen.js
+
+//- ── Original EUI-converted markup (commented out for reference) ──────────
+//-
+//- style.
+//-   form#generator > .frow {
+//-     margin-top:0;
+//-     height:22px;
+//-     display: inline-flex;
+//-   }
+//-
+//-   form#generator > .frow > label {width:140px;max-width:unset;text-transform:capitalize;}
+//-   form#generator > .frow .textbox {width: 205px;}
+//-
+//-   input#GEN_ID.test + span.textbox:not(.textbox-invalid) {
+//-     background-color: #CAFFD8;
+//-   }
+//-
+//-   #pngenwin #results > .fbuts {
+//-     background: #FEFEFE;
+//-     padding: 8px 0;
+//-     margin: 12px 0 0 0;
+//-     width: 100%;
+//-     border-top: 1px solid #CCCCCC;
+//-   }
+//-
+//-   form#generator{
+//-     column-count: 1;
+//-     max-width:760px;
+//-     padding:10px 0;
+//-   }
+//-
+//- div#genhead
+//-   +fitem('Class ID',{id:'GEN_CLASS_ID'})
+//-
+//- form#generator.hide(style="margin-left:20px;margin-top:20px;")
+//-
+//- form#results
+//-   +fitem('Part ID',{id:'GEN_ID', class:'textbox',readonly:true, validType:['length[1,30]']})
+//-   +fitem('UOM',{id:'GEN_UOM',readonly:true, class:'textbox'})
+//-   +fitem('Traceable',{id:'GEN_TRACEABLE',readonly:true,class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+//-   +fitem('Description',{id:'GEN_DESC',readonly:true, class:'textbox','data-options':"multiline:true,height:100"},{class:'spec'})
+//-
+//-   .fbuts.center
+//-     a#butgo
+//-     a#butcancel
+//-
+//-   script(src='html/dui/mod/inv/js/pn_gen.js')

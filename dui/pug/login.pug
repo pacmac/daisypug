@@ -1,0 +1,340 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Pure — Sign In
+    link(rel="stylesheet" href="/dui/css/main.css")
+    link(rel="icon" href="/img/favicon.ico" type="image/x-icon")
+    style.
+      @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes blobDrift1 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -20px) scale(1.05); }
+        66% { transform: translate(-20px, 15px) scale(0.95); }
+      }
+      @keyframes blobDrift2 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(-25px, 20px) scale(0.95); }
+        66% { transform: translate(20px, -15px) scale(1.05); }
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: linear-gradient(-45deg, #0f172a, #1e3a5f, #0c4a6e, #164e63, #0f172a);
+        background-size: 400% 400%;
+        animation: gradientShift 20s ease infinite;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      /* Floating decorative blobs */
+      .login-blob {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .login-blob-1 {
+        top: 15%; left: -5%;
+        width: 400px; height: 400px;
+        background: rgba(59, 130, 246, 0.15);
+        filter: blur(80px);
+        animation: blobDrift1 12s ease-in-out infinite;
+      }
+      .login-blob-2 {
+        bottom: 10%; right: -8%;
+        width: 500px; height: 500px;
+        background: rgba(6, 182, 212, 0.12);
+        filter: blur(100px);
+        animation: blobDrift2 15s ease-in-out infinite;
+      }
+      .login-blob-3 {
+        top: 60%; left: 30%;
+        width: 300px; height: 300px;
+        background: rgba(99, 102, 241, 0.08);
+        filter: blur(80px);
+        animation: blobDrift1 18s ease-in-out infinite reverse;
+      }
+
+      /* Glassmorphism card */
+      .login-card {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 420px;
+        margin: 1rem;
+        padding: 2.5rem 2.5rem 2rem;
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 80px rgba(59, 130, 246, 0.05);
+        animation: fadeInUp 0.8s ease-out;
+      }
+
+      /* Logo & subtitle */
+      .login-logo {
+        text-align: center;
+        margin-bottom: 0.25rem;
+      }
+      .login-logo h1 {
+        font-size: 2.5rem;
+        font-weight: 200;
+        color: white;
+        letter-spacing: 0.15em;
+        margin: 0;
+      }
+      .login-subtitle {
+        text-align: center;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 0.08em;
+        margin-bottom: 2.5rem;
+      }
+
+      /* Form fields */
+      .login-field {
+        margin-bottom: 1.25rem;
+      }
+      .login-field label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+      .login-field .input-wrap {
+        position: relative;
+      }
+      .login-field input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: white;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.25s ease;
+        box-sizing: border-box;
+      }
+      .login-field input::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+      }
+      .login-field input:focus {
+        border-color: rgba(96, 165, 250, 0.5);
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15), 0 0 20px rgba(96, 165, 250, 0.08);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      /* Password toggle */
+      .pwd-toggle {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        padding: 0.25rem;
+        transition: color 0.2s;
+        line-height: 1;
+      }
+      .pwd-toggle:hover {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .pwd-toggle svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* Submit button */
+      .login-btn {
+        width: 100%;
+        padding: 0.8rem;
+        margin-top: 0.75rem;
+        background: #3b82f6;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        letter-spacing: 0.02em;
+        position: relative;
+        overflow: hidden;
+      }
+      .login-btn:hover {
+        background: #2563eb;
+        box-shadow: 0 4px 25px rgba(59, 130, 246, 0.4);
+        transform: translateY(-1px);
+      }
+      .login-btn:active {
+        transform: translateY(0);
+      }
+      .login-btn.loading {
+        pointer-events: none;
+        opacity: 0.85;
+      }
+      .login-btn .spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        margin: 0 auto;
+      }
+      .login-btn.loading .btn-text { display: none; }
+      .login-btn.loading .spinner { display: block; }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Error message */
+      .login-error {
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.25rem;
+        color: #fca5a5;
+        font-size: 0.85rem;
+        display: none;
+        animation: fadeInUp 0.3s ease-out;
+      }
+      .login-error.show { display: block; }
+
+      /* Footer */
+      .login-footer {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.2);
+        letter-spacing: 0.03em;
+      }
+
+  body
+    //- Decorative floating blobs
+    .login-blob.login-blob-1
+    .login-blob.login-blob-2
+    .login-blob.login-blob-3
+
+    .login-card
+      .login-logo
+        h1 PURE
+      .login-subtitle Manufacturing Management
+
+      .login-error#loginError
+
+      form#loginForm(autocomplete="off")
+        .login-field
+          label User ID
+          .input-wrap
+            input#userid(type="text" name="userid" placeholder="Enter your user ID" autofocus autocomplete="username")
+
+        .login-field
+          label Password
+          .input-wrap
+            input#passwd(type="password" name="passwd" placeholder="Enter your password" autocomplete="current-password")
+            button.pwd-toggle(type="button" tabindex="-1" title="Show password")
+              //- Eye icon (visible state)
+              svg.eye-show(viewBox="0 0 24 24")
+                path(d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z")
+                circle(cx="12" cy="12" r="3")
+              //- Eye-off icon (hidden state)
+              svg.eye-hide(viewBox="0 0 24 24" style="display:none")
+                path(d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24")
+                line(x1="1" y1="1" x2="23" y2="23")
+
+        button.login-btn(type="submit")
+          span.btn-text Sign In
+          .spinner
+
+      .login-footer
+        | &copy; #{new Date().getFullYear()} DiGiTaL Information Systems Pte Ltd
+
+    script.
+      // Password visibility toggle
+      document.querySelector('.pwd-toggle').addEventListener('click', function() {
+        var inp = document.getElementById('passwd');
+        var show = document.querySelector('.eye-show');
+        var hide = document.querySelector('.eye-hide');
+        if (inp.type === 'password') {
+          inp.type = 'text';
+          show.style.display = 'none';
+          hide.style.display = 'block';
+        } else {
+          inp.type = 'password';
+          show.style.display = 'block';
+          hide.style.display = 'none';
+        }
+      });
+
+      // Uppercase user ID on blur
+      document.getElementById('userid').addEventListener('blur', function() {
+        this.value = this.value.toUpperCase();
+      });
+
+      // Form submit — AJAX to /login
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = this.querySelector('.login-btn');
+        var errEl = document.getElementById('loginError');
+        var userid = document.getElementById('userid').value.trim().toUpperCase();
+        var passwd = document.getElementById('passwd').value;
+
+        if (!userid || !passwd) {
+          errEl.textContent = 'Please enter both User ID and Password.';
+          errEl.classList.add('show');
+          return;
+        }
+
+        errEl.classList.remove('show');
+        btn.classList.add('loading');
+
+        fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userid: userid, passwd: passwd })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          btn.classList.remove('loading');
+          if (data.error) {
+            errEl.textContent = data.msg || 'Authentication failed.';
+            errEl.classList.add('show');
+            document.getElementById('passwd').value = '';
+            document.getElementById('passwd').focus();
+          } else {
+            window.location.href = data.redirect || '/';
+          }
+        })
+        .catch(function() {
+          btn.classList.remove('loading');
+          errEl.textContent = 'Connection error. Please try again.';
+          errEl.classList.add('show');
+        });
+      });

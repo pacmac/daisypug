@@ -1,0 +1,106 @@
+extends ../content 
+block script 
+  //-+script("dqm",['js/ci_man.js'])
+  script: include js/ci_man.js
+block content 
+  +vsplit('400px')
+    +panel('west')
+      +form#ci.fit.multi(asdpx="ax" _sqlid="dqm^ci")
+        +hsplit('170px').no-border
+          +panel('north', { style: "background:#FAFAFA;padding:0 0 20px 0;overflow:hidden;" })
+            input#_RECIPIENTS(type="hidden" name="_RECIPIENTS")
+            .fitem
+              label(style="width:116px") ID
+              +button('', {id:'edit', class:'tiny toggle', size:'sm', iconCls:'icon-edit', disabled:true, 'data-options':"toggle:true"})
+              +textbox.autonum(name="ID" readonly="readonly")
+      
+            +fitem('Date',{eui:'datebox',name:'CREATE_DATE',class:'today',readonly:true})
+            +fitem('Subject',{eui:'textbox',name:'SRC_SUBJECT'})
+            +fitem('Status',{eui:'combobox',name:'STATUS',id:'~'})
+            +fitem('Created By',{eui:'textbox',name:'USER_ID',id:'~', readonly:true}) 
+          +panel('center')
+            +tabs#wtab(data-options="plain:true, justified:true")
+      
+              div(title='Details' iconCls="icon-doc-ok")              
+                +fitem('Type',{eui:'combobox',name:'TYPE',id:'~', 'data-options':"groupField: 'type'", _sqlid:'dqm^ci_type_grp'})
+                +fitem('Severity',{eui:'combobox',name:'SRC_SEVERITY',id:'SEVERITY','data-options':"editable:false,data:[{value:'LOW',text:'LOW'},{value:'MEDIUM',text:'MEDIUM'},{value:'HIGH',text:'HIGH'},{value:'CRITICAL',text:'CRITICAL'}]"})
+                .fitem
+                  label Comments
+                  +input({eui:'textbox',name:'NOTES','data-options':"multiline:true", style:'height:200px;width:345px'})
+                
+              div(title='Cause' fit="true" iconCls="icon-magnify")
+                +fitem('Cause Code',{name:'CAUSE_ID',id:'~'})
+                +fitem('Cause Description',{eui:'textbox',id:'CAUSE_DESC',readonly:true,class:'valuetip'})
+                .fitem
+                  label Comments
+                  +input({eui:'textbox',name:'CAUSE_NOTES','data-options':"multiline:true", style:'height:200px;width:345px'})           
+                  
+              div(title='Actions' fit="true" iconCls="icon-task")
+                +fitem('Action User',{eui:'combobox', name:'ACTION_USER', id:'~', _sqlid_xx:'uidall','data-options':"data:$.dui.pdata.uid"})
+                +fitem('Target Date',{eui:'datebox',name:'ACTION_DATE',class:'today'})
+                +fitem('Completed Date',{eui:'datebox',name:'COUT_DATE',id:'~'})
+                .fitem
+                  label Comments
+                  +input({eui:'textbox',name:'ACTION_NOTES','data-options':"multiline:true", style:'height:200px;width:345px'})  
+
+              div(title='Source' fit="true" iconCls="icon-manager")
+                +fitem('Doc Type',{eui:'textbox',name:'SRC_TYPE',id:'~',readonly:true})
+                +fitem('Doc ID',{eui:'textbox',name:'SRC_ID',readonly:true})
+                +fitem('Status',{eui:'textbox',name:'SRC_STATUS',readonly:true})
+                +fitem('Create Date',{eui:'datebox',name:'SRC_CREATE_DATE',readonly:true})
+                +fitem('Reported By',{eui:'textbox',name:'SRC_REPORTED_BY',readonly:true})
+
+              div.files(title='Files' fit="true" iconCls="icon-pclip" style="padding:0")
+                div(style="width:380px;")
+                  +filegrid#cifiles(data-options="fit:true")
+
+    +panel('center')
+      +datagrid#cidg
+block style 
+  style.
+
+    #wtab div.panel {
+      padding-top:12px;
+    }
+
+    #wtab div.panel:last-child {
+      padding:2px 0 0 3px;
+    }
+    
+    .combobox-group {
+      color: #08c;
+    }
+    
+    .datagrid-toolbar{
+      padding:2px;
+    }
+    
+    .datagrid-header-row div.datagrid-cell>span {
+      color: #08C;
+    }
+    
+    td[field].icon-c {
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+    
+    /*
+    .datagrid-btn-separator + .datagrid-btn-separator:after {
+      content:'Filters:'  
+    }
+    */
+    
+    #but_dg_open,
+    #dg2excel{
+      margin-left:30px;  
+    }
+    
+    #but_dg_cf {
+      margin-left:30px;  
+    } 
+    #but_dg_closed,
+    #but_dg_cpar, 
+    #but_dg_ncr, 
+    #but_dg_ci {
+      margin-left:4px;
+    }

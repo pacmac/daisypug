@@ -1,0 +1,34 @@
+extends ../content
+block script
+  script: include js/codes.js
+block content
+  +tabs#lists
+
+    +tab-item("Customers",{id:'tabc'})
+      form.multi#custs(_sqlid='oss^cust' asdpx='ax')
+        +fitem('OSS Customer ID',{name:'CUSTOMER_ID', id:'~', _sqlid:'oss^custall_ids', class:'combobox fkey fit',required:true})
+        +fitem('Customer Name',{name:'CUSTOMER_NAME', class:'textbox',readonly:true})
+        +fitem('OSS Currency',{name:'CURRENCY_ID', id:'~', class:'combobox' , _sqlid:'admin^curr', required:true,'data-options':"editable:false"})
+        +input({type:'hidden', name:'_stamp', value:'y'})
+
+    +tab-item("Rent Types",{id:'tabrt'})
+      form.multi#rtypes(_sqlid='oss^renttype' asdpx='ax')
+        +input({type:'hidden', name:'_stamp', value:'y'})
+        +fitem('Type',{name:'ID', _sqlid:'oss^renttype_ids', class:'combobox fkey fit'})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox', validType:['length[1,80]']})
+    
+    +tab-item("Service Types",{id:'tabst'})
+      form.multi#stypes(_sqlid='oss^svctype' asdpx='ax')
+        +input({type:'hidden', name:'_stamp', value:'y'})
+        +fitem('Type',{name:'ID', _sqlid:'oss^svctype_ids', class:'combobox fkey fit'})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox' ,validType:['length[1,80]']})
+          
+    +tab-item("Service Class",{id:'tabsc'})
+      form.multi#sclass(_sqlid='oss^svccls', asdpx='ax')
+        +input({type:'hidden', name:'_stamp', value:'y'})
+        +fitem('Service ID',{name:'ID', _sqlid:'oss^svccls_ids', class:'combobox fkey fit'})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox' ,validType:['length[1,80]']})
+
+    +tab-item("Next Numbers",{id:'nng'})
+      include ../nng.inc.pug
+        +input({name:'ID', value:'OSS', type:'hidden'})

@@ -1,0 +1,6 @@
+{
+  "id": "lvl",
+  "sourceFile": "admin/js/users.js",
+  "lineNumber": 470,
+  "configPreview": "('load',{ _dgrid:'y',_sqlid:'admin^user_leaveEntitlement', _func:'get',UID:$('input#UID').combobox('getValue')}"
+}

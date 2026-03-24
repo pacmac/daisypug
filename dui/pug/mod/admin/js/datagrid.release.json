@@ -1,0 +1,66 @@
+{
+  "id": "release",
+  "columns": [
+    [
+      {
+        "field": "fn",
+        "width": 200,
+        "fixed": true,
+        "order": "asc",
+        "title": "File Path",
+        "editor": null
+      },
+      {
+        "field": "fver",
+        "width": 70,
+        "fixed": true,
+        "order": "asc",
+        "title": "File Ver"
+      },
+      {
+        "field": "fnotes",
+        "width": 1000,
+        "fixed": false,
+        "order": "asc",
+        "title": "Change Details",
+        "editor": null
+      }
+    ]
+  ],
+  "options": {
+    "rownumbers": true,
+    "fitColumns": true,
+    "striped": true,
+    "fit": true,
+    "columns": [
+      [
+        {
+          "field": "fn",
+          "width": 200,
+          "fixed": true,
+          "order": "asc",
+          "title": "File Path",
+          "editor": null
+        },
+        {
+          "field": "fver",
+          "width": 70,
+          "fixed": true,
+          "order": "asc",
+          "title": "File Ver"
+        },
+        {
+          "field": "fnotes",
+          "width": 1000,
+          "fixed": false,
+          "order": "asc",
+          "title": "Change Details",
+          "editor": null
+        }
+      ]
+    ],
+    "onSelect": null,
+    "onEndEdit": null
+  },
+  "sourceFile": "admin/js/release.js"
+}

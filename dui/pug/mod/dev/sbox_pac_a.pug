@@ -1,0 +1,38 @@
+extends ../content
+
+block content
+  +vsplit('25%')
+    +panel('west', { title: 'QBE Search Demo' })
+      +form#qbe-demo-form(class='multi fit', _sqlid='inv^partall')
+        +fitem('Part ID (QBE + Navi)',{_sqlid:'inv^partid_qbe', id:'~', name:'ID', class:'qbe fkey fit navi', panelWidth:'230px', validType:['length[1,30]']})
+        +fitem('Part Class',{id:'~', name:'PART_CLASS_ID', class:'combobox','data-options':"data:[{text:'Component',value:'COMP'},{text:'Finished Goods',value:'FG'}]"})
+        +fitem('Description',{id:'~', name:'DESCRIPTION', class:'textbox', readonly:true})
+        +fitem('Search Part',{id:'SEARCH_PART', name:'SEARCH_PART', class:'searchbox'})
+
+    +panel('east', { title: 'Modal Create Demo' })
+      .p-4
+        +button('Open $.modal.create() Demo', {id: 'btn-modal-create', color: 'primary', size: 'sm'})
+
+block script
+  script.
+    $('#btn-modal-create').on('click', function() {
+      var dlg = $.modal.create({
+        id: 'sbox-demo',
+        title: 'Demo Dialog',
+        fields: [
+          { id: 'PART_ID', type: 'combobox',  label: 'Part', sqlid: 'inv^partid_qbe' },
+          { id: 'QTY',     type: 'numberbox', label: 'Quantity' },
+          { id: 'STATUS',  type: 'combobox',  label: 'Status',
+            data: [{ value: 'A', text: 'Active' }, { value: 'I', text: 'Inactive' }] }
+        ]
+      }, [
+        { text: 'OK', handler: function() {
+            var part = $('#sbox-demo [name="PART_ID"]').val();
+            var qty  = $('#sbox-demo [name="QTY"]').val();
+            var stat = $('#sbox-demo [name="STATUS"]').val();
+            alert('Part: ' + part + ', Qty: ' + qty + ', Status: ' + stat);
+            $('#sbox-demo').modal('close');
+        }}
+      ]);
+      dlg.modal('open');
+    });

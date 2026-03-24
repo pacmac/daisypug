@@ -1,0 +1,28 @@
+extends ../content
+block script
+  script: include js/opcert_sessions.js
+block content
+  form.multi#cert(_sqlid='dqm^qctrainingall', asdpx='ax' data-lbut="ax" data-ebut="ax").fit
+    +vsplit('450px')
+      +panel('west')
+        input#USERS_FAIL(name="USERS_FAIL" readonly="readonly" type="hidden")
+        input#USERS_PASS(name="USERS_PASS" readonly="readonly" type="hidden")
+        input#MODULES(name="MODULES" readonly="readonly" type="hidden")
+        input#INSTRUCTOR_EMAIL(name="INSTRUCTOR_EMAIL" type="hidden")
+        +fitem('Training ID', { id:'TRAINING_ID', name:'TRAINING_ID', class:'combobox autonum fkey', _sqlid:'dqm^qctrainingid', 'data-options':"formatter: cbocols, widths:['50%','20%','30%']" })
+
+        div.canlock
+          +fitem('Status', { id:'STATUS', name:'STATUS', class:'combobox', 'data-options':"data:[{value:'PLANNED',text:'PLANNED'},{value:'COMPLETED',text:'COMPLETED'}]", required:'required' })
+          +fitem('Hours', { name:'HOURS', class:'numberbox', value:'0', precision:'2' })
+          +fitem('Plan Date', { id:'PD', name:'PDATE', class:'datebox today' })
+            +input({ id:'PT', name:'PTIME', class:'timespinner now' })
+          +fitem('Completed Date', { name:'COMPLETED_DATE', id:'~', class:'datebox' })
+          +fitem('Instructor', { class:'combobox', name:'INSTRUCTOR', id:'~', required:'required', _sqlid:'dqm^cbo_instructor' })
+          +fitem('Notes & Comments', { class:'textarea h-32', name:'NOTES' })
+
+      +panel('center').canlock
+        +vsplit('400px')
+          +panel('west', { title: "Training Modules" })
+            ul#modules.px-3.py-2
+          +panel('center', { title: "Training Attendees" })
+            ul#operators.px-3.py-2

@@ -1,0 +1,6 @@
+{
+  "id": "table#data",
+  "sourceFile": "admin/js/query.js",
+  "lineNumber": 128,
+  "configPreview": "('loading');\n  switch (val) {\n    case \"query\":\n    case \"exec\":\n      if (sql.length == 0) return me.linkbutton(\"disable\");\n      var vars = {\n      ..."
+}

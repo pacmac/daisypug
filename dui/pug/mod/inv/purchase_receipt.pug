@@ -1,0 +1,59 @@
+extends ../content
+block script
+  script: include js/purchase_receipt.js
+  script.
+    console.warn('[audit] purchase_receipt L27: +split inside +form — causes double margins. Move the split above the +form. Downgraded to +layout until fixed.')
+block style
+  style.
+    div#toolbut {
+      position: relative;
+      top: -3px;
+    }
+    td[field=LINE_NO] {
+      background: linear-gradient(to bottom,#F9F9F9 0,#efefef 100%);
+    } td[field=LINE_NO] > .datagrid-cell {
+      color: #000000;
+    }
+    form[class*="grid-"] {
+      padding: 20px 22px 10px 0 !important;  
+    } 
+    form[class*="grid-"] .fitem {
+      margin-right: 0;
+    }
+
+
+block content
+  +split
+    +panel('west', { style: "width:400px" })
+      +form#receipthead(class='multi fit form', _sqlid='inv^receipt_head', asdpx='adx')
+        //- [MANUAL FIX] +split inside +form — causes double margins. Move the split above the +form. Downgraded to +layout until fixed.
+        +hsplit('100%')
+          +panel('north')
+            //- [auto] qbe→combobox: +fitem('Receipt ID',{id:'~', name:'RECEIPT_ID', class:'qbe fkey fit navi', panelWidth:'230px', validType:['length[1,30]']})
+            +fitem('Receipt ID',{_sqlid:'inv^receipt_ids_qbe', id:'~', name:'RECEIPT_ID', class:'combobox fkey fit navi', panelWidth:'230px', validType:['length[1,30]']})
+            //- [auto] qbe→combobox: +fitem('Order ID',{id:'~', name:'PO_ID', class:'qbe', required:true,panelWidth:'230px', validType:['length[1,30]']})
+            +fitem('Order ID',{_sqlid:'inv^po_qbe', id:'~', name:'PO_ID', class:'combobox', required:true,panelWidth:'230px', validType:['length[1,30]']})                         
+            +fitem('Vendor ID',{name:'VENDOR_ID', id:'~' ,class:'textbox',readonly:true})
+            +fitem('Name',{id:'~',name:'NAME', class:'textbox',readonly:true})
+            +fitem('Delivery Date',{name:'DELIVERY_DATE', class:'datebox',readonly:true})
+            +fitem('Actual Delivery Date',{name:'ACT_DELIVERY_DATE', class:'datebox today'})
+            +fitem('Exch Rate',{name:'CURRENCY_RATE', class:'numberbox' ,readonly:true,precision:8})
+          
+            +tabs(data-options="plain:true,justified:true")
+              +tab-item('Contact',{iconCls:'icon-contact'})
+                +fitem('Name',{id:'~',name:'CONTACT_PERSON', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Phone',{id:'~',name:'CONTACT_PHONE', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Fax',{id:'~',name:'CONTACT_FAX', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Email',{id:'~',name:'CONTACT_EMAIL', class:'textbox',validType:['email']})
+              +tab-item('Notes',{iconCls:'icon-notes'})
+                .fitem(style="margin-top:0")
+                  +label('Order Notes')
+                  +input({eui:'textbox',name:'NOTES','data-options':"multiline:true", style:'height:150px;width:345px'})
+              +tab-item('Files', {iconCls:"icon-file"})
+                div(style="width:380px;")
+                  +filegrid#pofiles(data-options="fit:true")
+                  
+    +panel('center')
+      +datagrid#receiptlines
+    div#traced.dialog(style="width:500px;height:250px;" title="Trace/Dimensions Details" closed="true" modal="true")
+      +datagrid#tracedg

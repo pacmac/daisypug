@@ -1,0 +1,171 @@
+//- Data Display Mixins
+//- Purpose: Presenting data and information status.
+//- DaisyUI Components: avatar, badge, countdown, kbd, mask, progress, radial-progress, stat, status, table
+
+//- ============================================================================
+//- Auto-generated skeleton: avatar
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin avatar(opts = {})
+  span.mixin-skeleton(data-mixin="avatar")
+    | [SKELETON: avatar]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: badge
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin badge(opts = {})
+  span.mixin-skeleton(data-mixin="badge")
+    | [SKELETON: badge]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: countdown
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin countdown(opts = {})
+  span.mixin-skeleton(data-mixin="countdown")
+    | [SKELETON: countdown]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: kbd
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin kbd(opts = {})
+  span.mixin-skeleton(data-mixin="kbd")
+    | [SKELETON: kbd]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: mask
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin mask(opts = {})
+  span.mixin-skeleton(data-mixin="mask")
+    | [SKELETON: mask]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: progress
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin progress(opts = {})
+  span.mixin-skeleton(data-mixin="progress")
+    | [SKELETON: progress]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: radial-progress
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin radial-progress(opts = {})
+  span.mixin-skeleton(data-mixin="radial-progress")
+    | [SKELETON: radial-progress]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: stat
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin stat(opts = {})
+  span.mixin-skeleton(data-mixin="stat")
+    | [SKELETON: stat]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: status
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin status(opts = {})
+  span.mixin-skeleton(data-mixin="status")
+    | [SKELETON: status]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: table
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin table(opts = {})
+  span.mixin-skeleton(data-mixin="table")
+    | [SKELETON: table]
+
+
+//- ============================================================================
+//- Datagrid — moved to dedicated file: mixins/datagrid.pug
+
+
+//- ============================================================================
+//- ============================================================================
+//- FILEGRID — File attachment grid (wraps datagrid with file-specific config)
+//- Usage: +filegrid#partfiles(data-options="fit:true")
+//- JS:    $('#partfiles').datagrid('docFiles', partId)
+//- ============================================================================
+mixin filegrid(opts = {})
+  -
+    var mAttrs = attributes || {}
+    var fgId = mAttrs.id || opts.id || 'filegrid'
+
+  //- Toolbar with file operation buttons — uses +toolbar mixin
+  +toolbar({size: 'sm'})(id=fgId)
+    +button({icon: 'folder-plus', size: 'xs', style: 'ghost', id: fgId + '_browse', title: 'Browse Files', 'data-always-enabled': ''})
+    +button({icon: 'upload', size: 'xs', style: 'ghost', id: fgId + '_upload', title: 'Upload File', 'data-always-enabled': ''})
+    +toolbar-sep
+    +button({icon: 'download', size: 'xs', style: 'ghost', id: fgId + '_fl_view', title: 'Download'})
+    +button({icon: 'eye', size: 'xs', style: 'ghost', id: fgId + '_fl_viewdoc', title: 'Preview'})
+    +button({icon: 'trash-2', size: 'xs', style: 'ghost', id: fgId + '_fl_del', title: 'Delete'})
+    +toolbar-sep
+    +button({icon: 'refresh-cw', size: 'xs', style: 'ghost', id: fgId + '_refresh', title: 'Refresh', 'data-always-enabled': ''})
+
+  //- Datagrid container — columns rendered dynamically by filegrid-plugin.js
+  .overflow-auto.flex-1.min-h-0.bg-base-100.easyui-filegrid(id=fgId)
+    template(data-dg-th)
+      th
+    template(data-dg-td)
+      td
+    template(data-dg-tr)
+      tr.hover.cursor-pointer
+    table.table.table-sm.table-pin-rows.w-full.table-zebra
+      thead
+      tbody
+
+//- ============================================================================
+//- FILEGRID MODALS — layout-level modals shared by all filegrid instances
+//- Called once from dashboard_sidebar.pug / dashboard_drawer.pug
+//- ============================================================================
+mixin filegrid-modals()
+  //- Document preview modal
+  +docviewer#fg-preview-modal(title="Document Preview" icon-cls="eye")
+
+  //- File upload modal
+  +modal#fg-upload-modal(title="Upload File" titlebar icon-cls="upload")
+    .flex.flex-col.gap-3
+      label.form-control.w-full
+        .label: span.label-text Select File
+        input.file-input.file-input-bordered.file-input-sm.w-full(type="file" name="fname" required)
+      label.form-control.w-full
+        .label: span.label-text Description
+        input.input.input-bordered.input-sm.w-full(type="text" name="description" required)
+      label.form-control.w-full
+        .label: span.label-text Version
+        input.input.input-bordered.input-sm.w-full(type="text" name="rver")
+      progress.progress.progress-primary.w-full.hidden#fg-upload-progress(value="0" max="100")
+    +modal-footer
+      +button('Upload', {id: 'fg-upload-btn', color: 'primary', size: 'sm'})
+
+  //- File tree browser modal
+  +modal#fg-tree-modal(title="Browse Files" titlebar icon-cls="folder-tree" no-form style="height:60vh;")
+    .flex-1.overflow-auto
+      #fg-filetree
+

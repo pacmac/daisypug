@@ -1,0 +1,19 @@
++layout(fit="true")
+  div(region="west" style="width:250px; xpadding:12px;" xtitle="Folders" collapsible="false" headerCls="tbar")
+    div.datagrid-toolbar(style="height:26px")
+      +linkbutton(iconCls="icon-add" plain="true")
+    div(style="padding:10px;")
+      #folds
+
+  div(region="center" style="border:none")
+    +filegrid#files(fit="true")
+
+div#trmenu(style="display:none")
+  div(name="fedit" data-options="iconCls:'aicon-folder_edit'") Edit
+  div(name="fadd" data-options="iconCls:'aicon-folder_add'") New
+  div(name="fdel" data-options="iconCls:'aicon-folder_delete'") Delete
+
+div#dgmenu(style="display:none")
+  div(name="fedit" data-options="iconCls:'icon-edit'") Edit
+
+script(type="text/javascript"): include js/files.js

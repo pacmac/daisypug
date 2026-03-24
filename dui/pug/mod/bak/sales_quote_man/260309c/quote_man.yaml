@@ -1,0 +1,82 @@
+page: quote_man
+module: sales
+created_at: '2026-03-09T00:00:00Z'
+created_by: dui-init
+status: in_progress
+dui_status: migrating
+eui_baseline:
+  load_verified: true
+  discovered_at: '2026-03-01T08:05:00Z'
+  discovered_by: dui-discover
+  form: quoteform
+  sqlid: sales^quotehead
+  asdpx: adx
+  layout: west+center split (nested)
+  screenshots:
+    empty: .pw/discover-quote_man-eui-empty.png
+    loaded: .pw/discover-quote_man-eui-loaded.png
+  load_element:
+    type: fkey_qbe
+    label: Quote ID
+    id: '#QUOTE_ID'
+    value: QUOTE-0061-21
+  fields:
+    - {name: QUOTE_ID,      type: qbe,           label: 'Quote ID'}
+    - {name: QUOTE_FORMAT,  type: combobox,       label: 'Quote Format'}
+    - {name: DESCRIPTION,   type: textbox,        label: 'Title'}
+    - {name: STATUS,        type: combobox,       label: 'Status'}
+    - {name: REVISION,      type: numberspinner,  label: 'Revision'}
+    - {name: CUSTOMER_ID,   type: combobox,       label: 'Customer ID'}
+    - {name: CUSTOMER_NAME, type: textbox,        label: 'Name', readonly: true}
+    - {name: CURRENCY_ID,   type: combobox,       label: 'Currency'}
+    - {name: PAYMENT_TERM,  type: combobox,       label: 'Payment Terms'}
+    - {name: STATUS_REMARK, type: textbox,        label: 'Status Remark', readonly: true}
+    - {name: GRAND,         type: numberbox,      label: 'Total Value', readonly: true}
+    - {name: QUOTE_DATE,    type: datebox,        label: 'Quoted'}
+    - {name: FOLLOWUP_DATE, type: datebox,        label: 'Follow Up'}
+    - {name: EXPIRY_DATE,   type: datebox,        label: 'Expiry'}
+    - {name: WANT_DATE,     type: datebox,        label: 'Want'}
+  tabs:
+    - {label: Contact,    order: 1}
+    - {label: 'Ship To',  order: 2}
+    - {label: Notes,      order: 3}
+    - {label: Files,      order: 4}
+    - {label: UDF,        order: 5}
+  default_tab: Contact
+  nested_tabs:
+    - parent: Notes
+      tabs:
+        - {label: Order,       order: 1}
+        - {label: Revision,    order: 2}
+        - {label: 'Quote Item', order: 3}
+  datagrids:
+    - id: qlines
+      tab: null
+      columns: ['#', 'Item ID', 'Qty', 'Unit $', 'Total $', 'Cust Part Ref', 'Item Description']
+      row_count: 7
+    - id: qfiles
+      tab: Files
+      columns: ['Filename', 'Description']
+      row_count: 0
+      type: filegrid
+  buttons:
+    - {label: Copy,    id: '#copy_quote',    context: toolbar}
+    - {label: Revise,  id: '#revise_quote',  context: toolbar}
+    - {label: Convert, id: '#convert_quote', context: toolbar}
+    - {label: Print,   id: '#print_quote',   context: toolbar}
+  layout_profile:
+    type: vsplit_with_nested_hsplit
+    panels:
+      - {region: west,   content: form+tabs}
+      - {region: center, content: grid}
+    has_toolbar: false
+    toolbar_fields: 0
+    datagrids: 2
+    tabs: 5
+    nested_tabs: 3
+    form_fields: 15
+    split_size: ~400px
+    inner_split_size: ~480px
+  user_notes: "Notes tab contains nested sub-tabs (Order/Revision/Quote Item). qlines datagrid contains both item rows and subtotal rows. Quote ID format is QUOTE-NNNN-YY."
+fragments: {}
+user: CLS

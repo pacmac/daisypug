@@ -1,0 +1,6 @@
+{
+  "id": "dgvwlogs",
+  "sourceFile": "admin/js/logins.js",
+  "lineNumber": 28,
+  "configPreview": "({\n    striped:true,\n    loadMsg:'',\n    rownumbers:true, \n    singleSelect:true,    \n    \n    onSelect: function(){\n      $('#but_user_logout, #but_u..."
+}

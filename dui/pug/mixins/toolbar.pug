@@ -1,0 +1,343 @@
+//- Topnav Mixins
+//- Purpose: Form action buttons embedded in the topnav navbar.
+//- Architecture: All buttons packed left in logical groups, title anchored right.
+//- All buttons render in DOM; toolbar-plugin.js owns butEn() and controls enable/disable.
+//- Button IDs match EUI for main.js compatibility (but_add, but_save, etc.).
+//-
+//- Layout:  [☰ ←] | [+ Add 🗑 Del 💾 Save ✕ Cancel] | [🖨 Reports] | [Theme] | [Logout] | ...spacer... | PURE4
+//- Groups:
+//-   A: Navigation  — Hamburger drawer toggle, back button
+//-   B: Actions     — Add, Delete, Save, Cancel
+//-   C: Output      — Print / Reports
+//-   D: Theme       — Theme picker
+//-   E: Session     — Logout
+//-   F: Status      — Spacer with optional alerts
+//-   G: Branding    — App title (anchored right)
+
+//- ============================================================================
+//- TOPNAV (assembler) — renders the complete navbar
+//- Options: { drawerId: 'dashboard-drawer' }
+//- ============================================================================
+mixin topnav(opts)
+  -
+    var options = opts || {}
+    var drawer_id = options.drawerId || 'dashboard-drawer'
+    var toolbarLayout = options.layout || 'drawer'
+
+  nav.navbar.bg-primary.text-primary-content.shadow-sm.w-full.flex-none.flex.items-center.h-10.min-h-0.px-2.gap-0
+    //- All buttons packed left
+    if toolbarLayout !== 'sidebar'
+      +topnav-nav(drawer_id)
+    else
+      +topnav-back
+    +topnav-sep
+    +topnav-actions
+    +topnav-sep
+    +topnav-output
+    +topnav-sep
+    +topnav-theme
+    +topnav-sep
+    +topnav-session
+    //- Spacer
+    +topnav-status
+    //- Title anchored right
+    +topnav-brand
+
+//- ============================================================================
+//- Visual separator — vertical rule between groups
+//- ============================================================================
+mixin topnav-sep
+  .toolbar-sep.self-center(class="h-5/6")
+
+//- ============================================================================
+//- Section A: Navigation — hamburger toggle, back
+//- ============================================================================
+mixin topnav-nav(drawer_id)
+  .flex.items-center.gap-1.shrink-0
+    label.btn.btn-ghost.btn-sm.px-1.btn-square.drawer-button(for=(drawer_id || 'dashboard-drawer') + "-toggle")
+      svg.w-5.h-5(fill="none" stroke="currentColor" viewBox="0 0 24 24")
+        path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16")
+    button.btn.btn-ghost.btn-sm.px-1.gap-1#but_bak(title="Back")
+      +icon('arrow-left')
+      span Back
+
+//- Back button only (used by sidebar layout — no hamburger needed)
+mixin topnav-back
+  .flex.items-center.gap-1.shrink-0
+    button.btn.btn-ghost.btn-sm.px-1.gap-1#but_bak(title="Back")
+      +icon('arrow-left')
+      span Back
+
+//- ============================================================================
+//- Section B: Actions — add, delete, save, cancel
+//- ============================================================================
+mixin topnav-actions
+  .flex.items-center.gap-1.shrink-0
+    button.btn.btn-ghost.btn-sm.px-1.tbut.opacity-40.pointer-events-none.gap-1#but_add(title="Add New")
+      +icon('plus')
+      span Add
+    button.btn.btn-ghost.btn-sm.px-1.tbut.opacity-40.pointer-events-none.gap-1#but_addm(title="Add Menu")
+      +icon('plus-circle')
+      span Add+
+    button.btn.btn-ghost.btn-sm.px-1.tbut.opacity-40.pointer-events-none.gap-1#but_save(title="Save")
+      +icon('save')
+      span Save
+    button.btn.btn-ghost.btn-sm.px-1.tbut.opacity-40.pointer-events-none.gap-1#but_del(title="Delete")
+      +icon('trash-2')
+      span Delete
+    button.btn.btn-ghost.btn-sm.px-1.tbut.opacity-40.pointer-events-none.gap-1#but_clr(title="Cancel")
+      +icon('x')
+      span Cancel
+
+//- ============================================================================
+//- Section D: Output — print / reports
+//- ============================================================================
+//- Uses +menubutton mixin. Menu <li> items populated by print-plugin.js.
+//- butEn() controls enable/disable via .tbut class.
+mixin topnav-output
+  +menubutton#but_print.tbut.opacity-40.pointer-events-none(title="Reports" icon="printer" menu-id="dui-printmen")
+
+//- ============================================================================
+//- Section E: Session — logout
+//- ============================================================================
+mixin topnav-session
+  .flex.items-center.gap-1.shrink-0
+    a.btn.btn-ghost.btn-sm.px-1.gap-1(href="/logout" title="Sign Out")
+      +icon('log-out')
+      span Logout
+
+//- ============================================================================
+//- Section F: Status / Alerts — flex-1 spacer, optional status messages
+//- ============================================================================
+mixin topnav-status
+  .flex-1.min-w-0
+
+//- ============================================================================
+//- Theme Picker — two-column light/dark with sun/moon indicators
+//- ============================================================================
+mixin topnav-theme
+  .dropdown.shrink-0.dropdown-end
+    button.btn.btn-ghost.btn-sm.px-1.gap-1(tabindex="0")
+      +icon('settings')
+      span Theme
+      svg.w-3.h-3.opacity-60(fill="none" stroke="currentColor" viewBox="0 0 24 24")
+        path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7")
+    .dropdown-content.bg-base-100.text-base-content.rounded-box.shadow-lg.p-3(id="theme-menu" tabindex="0" style="z-index:1000; min-width:240px;")
+      //- Auto toggle row
+      .flex.items-center.justify-center.mb-2
+        button.btn.btn-ghost.btn-xs.gap-1.theme-auto(onclick="window._themeAuto()")
+          svg(class="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2")
+            circle(cx="12" cy="12" r="4")
+            path(d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41")
+          span.text-xs Auto
+      //- Two-column grid
+      .grid.grid-cols-2.gap-3
+        //- Light column
+        div
+          .flex.items-center.gap-1.mb-1.px-1.opacity-50.text-xs.font-semibold.uppercase.tracking-wider
+            svg.w-3.h-3(fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2")
+              circle(cx="12" cy="12" r="5")
+              path(d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42")
+            span Light
+          div(class="flex flex-col gap-0.5")
+            each t in (config.themes_light || [])
+              a.theme-item.theme-light.theme-pick(data-theme-name=t onclick=`window._themePick('day','${t}')`)
+                span.theme-indicator
+                  svg.w-3.h-3(fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2")
+                    circle(cx="12" cy="12" r="5")
+                    path(d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42")
+                span.theme-label= t
+        //- Dark column
+        div
+          .flex.items-center.gap-1.mb-1.px-1.opacity-50.text-xs.font-semibold.uppercase.tracking-wider
+            svg.w-3.h-3(fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2")
+              path(d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z")
+            span Dark
+          div(class="flex flex-col gap-0.5")
+            each t in (config.themes_dark || [])
+              a.theme-item.theme-dark.theme-pick(data-theme-name=t onclick=`window._themePick('night','${t}')`)
+                span.theme-indicator
+                  svg.w-3.h-3(fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2")
+                    path(d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z")
+                span.theme-label= t
+  script.
+    (function(){
+      var _ftIcon = '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.7-.8 1.7-1.7 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.8-1.7 1.7-1.7H16c3.3 0 6-2.7 6-6 0-5.5-4.5-9.6-10-9.4z"/></svg>';
+      window._themeFooter = function(t) {
+        var ft = document.getElementById('footer-theme');
+        if (ft) ft.innerHTML = _ftIcon + t;
+      };
+      function applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('dui-theme', t);
+        window._themeFooter(t);
+      }
+      function updateUI() {
+        var dayPref = localStorage.getItem('dui-theme-day') || 'corporate';
+        var nightPref = localStorage.getItem('dui-theme-night') || 'dark';
+        var cur = document.documentElement.getAttribute('data-theme');
+        var menu = document.getElementById('theme-menu');
+        if (!menu) return;
+        menu.querySelectorAll('.theme-pick').forEach(function(a) {
+          var name = a.getAttribute('data-theme-name');
+          var isDay = a.classList.contains('theme-light');
+          var isPref = isDay ? (name === dayPref) : (name === nightPref);
+          var isActive = (name === cur);
+          a.classList.toggle('theme-active', isActive);
+          a.classList.toggle('theme-preferred', isPref);
+        });
+        var auto = menu.querySelector('.theme-auto');
+        if (auto) auto.classList.toggle('btn-active', !localStorage.getItem('dui-theme-manual'));
+      }
+      window._themePick = function(slot, t) {
+        localStorage.setItem('dui-theme-' + slot, t);
+        localStorage.removeItem('dui-theme-manual');
+        applyTheme(t);
+        updateUI();
+      };
+      window._themeAuto = function() {
+        localStorage.removeItem('dui-theme-manual');
+        var sun = window.jQuery && $.dui && $.dui.locale && $.dui.locale.sun;
+        if (sun) {
+          var now = new Date();
+          var hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+          var t = (hhmm >= sun.sunrise && hhmm < sun.sunset)
+            ? (localStorage.getItem('dui-theme-day') || 'corporate')
+            : (localStorage.getItem('dui-theme-night') || 'dark');
+          applyTheme(t);
+        }
+        updateUI();
+      };
+      document.addEventListener('DOMContentLoaded', function() {
+        var ft = document.getElementById('footer-theme');
+        if (ft) applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+        updateUI();
+      });
+    })();
+
+//- ============================================================================
+//- Section G: Branding — app title (anchored right, no buttons)
+//- ============================================================================
+mixin topnav-brand
+  .shrink-0.pr-2
+    span.font-semibold.tracking-wide.opacity-75 PURE Manufacturing 4.0
+
+//- ============================================================================
+//- TOOLBAR — reusable action bar for buttons, fields, separators
+//- Can be placed anywhere in page templates. The datagrid mixin delegates here.
+//- ============================================================================
+//- Three logical sections in a single flex row:
+//-   1. Title   (shrink-0) — icon + title text
+//-   2. Inputs  (flex-1)   — filter fields in a +form, stretch to fill
+//-   3. Buttons (shrink-0) — CRUD + custom buttons + separators, pack right
+//- ============================================================================
+//- Attributes (via &attributes):
+//-   id       — toolbar ID; namespaces CRUD button IDs (<id>_add, <id>_edit, <id>_del)
+//-   title    — optional title text (left-aligned)
+//-   icon     — Lucide icon name for the title
+//-   asdpx    — CRUD buttons: a=Add, e=Edit, d=Delete
+//-   size     — button size: sm, md (default), lg
+//- JSON config: toolbar.<pageName>_<id>.json or toolbar.<id>.json
+//-   { title, icon, asdpx, size, toolbar: [ {type:'field',...}, {type:'sep'}, {id,text,icon,...} ] }
+//- ============================================================================
+mixin toolbar(opts)
+  -
+    var tbOpts = opts || {}
+    var tbId = attributes.id || tbOpts.id || null
+
+    // Load JSON config if available (same pattern as datagrid)
+    var pgName = fn.pug.pageName || ''
+    var cfg = tbId ? (fn.pug.jsonRead('toolbar.' + pgName + '_' + tbId) || fn.pug.jsonRead('toolbar.' + tbId)) : null
+
+    // Merge: pug attributes > opts > JSON config
+    var tbTitle = attributes.title || tbOpts.title || (cfg && cfg.title) || ''
+    var tbIcon = attributes.icon || tbOpts.icon || (cfg && cfg.icon) || ''
+    var tbAsdpx = attributes.asdpx || tbOpts.asdpx || (cfg && cfg.asdpx) || ''
+    var tbSize = attributes.size || tbOpts.size || (cfg && cfg.size) || 'md'
+
+    // Size mappings — font-size on container cascades to all children
+    var sizeTextMap = { sm: 'text-xs', md: 'text-sm', lg: 'text-base' }
+    var sizeText = sizeTextMap[tbSize] || 'text-sm'
+    var sizeBtnMap = { sm: 'btn-xs', md: 'btn-sm', lg: 'btn-md' }
+    var sizeBtn = sizeBtnMap[tbSize] || 'btn-sm'
+    var sizeBtnPassMap = { sm: 'xs', md: 'sm', lg: 'md' }
+    var sizeBtnPass = sizeBtnPassMap[tbSize] || 'sm'
+    var sizeIconMap = { sm: 'sm', md: 'sm', lg: 'md' }
+    var sizeIcon = sizeIconMap[tbSize] || 'sm'
+    var sizePyMap = { sm: '', md: 'py-0.5', lg: 'py-1' }
+    var sizePy = sizePyMap[tbSize] || 'py-0.5'
+    var sizeGapMap = { sm: 'gap-2', md: 'gap-3', lg: 'gap-4' }
+    var sizeGap = sizeGapMap[tbSize] || 'gap-3'
+
+    // Parse toolbar items from JSON config or opts.toolbar (passed by datagrid)
+    var toolbarItems = (tbOpts.toolbar && Array.isArray(tbOpts.toolbar)) ? tbOpts.toolbar : (cfg && Array.isArray(cfg.toolbar)) ? cfg.toolbar : []
+    var toolbarFields = toolbarItems.filter(function(t) { return t.type === 'field'; })
+    var toolbarBtnItems = toolbarItems.filter(function(t) { return t.type !== 'field'; })
+
+    var hasInputs = toolbarFields.length > 0
+    var hasTitle = tbTitle.length > 0
+
+  .dui-toolbar.flex.items-center.flex-nowrap.px-2.bg-base-200.border-b.border-base-300&attributes({id: tbId ? tbId + '_toolbar' : attributes.id, class: sizeText + ' ' + sizePy + ' ' + sizeGap})
+
+    //- Title (order: 0 via CSS)
+    if hasTitle
+      .dui-toolbar-title.flex.items-center.shrink-0.font-semibold(class=sizeGap)
+        if tbIcon
+          +icon(tbIcon, {opacity: 'opacity-70'})
+        span= tbTitle
+
+    //- JSON config fields (order: 1 via CSS)
+    if hasInputs
+      +form(class="flex items-center pt-0 " + sizeGap, id=tbId ? tbId + '_filter' : null)
+        each fld in toolbarFields
+          -
+            var inp = { name: fld.name || fld.id, class: fld.editor ? fld.editor.type : 'textbox' }
+            if (fld.id) inp.id = fld.id
+            var eo = (fld.editor && fld.editor.options) || {}
+            if (eo.required) inp.required = true
+            if (eo.readonly) inp.readonly = true
+            if (eo._sqlid) inp._sqlid = eo._sqlid
+            var dop = []
+            if (eo.data) dop.push('data:' + JSON.stringify(eo.data))
+            if (eo.editable === false) dop.push('editable:false')
+            if (eo.panelHeight) dop.push("panelHeight:'" + eo.panelHeight + "'")
+            if (dop.length) inp['data-options'] = dop.join(',')
+            inp.class = (inp.class || '') + ' navi fit'
+          +fitem(fld.label, inp)
+
+    //- Block content — direct children of .dui-toolbar
+    //- CSS order sorts fitems left (order:2) and buttons/seps right (order:100)
+    block
+
+    //- Two spacers center the inputs between title and buttons
+    .dui-toolbar-lspace.flex-1.min-w-0
+    .dui-toolbar-rspace.flex-1.min-w-0
+
+    //- CRUD buttons (order: 100 via CSS)
+    if tbAsdpx.indexOf('a') > -1
+      button.btn.btn-ghost.gap-1.opacity-40.pointer-events-none(type="button" id=tbId ? tbId + '_add' : null, class=sizeBtn)
+        +icon('plus', {size: sizeIcon})
+        | Add
+    if tbAsdpx.indexOf('e') > -1
+      button.btn.btn-ghost.gap-1.opacity-40.pointer-events-none(type="button" id=tbId ? tbId + '_edit' : null, class=sizeBtn)
+        +icon('square-pen', {size: sizeIcon})
+        | Edit
+    if tbAsdpx.indexOf('d') > -1
+      button.btn.btn-ghost.gap-1.opacity-40.pointer-events-none(type="button" id=tbId ? tbId + '_del' : null, class=sizeBtn)
+        +icon('trash-2', {size: sizeIcon})
+        | Delete
+
+    //- JSON config buttons (order: 100 via CSS)
+    each item in toolbarBtnItems
+      if item.type === 'sep'
+        +toolbar-sep
+      else
+        -
+          var btnOpts = {id: item.id, size: sizeBtnPass, style: 'ghost', icon: item.icon}
+          if (item.disabled) btnOpts.disabled = true
+          if (item.alwaysEnabled) btnOpts['data-always-enabled'] = ''
+        +button(item.text || '', btnOpts)
+
+//- Toolbar separator — vertical rule between groups
+mixin toolbar-sep
+  .toolbar-sep.self-stretch.my-1

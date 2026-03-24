@@ -1,0 +1,19 @@
+{
+  "singleSelect": true,
+  "striped": true,
+  "idField": "PART_ID",
+  "asdpx": "aed",
+  "columns": [
+    { "field": "LINE", "title": "#", "width": 40, "align": "right" },
+    { "field": "PART_ID", "title": "Part ID", "width": 120,
+      "editor": { "type": "textbox", "options": { "readonly": true } } },
+    { "field": "DESCRIPTION", "title": "Description", "width": 220,
+      "editor": { "type": "textbox" } },
+    { "field": "QTY", "title": "Qty", "width": 60, "align": "right",
+      "editor": { "type": "numberbox", "options": { "precision": 0, "min": 0 } } },
+    { "field": "STATUS", "title": "Status", "width": 80,
+      "editor": { "type": "combobox", "options": {
+        "data": [{"text": "Active", "value": "Active"}, {"text": "Inactive", "value": "Inactive"}],
+        "editable": false } } }
+  ]
+}

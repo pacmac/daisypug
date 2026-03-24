@@ -1,0 +1,17 @@
+extends ../content 
+block content 
+  #max-grid(asdpx='')
+    .datagrid-filter.static
+      label Operator
+      +combobox#empid.all(style='width:120px;' _sqlid = "vwltsa^empid" name='EMPLOYEE_ID')
+      label Resource
+      +combobox#resid.all( _sqlid = "vwltsa^resid" name='RESOURCE_ID')
+      label Active By
+      +combobox#filter(style='width:120px;' name="filter")
+        option(value="lt" selected=true) Open Ticket
+        option(value="rls" ) Rls Opns
+
+  include dg_filter.inc.pug
+
+block script
+  script: include js/dg_jobstat.js

@@ -1,0 +1,30 @@
+{
+  "fit": true,
+  "fitColumns": true,
+  "singleSelect": true,
+  "checkOnSelect": true,
+  "striped": true,
+  "method": "get",
+  "asdpx": "x",
+  "columns": [
+    [
+      { "field": "SALES_ORDER_ID", "hidden": true },
+      { "field": "LINE_NO", "title": "#", "width": 30, "fixed": true, "align": "center" },
+      {
+        "field": "OTD_CODE",
+        "title": "OTD Code",
+        "width": 100,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelWidth": 300,
+            "url": "/?_func=get&_sqlid=dqm^otdcause&_combo=y",
+            "editable": false
+          }
+        }
+      },
+      { "field": "PART_ID", "title": "Part ID", "width": 150 },
+      { "field": "WANT_DATE", "title": "Want Date", "width": 80, "formatter": "$.dui.fmt.date" }
+    ]
+  ]
+}

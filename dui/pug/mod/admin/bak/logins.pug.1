@@ -1,0 +1,16 @@
+extends ../content 
+block content 
+  +layout(data-options="fit:true" style="border:0;")
+    div(region="north" style="height:70%;padding:6px;" title="Office Users" collapsible="false" iconCls="icon-pc")
+      table#logins(fit="true")
+    div(region="south" style="height:30%;padding:6px;" title="Shop Floor Devices" collapsible="false" iconCls="icon-touch")
+      #dgvwlogs(fit="true")
+block style       
+  style.
+    td[field=maxage] {
+      background-image: url("../img/ora-0.5.png");
+      background-repeat: no-repeat;
+    }
+block script
+  script: include js/logins.js
+  //-+script("admin",["js/logins.js"])

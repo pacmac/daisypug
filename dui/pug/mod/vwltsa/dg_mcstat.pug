@@ -1,0 +1,23 @@
+extends ../content 
+block content
+  +layout(data-options="fit:true,border:false")
+
+    div(region="center" style="border:none; padding:0px;")
+      #txgrid
+      #tbar
+        form#gfilter
+block style 
+  style.
+    
+    #tbar {
+      height:auto;
+      line-height:auto;  
+    } 
+    .datagrid-header-row {
+      line-height:normal;
+      height:auto;
+      white-space:normal;
+    }
+
+block script
+  script: include js/dg_mcstat.js

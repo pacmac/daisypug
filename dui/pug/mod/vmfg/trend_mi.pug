@@ -1,0 +1,214 @@
++layout
+  div.bg-base-200(region="west" style="width:400px;border-bottom:none")
+    +form#head.multi.fit(_sqlid='vmfg^vmi' asdpx='adx')
+      +fitem('VMI ID',{class:'combobox fkey autonum fit navi',name:'VMI_ID',id:'~'})
+      
+      #items.lock
+        +fitem('Customer',{eui:'combobox',name:'CUST_ID', id:'~', required:true},{style:'margin-top:12px;'})
+        +fitem('Name',{eui:'textbox',id:'CUST_ID_NAME','data-options':"readonly:true"})
+  
+        +fitem('Ship To',{eui:'combobox',name:'SHIPTO_ID', id:'~', required:true},{style:'margin-top:12px;'})
+        +fitem('Details',{eui:'textbox',id:'SHIPTO_DETAILS','data-options':"readonly:true,multiline:true",style:'height:100px'})
+  
+        +fitem('Warehouse',{eui:'combobox',name:'WAREHOUSE', id:'~', required:true},{style:'margin-top:12px;'})
+        //+fitem('',{eui:'textbox',id:'WAREHOUSE_DESCRIPTION','data-options':"readonly:true"})
+  
+        //-+fitem('Location',{eui:'combobox',name:'LOCATION', id:'~', required:true},{style:'margin-top:12px;'})
+        //-+fitem('',{eui:'textbox',id:'LOCATION_DESCRIPTION','data-options':"readonly:true"})
+    
+  div(region="center" style="border:none; padding:0px;").noselect
+    #vmfdgrid
+
+script.
+  $('#VMI_ID').combobox({
+    url:'/',
+    queryParams: {_sqlid:'vmfg^vmi',_func:'get',_combo:'y'},
+    onSelect:function(rec){
+      if (rec){
+        $('#vmfdgrid').datagrid('options').tbar.dgre_add.linkbutton('enable'); 
+        $('#CUST_ID').combobox('setValue',rec.CUST_ID); 
+        //var shp={text:rec.text,NAME:rec.NAME,ADDR_1:rec.ADDR_1,ADDR_2:rec.ADDR_2,ADDR_3:rec.ADDR_3};
+        var shp=[rec.text,rec.NAME,rec.ADDR_1,rec.ADDR_2,rec.ADDR_3];
+        $('#SHIPTO_ID').combobox('setValue',rec.SHIPTO_ID);
+        $('#SHIPTO_DETAILS').textbox('setValue',shp.join('\n')); 
+        $('#WAREHOUSE').combobox('select',rec.WAREHOUSE);
+        //$('#LOCATION').combobox('select',rec.LOCATION);
+        
+        var pvar={_sqlid:'vmfg^vmfdlines',_func:'get',VMI_ID:rec.value,_dgrid:'y'};
+        // $('#vmfdgrid').datagrid('load',pvar);
+        ajaxget('/',pvar,function(data){ $('#vmfdgrid').datagrid('loadData',data);   });
+      }
+    }
+    
+  })
+  
+  $('#CUST_ID').combobox({
+    url:'/',
+    queryParams: {_sqlid:'vmfg^cust_ids',_func:'get',_combo:'y'}, 
+    onSelect:function(rec){
+      //console.log(rec);
+      if (rec){
+        $('#CUST_ID_NAME').textbox('setValue',rec.NAME);
+
+        var vmi=$('#VMI_ID').combobox('getValue');
+        //cl(vmi);
+        if (vmi==''){
+          var sto = $('#SHIPTO_ID'); 
+          sto.combobox('readonly',false).combobox('reload','/?_sqlid=vmfg^cust_shiptos&_func=get&_combo=y&CUSTOMER_ID='+rec.value);
+        }
+        ajaxget('/',{_sqlid:'vmfg^open_cos',_func:'get',CUST_ID:rec.value},function(cbo){
+          $('#_dgform > form input[textboxname=CUST_ORDER_ID]').combobox('loadData',cbo); 
+        });
+      }
+      
+
+    }
+  })
+
+  $('#SHIPTO_ID').combobox({
+    readonly: true,
+    __url:'/',
+    __queryParams: {_sqlid:'vmfg^cust_shiptos',_func:'get',_combo:'y'}, 
+    formatter:function(row){
+      return (row.text+' - '+row.NAME).substr(0,29);  
+    },
+    onSelect:function(rec1){
+      var vmi=$('#VMI_ID').combobox('getValue');
+      if (vmi==''){
+      	var text = [rec1.NAME,rec1.ADDR_1,rec1.ADDR_2,rec1.ADDR_3].join('\n');
+      	$('#SHIPTO_DETAILS').textbox('setValue',text)
+      }      
+      
+    }
+  })
+  
+  $('#WAREHOUSE').combobox({
+    url:'/',
+    queryParams: {_sqlid:'vmfg^whouse_ids',_func:'get',_combo:'y'}, 
+    onLoadSuccess: function(data){
+      $.dui.page.WAREHOUSE = data;  
+    },
+    onSelect:function(rec){
+     // $('#WAREHOUSE_DESCRIPTION').textbox('setValue',rec.DESCRIPTION);
+      /*
+      var locn = $('#LOCATION');
+      var opt = locn.combobox('options');
+      var rows=[]; opt.allRows.map(function(e){if(e.WAREHOUSE_ID==rec.value) rows.push(e)});
+      locn.combobox('loadData',rows).combobox('readonly',false);
+      */
+    }
+  })
+  
+  /*
+  $('#LOCATION').combobox({
+    readonly: true,
+    url:'/',
+    allRows:[],
+    whid:'',
+    loadFilter:function(data){
+      var opt = $(this).combobox('options');
+      if(opt.allRows.length==0) {opt.allRows=data; return [];}
+      return data;
+    },
+    queryParams: {_sqlid:'vmfg^locn_ids',_func:'get',_combo:'y'}, 
+    onSelect:function(rec){
+      $('#LOCATION_DESCRIPTION').textbox('setValue',rec.DESCRIPTION)
+    }
+  })
+  */
+  $.dui.page.loadDone=function(data){
+     var VMIID=$('#VMI_ID').combobox('getValue');
+     $('#vmfdgrid').datagrid('load',{_func:'get', _sqlid:'vmfg^vmfdlines',_dgrid:'y',VMI_ID:VMIID});
+     $('#vmfdgrid').datagrid('options').tbar.dgre_add.linkbutton('enable'); 
+  }
+  
+  $.dui.page.location = function(param,cb){
+    var qp = {_sqlid:'vmfg^locn_ids',_func:'get',_combo:'y'};
+    ajaxget('/',qp,cb);
+  }
+  
+  setTimeout(function(){
+    
+    $.dui.page.opts={
+      twoColumns: true,
+      editor: 'inline',
+      rownumbers: false,
+      fitColumns: true,
+      fit: true,
+      url: '/',
+      queryParams:{
+          _sqlid:'vmfg^vmfdlines',
+          _func:'get',
+          _dgrid:'y'
+      },
+      addData:{
+          LINE_NO: '$autonum:1',
+          VMI_ID: '#VMI_ID'
+      },
+  
+      onRowContextMenu: function(e){return e.preventDefault()},
+      onBeforeLoad:function(qp){
+        if(!qp.VMI_ID) return false; 
+      },
+      loadFilter: function(data){
+          if(!data || (!data.rows && data.length==0)) data = {rows:[],total:0};
+          return data;
+      },
+      onEndEdit: function(idx,row,chg){
+          var url = "/?_sqlid=vmfg^vmfdlines";
+          var data = clone(row);
+          ajaxget(url,data,function(data){}) 
+      },
+      onSelect:function(idx,row){
+  
+      },
+      columns:
+      [[
+        {field:'VMI_ID',hidden:true},
+        {field:'LINE_NO',title:'#',width:40,fixed:true,align:'center'},
+        {field:'CUST_ORDER_ID',title:'Order - Line',width:100,editor:{
+            type:'combobox',
+              options:{
+                url: '/?_func=get&_sqlid=vmfg^open_cos',
+                required: true,
+                groupField: 'CUST_ORDER_ID',
+                onSelect: function(rec){
+                  $('#_dgform > form input[textboxname=PART_ID]').textbox('setValue',rec.PART_ID);
+                  $('#_dgform > form input[textboxname=PART_DESC]').textbox('setValue',rec.PART_DESC);
+                  $('#_dgform > form input[textboxname=BAL_QTY]').textbox('setValue',rec.ORDER_LINE_BAL); 
+                  $('#_dgform > form input[textboxname=QTY').numberspinner('set',{'min':0,'max':rec.ORDER_LINE_BAL});
+                }
+              }
+         }
+        },
+        {field:'PART_ID',title:'Part ID',width:100,editor:{type:'textbox',options:{readonly:true}}},
+        {field:'PART_DESC',title:'Description',width:150,editor:{type:'textbox',options:{readonly:true}}},
+        {field:'BAL_QTY',title:'Bal',width:60,editor:{type:'textbox',options:{readonly:true}}},
+        {field:'QTY',title:'Qty',width:50, editor:{type:'numberspinner',options:{min:0,max:100,precision:0,value:1}}},
+        {field:'WAREHOUSE',title:'Warehouse',width:120,editor:{type:'combobox',options:{data:$.dui.page.WAREHOUSE,xrequired:true}}},
+        {field:'LOCATION',title:'Location',width:120,editor:{type:'combobox',options:{loader:$.dui.page.location, _data:$.dui.page.LOCATION,xrequired:true}}},
+       
+      ]]
+    }
+
+    $('#vmfdgrid').datagrid('rowEditor',$.dui.page.opts).datagrid('columns',$('#dgre_tb'));
+    $('#vmfdgrid').datagrid('options').tbar.dgre_add.linkbutton('disable');
+  }) 
+
+  $('form#head').on('loadDone',function(jq,data){
+    if(!data.VMI_ID) return;
+    $.dui.page.loadDone(data);
+    
+  });
+
+  $('#but_add').on('done',function(){
+        //empty the datagrid
+        $('#vmfdgrid').datagrid('loadData',{"total":0,"rows":[]});
+        $('#items').removeClass('lock');  
+        $('#CUST_ID').combobox('readonly',false);
+        $('#SHIPTO_ID').combobox('readonly',false);
+        $('#WAREHOUSE').combobox('readonly',false);
+        
+        butEn('s');
+       // $('#vmfdgrid').datagrid('options').tbar.dgre_add.linkbutton('disable'); 
+  })

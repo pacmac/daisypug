@@ -1,0 +1,72 @@
+extends ../content 
+block script 
+  //-+script("inv",["js/cp_man.js"])
+  script: include js/cp_man.js
+block style
+  style.
+    .grid-a {
+      -moz-column-count:2;
+      -webkit-column-count:2;
+      column-count:2
+    }
+    
+    form#dgform {
+      padding: 12px 0;
+    }
+    
+    form#dgform .fitem:nth-of-type(1) {
+      margin-top: 0px;
+    }
+    
+    #jobdiv {
+      display: none;
+      margin-bottom:8px;
+    }
+
+block content
+  +split
+    div#ticket(region="west" style="width:400px;border-bottom:none;background:#FAFAFA;")
+      +form#head(class='multi', asdpx="ax", _sqlid="inv^cprop_head")
+        +fitem('Document ID',{_sqlid:'inv^cprop_ids',class:'combobox fkey autonum fit',name:'CP_ID',id:'~','data-options':"groupField:'CUST_ID'"})
+        +fitem('Customer ID',{class:'combobox',id:'~',name:'CUST_ID', required:true,'data-options':'editable:false' })
+        +fitem('Customer Name',{eui:'textbox',id:'CUST_NAME', readonly:true })
+        +fitem('Received By',{eui:'combobox',name:'USER_ID', required:true,_sqlid:'vwltsa^userids','data-options':"editable:false,groupField:'department',groupFormatter:function(val){if(val=='') return 'NO-DEPARTMENT'; return val.toUpperCase();}"})
+        +fitem('Received Date',{class:'datebox today',name:'CP_DATE'})
+        +fieldset('File Attachments',{style:"margin-top:30px;width:350px;"})
+          +filegrid#cpfiles(data-options="fit:true")
+    
+    div(region="center" style="border:none; padding:0px;").noselect
+      +datagrid#cpdg
+
+      div#dgedit(style="width:800px")
+        +form#dgform
+          +fieldset(null).two
+            div
+              +fitem('Line Number',{id:'LINE_NO', eui:'numberbox',name:'LINE_NO', readonly:true})
+              +fitem('Cust Part ID',{eui:'textbox', id:'CUST_PART_ID',name:'CUST_PART_ID', validType:['length[1,30]']})
+              +fitem('Cust PO',{eui:'textbox',id:'CUST_PO',name:'CUST_PO',validType:['length[1,50]']})
+              //- [auto] qbe→combobox: +fitem('Our Part ID',{class:'qbe',id:'~', name:'PART_ID'})
+              +fitem('Our Part ID',{_sqlid:'inv^partid_qbe', class:'combobox',id:'~', name:'PART_ID'})
+              +fitem('Location',{eui:'textbox',name:'LOCN',validType:['length[1,30]']})
+              +fitem('Qty Received',{eui:'numberspinner',name:'QTY_RECV', min:0, value:0, precision:0})
+            div
+              +spec('Description',{name:'DESCRIPTION'})
+
+          +fieldset('Details',{style:'margin: 0 0 0 13px;'})
+            div.grid-a
+              +fitem('NCR Reference',{eui:'textbox',name:'NCR_ID',validType:['length[1,30]']})
+              +fitem('Permit',{eui:'textbox',name:'PERMIT',validType:['length[1,30]']})
+              +fitem('Sales Order Ref',{id:'SALES_ORDER_ID', class:'combobox navi fit',name:'~','data-options':"validType: ['inList']"})
+              +udf
+          
+          +fieldset('Disposition',{style:'margin: 0 0 0 13px;',class:'two'})
+              div
+                +fitem('Action',{eui:'combobox',name:'ACTION',id:'ACTION',validType:['length[1,50]']})
+              div
+                div#jobdiv
+                  //- [auto] qbe→combobox: +fitem('Job ID',{id:'BASE_ID', class:'qbe navi fit',name:'~'})
+                  +fitem('Job ID',{_sqlid:'vwltsa^basid_qbe', id:'BASE_ID', class:'combobox navi fit',name:'~'})
+                  a.iconbut(iconCls="icon-delete")#WOREF_DEL  
+                  +fitem('COC IDs',{id:'~',eui:'textbox',name:'COC_ID',readonly:true})  
+                      
+  include ./cp_man_inc.pug

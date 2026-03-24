@@ -1,0 +1,141 @@
++vsplit('380px')
+  +panel('west')
+    input(type='hidden' name='PLAN_ID')#SEQ_PLAN_ID
+
+    .fitem
+      label Sequence No
+      +textbox#SEQ_NO(type='text', name='SEQ_NO' readonly="readonly")
+
+    .fitem
+      label Title
+      +textbox#TITLE(type='text', name='TITLE' prompt="Procedure Name or Title" required="required")
+
+    .fitem
+      label Reference Doc
+      +textbox#DOC(type='text', name='DOC' prompt="Drawing or Specification")
+
+    .fitem
+      label Page # / Grid Ref
+      +textbox#GREF(type='text' name='GREF' prompt="A1, Page 1, Top-Left etc")
+
+    .fitem
+      label Measurement Type
+      input#ltype(name='LTYPE' required="required" data-options="editable:false")
+
+    .fitem
+      label Gauge Type
+      +combobox#P_GAUGE_TYPE(_sqlid="dqm^gaugeType" name='GAUGE_TYPE' data-gid="#P_GAUGE_ID")
+
+    .fitem
+      label Gauge ID
+      +combobox#P_GAUGE_ID(name='GAUGE_ID' readonly="readonly")
+
+    fieldset#valuediv.vals
+      .fitem
+        label Unit of Measure
+        +combobox(name='UOM' _sqlid="dqm^unit" data-options="editable:false")
+
+      .fitem
+        label Upper Limit
+        +numberbox#VUPP.lim(name='VUPP' precision="5" iconCls="icon-up" iconAlign="left")
+        +numberbox.tol(precision="5" readonly="readonly" data-options="formatter:plus")
+
+      .fitem
+        label Nominal Value
+        +numberbox#vnom(name='VNOM' precision="5" value="" iconCls="icon-right" iconAlign="left")
+
+      .fitem
+        label Lower Limit
+        +numberbox#VLOW.lim(name='VLOW' precision="5" iconCls="icon-down" iconAlign="left")
+        +numberbox.tol(precision="5" readonly="readonly" data-options="formatter:plus")
+
+    fieldset#booldiv.bools
+      .fitem
+        label Pass-Fail Criteria
+        +textbox#BOOL_TEXT(type='text', name='BOOL_TEXT')
+
+  +panel('center')
+    .fitem
+      label Instructions
+    .fitem#jqfit
+      +textbox(name='SPEC' data-options="multiline:true")
+
+
+script.
+  $.page.fn.ltype = function(rec){
+    if(!rec) rec = {value:$('#ltype').combobox('getValue')};
+    var stat = ['value','bool'];
+    for(var i in stat){
+      var hs='hide'; if(rec.value==stat[i]) hs='show';
+      $('#'+stat[i]+'div')[hs]();
+    }
+
+    // Requires
+    var req=false; if(rec.value=='value') req=true;
+    $('[name="UOM"]').combobox('required',req);
+    $('[name="VNOM"]').combobox('required',req);
+    $('[name="BOOL_TEXT"]').textbox('required',!req);
+
+  };
+
+  $(function(){
+
+    $('form#qpproc').form({
+
+      success:function(data){
+        $('#QPTREE').tree('reload');
+      },
+
+      onLoadSuccess:function(){
+        $.page.fn.ltype();
+        $.page.fn.saved = true;
+      }
+    })
+
+    $('#TITLE').textbox({
+      onChange:function(nv,ov){
+        setTimeout(function(){
+          var tr = $('#QPTREE');
+          var sel = tr.tree('getSelected');
+          if (sel){
+            var seq = sel.id.split('^')[1];
+            var txt = seq+' - '+nv;
+            tr.tree('update',{target:sel.target,text:txt})
+          }
+        });
+      }
+    })
+
+    $('#ltype').combobox({data:[{"value":"value","text":"VALUE"},{"value":"bool","text":"PASS-FAIL"}], onSelect:$.page.fn.ltype, panelHeight:'auto'})
+    $('#vnom').numberbox({
+      onChange:function(nv,ov){
+        $('#VUPP').numberbox('setValue',nv);
+        $('#VLOW').numberbox('setValue',nv);
+      }
+    })
+    // tolerence calculator
+    $('.lim').numberbox({
+      onChange:function(nv,ov){
+        var me = $(this);
+        if($.page.fn.skip){
+          $.page.fn.skip = false;
+          return;
+        }
+        var val = parseFloat(nv);
+        var nom = parseFloat($('#vnom').numberbox('getValue'));
+
+        if(nv != ''){
+          var msg; if(this.id=='VLOW' && val > nom) msg = 'Must be LESS than '+nom;
+          else if(this.id=='VUPP' && val < nom) msg = 'Must be GREATER than '+nom;
+          if(msg){
+            alert(msg);
+            $.page.fn.skip = true;
+            setTimeout(function(){me.numberbox('setValue',ov);})
+          }
+          var tol = $(this).nextAll('input.tol');
+          var val = (nv-nom).toFixed(5);
+          tol.numberbox('setValue',val);
+        }
+      }
+    });
+  })

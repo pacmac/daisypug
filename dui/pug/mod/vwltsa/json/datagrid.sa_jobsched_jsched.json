@@ -1,0 +1,34 @@
+{
+  "method": "get",
+  "fit": true,
+  "striped": false,
+  "singleSelect": false,
+  "toolbar": [
+    { "type": "field", "label": "Customer", "id": "cuscbo", "name": "cuscbo", "editor": { "type": "combobox" } },
+    { "type": "field", "label": "Job Class", "id": "woccbo", "name": "woccbo", "editor": { "type": "combobox" } },
+    { "type": "field", "label": "Filter By", "id": "filtercbo", "name": "filtercbo", "editor": { "type": "combobox" } }
+  ],
+  "columns": [
+    { "field": "woref", "title": "Job Reference", "width": 100 },
+    { "field": "priority", "title": "PRI", "width": 30, "align": "center" },
+    { "field": "custid", "title": "Cust ID", "width": 150, "hidden": true },
+    { "field": "custname", "title": "Cust Name", "width": 150, "hidden": true },
+    { "field": "partid", "title": "Part ID", "width": 150, "hidden": true },
+    { "field": "soref", "title": "Sales Order", "width": 125, "hidden": true },
+    { "field": "wo_class", "title": "Job Class", "width": 80 },
+    { "field": "wdate", "title": "Want Date", "width": 80 },
+    { "field": "sdate", "title": "Start Date", "width": 80 },
+    { "field": "edate", "title": "End Date", "width": 80 },
+    { "field": "USER_1", "title": "UDF 1", "width": 100, "hidden": true },
+    { "field": "USER_2", "title": "UDF 2", "width": 100, "hidden": true },
+    { "field": "USER_3", "title": "UDF 3", "width": 100, "hidden": true },
+    { "field": "USER_4", "title": "UDF 4", "width": 100, "hidden": true },
+    { "field": "USER_5", "title": "UDF 5", "width": 100, "hidden": true },
+    { "field": "USER_6", "title": "UDF 6", "width": 100, "hidden": true },
+    { "field": "USER_7", "title": "UDF 7", "width": 100, "hidden": true },
+    { "field": "USER_8", "title": "UDF 8", "width": 100, "hidden": true },
+    { "field": "USER_9", "title": "UDF 9", "width": 100, "hidden": true },
+    { "field": "USER_10", "title": "UDF 10", "width": 100, "hidden": true },
+    { "field": "sched", "title": "", "width": 990 }
+  ]
+}

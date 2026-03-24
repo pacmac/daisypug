@@ -1,0 +1,113 @@
+{
+  "id": "qlines",
+  "url": "/?_sqlid=sales^quotelines&_func=get&_dgrid=y",
+  "method": "post",
+  "asdpx": "aed",
+  "rownumbers": false,
+  "singleSelect": true,
+  "striped": true,
+  "fitColumns": true,
+  "fit": true,
+  "title": "Line Items",
+  "columns": [
+    [
+      { "field": "QUOTE_ID", "hidden": true },
+      { "field": "CLASS", "hidden": true },
+      { "field": "SOURCE", "hidden": true },
+      { "field": "LINE_INDEX", "hidden": true },
+      {
+        "field": "LINE_NO",
+        "title": "#",
+        "width": 25,
+        "fixed": true,
+        "align": "center"
+      },
+      {
+        "field": "ID",
+        "title": "Item ID",
+        "width": 140,
+        "fixed": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "_sqlid": "sales^quoteitemid"
+          }
+        }
+      },
+      {
+        "field": "ORDER_QTY",
+        "title": "Qty",
+        "width": 60,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0,
+            "value": 1
+          }
+        }
+      },
+      {
+        "field": "UOM_ID",
+        "title": "UOM",
+        "coloff": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "required": false
+          }
+        }
+      },
+      {
+        "field": "UNIT_PRICE",
+        "title": "Unit $",
+        "width": 80,
+        "fixed": true,
+        "align": "right",
+        "formatter": "$.dui.fmt.currency",
+        "editor": {
+          "type": "numberbox",
+          "options": {
+            "value": 0,
+            "precision": 2
+          }
+        }
+      },
+      {
+        "field": "TOTAL_PRICE",
+        "title": "Total $",
+        "width": 90,
+        "fixed": true,
+        "align": "right",
+        "formatter": "$.dui.fmt.currency"
+      },
+      {
+        "field": "CUST_PART_REF",
+        "title": "Cust Part Ref",
+        "width": 140,
+        "fixed": true,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "required": false
+          }
+        }
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Item Description",
+        "width": 1000,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": false,
+            "multiline": true,
+            "rows": 10
+          }
+        }
+      }
+    ]
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "lines",
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "inv^physical_count_lines",
+    "_func": "get",
+    "_dgrid": "y"
+  },
+  "fit": true,
+  "striped": true,
+  "fitColumns": false,
+  "rownumbers": false,
+  "pagination": true,
+  "pageSize": 25,
+  "pageList": [25, 50, 100, 250],
+  "pagePosition": "bottom",
+  "asdpx": "aedx",
+  "columns": [
+    [
+      {"field": "PHYSICAL_COUNT_ID", "hidden": true},
+      {"field": "LINE_NO", "title": "#", "width": 30, "fixed": true, "align": "center"},
+      {"field": "PART_ID", "title": "Our Part ID", "width": 100},
+      {"field": "DESCRIPTION", "title": "Description", "width": 100, "fixed": true, "align": "left"},
+      {"field": "UOM_ID", "title": "UOM", "width": 30, "fixed": true, "align": "left"},
+      {"field": "TRACE_ID", "title": "Trace ID", "width": 100, "fixed": true, "align": "left"},
+      {"field": "LENGTH", "title": "Length", "width": 100, "fixed": true, "align": "right"},
+      {"field": "WIDTH", "title": "Width", "width": 100, "fixed": true, "align": "right"},
+      {"field": "HEIGHT", "title": "Height", "width": 100, "fixed": true, "align": "right"},
+      {"field": "COUNT", "title": "Count Qty", "width": 100, "fixed": true, "align": "right"},
+      {"field": "RECOUNT", "title": "RECount Qty", "width": 100, "fixed": true, "align": "right"},
+      {"field": "NOTES", "title": "Notes", "width": 250, "fixed": true}
+    ]
+  ]
+}

@@ -1,0 +1,56 @@
+
+$.page.ready(function () {
+
+// Page-specific datagrid opts — merged with JSON config by datagrid-plugin
+$.page.fn.opts = {
+  queryParams: frm2dic($('form#gfilter')),
+  onBeforeLoad: function(qp){
+    if(!qp.sdate) return false;
+  },
+  onCheck: function(idx, dat){
+    $(this).data('idx', idx);
+    var frm = $('form#parttrans');
+    frm.attr('mode','upd').form('load', dat);
+
+    for(var key in dat){
+      if(key.indexOf('TRACE_USER_') == 0){
+        var fitem = $('div#traceprop div.fitem#' + key + '_LBL');
+        var label = fitem.find('label');
+        if(dat[key] != '') {
+          label.text(dat[key].replace('*',''));
+          fitem.show();
+        } else {
+          fitem.hide();
+        }
+      }
+    }
+  },
+  onLoadSuccess: function(){
+    $('form#parttrans').form('clear');
+  }
+};
+
+$(document).ready(function(){
+
+  $('#txgrid').datagrid($.page.fn.opts);
+
+  // Custom save: update datagrid row + submit form
+  $('form#parttrans').on('submit', function(e){
+    e.preventDefault();
+    var frm = $(this);
+    var data = frm2dic(frm);
+    var dg = $('#txgrid');
+    dg.datagrid('updateRow', {index: dg.data('idx'), row: data});
+    frm.form('options').queryParams = {_func: "upd", _sqlid: 'inv^part_trace'};
+    frm.form('submit');
+  });
+
+  $('form#gfilter').form({
+    onChange: function(){
+      $('#txgrid').datagrid('reload', frm2dic($('form#gfilter')));
+    }
+  });
+
+})
+
+});  // $.page.ready

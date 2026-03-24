@@ -1,0 +1,145 @@
+extends ../content 
+
+block style
+  style.
+    #coinfo a.textbox-icon.icon-login {
+      pointer-events: all;
+      position: relative;
+      top: -60px;
+      right: 4px;
+      opacity:1;
+    }
+
+block script
+  +script("admin",['js/global.js'])
+  script.
+    $('#lickey').filebox({
+      multiple: false,
+      accept:'.key',
+      onChange: function(nv,ov){
+        $(this).textbox('textbox')[0].value = nv.replace("C:\\fakepath\\", "");
+        var f = $(this).data('filebox').filebox.children('input[type=file]')[0].files[0];
+    
+        var name = f.name;
+        if((/\.key/).test(name)){
+          var reader = new FileReader();
+          reader.onload = function(evt){
+            var data = evt.target.result.trim();
+            $('#colkey').textbox('setValue',data);
+            msgbox('License updated, please save.')
+            try{$('#lickey').filebox('clear')}
+            catch(err){}
+          }       
+          
+          reader.readAsText(f);
+        }
+        else msgbox('*.key files only.')
+      } 
+    })
+    
+    // bug fixes / hacks
+    setTimeout(function(){
+      $('#coinfo a.textbox-icon.icon-login').removeClass('textbox-icon-disabled');
+      $('#lickey').next('span.filebox').find('input[type="file"]').attr('accept','.key');
+    });
+    
+block content
+  +tabs#main(fit="true")
+    
+    #coinfo(title='Company' iconCls="aicon-table")
+      form.single.load(_sqlid='admin^company' asdpx='s')
+        div.two
+          div(style="width:420px;")
+          
+            +fieldset('Registered Address',{style:'margin-top:12px;'})
+              +fitem('Name',{name:'coname', class:'textbox',required:true })
+              +fitem('Address Line 1',{name:'coaddr1', class:'textbox' })
+              +fitem('Address Line 2',{name:'coaddr2', class:'textbox' })
+              +fitem('Address Line 3',{name:'coaddr3', class:'textbox' })
+              +fitem('Telephone',{name:'cotel', class:'textbox' })
+              +fitem('Fax',{name:'cofax', class:'textbox' })
+            +fieldset('Emails',{style:'margin-top:12px;'})
+              +fitem('Help Desk',{name:'helpdesk_email', class:'textbox',required:true  })
+              +fitem('Administrator',{name:'administrator_email', class:'textbox' ,required:true })
+            +fieldset('Remit-To Address',{style:'margin-top:12px;'})
+              +fitem('Name',{name:'remitname', class:'textbox' })
+              +fitem('Address Line 1',{name:'remitaddr1', class:'textbox' })
+              +fitem('Address Line 2',{name:'remitaddr2', class:'textbox' })
+              +fitem('Address Line 3',{name:'remitaddr3', class:'textbox' })
+              +fitem('Telephone',{name:'remittel', class:'textbox' })
+              +fitem('Fax',{name:'remitfax', class:'textbox' })          
+
+            div.center
+              //-img(src=$.__cologo || "img/cologo.png" style="height:100px;")
+              img(src="img/cologo.png" style="height:100px;")
+                    
+          div
+
+            +fieldset('Company Info',{style:'margin-top:12px;'})
+              +fitem('Company Alias',{name:'coalias', class:'textbox' })
+              +fitem('Site UID',{name:'couid', class:'textbox' ,readonly:true})
+              +fitem('Group UID',{name:'groupuid', class:'textbox' ,readonly:true})
+              +fitem('Home Currency',{name:'currency_id', class:'combobox' , _sqlid:'admin^curr'})
+              +fitem('Costing Currency',{name:'costing_currency_id', class:'combobox' , _sqlid:'admin^curr',required:true})
+              +fitem('Default GST Code',{name:'gst_id', class:'combobox' , _sqlid:'admin^gst'})
+
+            +fieldset('Licensing',{style:'margin-top:12px;'})
+              .hide
+                +input({id:'lickey', class:'filebox hide',accept:'.key'})
+              +fitem({text:'License Key',style:'vertical-align:top'},{id:'~',name:'colkey', required:true, class:'textbox' ,readonly:true,'data-options':"multiline:true,icons:[{disabled:false,iconCls:'icon-login',class:'lickey',handler:function(){$('#lickey').next().find('.textbox-value')[0].click()}}]",style:'height:150px;'})
+              +fitem('Office Users',{id:'ucount', class:'numberbox sub-off' ,readonly:true, value:$.license.allow})
+              +fitem('Support Expires',{class:'datebox sub-off' ,readonly:true, value:$.license.amexpire})
+              +fitem('Agreement Docs',{id:'_agree', class:'combobox sub-off'})
+              if(!$.isbin)
+                div
+                  +fitem('Pure Version',{name:'appver', class:'textbox' ,readonly:true,value:$.package.version }) 
+              //-+fitem('Shop Floor Devices',{id:'dcount', class:'numberbox sub-off' ,readonly:true, value:$.license.vwlt})    
+              //-+fitem('Enabled Modules',{id:'licmod', class:'textbox sub-off' ,readonly:true, value:$.license.mod})
+              //-+fitem('System Restart ?',{name:'_restart', required:true, class:'combobox', 'data-options':"data:[{value:'y',text:'Yes'},{value:'n',text:'No'}]" }) 
+              
+    #eserver(title='Email Server' iconCls="icon-email")
+      form.single.load(_sqlid='admin^eserver' asdpx='s')
+        +fitem('Method',{id:'logon',name:'logon', class:'textbox fkey' ,required:true})
+        
+        div#smtp
+          +fitem('Host IP or Name',{name:'host', class:'textbox' ,required:true})
+          +fitem('Host Port',{name:'port', class:'numberbox' ,required:true ,value:25})
+          +fitem('Domain Name',{name:'domain_name', class:'textbox' })
+          fieldset#login  
+            +fitem('Host User',{id:'emuser',name:'user', class:'textbox' })
+            +fitem('Host Password',{id:'empass',name:'pwd', class:'textbox' ,type:"password"}) 
+        +fitem('Test Recipient',{id:'testrecip', class:'easyui-validatebox' ,'data-options':"validType:'email'" ,value:"purehelp@dis.com.sg"})      
+        .fbuts.center
+          a#testmail
+
+    #security(title='Security' iconCls="icon-lock")
+      form.single.load(_sqlid='admin^security' asdpx='s')
+        .div.two
+          div(style="width:420px;")
+            +fieldset('Password Rules',{style:'margin-top:12px;'})
+              +fitem('Password Age',{name:'pwd_age', class:'numberspinner' ,required:true,value:90,min:0,max:365,precision:0 })
+              +fitem('Minimum Length',{name:'pwd_rule_length', class:'numberspinner' ,required:true,value:8,min:0,max:12,precision:0 })
+              +fitem('Minimum Upper',{name:'pwd_rule_ucase', class:'numberspinner' ,required:true,value:1,min:0,max:5,precision:0 })
+              +fitem('Minimum Lower',{name:'pwd_rule_lcase', class:'numberspinner' ,required:true,value:1,min:0,max:5,precision:0 })
+              +fitem('Minimum Numeric',{name:'pwd_rule_numeric', class:'numberspinner' ,required:true,value:1,min:0,max:5,precision:0 })
+              +fitem('Minimum Special',{name:'pwd_rule_special', class:'numberspinner' ,required:true,value:1,min:0,max:5,precision:0 })
+          .div
+            +fieldset('User access',{style:'margin-top:12px;'})
+              +fitem('Idle Minutes',{name:'idlemin',class:'numberspinner',value:0,min:0,max:60,precision:0})  
+              +fitem('Inactive Days',{name:'inactive_days',class:'numberspinner',value:0,min:0,max:365,precision:0})            
+              +fitem('Allow Remote Access',{id:'RA', name:'remote_access'})
+              div#iplist
+                +fitem('Allowed IPs',{id:'ip',name:'ip', class:'textbox', 'data-options':"multiline:true",style:'height:200px;'})
+
+   
+    #sa_database(title='Databases' iconCls="aicon-database")          
+
+      form.multi(_sqlid='admin^dbcon' asdpx='asx')
+        +fitem('Connection ID',{id:'~', name:'conid', class:'fkey combobox'})
+        +fitem('Database Type',{id:'~',name:'engine', class:'combobox'})
+        +fitem('Server',{name:'server', class:'textbox',required:true})
+        +fitem('Database',{name:'database', class:'textbox',required:true})
+        +fitem('User Name',{name:'userName', class:'textbox',required:true })
+        +fitem('Password',{name:'password', class:'textbox',required:true ,type:'password'})
+        +fitem('Use Pooling',{id:'~',name:'pooling', class:'combobox', 'data-options':"data:[{value:true,text:'YES'},{value:false,text:'NO'}]"})
+        +fitem('Pool Size',{name:'connectionLimit', class:'numberbox',min:1, precision:0 })

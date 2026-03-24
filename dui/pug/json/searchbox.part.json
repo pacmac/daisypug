@@ -1,0 +1,70 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "inv^partid_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 25,
+  "columns": [
+    { "field": "value",        "title": "Part ID",       "width": 100 },
+    { "field": "DESCRIPTION",  "title": "Description",   "width": 200 },
+    { "field": "ALIAS_DESC",   "title": "Alias",         "width": 150 },
+    { "field": "TRACEABLE",    "title": "Traceable",     "width": 70 },
+    { "field": "PRODUCT_CODE", "title": "Product Code",  "width": 100 },
+    { "field": "DIM_TRACKED",  "title": "Dimensions",    "width": 80 },
+    { "field": "PART_CLASS_ID","title": "Part Class",    "width": 100 },
+    { "field": "USER_1",       "title": "UDF 1",         "width": 80 },
+    { "field": "USER_2",       "title": "UDF 2",         "width": 80 },
+    { "field": "USER_3",       "title": "UDF 3",         "width": 80 },
+    { "field": "USER_4",       "title": "UDF 4",         "width": 80 },
+    { "field": "USER_5",       "title": "UDF 5",         "width": 80 }
+  ],
+  "filters": [
+    { "field": "DESCRIPTION", "title": "Description", "editor": "textbox" },
+    { "field": "ALIAS_DESC", "title": "Alias", "editor": "textbox" },
+    { "field": "TRACEABLE", "title": "Traceable", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "", "text": "All" },
+            { "value": "Y", "text": "Yes" },
+            { "value": "N", "text": "No" }
+          ]
+        }
+      }
+    },
+    { "field": "PRODUCT_CODE", "title": "Product Code", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "vwltsa^productcodeid" }
+      }
+    },
+    { "field": "DIM_TRACKED", "title": "Dimensions", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "", "text": "All" },
+            { "value": "Y", "text": "Yes" },
+            { "value": "N", "text": "No" }
+          ]
+        }
+      }
+    },
+    { "field": "PART_CLASS_ID", "title": "Part Class", "editor": {
+        "type": "combobox",
+        "options": { "_sqlid": "inv^pn_partclass" }
+      }
+    },
+    { "field": "USER_1", "title": "UDF 1", "editor": "textbox" },
+    { "field": "USER_2", "title": "UDF 2", "editor": "textbox" },
+    { "field": "USER_3", "title": "UDF 3", "editor": "textbox" },
+    { "field": "USER_4", "title": "UDF 4", "editor": "textbox" },
+    { "field": "USER_5", "title": "UDF 5", "editor": "textbox" }
+  ]
+}

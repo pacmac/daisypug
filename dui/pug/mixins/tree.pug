@@ -1,0 +1,112 @@
+//- Tree Component Mixins
+//- DaisyUI menu-based tree with details/summary for expand/collapse
+//- Supports: navigation trees, checkbox trees, checkbox+status trees
+
+//- ============================================================================
+//- TREE CONTAINER
+//- ============================================================================
+//- Renders a ul.menu tree with optional data attributes and a <template> for
+//- dynamic node creation via the tree plugin.
+//-
+//- opts.checkbox    - Boolean: enable checkboxes on nodes
+//- opts.cascadeCheck - Boolean: cascade check to parent/children (default true)
+//- opts.onlyLeafCheck - Boolean: only show checkboxes on leaf nodes
+//- opts.url         - String: AJAX endpoint for remote data
+//- opts.lines       - Boolean: show connector lines (not yet implemented)
+//- opts.animate     - Boolean: animate expand/collapse
+//- opts.data        - Array: initial tree data (for JS init, not server render)
+//-
+//- Usage:
+//-   +tree({checkbox: true, cascadeCheck: false})#myTree
+//-     +tree-node({id:'n1', text:'Root', iconCls:'folder', children:[...]})
+
+mixin tree(opts)
+  -
+    var o = opts || {}
+    var mAttrs = attributes || {}
+    var classes = ['menu', 'menu-sm', 'dui-tree', 'easyui-tree']
+    if (mAttrs.class) classes.push(mAttrs.class)
+
+    var dataAttrs = {}
+    if (o.checkbox) dataAttrs['data-checkbox'] = 'true'
+    if (o.cascadeCheck === false) dataAttrs['data-cascade-check'] = 'false'
+    if (o.onlyLeafCheck) dataAttrs['data-only-leaf-check'] = 'true'
+    if (o.url) dataAttrs['data-url'] = o.url
+    if (o.animate) dataAttrs['data-animate'] = 'true'
+    if (o.lines) dataAttrs['data-lines'] = 'true'
+
+    // Pass through id from shorthand
+    var elId = mAttrs.id || o.id || null
+
+  ul(id=elId class=classes)&attributes(dataAttrs)
+    block
+    //- Template for dynamic node creation by tree-plugin.js
+    template.tree-node-tpl
+      li
+        a
+          span.tree-icon.w-4.h-4.flex-shrink-0
+          span.tree-text
+
+//- ============================================================================
+//- TREE NODE (recursive)
+//- ============================================================================
+//- Renders a single tree node. Branches use details/summary, leaves use <a>.
+//- Checkbox mode adds <input type="checkbox"> before the text.
+//-
+//- node.id       - String: node ID
+//- node.text     - String: display text
+//- node.iconCls  - String: icon class (mapped via getIcon)
+//- node.state    - String: 'open' or 'closed' (default 'closed')
+//- node.checked  - Boolean: checkbox state
+//- node.children - Array: child nodes (if present, renders as branch)
+//- node.attributes - Object: extra data stored on the node
+//- node.cls      - String: extra CSS classes on the <li>
+
+mixin tree-node(node)
+  -
+    var n = node || {}
+    var hasChildren = n.children && n.children.length > 0
+    var isOpen = n.state === 'open'
+    var nodeId = n.id || ''
+    // Inherit checkbox setting from nearest ancestor tree
+    // The tree container sets _treeCheckbox in its scope; we read it here
+    var showCheckbox = _treeCheckbox || false
+    var onlyLeaf = _treeOnlyLeafCheck || false
+
+  if hasChildren
+    li(id=nodeId data-node-id=nodeId class=n.cls || '')
+      details(open=isOpen)
+        summary
+          if n.iconCls
+            +icon(n.iconCls)
+          if showCheckbox && !onlyLeaf
+            input.checkbox.checkbox-sm(type="checkbox" checked=n.checked || false)
+          span.tree-text= n.text
+        ul.menu
+          each child in n.children
+            +tree-node(child)
+  else
+    li(id=nodeId data-node-id=nodeId class=n.cls || '')
+      a(data-node-id=nodeId)
+        if n.iconCls
+          +icon(n.iconCls)
+        if showCheckbox
+          input.checkbox.checkbox-sm(type="checkbox" checked=n.checked || false)
+        span.tree-text= n.text
+
+//- ============================================================================
+//- TREE HELPER — wraps +tree with checkbox state for child nodes
+//- ============================================================================
+//- Call this instead of +tree when using +tree-node children, so the checkbox
+//- flag propagates to recursive nodes via _treeCheckbox variable.
+
+mixin tree-render(opts)
+  -
+    var o = opts || {}
+    _treeCheckbox = o.checkbox || false
+    _treeOnlyLeafCheck = o.onlyLeafCheck || false
+  +tree(o)&attributes(attributes)
+    block
+  -
+    _treeCheckbox = false
+    _treeOnlyLeafCheck = false

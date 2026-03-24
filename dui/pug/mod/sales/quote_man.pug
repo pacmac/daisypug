@@ -1,0 +1,97 @@
+extends ../content
+block script
+  //-script(src='html/eui/sales/js/quote_man.js')
+  script: include js/quote_man.js
+block content
+  +vsplit('400px')
+    +panel('west')
+      +form#qhead.multi.fit(_sqlid='sales^quotehead' asdpx='adx')
+        +fitem('Quote ID',{id:'~', name:'QUOTE_ID', class:'searchbox fkey fit navi autonum', panelWidth:'230px', validType:['length[1,30]'], sbref:'quote_ids'})
+        +fitem('Quote Format',{name:'QUOTE_FORMAT', id:'~',_sqlid:'sales^quoteformatid', required:true, class:'combobox','data-options':"editable:false,panelHeight:'auto'"})
+        +fitem('Title',{name:'DESCRIPTION', class:'textbox' , validType:['length[1,30]']})
+        +fitem('Status / Revision',{name:'STATUS', id:'~', required:true, class:'combobox',style:'width:150px;','data-options':"editable:false,panelHeight:'auto'"})
+          +input({name:'REVISION', id:'~', class:'numberspinner', precision:0, min:0,value:0,style:'width:50px;'})
+
+        +fitem('Customer ID',{name:'CUSTOMER_ID', id:'~', class:'searchbox', required:true,sbref:'customer_ids'})
+        +fitem('Name',{name:'CUSTOMER_NAME',id:'~', class:'textbox' , validType:['length[1,80]']})
+
+        +fitem('Currency',{name:'CURRENCY_ID', id:'~', class:'combobox',required:true,'data-options':"editable:false,panelHeight:'auto'"})
+        +fitem('Payment Terms',{name:'PAYMENT_TERM', id:'~',  class:'combobox',required:true})
+        +fitem('Status Remark',{name:'STATUS_REMARK',class:'textbox',readonly:true})
+        +fitem('Total Value',{name:'GRAND',class:'numberbox sub-off ',readonly:true, precision:2, prefix:'$'})
+
+        +v-group('Dates')
+          +fitem('Quoted',{name:'QUOTE_DATE',id:'~', class:'datebox',required:true})
+          +fitem('Follow Up',{name:'FOLLOWUP_DATE', id:'~',class:'datebox'})
+          +fitem('Expiry',{name:'EXPIRY_DATE',id:'~', class:'datebox'})
+          +fitem('Want',{name:'WANT_DATE', class:'datebox'})
+
+    +panel('center')
+      
+      +tabs(data-options="plain:true")
+        +tab-item('Lines',{iconCls:"icon-list"})
+          +datagrid#qlines
+        +tab-item('Files',{iconCls:'icon-pclip'})
+          +filegrid#qfiles(data-options="fit:true")
+        +tab-item('Contact',{iconCls:"icon-contact"})
+          +form#qhead
+            +fitem('Contact Name',{name:'CONTACT_PERSON', class:'textbox' ,validType:['length[1,80]']})
+            +fitem('Phone',{name:'CONTACT_PHONE', class:'textbox' ,validType:['length[1,80]']})
+            +fitem('Fax',{name:'CONTACT_FAX', class:'textbox' ,validType:['length[1,80]']})
+            +fitem('Email',{name:'CONTACT_EMAIL', class:'textbox',validType:['email']})
+
+        +tab-item("Ship To",{ iconCls:"icon-address"})
+          +form#qhead
+            +fitem('Address 1',{name:'SHIPTO_ADDR_1', class:'textbox',validType:['length[1,50]']})
+            +fitem('Address 2',{name:'SHIPTO_ADDR_2', class:'textbox',validType:['length[1,50]']})
+            +fitem('Address 3',{name:'SHIPTO_ADDR_3', class:'textbox',validType:['length[1,50]']})
+
+        +tab-item("Notes", {iconCls:"icon-notes"})
+          +tabs(data-options="plain:true,justified:true")
+            +tab-item("Order")
+              +form#qhead
+                +fitem('NOTES ID',{id:'~',name:'NOTES_ID', _sqlid:'sales^quotenotesid', class:'combobox fit'})
+                +spec('',{id:'NOTES',name:'NOTES'})
+                div
+                  p        any text appearing after @@@ will be printed as foot notes
+            +tab-item("Revision")
+              +form#qhead
+                +spec('',{id:'~',name:'REV_NOTES'})
+            +tab-item("Quote Item")
+              +form#qhead
+                +spec('',{id:'QI_NOTES'})
+
+        +tab-item('UDF' ,{iconCls:"icon-udf"})
+          +form#qhead
+            //-+fitem('UDF Layout',{id:'~',class:'combobox', name:'UDF_LAYOUT_ID',  _sqlid:'sales^udfid'})
+            //-+udf
+            +udfs({sqlid:'sales^udfid',select:bhave.UDF_LAYOUT_ID,ron:false})
+            //-+v-group('UDF Group',{style:'margin-top:10px;'})
+              +fitem('UDF Layout',{id:'~',class:'combobox', name:'UDF_LAYOUT_ID'})
+              +udf
+  //- Custom toolbar buttons (appended by toolbut() in JS, moved to navbar)
+  #toolbut.hidden
+
+  //-div.hide
+    +menu#linemenu(style="width:120px;")
+      div(name="insert" data-options="iconCls:'icon-insert'") Insert Line
+
+    +dialog#savetemplatewin(title="Save as Template" data-options="closed:true,modal:true" style="padding:12px;")
+      form#saveastemplate
+        +fitem('Quote ID',{id:'TEMPLATE_QUOTE_ID',class:'textbox',readonly:true})
+        +fitem('Template ID',{id:'TEMPLATE_ID',class:'textbox upper',style:'',required:true, 'data-options':"validType:'length[1,50]'"})
+
+        div(style="text-align:center;margin-bottom:0px;margin-top:12px")
+          +button('Save',{id:'saveastemplatebtn',iconCls:'icon-add'})
+          +button('Cancel',{id:'savetemplatewin-close',iconCls:'aicon-cancel',onclick:"$('#savetemplatewin').dialog('close')"})
+    +dialog#loadtemplatewin(title="Load Template" data-options="closed:true,modal:true" style="padding:12px;")
+      form#loadtemplate
+        +fitem('Template ID',{id:'LOAD_TEMPLATE_ID',class:'combobox',_sqlid:'sales^quote_template_id' ,required:true})
+        div(style="text-align:center;margin-bottom:0px;margin-top:12px")
+          +button('Load',{id:'loadtemplatebtn',iconCls:'icon-add'})
+          +button('Cancel',{id:'loadtemplatewin-close',iconCls:'aicon-cancel',onclick:"$('#loadtemplatewin').dialog('close')"})
+    #copy_quote_menu(style="width:100px;")
+      div(iconCls="icon-app") Copy Quote
+        div
+          div(name="NEW" iconCls="icon-add") New
+          div(name="REVISION" iconCls="aicon-micrometer") Revision

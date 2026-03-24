@@ -1,0 +1,290 @@
+# ============================================================================
+# DUI Page Spec — dqm/qp_coatman (Coating Test Manager)
+# ============================================================================
+
+page:
+  id: "dqm/qp_coatman"
+  form:
+    id: "main"
+    asdpx: "ax"
+  fkey:
+    id: "#ID"
+    widget: searchbox
+    sbref: "coatman_ids"
+
+register:
+  autonum:
+    field: "#ID"
+
+# ----------------------------------------------------------------------------
+# onLoad — form#main loadDone handler
+# ----------------------------------------------------------------------------
+onLoad:
+  - custom: clone_enable
+  - custom: status_color
+  - custom: complete_lock
+
+# ----------------------------------------------------------------------------
+# onChanged — form#main changed handler
+# ----------------------------------------------------------------------------
+onChanged:
+  - custom: changed_buten
+
+# ----------------------------------------------------------------------------
+# onAdd — but_add done handler
+# ----------------------------------------------------------------------------
+onAdd:
+  - custom: onadd_roclr
+
+# ----------------------------------------------------------------------------
+# init — page-ready calls (run inside $.page.ready)
+# ----------------------------------------------------------------------------
+init:
+  - custom: notes_load
+  - call: cbos
+  - custom: ncr_combo_share
+  - custom: deferred_init
+
+# ----------------------------------------------------------------------------
+# rules — field interaction map
+# ----------------------------------------------------------------------------
+rules:
+  "#INS_STD_REQD":
+    onSelect:
+      - set:
+          "#INS_VIS_METHOD": "$rec.INS_VIS_METHOD"
+          "#ADH_METHOD": "$rec.ADH_METHOD"
+
+  "#USER_ID":
+    onSelect:
+      - custom: user_name_set
+
+  "#ADH_METHOD":
+    onSelect:
+      - set:
+          "#ADH_DESC": "$rec.desc"
+
+  "#BASE_ID":
+    onSelect:
+      - custom: base_id_select
+    filtertip:
+      default: ["R"]
+      field: "STATUS"
+      data:
+        - { name: "R", text: "Released" }
+        - { name: "U", text: "Un-Released" }
+        - { name: "C", text: "Closed" }
+        - { name: "X", text: "Cancelled" }
+
+  "input[grpid]":
+    onChange:
+      - custom: grpid_change
+
+  "input.comply":
+    onChange:
+      - custom: comply_color
+
+# ----------------------------------------------------------------------------
+# toolbut — custom toolbar buttons
+# ----------------------------------------------------------------------------
+toolbut:
+  - id: "clone"
+    text: "Clone Test"
+    iconCls: "icon-clone"
+    disabled: true
+    noText: true
+    handler: clone
+  - separator: true
+
+# ----------------------------------------------------------------------------
+# bhave — behavior settings
+# ----------------------------------------------------------------------------
+bhave:
+  COMPLETE_LOCK:
+    default: "y"
+    effect:
+      - custom: complete_lock
+
+# ----------------------------------------------------------------------------
+# functions — $.page.fn declarations
+# ----------------------------------------------------------------------------
+functions:
+  notes: |
+    function(notes){
+      for(var k in notes){
+        var vals = notes[k];
+        if(typeof(vals)=='string') vals = [vals];
+        var tgt = $('input[name='+k+']');
+        var ul = tgt.next('ul.checklist');
+        vals.map(function(e){
+          var chk='';
+          ul.append('<li><input type="checkbox" '+chk+' target="'+k+'"/><label>'+e+'</label></li>');
+        })
+      }
+      $('ul.checklist input').on('change',function(){
+        var me = $(this);
+        var tgt = $('input[textboxname='+me.attr('target')+']');
+        var val = tgt.textbox('getValue');
+        var txt = me.next('label').text();
+        if(val.indexOf(txt)==-1) {
+          if(val.length > 0) val+= '\r\n';
+          tgt.textbox('setValue',val+txt);
+        }
+      })
+    }
+
+  cbos: |
+    function(){
+      for(var k in $.dui.bhave){
+        var bits = k.split('CBO_');
+        if(bits.length==2) {
+          $('input[name='+bits[1]+']').combobox({
+            data:jsonParse($.dui.bhave[k]),
+            panelHeight:'auto',
+            editable: false,
+          });
+        }
+      }
+    }
+
+  combos: |
+    function(cbos){
+      for(var k in cbos){
+        var opt = {
+          data:[],
+          panelHeight:'auto',
+          editable: false,
+        };
+        cbos[k].map(function(e){
+          var def; if(e.indexOf('*')!=-1) def=true;
+          var val = e.replace('*','').trim();
+          var obj = {value:val,text:val};
+          if(def) opt.value = val;
+          opt.data.push(obj);
+        })
+        $('input[name='+k+']').combobox(opt);
+      }
+    }
+
+  onBeforePrint: |
+    function(vars,cb){
+      var id = $('#ID').searchbox('getValue');
+      if(!id) return cb({error:true, msg:'Select a TEST ID first.'});
+      var status = $('#STATUS').textbox('getValue');
+      if(status !='COMPLETED') return cb({error:true, msg:'Status must be COMPLETED.'});
+      return cb();
+    }
+
+  grpid: |
+    function(me,val){
+      var grp = me.attr('grpid');
+      if(grp){
+        if(val == "N/A") var tf=false; else var tf=true;
+        var vals = $(grp).find('input.textbox-f').not(me);
+        $.each(vals,function(){
+          var el = $(this);
+          var req = el.attr('ini-req');
+          var ron = el.attr('ini-ron');
+          if(req && tf) el.textbox('required',true);
+          else el.textbox('required',false);
+          el.textbox('readonly',!tf);
+          if(!tf) el.textbox('clear');
+        })
+      }
+    }
+
+  init: |
+    function(){
+      $.each($('input.textbox-f'),function(){
+        var me = $(this);
+        if(me.textbox('options').readonly) me.attr('ini-ron',true);
+        if(me.textbox('options').required) me.attr('ini-req',true);
+      });
+    }
+
+  clone: |
+    function(){
+      confirm(function(ok){
+        if(!ok) return;
+        var fdat={};
+        fdat._sqlid = 'dqm^coatman_clone';
+        fdat._func = 'get';
+        fdat.SOURCE_ID=$('#ID').searchbox('getValue');
+        ajaxget('/',fdat,function(data){
+          if(data.error) msgbox(data.msg);
+          else msgbox("New Test ID,"+data._next+" cloned from "+fdat.SOURCE_ID+" . Please check");
+          $('#ID').searchbox('setValue',data._next);
+          $('#ID').searchbox('reload');
+        })
+      })
+    }
+
+# ----------------------------------------------------------------------------
+# custom — named JS blocks inserted verbatim
+# ----------------------------------------------------------------------------
+custom:
+  clone_enable: |
+    if (data.ID) $('#clone').linkbutton('enable');
+
+  status_color: |
+    if(data.STATUS=='COMPLETED') var cls='bg-grn'; else var cls='';
+    $('#STATUS').textbox('textbox').removeClass('bg-grn').addClass(cls);
+
+  complete_lock: |
+    var lock = $.dui.bhave.COMPLETE_LOCK || 'y';
+    if(lock !='y') return;
+    if(cls) roset(true); else roclr(true);
+
+  changed_buten: |
+    var opts = $(this).form('options');
+    if(!opts.loading) {
+      butEn('sadx');
+    }
+
+  onadd_roclr: |
+    roclr(true);
+
+  notes_load: |
+    $.page.fn.notes({
+      ENV_NOTES: [
+        'Final blast cleaning and coating application shall not take place unless the surface temperature is at least 5\u00b0 F above the dew point temperature.',
+        'Atmospheric conditions for coating application must be recorded to ensure part does not have moisture on it at the time of application.',
+        'If applicable, after Touch\u2013Up, Holiday Test must be re-performed to verify surfaces are Holiday free prior to final acceptance.'
+      ],
+      PRE_NOTES: 'Performed receiving inspection. Part is acceptable.'
+    })
+
+  user_name_set: |
+    $('#USER_NAME').val(rec.name_last+', '+rec.name_first);
+
+  ncr_combo_share: |
+    $('#INS_DFT_QNID').combobox({
+      onLoadSuccess: function(data){
+        ['INS_WIPE_QNID','VIS_PHOS_QNID','VIS_PRIMER_QNID','VIS_COAT_QNID','ADH_QNID'].map(function(e){
+          $('input[textboxname='+e+']').combobox('loadData',data);
+        })
+      }
+    });
+
+  base_id_select: |
+    if(eui.isloading('#main')) return;
+    ajaxget('/',{
+      _func: 'get',
+      _sqlid: 'dqm^coatman_job',
+      BASE_ID: rec.value
+    },function(data){
+      $('#main').form('preload',data);
+    });
+
+  grpid_change: |
+    $.page.fn.grpid($(this),nv);
+
+  comply_color: |
+    var me = $(this);
+    var val = nv.toLowerCase();
+    if(val=='reject' || val=='fail') var cls='bg-red'; else var cls='bg-grn';
+    $(this).textbox('textbox').removeClass('bg-red').removeClass('bg-grn').addClass(cls);
+    $.page.fn.grpid(me,nv);
+
+  deferred_init: |
+    setTimeout($.page.fn.init);

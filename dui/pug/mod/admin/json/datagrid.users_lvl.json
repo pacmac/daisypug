@@ -1,0 +1,71 @@
+{
+  "id": "lvl",
+  "editor": "form",
+  "asdpx": "aedx",
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "admin^user_leaveEntitlement",
+    "_dgrid": "y",
+    "UID": ""
+  },
+  "fit": true,
+  "striped": true,
+  "rownumbers": true,
+  "singleSelect": true,
+  "columns": [
+    [
+      {
+        "field": "UID",
+        "hidden": true
+      },
+      {
+        "field": "YEAR_NO",
+        "title": "Year No",
+        "width": 100,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "editable": false,
+            "data": [
+              { "value": "2018", "text": "2018", "selected": true },
+              { "value": "2019", "text": "2019" },
+              { "value": "2020", "text": "2020" },
+              { "value": "2021", "text": "2021" },
+              { "value": "2022", "text": "2022" },
+              { "value": "2023", "text": "2023" }
+            ]
+          }
+        }
+      },
+      {
+        "field": "BALANCE",
+        "title": "Balance",
+        "width": 80,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0
+          }
+        }
+      },
+      {
+        "field": "BAL_BF",
+        "title": "Balance BF",
+        "width": 80,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0
+          }
+        }
+      }
+    ]
+  ]
+}

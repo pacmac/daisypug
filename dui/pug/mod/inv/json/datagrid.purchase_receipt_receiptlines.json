@@ -1,0 +1,59 @@
+{
+  "id": "receiptlines",
+  "url": "/",
+  "method": "post",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "inv^receipt_lines",
+    "_dgrid": "y",
+    "RECEIPT_ID": ""
+  },
+  "asdpx": "aed",
+  "rownumbers": false,
+  "fitColumns": true,
+  "singleSelect": true,
+  "striped": true,
+  "fit": true,
+  "columns": [
+    [
+      { "field": "_INFO", "hidden": true },
+      { "field": "_UNIT_MATERIAL_COST", "hidden": true },
+      { "field": "UNIT_PRICE", "hidden": true },
+      { "field": "CURRENCY_RATE", "hidden": true },
+      { "field": "TRACE", "hidden": true },
+      { "field": "RECEIPT_ID", "hidden": true },
+      { "field": "LINE_NO", "title": "#", "width": 25, "fixed": true },
+      { "field": "TRACEABLE", "title": "TRC", "width": 35, "fixed": true, "align": "center" },
+      { "field": "_DIM_TRACKED", "title": "DIM", "width": 35, "fixed": true, "align": "center" },
+      { "field": "_L", "title": "Length", "width": 35, "fixed": true, "align": "center" },
+      { "field": "_W", "title": "Width", "width": 35, "fixed": true, "align": "center" },
+      { "field": "_H", "title": "Height", "width": 35, "fixed": true, "align": "center" },
+      { "field": "PO_LINE_NO", "title": "PO Line", "width": 50, "fixed": true },
+      { "field": "ORDER_QTY", "title": "Qty Order", "width": 60, "fixed": true, "align": "right" },
+      { "field": "QTY_BAL", "title": "Qty Bal", "width": 60, "fixed": true, "align": "right" },
+      {
+        "field": "RECEIVE_QTY",
+        "title": "Qty Rcv",
+        "width": 60,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0,
+            "value": 0,
+            "readonly": false
+          }
+        }
+      },
+      { "field": "DELIVERY_DATE", "title": "Del. Date", "width": 80, "fixed": true, "formatter": "$.dui.fmt.date" },
+      { "field": "ORDER_TYPE", "title": "Order Type", "width": 60 },
+      { "field": "LINE_STATUS", "title": "Line Status", "width": 40 },
+      { "field": "PART_ID", "title": "Our Part ID", "width": 100 },
+      { "field": "PART_DESCRIPTION", "title": "Our Part Description", "width": 150 },
+      { "field": "PURCHASE_UOM", "title": "UOM", "width": 50 },
+      { "field": "WOREF", "title": "Job Reference", "width": 120 }
+    ]
+  ]
+}

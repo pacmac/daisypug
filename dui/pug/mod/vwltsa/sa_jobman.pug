@@ -1,0 +1,92 @@
+extends ../content
+block style
+  style: include css/sa_jobman.css
+  style: include css/ulbar.css
+
+block script
+  script: include js/sa_jobman.js
+
+block content
+  -
+    var asdpx = 'nx'
+
+  +vsplit('250px')
+    +panel('west')
+      #leftwr
+        //- Status filter buttons (U/R/C/X toggles)
+        #selfilt.grid.grid-cols-2.gap-1.mb-2
+          +button('Un-Released', {size:'xs', name:'U', class:'btn-outline btn-info stat-toggle ronly-on'})
+          +button('Released', {size:'xs', name:'R', class:'btn-outline btn-success stat-toggle ronly-on'})
+          +button('Closed', {size:'xs', name:'C', class:'btn-outline btn-warning stat-toggle ronly-on'})
+          +button('Cancelled', {size:'xs', name:'X', class:'btn-outline btn-error stat-toggle ronly-on'})
+
+        //- Job class filter panel (dynamic checkboxes added by JS)
+        details.collapse.collapse-arrow.bg-base-200.rounded-box.mb-1#clsfilt
+          summary.collapse-title.text-xs.font-medium.min-h-0.py-1.px-2 Job Class Filter
+          .collapse-content.px-2.pb-2
+            .grid.grid-cols-2.gap-x-1(class="gap-y-0.5")#clsfilt-items
+
+        //- Job combobox selector
+        .mt-1
+          +fitem(null, {id:'wosel', name:'BASE_ID', class:'combobox navi ronly-on'})
+
+        //- QBE job search (disabled — combobox is the active selector)
+        //- .mt-1
+        //-   +fitem(null, {id:'woselqbe', name:'BASE_ID', class:'qbe'})
+
+        //- WO Tree
+        ul.wotree.dui-tree.mt-2
+
+    +panel('center')
+      #woform.flex.flex-col.flex-1.min-h-0
+        #wo_bas_inc.flex.flex-col.flex-1.min-h-0
+        #wo_sub_inc.flex.flex-col.flex-1.min-h-0(style="display:none")
+        #wo_seq_inc.flex.flex-col.flex-1.min-h-0(style="display:none")
+
+  //- Custom toolbar buttons (appended by toolbut() in JS)
+  #toolbut.hidden
+
+  //- Context menus (positioned by JS)
+  #closejobmenu.menu.hidden
+    div(name="close") Close Job
+
+  #trmenu.menu.hidden
+    div(name="seqin") Insert Above
+    div(name="opcls") Save as Template
+    div(name="close") Release/Close Operation
+    div(name="grl") Insert into Gauge Rental Line
+
+  #addmenu.menu.hidden
+    div(name="seq") Operation
+    div(name="sub") Sub Assy
+    div(name="bas^DEFAULT") Job
+      div
+
+  //- Dialogs
+  +modal#cloneopt(title="Clone Options", titlebar, bordered)&attributes({'max-w': 'sm'})
+    +fitem('Source Job', {id:'baseid', name:'baseid', class:'qbe', required:true})
+    +fitem('Target Class', {id:'classid', name:'woclass', class:'combobox', required:true})
+    +modal-footer
+      button.btn.btn-primary.btn-sm(type="button" data-action="clone") Clone
+
+  +modal#opncls(title="Operation Template", titlebar, bordered)&attributes({'max-w': 'sm'})
+    +fitem('Template ID', {name:'WORKORDER_BASE_ID', class:'textbox upper', required:true, 'data-options':"validType:['length[1,30]']"})
+    +fitem('Description', {name:'CLASS_DESCRIPTION', class:'textbox', required:true, 'data-options':"validType:['length[1,40]']"})
+    +modal-footer
+      button.btn.btn-primary.btn-sm(type="button" name="saveoc") Save
+
+  +modal#importopt(title="Job Import Options", titlebar, bordered)&attributes({'max-w': 'sm'})
+    +fitem('Target Class', {id:'woclassid', name:'woclass', class:'combobox', required:true})
+    +fitem('Autonumber ?', {name:'nextno', class:'combobox', required:true, 'data-options':"panelHeight:'auto', data:[{text:'NO',value:'n'},{text:'YES',value:'y'}]"})
+    +modal-footer
+      button.btn.btn-primary.btn-sm(type="button" id="imp_next" disabled) Next
+
+  +modal#grl(title="Gauge Rental Line", titlebar, bordered)&attributes({'max-w': 'sm'})
+    +fitem('Rental ID', {id:'~', name:'RENTAL_ID', class:'combobox', 'data-options':"panelHeight:'auto'", required:true})
+    +modal-footer
+      button.btn.btn-primary.btn-sm(type="button" name="savegrl") Save
+
+  +modal#addsub(title="Import Sub Assy", titlebar, bordered)&attributes({'max-w': 'sm'})
+    +fitem('Template Job', {id:'~', name:'TEMPLATE_JOB', class:'combobox', 'data-options':"panelHeight:'auto',editable:true", required:true})
+    +modal-footer
+      button.btn.btn-primary.btn-sm(type="button" data-action="addsubleg") Add

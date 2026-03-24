@@ -1,0 +1,219 @@
+//- ptype is set by the parent page (ncr_man, cpar_man, cf_man) before include
+-if (!ptype) ptype = {'dqm^comp^ncr_man':'ncr','dqm^comp^cpar_man':'cpar','dqm^comp^cf_man':'cf'}[_pageid] || 'ncr'
+//- console.log('@@@',_pageid,'ptype:',ptype,'###')
+
+mixin spec(label,input)
+  -var height=150; if(input.class && input.class.indexOf('tall')!=-1) height=340;
+  +fieldset(label,{class:'wide'})
+    +textbox(data-options="multiline:true" style='height:'+height+'px;')&attributes(input)
+
+mixin usercombo(label,name,user)
+  -var input = {'data-valueid':'userid',name:name, id:name,'data-email':'#'+name+'_EMAIL',class:'easyui-combobox user-combo','data-options':"data:$.dui.pdata.uid"}
+  +fitem(label,input)          
+    input(name=name+'_EMAIL' type="hidden" id=name+'_EMAIL') 
+
+style.
+
+  .vtip {
+    padding:8px;
+    display:inline-block;
+    word-wrap: break-word;
+  }
+
+  .two {
+    max-width:900px;
+  }
+
+  fieldset.wide .textbox {
+    width: calc(100vw - 840px);
+    height: 150px;
+    overflow:hidden;
+  }
+
+  .fadein {
+    animation-name: show;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 1s;
+  } @keyframes show {
+    0% {opacity:0}
+    100% {opacity:1}
+  }
+
+  ul.tabs li:not(.tabs-selected).blink .tabs-icon {
+    animation: blink 1s linear infinite;
+  } @keyframes blink {
+    50% { opacity: 0.0; }
+  }
+
+//- Label switches — must be at top scope so all panels can access them
+-var repby = {'cpar':'Initiated'}[ptype] || 'Reported';
+-var verby = {'cpar':'Approved'}[ptype] || 'Verified';
+-var disby = {'ncr':'Disposition'}[ptype] || 'Remedial';
+
+form.fit#ncrf(style="height:100%" asdpx='ax' data-lbut="ax" data-ebut="ax")
+  
+  +vsplit('200px').no-border
+
+    +panel('west', { class: "p-3" })
+      div.center
+        +combobox#allstat(style="width:150px;")
+      ul#ncrtree(data-allstat='n' style="margin-top: 6px;")
+        
+      //-+layout
+        +panel('north', { style: "height:30px;" })
+          +combobox#allstat(style="width:150px;")
+          //-div(style="border-radius:4px; border:1px solid #DDDDDD; padding:4px;text-align:center;")
+            input#myncr(type="checkbox")
+            label(style="margin-left:6px;") All Documents
+        
+        +panel('center')
+          ul#ncrtree(data-allstat='n' style="margin-top: 6px;")
+      
+    +panel('center')
+      +vsplit('390px').no-border
+
+        +panel('west')
+      
+          input#_LAST_STATUS(type="hidden" name="_LAST_STATUS")
+          input#_RECIPIENTS(type="hidden" name="_RECIPIENTS")
+          input#_NEXT_ACTION_EMAIL(type="hidden" name="_NEXT_ACTION_EMAIL")
+          
+          .fitem
+            label Document ID 
+            +combobox.autonum.fkey#NCR_ID(style="width:165px;" data-options="panelWidth: 208" name='NCR_ID')
+          //-+fitem('NCR ID',{id:'NCR_ID ',name:'~', eui:'combobox',class:'fkey autonum fit','data-options':"panelWidth: 208"})
+            
+          span.lock
+            fieldset
+              +fitem({text:'Status',id:'STATUS_LABEL'},{id:'NCR_STATUS',name:'STATUS', eui:'combobox','data-options':"panelHeight:'auto'"})
+              +fitem('Recur Probability',{id:'RECURRENCE',name:'~', eui:'combobox','data-options':"panelHeight:'auto',editable:false,data:[{value:'RARE',text:'RARE'},{value:'OCCASIONAL',text:'OCCASIONAL'},{value:'FREQUENT',text:'FREQUENT'}]"})
+              +fitem('Severity',{id:'SEVERITY',name:'~', eui:'combobox', 'data-options':"panelHeight:'auto',editable:false,data:[{value:'LOW',text:'LOW'},{value:'MEDIUM',text:'MEDIUM'},{value:'HIGH',text:'HIGH'},{value:'CRITICAL',text:'CRITICAL'}]"})
+              
+              //- RISK-LEVEL SWITCH
+              if(ptype !='ncr')
+                +fitem('Risk Level',{id:'RISKLEVEL',name:'RISK_REMARKS', eui:'textbox','data-options':"validType:['length[1,255]']",class:'valuetip'})
+              +fitem('Title / Subject',{id:'SUBJECT',name:'~', eui:'textbox','data-options':"validType:['length[1,255]']",class:'valuetip'})
+            
+            //- XXX-BY SWITCHES
+            -var repby = {'cpar':'Initiated'}[ptype] || 'Reported';
+            -var verby = {'cpar':'Approved'}[ptype] || 'Verified';
+            -var disby = {'ncr':'Disposition'}[ptype] || 'Remedial';
+            
+            +fieldset('Responsibilities')
+              +usercombo(repby+' By','REPORTED_BY')          
+              +usercombo(verby+' By','VERIFIED_BY')
+              +usercombo(disby+' By','DISPOSITION_BY') 
+              +usercombo('Review By','REVIEWED_BY') 
+              +usercombo('Approval By','APPROVED_BY') 
+              +usercombo('Followup By','FOLLOWUP_BY') 
+              if(ptype=='cpar')
+                +usercombo('Close-Out By','CLOSED_OUT_BY')    
+    
+        +panel#west_('center')
+
+          +tabs#maintabs.lock(data-options="plain:true,fit:true" )
+            div(title='Source')
+                
+              fieldset
+                +fitem('Source Type',{eui:'combobox',name:'SRCDOC',id:'srcsel'})
+                          
+              div#srcwo(style="display:none;")
+                
+                +fieldset('Job Order',{class:'two'})   
+                  +fitem('Job Ref',{eui:'combobox', name:'WOREF',id:'~','data-options':"groupField: 'WORKORDER_BASE_ID', onSelect:$.page.fn.woref_sel"})
+
+                  +fitem('Drawing ID',{name:'WOREF_DRAWING_ID',id:'~', eui:'textbox',readonly:true})
+                  +fitem('Drawing Rev No',{name:'WOREF_DRAWING_REV_NO',id:'~', eui:'textbox',readonly:true})
+                  +fitem('Resource ID',{name:'WOREF_RES_ID',id:'~', eui:'textbox',readonly:true})   
+                  +fitem('Resource Specs',{name:'WOREF_RES_SPEC',id:'~', eui:'textbox', class:'valuetip',readonly:true})                
+
+                  +fitem('Operator ID',{eui:'combobox',name:'EMPLOYEE_ID', id:'~','data-options':"formatter: cbocols, widths:['35%','55%'], onSelect:$.page.fn.emp_sel"})
+                  +fitem('Department ID',{eui:'textbox',name:'EMP_DEPARTMENT_ID',id:'~',readonly:true})
+                  +fitem('Department Head',{eui:'textbox',name:'EMP_DEPT_HEAD',id:'~',readonly:true}) 
+                            
+              div#srcso(style="display:none")
+                +fieldset('Sales',{class:'two',id:'srcfs'})
+                  +fitem('Source ID',{eui:'combobox',name:'ORDER_ID',id:'~'})
+                  +fitem('Contact / Co. Name',{eui:'textbox',name:'ORDER_NAME',id:'~'})  
+                  +fitem('Order No',{eui:'textbox',name:'ORDER_NO',id:'~'})
+
+              
+              +fieldset('Quantities',{class:'two'})
+                  +fitem('Run Qty',{id:'WOREF_DESIRED_QTY',name:'~', eui:'textbox',readonly:true})
+                  +fitem('Inspect Qty',{id:'WOREF_INSPECT_QTY',name:'~', eui:'numberspinner'}) 
+                  +fitem('Reject Qty',{id:'WOREF_REJECT_QTY',name:'~', eui:'numberspinner'})
+              +fieldset('Part',{class:'two'})
+                +fitem('ID',{name:'WOREF_PART_ID',id:'~', eui:'textbox',readonly:true})
+                +fitem('UOM',{name:'WOREF_PART_UOM',eui:'textbox',readonly:true})
+                +fitem('Product Code',{name:'WOREF_PART_PRODUCT_CODE',eui:'textbox',readonly:true})
+                +fitem('Description',{name:'WOREF_PART_DESCRIPTION', eui:'textbox', class:'valuetip',readonly:true})
+                +fitem('Rev No',{name:'WOREF_PART_REV_NO',id:'~', eui:'textbox',readonly:true})
+              +fieldset('Traceability',{class:'two'})
+                +fitem('Serial Number',{eui:'textbox',name:'SERIAL_NUMBER',id:'~','data-options':"validType:['length[1,80]']"})
+                +fitem('Customer Property #',{eui:'textbox',name:'CP_NUMBER',id:'~','data-options':"validType:['length[1,80]']"})
+              
+            div(title='Discrepancy' data-options="iconCls:'icon-cross'")
+              +fieldset('Responsibilities',{class:'two'})
+                +fitem(repby+' By',{eui:'textbox','data-alias':'#REPORTED_BY',readonly:true})
+                +fitem(verby+' By',{eui:'textbox','data-alias':'#VERIFIED_BY',readonly:true})
+                +fitem(repby+' Date',{eui:'datebox sub-on',name:'CREATE_DATE',id:'~',readonly:true})
+                +fitem(verby+' Date',{eui:'datebox',name:'VERIFIED_DATE',id:'~',readonly:true})               
+              
+              +spec('Discrepancy Details',{name:'REMARKS',id:'REMARKS'})
+              +spec('Verify Details',{name:'VERIFIED_REMARKS',id:'VERIFIED_REMARKS'})
+              +fieldset('File Attachments',{class:'wide'})
+                +filegrid#ncrfiles
+            
+            //- DISPOSITION/REMEDIAL SWITCHES
+            div(title=disby data-options="iconCls:'icon-cross'")                
+              +fieldset('Responsibilities',{class:'two'})
+                +fitem(disby+' By',{eui:'textbox','data-alias':'#DISPOSITION_BY',readonly:true})
+                +fitem(disby+' Date',{eui:'datebox',name:'DISPOSITION_DATE',id:'~',readonly:true})
+            
+              +fieldset('Details',{class:'two'})
+                //-+fitem('Material '+disby,{eui:'combobox',name:'DISPOSITION_MATERIAL',id:'~','data-options':"editable:false,data:[{value:'SCRAP',text:'SCRAP'},{value:'REWORK',text:'REWORK'},{value:'REPLACE',text:'REPLACE'},{value:'USE_AS_IT',text:'USE AS IT'}], novalidate:true"})
+                +fitem('Material '+disby,{eui:'combobox',name:'DISPOSITION_MATERIAL',id:'~'})
+                +fitem('Liability Cost',{eui:'numberbox',name:'DISPOSITION_LIABILITY_COST',id:'~'})
+                +fitem('Document Reference',{eui:'textbox',name:'DISPOSITION_DOC_NO',id:'~','data-options':"validType:['length[1,255]']"})
+                    
+              +spec(disby+' Notes',{name:'DISPOSITION_REMARKS',id:'DISPOSITION_REMARKS',class:'tall'})
+            
+            div(title='Cause' data-options="iconCls:'icon-cross'")                
+            
+              +fieldset('Responsibilities',{class:'two'})
+                +fitem('Reviewed By',{eui:'textbox','data-alias':'#REVIEWED_BY',readonly:true})
+                +fitem('Review Date',{eui:'datebox',name:'REVIEWED_DATE',id:'~',readonly:true})
+            
+              +fieldset('Details',{class:'two'})
+                +fitem('Cause Code',{eui:'combobox', name:'CAUSE_ID', id:'~','data-options':"groupField:'CLASS_ID', data:$.dui.pdata.cause,formatter: cbocols, widths:['20%','80%'], onSelect:$.page.fn.cause_sel"})
+                +fitem('Cause Description',{eui:'textbox',name:'CAUSE_DESCRIPTION',id:'~',class:'valuetip',readonly:true})
+            
+              +spec('Root Cause',{name:'RA_REMARKS',id:'RA_REMARKS',class:'tall'})    
+            
+            div(title='Action' data-options="iconCls:'icon-cross'")
+            
+              +fieldset('Responsibilities',{class:'two'})
+                +fitem('Approved By',{eui:'textbox', 'data-alias':'#APPROVED_BY',readonly:true})
+                +fitem('Approved Date',{eui:'datebox', name:'APPROVED_DATE', id:'APPROVED_DATE',readonly:true})
+                //-+fitem('Review Date',{eui:'datebox',name:'REVIEWED_DATE',id:'REVIEWED_DATE1',readonly:true})
+                      
+              +spec('Corrective or Preventive Actions',{name:'CA_REMARKS',id:'CA_REMARKS',class:'tall'})       
+            
+            div#tabfup(title='Followup' data-options="iconCls:'icon-cross'")
+            
+              +fieldset('Responsibilities',{class:'two'})
+                +fitem('Followup By',{eui:'textbox','data-alias':'#FOLLOWUP_BY',readonly:true})
+                +fitem('Completed Date',{eui:'datebox',name:'FOLLOWUP_DATE',id:'~',readonly:true})
+            
+              +spec('Followup Remarks',{name:'FOLLOWUP_REMARKS',id:'FOLLOWUP_REMARKS',class:'tall'})
+            
+            //- CLOSE-OUT SWITCH
+            
+            if (ptype == 'cpar')
+              div#tabfup(title='Close-Out' data-options="iconCls:'icon-cross'")
+                +fieldset('Responsibilities',{class:'two'})
+                  +fitem('Close-Out By',{eui:'textbox', 'data-alias':'#CLOSED_OUT_BY',readonly:true})
+                  +fitem('Close-Out Date',{eui:'datebox',name:'CLOSED_OUT_DATE',id:'~',readonly:true})
+      
+                +spec('Close-Out Remarks',{name:'CLOSED_OUT_REMARKS',id:'CLOSE_OUT_REMARKS',class:'tall'})

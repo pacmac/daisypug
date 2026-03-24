@@ -1,0 +1,15 @@
+# dui-backup-clean: inv/sa_parts
+# 2026-03-09T12:23:05.889324
+
+html/dui/mod/inv/sa_parts.pug -> sa_parts.pug
+html/dui/mod/inv/_part_trans_query.pug -> _part_trans_query.pug
+html/dui/mod/inv/js/part_trans.query.js -> js/part_trans.query.js
+html/dui/mod/inv/js/sa_parts.js -> js/sa_parts.js
+html/dui/mod/inv/js/sa_parts_bom.js -> js/sa_parts_bom.js
+html/dui/mod/inv/json/datagrid.sa_parts_tracedg.json -> json/datagrid.sa_parts_tracedg.json
+html/dui/mod/inv/json/datagrid.sa_parts_boms.json -> json/datagrid.sa_parts_boms.json
+html/dui/mod/inv/json/datagrid.sa_parts_prices.json -> json/datagrid.sa_parts_prices.json
+html/dui/mod/inv/json/datagrid.sa_parts_phycount.json -> json/datagrid.sa_parts_phycount.json
+html/dui/mod/inv/json/datagrid.sa_parts_dgdim.json -> json/datagrid.sa_parts_dgdim.json
+html/dui/mod/inv/json/datagrid.sa_parts_usedin.json -> json/datagrid.sa_parts_usedin.json
+yaml/migrator/mod/inv/sa_parts.yaml -> sa_parts.yaml

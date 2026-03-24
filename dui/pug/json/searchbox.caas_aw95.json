@@ -1,0 +1,47 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^caas_aw95_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",             "title": "Form No",           "width": 100 },
+    { "field": "STATUS",            "title": "Status",            "width": 100 },
+    { "field": "WOREF",             "title": "Job",               "width": 100 },
+    { "field": "PART_ID",           "title": "Part ID",           "width": 120 },
+    { "field": "ELIGIBILITY",       "title": "Eligibility",       "width": 100 },
+    { "field": "SERIAL_NO",         "title": "Serial No",         "width": 100 },
+    { "field": "STATUS_WORK",       "title": "Status Work",       "width": 100 },
+    { "field": "NEW_PARTS_OPTION",  "title": "New Parts Option",  "width": 120 },
+    { "field": "USED_PARTS_OPTION", "title": "Used Parts Option", "width": 120 },
+    { "field": "APPROVAL_NO",       "title": "Approval No",       "width": 100 }
+  ],
+  "filters": [
+    { "field": "STATUS", "title": "Status", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "DRAFT", "text": "DRAFT" },
+            { "value": "ORIGINAL", "text": "ORIGINAL" }
+          ]
+        }
+      }
+    },
+    { "field": "WOREF", "title": "Job", "editor": "textbox" },
+    { "field": "PART_ID", "title": "Part ID", "editor": "textbox" },
+    { "field": "ELIGIBILITY", "title": "Eligibility", "editor": "textbox" },
+    { "field": "SERIAL_NO", "title": "Serial No", "editor": "textbox" },
+    { "field": "STATUS_WORK", "title": "Status Work", "editor": "textbox" },
+    { "field": "NEW_PARTS_OPTION", "title": "New Parts Option", "editor": "textbox" },
+    { "field": "USED_PARTS_OPTION", "title": "Used Parts Option", "editor": "textbox" },
+    { "field": "APPROVAL_NO", "title": "Approval No", "editor": "textbox" }
+  ]
+}

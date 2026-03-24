@@ -1,0 +1,25 @@
+//- ============================================================================
+//- LAYOUT HELPERS (for test pages - not DaisyUI components)
+//- ============================================================================
+
+//- Page content wrapper with header
+mixin content(pageTitle, pageSubtitle)
+  header.mb-8
+    h1.font-bold.mb-1= pageTitle
+    if pageSubtitle
+      p.text-base-content.opacity-70.mt-0= pageSubtitle
+  block
+
+//- Beautiful section wrapper for test pages
+mixin section(title, subtitle)
+  section.mb-10.bg-base-200.border.border-base-300.p-6.rounded-2xl.shadow-xl
+    if title
+      h2.font-semibold.mb-3= title
+    if subtitle
+      p.text-base-content.opacity-70.mt-0= subtitle
+    block
+
+//- Test output area
+mixin testOutput(id)
+  div(id=id class="test-output bg-base-300 rounded-lg p-4 mt-4 font-mono min-h-12 whitespace-pre-line")
+    block

@@ -1,0 +1,6 @@
+{
+  "id": "logins",
+  "sourceFile": "admin/js/sysbut.js",
+  "lineNumber": 54,
+  "configPreview": "('getSelections').map(function(e){rows.push(e.uid)}"
+}

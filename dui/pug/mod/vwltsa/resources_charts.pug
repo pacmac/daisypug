@@ -1,0 +1,35 @@
+extends ../content
+block script
+  script: include ../../../../public/js3/flot/jquery.flot.js
+  script: include js/resources_charts.js
+block style 
+  style.
+    #mainlo > .panel > .panel-header .panel-tool {
+      left:12px;
+      height:34px;
+      top:42%;
+    }
+    form#filter {
+      height:50px;
+    }
+block content
+
+  +layout#mainlo(fit="true")
+    +panel('north', { style: "height:50%", title: " ", collapsible: "false" })
+      +layout(fit="true")
+        +panel('west', { style: "width:100%;" })
+          div#westdg
+            
+                          
+    +panel('south', { style: "height:50%" })
+      +layout(fit="true")
+        +panel('west', { style: "width:100%", title: " " })
+
+    div#ncatbar
+      form#filter
+        label(style="margin-right:10px;") Horizon
+        input#horiz(style="width:40px;" name="horiz" class="numberbox")
+        label(style="margin-left:10px;margin-right:10px;") Resources 
+        input#resources(style="width:180px;" _sqlid="vwltsa^resourceid" class='easyui-multibox navi inline ronly-on')
+        label(style="margin-left:10px;margin-right:10px;") Chart 
+        input#charts(style="width:180px;"  class='easyui-multibox navi inline ronly-on')

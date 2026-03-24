@@ -1,0 +1,87 @@
+//- Specific Visual Containers Mixins
+//- Purpose: Mockups and stylized boxes for specific devices or OS.
+//- DaisyUI Components: mockup-browser, mockup-code, mockup-phone, mockup-window
+
+//- ============================================================================
+//- MOCKUP BROWSER
+//- ============================================================================
+mixin mockup_browser(url, opts)
+  - var options = opts || {}
+  .mockup-browser.border.bg-base-300&attributes(options)
+    .mockup-browser-toolbar
+      .input= url
+    .bg-base-200
+      block
+
+//- ============================================================================
+//- MOCKUP CODE
+//- ============================================================================
+mixin mockup_code(opts)
+  - var options = opts || {}
+  .mockup-code&attributes(options)
+    block
+
+mixin code_line(prefix, opts)
+  - var options = opts || {}
+  pre(data-prefix=prefix)&attributes(options)
+    code
+      block
+
+//- ============================================================================
+//- MOCKUP PHONE
+//- ============================================================================
+mixin mockup_phone(opts)
+  - var options = opts || {}
+  .mockup-phone&attributes(options)
+    .mockup-phone-camera
+    .mockup-phone-display
+      block
+
+//- ============================================================================
+//- MOCKUP WINDOW
+//- ============================================================================
+mixin mockup_window(opts)
+  - var options = opts || {}
+  .mockup-window.border.bg-base-300&attributes(options)
+    .bg-base-200
+      block
+
+//- ============================================================================
+//- Auto-generated skeleton: mockup-browser
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin mockup-browser(opts = {})
+  span.mixin-skeleton(data-mixin="mockup-browser")
+    | [SKELETON: mockup-browser]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: mockup-code
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin mockup-code(opts = {})
+  span.mixin-skeleton(data-mixin="mockup-code")
+    | [SKELETON: mockup-code]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: mockup-phone
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin mockup-phone(opts = {})
+  span.mixin-skeleton(data-mixin="mockup-phone")
+    | [SKELETON: mockup-phone]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: mockup-window
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin mockup-window(opts = {})
+  span.mixin-skeleton(data-mixin="mockup-window")
+    | [SKELETON: mockup-window]
+

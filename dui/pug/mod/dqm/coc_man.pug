@@ -1,0 +1,78 @@
+extends ../content
+
+block script
+  script: include js/coc_man.js
+
+block content
+  form.multi.fit.changeonly#coc(_sqlid='dqm^coc', asdpx='xa', mode='add')
+    +vsplit('400px')
+      +panel('west')
+        +fitem('COC ID',{id:'~', name:'COC_ID', class:'searchbox fkey autonum', sbref:'coc_ids'})
+        +fitem('Status',{id:'~', name:'STATUS', class:'combobox sub-on', required:true, readonly:true})
+        +fitem('First Print Date',{id:'~', name:'PRINTED', class:'datebox', readonly:true})
+        #voiditem(style="display:none")
+          +fitem('VOID Reason',{id:'~', name:'VOID_REASON', class:'textbox sub-on'})
+
+        +v-group('Job Summary')
+          +fitem('Job ID',{id:'~', name:'WOREF', class:'combobox navi', required:true})
+          +fitem('Job Class',{name:'WO_CLASS', class:'textbox sub-off', readonly:true})
+          +fitem('Job Status',{name:'WO_STATUS', class:'textbox sub-off', readonly:true})
+          +fitem('Date Required',{name:'WO_WANT_DATE', class:'datebox sub-off', readonly:true})
+          +fitem('Job Required Qty',{name:'WO_QTY', class:'numberbox sub-off', readonly:true, 'data-options':"precision:2, value:0"})
+          span.cocbals(style="display:none")
+            +fitem('COC Previous Qty',{id:'~', name:'COC_QTY', class:'numberbox sub-off', readonly:true, 'data-options':"precision:2, value:0"})
+            +fitem('COC Balance Qty',{id:'~', name:'WO_QTY_BAL', class:'numberbox sub-off', readonly:true, 'data-options':"precision:2, value:0"})
+
+        +v-group('Sales Order')
+          +fitem('Customer ID',{name:'CUSTOMER_ID', class:'textbox', readonly:true})
+          +fitem('Order ID',{name:'SALES_ORDER_ID', class:'textbox', readonly:true})
+          +fitem('Order Line No',{name:'SALES_ORDER_LINE_NO', class:'textbox', readonly:true})
+          +fitem('Order Qty',{name:'SOL_QTY', class:'textbox sub-off', readonly:true})
+          +v-group('Shipment')
+            +fitem('Shipment ID',{name:'SHIPMENT_ID', class:'textbox sub-off', readonly:true})
+            +fitem('Shipped Qty',{name:'SOL_SHP_QTY', class:'textbox sub-off', readonly:true})
+            +fitem('Shipped',{name:'SHIPPED', class:'textbox sub-off', readonly:true})
+
+        +v-group('CP')
+          +fitem('Reference',{name:'CP_REF', class:'textbox sub-off', readonly:true})
+
+      +panel('center')
+        +tabs#coctabs
+          +tab-item('Details',{iconCls:'icon-tools', selected:true})
+            +hsplit('auto')
+              +panel('north')
+                +fitem('Qty',{id:'~', name:'QTY', class:'numberspinner', value:'0'})
+                +fitem('Issued By Name',{id:'~', name:'ISSUED_BY', class:'combobox', required:true, readonly:true})
+                +fitem('Issued By UID',{id:'ISSUED_BY_USER', name:'ISSUED_USER', class:'textbox', readonly:true})
+                +fitem('Issued By Position',{id:'~', name:'ISSUED_BY_POSITION', class:'textbox', readonly:true})
+                +fitem('Issued By Email',{id:'~', name:'ISSUED_BY_EMAIL', class:'textbox', readonly:true})
+              +panel('center')
+                +spec('Specifications',{id:'WO_LONG_SPEC', name:'DESCRIPTION',  prompt:'Job Specifications'})
+
+          +tab-item('Remarks',{iconCls:'icon-edit'})
+            +fitem('',{id:'~', name:'REMARKS', class:'multiline', prompt:'Remarks'})
+
+          +tab-item('Address',{iconCls:'icon-address'})
+            +fitem('Customer Name',{name:'NAME', class:'textbox', 'data-options':"validType:['length[1,80]']"})
+            +fitem('Address Line 1',{name:'ADDR_1', class:'textbox', 'data-options':"validType:['length[1,50]']"})
+            +fitem('Address Line 2',{name:'ADDR_2', class:'textbox', 'data-options':"validType:['length[1,50]']"})
+            +fitem('Address Line 3',{name:'ADDR_3', class:'textbox', 'data-options':"validType:['length[1,50]']"})
+            +fitem('Contact Person',{name:'CONTACT_PERSON', class:'textbox', 'data-options':"validType:['length[1,80]']"})
+            +fitem('Contact Phone',{name:'CONTACT_PHONE', class:'textbox', 'data-options':"validType:['length[1,20]']"})
+            +fitem('Contact Fax',{name:'CONTACT_FAX', class:'textbox', 'data-options':"validType:['length[1,20]']"})
+            +fitem('Contact Email',{name:'CONTACT_EMAIL', class:'textbox', 'data-options':"validType:['email','length[5,80]']"})
+
+          +tab-item('User Fields',{iconCls:'icon-list'})
+            +fitem({text:'User 1', id:'ulabel_1'},{name:'USER_1', class:'textbox'})
+            +fitem({text:'User 2', id:'ulabel_2'},{name:'USER_2', class:'textbox'})
+            +fitem({text:'User 3', id:'ulabel_3'},{name:'USER_3', class:'textbox'})
+            +fitem({text:'User 4', id:'ulabel_4'},{name:'USER_4', class:'textbox'})
+            +fitem({text:'User 5', id:'ulabel_5'},{name:'USER_5', class:'textbox'})
+
+          +tab-item('Boiler Plates',{iconCls:'icon-pagered'})
+            input#BOILER_IDS(type='hidden', name='BOILER_IDS')
+            input#BOILER_SPECS(type='hidden', name='BOILER_SPECS')
+            +datagrid#cocspec
+
+          +tab-item('Attachments',{iconCls:'icon-pclip'})
+            +filegrid#cifiles

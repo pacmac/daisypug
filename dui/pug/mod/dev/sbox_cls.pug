@@ -1,0 +1,113 @@
+extends ../content
+block script
+  script.
+
+    $.page.ready(function() {
+      var addProceed = null;
+      var $addMenu = $('#addmenu');
+
+      $.page.register({
+        hooks: {
+          beforeAdd: function(proceed) {
+            var $btn = $('#but_addm').is(':visible') ? $('#but_addm') : $('#but_add');
+
+            addProceed = proceed;
+            $addMenu.css({
+              left: $btn.offset().left,
+              top: $btn.offset().top + $btn.outerHeight()
+            }).show();
+
+            $.page.setTimeout(function() {
+              $(document).off('mousedown.sbox_cls_addmenu').on('mousedown.sbox_cls_addmenu', function(e) {
+                if ($(e.target).closest('#addmenu, #but_add, #but_addm').length) return;
+                addProceed = null;
+                $addMenu.hide();
+                $(document).off('mousedown.sbox_cls_addmenu');
+              });
+            }, 0);
+          },
+
+          afterLoad: function(data) {
+            console.log('Record loaded:', data);
+          }
+        }
+
+      });
+      butEn("a");
+
+      $addMenu
+        .appendTo('body')
+        .menu()
+        .hide()
+        .css({
+          position: 'absolute',
+          zIndex: 1000
+        })
+        .on('click', '[name]', function(e) {
+          var $item = $(e.target).closest('[name]');
+          var proceed = addProceed;
+
+          if (!$item.length || $item.is('[disabled]') || $item.find('[name]').length) return;
+
+          e.preventDefault();
+          e.stopPropagation();
+          $(document).off('mousedown.sbox_cls_addmenu');
+          $addMenu.hide();
+
+          if ($item.attr('name') == 'PART') { /* do something */ }
+          else if ($item.attr('name') == 'CLONE') { $.page.fn.clone(); }
+
+          addProceed = null;
+          if (proceed) proceed();
+        });
+
+    });
+block content
+  +form#main(asdpx="nsdpx")
+
+  div.hidden
+    #addmenu
+      div(iconCls="icon-add") Plan
+        div
+          div(name="PART" iconCls="icon-gear") Part
+          div(name="GAUGE" iconCls="icon-gauge") Gauge
+          div(name="CLONE" iconCls="icon-add") Clone
+            div
+              div(name="CLONEPART" iconCls="icon-gear") Part
+              div(name="CLONEGAUGE" iconCls="icon-gauge") Gauge    
+      div(iconCls="icon-insert" name="PROC" disabled="true") Procedure
+
+    +dialog#CLONEPLAN(title="Clone Options" data-options="closed:true,modal:true")
+      form#clone
+        +fitem('Source Plan',{id:'plan_id',class:'combobox', required:true})
+        //-.fitem
+          label Source Plan
+          +combobox#plan_id(required="required")
+        div#CLONEPART.hidden
+          +fitem('Part ID',{id:'CLONE_PART_ID',class:'combobox', required:true})
+          //-.fitem
+            label Part ID
+            +combobox#CLONE_PART_ID( data-options="editable:false")
+        div#CLONEGAUGE.hidden
+          +fitem('Gauge Type',{id:'CLONE_GAUGE_TYPE',class:'combobox', required:true,"data-options":"editable:false"})
+          //-.fitem
+            label Gauge Type
+            +combobox#CLONE_GAUGE_TYPE(_sqlid="dqm^gaugeType" data-options="editable:false")
+        div.text-center.mt-3  
+          +button.page.cloneplan(data-options="iconCls:'icon-add',onClick:function(){$.page.fn.cloneplan()}")
+          +button#CLONEPLAN_close.dialog(data-options="iconCls:'icon-cross',onClick:function(){$('#CLONEPLAN').dialog('close')}")
+
+    div#trmenu.hidden(style="display:none")
+      div(name="seqin" data-options="iconCls:'icon-insert'") Insert Above
+
+    +dialog#cplanopt(title="Copy Plan" data-options="closed:true,modal:true")
+      form#copy_plan 
+        +fitem('PLAN ID',{id:'SOURCE_PLAN_ID',class:'textbox', required:true})
+        +fitem('Target Site ID',{id:'TARGET_SITE_ID',name:'',class:'combobox',style:'',required:true, 'data-options':"validType:'length[1,50]'"})
+        
+        div.text-center.mt-3  
+          +button.page.copyplan(data-options="iconCls:'icon-add',onClick:function(){$.page.fn.copyplan()}")
+          +button#cplanopt_close.dialog(data-options="iconCls:'icon-cross',onClick:function(){$('#cplanopt').dialog('close')}")
+
+      
+

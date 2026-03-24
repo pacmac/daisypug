@@ -1,0 +1,75 @@
+extends ../content 
+
+block script 
+  +script("admin",['js/events.js'])
+
+block style 
+  style.
+    input#report_id:after {
+      content:".jade"  
+    }
+block content
+  #addmenu
+    div(name="addnew" iconCls="aicon-add") Add New
+    div(name="evtimport" iconCls="aicon-report_disk" disabled="true") Import Event
+
+  div#treemen(style="width:120px;")
+    div(name="export" data-options="iconCls:'icon-download'") Export
+
+  form#treefrm.fit(_sqlid="admin^event" asdpx='nx' mode="upd")
+    +layout(data-options="fit:true,border:false")
+      +panel('west', { style: "width:250px;background:#FAFAFA;padding:12px;" })
+        ul#mentree(style="margin:0")
+        
+      +panel('center', {  })
+        +layout(fit="true")
+          div(region="west" style="width:400px;")
+            +input({id:'id',name:'id', type:'hidden'})
+            +input({id:'app',name:'app', type:'hidden'})
+            +fitem('Event Name',{id:'name',name:'name', class:'textbox navi fit'})
+            +fitem('Event ID',{id:'ifile',name:'ifile', class:'textbox',required:true})
+            +fitem('Action SQLID',{id:'awhen',name:'awhen', class:'textbox'})
+            +fitem('Event Type',{id:'atype',name:'atype', class:'textbox',required:true})
+            +fitem('User Event',{value:'n',name:'tsql',id:'~',class:'combobox','data-options':"data:[{value:'y',text:'YES'},{value:'n',text:'NO'}]",required:true})
+            span#et_email(style="display:none;")
+              +fitem('Email Subject',{name:'email_subject', class:'textbox' ,prompt:"$tokens allowed.",style:"margin-top:0px;margin-bottom:8px;"})
+            
+            span#et_rpt(style="display:none;")
+              +fitem('Report ID',{id:'report_id',name:'report_id', class:'combobox' ,prompt:"filename without .extension",style:"margin-top:0px;margin-bottom:8px;"})
+            
+            +fitem('Trigger On',{id:'trigon',name:'trigger_on', class:'textbox',required:true})
+            
+            span#trigon_opt(style="display:none;")
+              fieldset#tt_timer
+                legend Timed Event
+                +fitem('Frequency',{id:'duration',name:'duration',class:'numberspinner',value:1,min:1})
+                +fitem('Frequency Units',{id:'duration_parameter',name:'duration_parameter',class:'combobox','data-options':"data:[{value:'minutes',text:'Minutes'},{value:'hours',text:'Hours'},{value:'days',text:'Days'},{value:'weeks',text:'Weeks'}]"})
+                
+                .fitem
+                  label Month Day Time
+                  input#NTT(name='next_trigger_time' type="hidden")
+                  div.three(style="display:inline-block")
+                    div(style="width:65px")
+                      input#month(style="width:60px;")
+                    div(style="width:65px;text-align:center")
+                      input#day(style="width:45px;")
+                    div(style="width:60px;text-align:right")
+                      +timespinner#time(highlight="1" style="width:75px")
+                +fitem('Skip Weekends',{name:'next_time',class:'combobox',value:y,'data-options':"data:[{value:'y',text:'Yes'},{value:'n',text:'No'}]"})
+
+          div(region="center" style="border:none;")
+            +tabs(style='min-width:800px;' fit="true")
+              div(title='Configuration')
+                +layout(data-options="fit:true" style="border:0;")
+                  
+                  div(region="north" style="height:50%;padding:6px;" title="Email Template" collapsible="false")
+                    +textbox#tpl(name='tpl' data-options="multiline:true" style="width:100%;height:100%")
+              
+                  div(region="center" style="height:25%;padding:6px;" title="SQL Select")
+                    +textbox.xxx(name='sqlsel' prompt="SELECT * FROM dbsa.xxx " data-options="multiline:true" style="width:100%;height:100%")
+                
+                  div(region="south" style="height:25%;padding:6px;" title="JSON Rules" collapsible="false")
+                    +textbox(name='vpath' prompt="JSON [array]" data-options="multiline:true,validType:['isJSON']" style="width:100%;height:100%")
+              
+              div(title='Subscriptions')
+                #subusers             

@@ -1,0 +1,14 @@
+extends ../content
+block content
+  +vsplit('410px')
+    +panel('west')
+      +form#parttrans(_sqlid='inv^invtrans')
+        +fitem('Part ID',{name:'PART_ID', readonly:true,requiredx:true,class:'textbox'})
+        +fitem('Tx ID',{name:'TRANSACTION_ID', readonly:true,class:'textbox'})
+        +fitem('Document ID',{name:'DOCUMENT_ID', class:'textbox'})
+        +fitem('Tx Date',{name:'TRANSACTION_DATE',  class:'datebox'})
+    +panel('center')
+      +datagrid#txgrid
+block script
+  //-+script("inv",['js/part_trans_editor.js'])
+  script: include js/part_trans_editor.js

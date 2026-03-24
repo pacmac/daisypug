@@ -1,0 +1,28 @@
+{
+  "id": "txgrid",
+  "singleSelect": true,
+  "fit": true,
+  "fitColumns": true,
+  "striped": true,
+  "checkOnSelect": false,
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "dqm^gaugetrans",
+    "_dgrid": "y"
+  },
+  "columns": [[
+    { "field": "EDIT", "title": "Edit", "checkbox": true },
+    { "field": "TRANSACTION_ID", "title": "ID", "hidden": true },
+    { "field": "TX_DATE", "title": "Date", "formatter": "iso2str", "width": 90, "fixed": true },
+    { "field": "TYPE", "title": "Type", "width": 70, "fixed": true },
+    { "field": "EMPLOYEE_ID", "title": "Operator", "width": 100, "fixed": true },
+    { "field": "GAUGE_ID", "title": "Gauge ID", "width": 80, "fixed": true },
+    { "field": "DOC_ID", "title": "Job ID", "width": 100, "fixed": true },
+    { "field": "RENTAL_ID", "title": "Rental ID", "width": 100, "fixed": true },
+    { "field": "VENDOR_ID", "title": "Vendor ID", "width": 100, "fixed": true },
+    { "field": "PO_REF", "title": "Issue Doc", "width": 150, "fixed": true },
+    { "field": "RECEIPT_REF", "title": "Receive Doc", "width": 150, "fixed": true },
+    { "field": "USER_ID", "title": "User Id", "width": 70, "fixed": true },
+    { "field": "NOTES", "title": "Notes", "width": 200 }
+  ]]
+}

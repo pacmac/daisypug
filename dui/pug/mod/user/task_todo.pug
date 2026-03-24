@@ -1,0 +1,95 @@
+extends ../content
+block script
+  +script('user',['js/task_todo.js'])
+block style
+  style.
+    span.count{
+      color:blue;
+    }
+block content
+  +layout(fit="true")
+    div(region="west" xstyle="width:450px;")
+      +tabs#maintab(fit="true")
+        div(title="To Me" iconCls="icon-user_down" fit="true")
+          table#dgtome
+      
+        div(title="By Me" iconCls="icon-user_up" fit="true")
+          table#dgbyme
+    
+        div(title="Manager" iconCls="icon-postit")
+          form#task(_sqlid='user^todo' asdpx="asx").fit
+            +layout(fit="true")
+              div.bg-base-200(region="west" style="width:410px")
+                .fitem
+                  label ID
+                  +combobox.fkey#id.autonum.novali(name='id' _sqlid="user^todoid" style="width:170px;" panelWidth="210")
+                
+                span.lock
+                  fieldset
+                    .fitem
+                      label Status
+                      input#status_(name='status' value="new" readonly="readonly") 
+                  
+                  fieldset
+                    legend Requestor
+                    .fitem
+                      label Requested By
+                      input#requestor(required='required' name='requestor')
+                      input#remail(type="hidden" name='requestor_email')  
+                    
+                    .fitem
+                      label Request Date
+                      +datebox.today(required='required' name='create_date' )
+                    
+                    .fitem
+                      label CC Email List
+                      input#emcc
+                  
+                  fieldset
+                    legend Details
+                    .fitem
+                      label Subject / Title
+                      +textbox(name='title' required='required')
+                    .fitem
+                      label Severity
+                      +combobox(required='required' name='severity' data-options="data:[{value:'low',text:'LOW'},{value:'med',text:'MEDIUM', selected:true},{value:'high',text:'HIGH'}]" value="med")
+                    
+                    span#classes
+                      .fitem#row_class
+                        label#label_class
+                        input#field_class(required='required' name='class')
+                      .fitem#row_class_1
+                        label#label_class_1
+                        input#field_class_1(name="class_1")    
+                      .fitem#row_class_2
+                        label#label_class_2
+                        input#field_class_2(name="class_2")
+          
+                  fieldset
+                    legend Assignment        
+                    .fitem
+                      label Assigned To
+                      input#assignee(required='required' name='assignee')
+                      input(type="hidden" name='assignee_email')#aemail 
+                    
+                    .fitem
+                      label Completed Date
+                      input#completed_date(name='completed_date')
+                  
+                  //fieldset
+                    .fbuts.center
+                      a#doclink(iconCls="aicon-link_add") Doc Link
+                    
+                  
+                  
+              div(region="center")
+                +tabs#tabs(data-options="plain:true,fit:true")
+          
+                  div(title='Request Details' fit="true").lock
+                    +textbox(name='request_details' prompt="Enter Details" data-options="multiline:true" style="height:100%; width:100%" required="required")
+            
+                  div(title='Action Details' fit="true").lock
+                    +textbox#action_details(name='action_details' prompt="Enter Details" data-options="multiline:true" style="height:100%; width:100%")
+                  
+                  div(title='Browse Records' fit="true")          
+                    table#todobrowse

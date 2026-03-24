@@ -1,0 +1,40 @@
+{
+  "id": "enquiry",
+  "singleSelect": true,
+  "striped": true,
+  "rownumbers": true,
+  "fitColumns": true,
+  "nowrap": true,
+  "fit": true,
+  "toolbar": "#enquirytb",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "dqm^compliance_enquiry",
+    "_dgrid": "y"
+  },
+  "columns": [
+    [
+      { "field": "_DOC_TYPE", "title": "Doc Type", "hidden": true, "fixed": true, "width": 100 },
+      { "field": "NCR_ID", "title": "Doc ID", "align": "left", "width": 100, "fixed": true, "formatter": "$.page.fn.docref" },
+      { "field": "NEXT_PERSON", "title": "Next Action By", "align": "left", "width": 100, "fixed": true },
+      { "field": "STATUS", "title": "Status", "align": "left", "width": 100, "fixed": true },
+      { "field": "STATUS_LABEL", "title": "Status Detail", "align": "left", "width": 100, "fixed": true },
+      { "field": "RECURRENCE", "title": "Recur Probability", "align": "left", "width": 100, "fixed": true },
+      { "field": "SEVERITY", "title": "Severity", "align": "left", "width": 60, "fixed": true },
+      { "field": "WOREF", "title": "WOREF Ref", "align": "left", "width": 120, "fixed": true, "formatter": "$.page.fn.woref" },
+      { "field": "CUSTOMER_NAME", "title": "Customer Name", "align": "left", "width": 100, "fixed": true },
+      { "field": "EMPLOYEE_ID", "title": "Operator ID", "align": "left", "width": 100, "fixed": true },
+      { "field": "DISPOSITION_MATERIAL", "title": "Disposition Matl", "align": "left", "width": 100, "fixed": true },
+      { "field": "DISPOSITION_DATE", "title": "Disposition Date", "align": "left", "width": 100, "fixed": true, "formatter": "eui.date" },
+      { "field": "CREATE_DATE", "title": "Create Date", "align": "left", "width": 100, "fixed": true, "formatter": "eui.date" },
+      { "field": "CAUSE_ID", "title": "Cause ID", "align": "left", "width": 100, "fixed": true },
+      { "field": "CP_NUMBER", "title": "CP ID", "align": "left", "width": 100, "fixed": true },
+      { "field": "ORDER_NO", "title": "ORDER_NO", "align": "left", "width": 100, "fixed": true },
+      { "field": "SO_ID", "title": "SO ID", "align": "left", "width": 100, "fixed": true },
+      { "field": "CI_TYPE", "title": "CI Type", "align": "left", "width": 100, "fixed": true },
+      { "field": "CI_TYPE_DESC", "title": "CI Type Desc", "align": "left", "width": 100, "fixed": true },
+      { "field": "ACTION_USER", "title": "CI Action User", "align": "left", "width": 100, "fixed": true },
+      { "field": "ACTION_DATE", "title": "CI Action Date", "align": "left", "width": 100, "fixed": true, "formatter": "eui.date" }
+    ]
+  ]
+}

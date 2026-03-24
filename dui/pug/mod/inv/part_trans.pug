@@ -1,0 +1,157 @@
+extends ../content
+
+block content
+  +hsplit('90px')
+    +panel('north')
+      div#topdiv(style="padding:12px;").noborder
+        div#typediv
+          +button('Component',{name:'COMP',iconCls:'icon-bolt','data-options':"toggle:true, group:'g1',selected:true"})
+          +button('Finished',{name:'FG',iconCls:'icon-nutbolt','data-options':"toggle:true, group:'g1'"})
+
+        div#bigbut
+          div#modediv
+            div#compdiv
+              +button('Part Receipt',{name:'ADJ-IN',iconCls:'icon-box_in-big','data-options':"toggle:true, group:'g2'"})
+              +button('Part Issue',{name:'ADJ-OUT',iconCls:'icon-box_out-big','data-options':"toggle:true, group:'g2'"})
+              div.vsep
+              +button('Job Issue',{name:'JOB-OUT',iconCls:'icon-tools_out-big','data-options':"toggle:true, group:'g2'",title:"Press 'q' & click for QBE"})
+              +button('Job Return',{name:'JOB-IN',iconCls:'icon-tools_in-big','data-options':"toggle:true, group:'g2'",title:"Press 'q' & click for QBE"})
+
+            div#fgdiv(style="display:none;")
+              +button('FG Receipt',{name:'FG-IN',iconCls:'icon-fg_in-big','data-options':"toggle:true, group:'g3'"})
+              +button('FG Return',{name:'FG-OUT',iconCls:'icon-fg_out-big','data-options':"toggle:true, group:'g3'"})
+              div.vsep
+              +button('Shipment',{name:'SHP-OUT',iconCls:'icon-ship_out-big','data-options':"toggle:true, group:'g3'"})
+              +button('Ship Return',{name:'SHP-IN',iconCls:'icon-ship_in-big','data-options':"toggle:true, group:'g3'"})
+
+          div#ctrldiv(style="margin-left:14px")
+            +button('Save',{id:'SAVE',name:'SAVE',iconCls:'icon-save-big'})
+            +button('Cancel',{id:'CANCEL',name:'CANCEL',iconCls:'icon-cancel-big'})
+
+    +panel('center')
+      div
+        div(style="display:none")
+          +fitem('Job Selector',{id:'JOB_QBE',class:'qbe'})
+
+        +form#trans(asdpx='').lock
+          div.two
+            div(style="width:440px;")
+              +input({id:'USER_ID',name:'USER_ID',type:'hidden'})
+              +input({id:'TRANS_TYPE',name:'TRANS_TYPE',type:'hidden'})
+              +fitem('Transaction Date',{id:'~',name:'TRANSACTION_DATE',readonly:false,class:'datebox today'})
+
+              +fitem('Part ID',{name:'PART_ID',id:'PART_ID',required:true,class:'combobox navi fit'})
+
+              +fitem('Part Description',{id:'PART_DESC',readonly:true,class:'textbox'})
+              +fitem('Part UOM',{id:'PART_UOM',readonly:true,class:'textbox'})
+              +fitem('Trace Mode',{id:'TRACEABLE',readonly:true,class:'textbox'})
+              +fitem('Piece Tracked',{id:'DIM_TRACKED',name:'~',readonly:true,class:'textbox'})
+              +fitem('Inventory Locked',{id:'LOCKED',name:'~',readonly:true,class:'textbox'})
+              div#udfs(style="display:none;")
+                +udf(true)
+
+              +fitem('Available Qty',{id:'AVAIL_BAL',class:'numberbox',precision:2,readonly:true,value:0})
+              +fitem('Transaction Qty',{name:'QTY',id:'~',required:true,class:'numberspinner',min:0,precision:4,value:0})
+              +fitem('Unit Material Cost',{name:'UNIT_MATERIAL_COST',id:'~',required:true,class:'numberspinner',min:0,precision:2,value:0})
+              +fitem('Document ID',{name:'DOCUMENT_ID',class:'textbox'})
+              +fitem('Notes & Comments',{name:'NOTES',id:'NOTES',class:'textbox','data-options':"multiline:true",style:'height:70px;'})
+
+            div(style="margin-top:24px;")
+              div#jobdiv
+                +v-group('Job Details')
+                  +fitem('Job Reference',{name:'WOREF',id:'WOREF',_sqlid:'vwltsa^transjobs','data-options':"groupField: 'WO_TYPE',validType: ['inList']"})
+                  +fitem('Master ID',{id:'BASE_ID',readonly:true,class:'textbox'})
+                  +fitem('Sub Assy ID',{id:'SUB_ID',readonly:true,class:'textbox'})
+                  +fitem('Sequence No',{id:'SEQ_ID',readonly:true,class:'textbox'})
+                  +fitem('Qty Reqd / Recvd',{id:'QTY_REQ',readonly:true,class:'textbox'})
+                  +fitem('Job Cost',{id:'JOB_COST',readonly:true,class:'textbox'})
+                  +input({id:'QTY_RCVD',name:'QTY_RCVD',type:'hidden'})
+
+              div#tracediv(style="margin-top:8px;")
+                +v-group('Traceability')
+                  +fitem('Trace ID',{name:'TRACE_ID',id:'TRACE_ID',class:'combobox upper',validType:['length[1,50]']})
+                  +fitem('Unit Material Cost',{id:'TRACE_MATERIAL_COST',name:'TRACE_MATERIAL_COST',required:true,class:'numberspinner',min:0,precision:2,value:0})
+                  +fitem('Expiry Date',{id:'EXPIRY_DATE',name:'~',class:'datebox',readonly:true})
+                  +fitem('Max Lot Size',{id:'LOT_SIZE',class:'numberbox',readonly:true})
+                  +fitem('Lot Balance',{id:'BAL_QTY',class:'numberbox sub-off',precision:2,readonly:true},{id:'tracebal'})
+
+                  div#traceprop
+                    -for (var x=1; x<11; x++)
+                      .fitem(id='TRACE_USER_'+x+'_LBL')
+                        label.trace
+                        +input({name:'TRACE_USER_'+x,class:'textbox','data-options':"validType:['length[1,80]']"})
+
+              #dimsdiv(style="margin-top:8px;display:none;")
+                +v-group('Piece Tracking')
+                  +fitem('Dimension UOM',{id:'DIM_UOM',class:'textbox',readonly:true})
+                  #dimout(style="margin-top:8px;")
+                    +fitem('Select Dimensions',{id:'DIM_LWH',readonly:true,class:'combobox sub-off'})
+                    +fitem('Available Pieces',{id:'DIM_PC_AVAIL',readonly:true,class:'numberbox',precision:0})
+                  #dimin(style="margin-top:8px;")
+                    #_LENGTH(style="margin-top:8px;")
+                      +fitem('Length',{id:'DIM_LENGTH',name:'~',class:'numberbox dimin',precision:4,min:0.0001})
+                    #_WIDTH(style="margin-top:8px;")
+                      +fitem('Width',{id:'DIM_WIDTH',name:'~',class:'numberbox dimin',precision:4,min:0.0001})
+                    #_HEIGHT(style="margin-top:8px;")
+                      +fitem('Height',{id:'DIM_HEIGHT',name:'~',class:'numberbox dimin',precision:4,min:0.0001})
+                  #dimqty(style="margin-top:8px;")
+                    +fitem('Piece Qty',{id:'DIM_PC_QTY',name:'~',required:true,class:'numberspinner',min:1,precision:0,value:1})
+
+block script
+  script: include js/part_trans.js
+
+block style
+  style.
+    #topdiv > div {
+      display:inline-block;
+    }
+
+    #typediv {
+      width: 100px;
+      margin-right:20px;
+      height: 52px;
+      padding:4px 5px 4px 4px;
+      border: 1px solid #DDDDDD;
+      border-radius: 5px;
+    }
+
+    #typediv > .btn {
+      position:relative;
+      display: inline-flex;
+      text-align: left;
+      width:100%;
+      justify-content: flex-start;
+    }
+
+    #typediv > .btn:last-child {
+      top: 2px;
+    }
+
+    #bigbut {
+      position:relative;
+      top: -12px;
+    }
+
+    #bigbut .btn {
+      width:90px;
+      margin-right:8px;
+      justify-content: flex-start;
+    }
+
+    #bigbut > div {
+      display:inline-block;
+    }
+
+    #bigbut .vsep {
+      display:inline-block;
+      width:1px;
+      height:100%;
+      border-right:none;
+      margin: 0 7px;
+    }
+
+    #props > div.fitem,
+    #jobdiv,
+    #tracediv {
+      display:none;
+    }

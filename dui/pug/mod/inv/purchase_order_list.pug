@@ -1,0 +1,18 @@
+extends ../content
+block content
+  +split
+    +panel('center')
+      +tabs(data-options="fit:true")
+          div(title="Goods" style="padding:2px;")
+            +datagrid#PO_LIST_DG
+            #tbar
+              div(style="display:inline-block")
+                +form#gfilter
+                  +fitem('Status Filter',{class:'combobox',name:'REPORT_TYPE','data-options':"data:[{text:'All',value:'ALL'},{text:'Shortages',value:'SHORTAGE'},{text:'Open Orders',value:'RLS'},{text:'Open Orders - Job Order',value:'RLS-J'},{text:'In-House',value:'INHOUSE',selected:true},{text:'Return',value:'RETURN'}],editable:false"})
+        
+        
+          div(title="Services" style="padding:2px;")
+            +datagrid#PO_LIST_SV
+
+block script
+  +script("inv",['js/purchase_order_list.js'])

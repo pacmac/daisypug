@@ -1,0 +1,289 @@
+//- Form Layout Mixins (DaisyUI v5 compatible with Legacy EUI signatures)
+//- Purpose: Global form structures, fieldsets, and labeled items.
+//- DaisyUI Components: form, fieldset, legend, label, hint, validator
+
+//- ============================================================================
+//- HELPERS
+//- ============================================================================
+-
+  function _trans(txt){
+    // Helper to simulate legacy trans() if missing
+    return (typeof trans === 'function') ? trans(txt) : txt;
+  }
+  function extend(obj,data){for(var k in data){obj[k] = data[k]}; return obj;}
+
+//- ============================================================================
+//- FORM WRAPPER
+//- Options: 
+//-   cols: (Number) Number of columns (1-12). If > 1, uses CSS Grid. Default: 1.
+//- ============================================================================
+mixin form(opts)
+  -
+    var options = opts || {}
+    var _fcls = (attributes && attributes.class) || ''
+    var cols = options.cols || (_fcls.includes('three') ? 3 : (_fcls.includes('two') ? 2 : 1))
+    var layoutClass = (cols > 1) ? `grid grid-cols-1 md:grid-cols-${cols} gap-x-4` : ''
+    layoutClass += ' easyui-form'
+    // Remove cols from attributes preventing it from rendering as an HTML attribute
+    var attr = Object.assign({}, options)
+    delete attr.cols
+    // Merge implicit pug attributes (#id.class from call site) with explicit opts
+    var merged = Object.assign({}, attributes || {}, attr)
+
+    // Multi-form support: track rendered form IDs.
+    // First +form#head → <form id="head" name="head">
+    // Subsequent +form#head → <form name="head" class="form-part"> (no id)
+    if (typeof _formIds === 'undefined') _formIds = {}
+    var _fid = merged.id || ''
+    if (_fid) {
+      if (_formIds[_fid]) {
+        // Subsequent: dumb field wrapper — no id, no plugin init, no form attributes
+        merged.name = _fid
+        delete merged.id
+        delete merged._sqlid
+        delete merged.asdpx
+        delete merged.method
+        layoutClass = 'form-part'
+      } else {
+        // First: keep id, also add name for allFields() selector
+        _formIds[_fid] = true
+        merged.name = _fid
+      }
+    }
+
+  form(class=layoutClass)&attributes(merged)
+    block
+
+//- ============================================================================
+//- FIELDSET & LEGEND
+//- ============================================================================
+mixin fieldset(legend, opts)
+  -
+    var options = opts || {}
+    var _fscls = (attributes && attributes.class) || ''
+    var fsCols = options.cols || (_fscls.includes('three') ? 3 : (_fscls.includes('two') ? 2 : 1))
+    var fsLayout = (fsCols > 1) ? `grid grid-cols-1 md:grid-cols-${fsCols} gap-x-4` : ''
+    var fsAttr = Object.assign({}, options)
+    delete fsAttr.cols
+    var fsMerged = Object.assign({}, attributes || {}, fsAttr)
+
+  fieldset.border-base-300.rounded-box.border.p-4.w-fit(class="bg-base-200/60 " + fsLayout)&attributes(fsMerged)
+    if legend
+      legend.font-semibold= _trans(legend)
+    block
+
+//- ============================================================================
+//- VGROUP — lightweight vertical titled group for fitems (no border/padding)
+//- ============================================================================
+mixin v-group(title)
+  .v-group&attributes(attributes)
+    if title
+      .v-group-title= _trans(title)
+    block
+
+//- Alias: +group → +v-group
+mixin group(title)
+  +v-group(title)&attributes(attributes)
+    block
+
+//- ============================================================================
+//- H-GROUP — horizontal group of fitems (inline/flex row layout)
+//- ============================================================================
+mixin h-group(title)
+  .h-group&attributes(attributes)
+    if title
+      .h-group-title= _trans(title)
+    block
+
+//- ============================================================================
+//- LABEL
+//- ============================================================================
+mixin label(labelOrText, opts)
+  -
+    var content = '';
+    var attr = opts || {};
+    
+    if (typeof labelOrText === 'object' && labelOrText !== null) {
+      attr = Object.assign({}, labelOrText);
+      if (attr.text) {
+        content = _trans(attr.text);
+        delete attr.text;
+      }
+      if (content === '') attr.class = (attr.class || '') + ' empty';
+    } else {
+      content = _trans(labelOrText);
+      if (labelOrText === '') attr.class = (attr.class || '') + ' empty';
+    }
+
+  label.label&attributes(attr)!= content
+
+//- ============================================================================
+//- HINT (DaisyUI fieldset-hint)
+//- ============================================================================
+mixin hint(text, opts)
+  - var options = opts || {}
+  div.fieldset-hint&attributes(options)= _trans(text)
+
+//- ============================================================================
+//- VALIDATOR
+//- ============================================================================
+mixin validator(opts)
+  -
+    var options = opts || {}
+    var inputType = options.type || 'text'
+    var hintText = options.hint
+    var attrs = Object.assign({}, options)
+    delete attrs.hint
+    delete attrs.type
+
+  input.validator(type=inputType)&attributes(attrs)
+  if hintText
+    .validator-hint= _trans(hintText)
+
+//- ============================================================================
+//- FORM ITEM (Label + Component + Hint)
+//- Legacy Signature: +fitem(label, input, fitemOpts)
+//- Layout: Responsive inline - stacked on mobile, side-by-side on desktop
+//- ============================================================================
+//- _fitem: PRESERVED original for reference/validation — do NOT delete
+mixin _fitem(label, input, fitemOpts)
+  -
+    var fitemAttr = fitemOpts || {};
+    var inline = fitemAttr.inline !== false;
+    var labelWidth = fitemAttr.labelWidth || '150px';
+    if (input && input.id === '~') input.id = input.name || ('input-' + Math.random().toString(36).substr(2, 9));
+    if (input && !input.id && input.name && input.name !== '~') {
+      var safeIdRe = /^[A-Za-z_][A-Za-z0-9_:\\-]*$/;
+      if (safeIdRe.test(String(input.name))) input.id = input.name;
+    }
+    var inputId = input && input.id ? input.id : 'input-' + Math.random().toString(36).substr(2, 9);
+    if (input && !input.id) input.id = inputId;
+    var labelText = '';
+    if (typeof label === 'object' && label !== null) labelText = label.text ? _trans(label.text) : '';
+    else if (label) labelText = _trans(label);
+    delete fitemAttr.inline; delete fitemAttr.labelWidth;
+  div.mb-2(class="flex flex-col md:flex-row md:items-center gap-2")&attributes(fitemAttr)
+    if label
+      label(for=inputId class=`md:w-[${labelWidth}] md:shrink-0`)= labelText
+    if input
+      div(class="flex-1")
+        if !input.class || !input.class.includes('input-bordered')
+          - input.class = (input.class || '') + ' input-bordered';
+        if (!input.eui && input.class && input.class.includes('easyui-numberspinner'))
+          - input.eui = 'numberspinner';
+        if input.eui === 'spinner'
+          +spinner(input)
+        else if input.eui === 'numberspinner'
+          +numberspinner(input)
+        else if input.eui === 'timespinner'
+          +timespinner(input)
+        else
+          +input(input)
+        if block
+          block
+    else if block
+      div(class="flex-1")
+        block
+
+//- fitem: Thin switch — +label + delegate to correct standalone mixin
+mixin fitem(label, input, fitemOpts)
+  if input && input.type === 'hidden'
+    +input(input)
+  else
+    -
+      var fitemAttr = fitemOpts || {};
+
+      // --- ID resolution (shared helper) ---
+      var inputId = resolveInputId(input);
+
+      // --- Detect input type from class string (shared helper) ---
+      var _t = detectInputType((input && input.class) || '');
+      var _isCombobox = _t.isCombobox;
+      var _isNumberbox = _t.isNumberbox;
+      var _isNumberspinner = _t.isNumberspinner;
+      var _isSpinner = _t.isSpinner;
+      var _isTimespinner = _t.isTimespinner;
+      var _isDatebox = _t.isDatebox;
+      var _isDatetimebox = _t.isDatetimebox;
+      var _isTextbox = _t.isTextbox;
+      var _isSearchbox = _t.isSearchbox;
+      var _isTextarea = _t.isTextarea;
+      var _isMultiline = _t.isMultiline || (input && (input.multiline === true || input.multiline === 'true'));
+      if (_isMultiline && input) delete input.multiline;
+
+      // Remove our custom options from HTML attributes
+      delete fitemAttr.inline;
+      delete fitemAttr.labelWidth;
+
+    -
+      if (_isMultiline) fitemAttr.class = ((fitemAttr.class || '') + ' fitem-multiline').trim();
+    -
+      // --- Field help tooltip lookup (language-aware) ---
+      var _helpText = '';
+      var _langMap = {eng:'en', chs:'ch', bah:'en'};
+      var _langMap = {eng:'en', chs:'ch', bah:'en'};
+      var _uLang = (typeof udata === 'object' && udata && udata.language) ? udata.language : 'eng';
+      var _fhLang = _langMap[_uLang] || 'en';
+      var _fh = (typeof fieldHelpAll === 'object' && fieldHelpAll && fieldHelpAll[_fhLang]) || fieldHelp || {};
+      if (input && input.name && _fh) {
+        var _pgKey = (typeof title === 'string' && title) || '';
+        if (_fh.pages && _fh.pages[_pgKey] && _fh.pages[_pgKey][input.name]) {
+          _helpText = _fh.pages[_pgKey][input.name];
+        } else if (_fh[input.name]) {
+          _helpText = _fh[input.name];
+        }
+      }
+
+    div.fitem&attributes(fitemAttr)
+      if label
+        if _helpText
+          .fitem-label-wrap
+            span.fitem-help(data-tip=_helpText)
+              svg.fitem-help-icon(xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round')
+                circle(cx='12' cy='12' r='10')
+                path(d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3')
+                line(x1='12' y1='17' x2='12.01' y2='17')
+            +label(label)(for=inputId)
+        else
+          +label(label)(for=inputId)
+
+      if input
+        -
+          if (!input.class || !input.class.includes('input-bordered'))
+            input.class = (input.class || '') + ' input-bordered';
+        div.fitem-body
+          div.fitem-pre
+          //- Switch to correct standalone mixin (detected from class)
+          if _isCombobox
+            +combobox(input)
+          else if _isSpinner
+            +spinner(input)
+          else if _isNumberspinner
+            +numberspinner(input)
+          else if _isTimespinner
+            +timespinner(input)
+          else if _isSearchbox
+            +searchbox(input)
+          else if _isTextbox
+            +textbox(input)
+          else if _isDatebox || _isDatetimebox
+            +datebox(input)
+          else if _isNumberbox
+            +numberbox(input)
+          else if _isMultiline
+            +multiline(input)
+          else if _isTextarea
+            +input(input)
+          else
+            +input(input)
+          div.fitem-suf
+            if _isSearchbox
+              span(data-tip="Type to search (starts-with).\nUse % as wildcard: %valve% finds anywhere.\n% at start: %pump finds ending with pump." data-tip-pos="left")
+                +icon('circle-help', {size:'lg', color:'text-warning', cls:'cursor-help'})
+            if block
+              block
+      else if block
+        div.fitem-body
+          div.fitem-pre
+          div.fitem-suf
+            block

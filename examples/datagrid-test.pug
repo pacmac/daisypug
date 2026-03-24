@@ -1,0 +1,56 @@
+//- Datagrid test page
+
++dp-datatable({zebra: true, size: 'sm'})(id="parts")
+
+script.
+  dp.on('ready', () => {
+    const table = dp('#parts');
+
+    table.columns([
+      { field: 'LINE', title: '#', width: 40, align: 'center' },
+      { field: 'PART_ID', title: 'Part ID', width: 120 },
+      { field: 'DESCRIPTION', title: 'Description', width: 250 },
+      { field: 'QTY', title: 'Qty', width: 80, align: 'right',
+        formatter: (v) => Number(v).toLocaleString(),
+        style: 'font-weight:600' },
+      { field: 'STATUS', title: 'Status', width: 80, align: 'center',
+        formatter: (v) => v === 'A'
+          ? '<span class="badge badge-success badge-sm">Active</span>'
+          : '<span class="badge badge-error badge-sm">Inactive</span>' },
+      { field: 'ROWID', hidden: true },
+    ]);
+
+    table.idField('ROWID');
+
+    table.rowStyler((i, row) => {
+      if (row.STATUS === 'I') return { class: 'opacity-50' };
+    });
+
+    table.paginate({ pageSize: 5 });
+
+    const data = [];
+    const parts = ['Hydraulic Pump', 'Bearing Kit', 'Control Valve', 'Drive Shaft', 'Exhaust Gasket',
+                    'Fuel Injector', 'Gear Assembly', 'Heat Exchanger', 'Ignition Coil', 'Joint Seal',
+                    'Kinematic Link', 'Linear Actuator'];
+    for (let i = 0; i < 12; i++) {
+      data.push({
+        LINE: i + 1,
+        PART_ID: String.fromCharCode(65 + i) + (1000 + i * 100),
+        DESCRIPTION: parts[i],
+        QTY: Math.floor(Math.random() * 100) + 1,
+        STATUS: i % 4 === 3 ? 'I' : 'A',
+        ROWID: 100 + i,
+      });
+    }
+
+    table.setData(data);
+
+    table.onRowClick(({ data, index }) => {
+      table.selectRow(index);
+      console.log('Selected:', data.PART_ID, 'ROWID:', data.ROWID);
+    });
+
+    table.onCellClick(({ field, value, rowIdx }) => {
+      console.log('Cell:', field, '=', value, 'row:', rowIdx);
+    });
+  });

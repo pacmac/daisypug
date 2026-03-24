@@ -1,0 +1,15 @@
+extends ../content
+block style
+  style.
+    input.datagrid-filter {
+      background: #FFFFFF;
+    }
+    
+    /* Alternat Column Colors */
+    td[field^="BAL_"]:nth-child(even) {
+      color: #08C!important
+    }
+block content
+  +datagrid#partbal
+block script
+  +script("inv",['js/global_parts.js'])

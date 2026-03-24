@@ -1,0 +1,30 @@
+#capor
+  //- Datagrid
+
+//-#capor_tb
+  .fitem.inline
+    #capor_res
+  span.vert-sep
+  a#capor_add(title="Add")
+  a#capor_del(title="Delete")
+  a#capor_ok(title="OK")
+  span.vert-sep
+
+script: include js/capor_inc.js
+
+style.
+  #capor_tb {
+    padding-left:12px;
+  }  
+  
+  #capor_tb > div.l-btn{
+    margin: 0 4px;  
+  }
+
+  #capord label {
+    width:140px;
+  }
+
+  #capord .fitem {
+    min-width:auto !important;
+  }

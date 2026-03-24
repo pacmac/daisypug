@@ -1,0 +1,51 @@
+extends ../content 
+block style
+  style.
+    .wo-sel{
+      color:red;
+    }
+    .titlebar {
+      border:none;
+      border-bottom:1px solid #DDDDDD; 
+      background:linear-gradient(to bottom, #fff 0px, #f2f2f2 100%) repeat-x scroll 0 0; 
+      padding:6px 10px; 
+    }
+  style(type="text/css" media="all"): include css/ulbar.css
+
+
+block script
+  script: include js/lt_allocate.js
+block content 
+  +layout(data-options="fit:true,border:false" asdpx='')
+    
+    +panel('west', { style: 'width:210px;background:#FAFAFA;' })
+      +layout(data-options="border:false, fit:true")
+        
+        div(region="north").titlebar
+          +label({text:'Job Class',style:"width:70px;display:inline-block"})
+          #wocid(style="width:115px")  
+        
+        div(region="center" fit="true" style="border:none;background:inherit; padding:12px;")
+          ul#wotr.wotree
+
+    +panel('center', {  })
+      +layout(data-options="border:false, fit:true")
+        
+        div(region="north").titlebar
+          +label({text:'Department',style:"width:100px;display:inline-block"})
+          input#dept.fkey.all.novali(name='ID', _sqlid='vwltsa^depid1' style="width:220px;")      
+        
+        div(region="center" fit="true" style="border:none;background:inherit; padding:12px;")          
+          ul#emptr
+
+      div#emmen(style="width:120px;")
+        div(onclick="empdel();" data-options="iconCls:'icon-delete'") Delete
+        div(onclick="move('up');" data-options="iconCls:'icon-up'") Move Up
+        div(onclick="move('dn');" data-options="iconCls:'icon-down'") Move Down
+        
+
+      div#women(style="width:120px;")
+        div(onclick="alodel();" data-options="iconCls:'icon-delete'") Deallocate
+    
+
+    

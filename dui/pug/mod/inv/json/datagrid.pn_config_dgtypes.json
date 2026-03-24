@@ -1,0 +1,52 @@
+{
+  "id": "dgtypes",
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "inv^pn_classtype",
+    "_dgrid": true,
+    "CLASS_ID": ""
+  },
+  "columns": [
+    [
+      {
+        "field": "CLASS_ID",
+        "title": "Class"
+      },
+      {
+        "field": "TYPE_ID",
+        "title": "Type ID",
+        "editor": "text"
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Description",
+        "editor": "text"
+      },
+      {
+        "field": "DESC_RULE",
+        "title": "Position",
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "data": [
+              {
+                "value": "NONE",
+                "text": "NONE"
+              },
+              {
+                "value": "PREFIX",
+                "text": "PREFIX"
+              },
+              {
+                "value": "SUFFIX",
+                "text": "SUFFIX"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  ]
+}

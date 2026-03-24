@@ -1,0 +1,16 @@
+{
+  "id": "testgrid",
+  "fit": true,
+  "striped": true,
+  "singleSelect": true,
+  "asdpx": "aed",
+  "columns": [
+    [
+      { "field": "LINE", "title": "#", "width": 40 },
+      { "field": "PART_ID", "title": "Part ID", "width": 120 },
+      { "field": "DESCRIPTION", "title": "Description" },
+      { "field": "QTY", "title": "Qty", "width": 80, "align": "right" },
+      { "field": "STATUS", "title": "Status", "width": 100 }
+    ]
+  ]
+}

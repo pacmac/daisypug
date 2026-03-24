@@ -1,0 +1,30 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^ncrids_sbox",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "NCR_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "NCR ID", "width": 100 },
+
+    { "field": "CAUSE_ID", "title": "Cause ID", "width": 100 },
+    { "field": "SUBJECT", "title": "Subject", "width": 100 },
+    { "field": "STATUS", "title": "Status", "width": 80 },
+    { "field": "SEVERITY", "title": "Severity", "width": 120 }
+  ],
+  "filters": [
+    { "field": "NCR_ID", "title": "NCR ID", "editor": "textbox" },
+    { "field": "CAUSE_ID", "title": "Cause ID", "editor": "textbox" },
+    { "field": "SUBJECT", "title": "Subject", "editor": "textbox" },
+    { "field": "STATUS", "title": "Status", "editor": "textbox" },
+    { "field": "SEVERITY", "title": "Severity", "editor": "textbox" }
+  ]
+}

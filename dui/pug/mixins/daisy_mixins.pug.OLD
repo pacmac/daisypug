@@ -1,0 +1,49 @@
+//- DaisyUI/Tailwind Compatible Mixins for Pure4
+//- Honestly outputs native DaisyUI structures
+//- https://daisyui.com/components/?lang=en
+
+- function trans(txt) { return txt; }
+
+//- Simple label mixin
+mixin label(label)
+  -
+    var text = '';
+    var attr = {};
+    if (typeof label === 'object') {
+      text = label.text;
+      attr = Object.assign({}, label);
+      delete attr.text;
+    } else {
+      text = label;
+    }
+  label.label&attributes(attr)
+    span.label-text!= trans(text)
+
+//- Core input mixin - outputs a standard DaisyUI join group
+mixin input(input)
+  -
+    if(input.id=='~') input.id=input.name; if(input.name=='~') input.name=input.id;
+    var euiClass = input.class || '';
+    var inputAttrs = Object.assign({}, input);
+    delete inputAttrs.class;
+    delete inputAttrs.label;
+    delete inputAttrs.iconCls;
+
+  .form-control.w-full(class=euiClass)
+    if input.label
+      +label(input.label)
+
+    .join.w-full
+      input.input.input-bordered.join-item.w-full&attributes(inputAttrs)
+      if block
+        block
+
+//- Form item wrapper (label + input)
+mixin fitem(label, input, fitem)
+  - fitem = fitem || {};
+  .fitem.mb-4&attributes(fitem)
+    if label
+      +label(label)
+    +input(input)
+    if block
+      block

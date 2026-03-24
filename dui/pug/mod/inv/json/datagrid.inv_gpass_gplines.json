@@ -1,0 +1,143 @@
+{
+  "id": "gplines",
+  "url": "/",
+  "method": "post",
+  "queryParams": {
+    "_sqlid": "inv^gplines",
+    "_func": "get",
+    "_dgrid": "y"
+  },
+  "asdpx": "ad",
+  "rownumbers": false,
+  "fitColumns": true,
+  "singleSelect": true,
+  "striped": true,
+  "fit": true,
+  "columns": [
+    [
+      {
+        "field": "GP_ID",
+        "hidden": true
+      },
+      {
+        "field": "LINE_NO",
+        "title": "#",
+        "width": 40,
+        "fixed": true,
+        "align": "center"
+      },
+      {
+        "field": "DOC_TYPE",
+        "title": "Doc Type",
+        "width": 70,
+        "fixed": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "editable": false,
+            "required": true
+          }
+        }
+      },
+      {
+        "field": "DOC_ID",
+        "title": "Doc ID",
+        "width": 120,
+        "fixed": true,
+        "editor": {
+          "type": "qbe",
+          "options": {
+            "_sqlid": ""
+          }
+        }
+      },
+      {
+        "field": "PART_ID",
+        "title": "Our Part ID",
+        "width": 160,
+        "fixed": true,
+        "editor": {
+          "type": "qbe",
+          "options": {
+            "_sqlid": "inv^partid_qbe"
+          }
+        }
+      },
+      {
+        "field": "PART_UOM",
+        "title": "Part UOM",
+        "width": 30,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": true
+          }
+        }
+      },
+      {
+        "field": "CUST_PART_ID",
+        "title": "Cust Part Ref",
+        "width": 100,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": false
+          }
+        }
+      },
+      {
+        "field": "CUST_PROD_ORDER_NO",
+        "title": "Cust Prod Order #",
+        "width": 100,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": false
+          }
+        }
+      },
+      {
+        "field": "QTY",
+        "title": "Qty Reqd",
+        "width": 60,
+        "fixed": true,
+        "align": "center",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0,
+            "required": true
+          }
+        }
+      },
+      {
+        "field": "BAL_QTY",
+        "title": "Bal Qty",
+        "width": 60,
+        "fixed": true,
+        "align": "center",
+        "editor": {
+          "type": "numberbox",
+          "options": {
+            "precision": 2,
+            "readonly": true
+          }
+        }
+      },
+      {
+        "field": "PART_DESCRIPTION",
+        "title": "Our Part Description",
+        "width": 250,
+        "fixed": true,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": false
+          }
+        }
+      }
+    ]
+  ]
+}

@@ -1,0 +1,34 @@
+extends ../content
+block content
+  +layout(data-options="fit:true,border:false")
+    +panel#FAFAFA.bg-base-200(region="west" style="width:410px" collapsible="false")
+      form#parttrans(style="display:inline")
+        +fitem('Part ID',{name:'PART_ID', readonly:true,requiredx:true,class:'textbox'})
+        +fitem('Tx ID',{name:'TRANSACTION_ID', readonly:true,class:'textbox'})
+        +fitem('Document ID',{name:'DOCUMENT_ID', class:'textbox'})
+        +fitem('Tx Date',{name:'TRANSACTION_DATE',  class:'datebox'})  
+    div(region="center" style="border:none; padding:0px;")
+      #txgrid
+      #tbar
+        form#gfilter
+          label From
+          +datebox.today(name="sdate" style="width:100px;")
+          label To
+          +datebox.today(name="edate" style="width:100px;")
+          label Part ID
+          +combobox(_sqlid="inv^partid" name="pid" )
+block script
+  //-+script("inv",['js/part_trans_editor.js'])
+  script: include js/part_trans_editor.js
+block style
+  style.
+    #parttrans .fitem{
+      margin-bottom: 8px !important;
+    }    
+    #tbar {
+      height:30px;
+      line-height:30px;  
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }

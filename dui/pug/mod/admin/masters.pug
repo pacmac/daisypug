@@ -1,0 +1,31 @@
+extends ../content
+block content
+  +tabs(data-options="fit:true" )
+    +tab-item#groups('Groups',{iconCls:'users'})
+      form.multi(_sqlid='admin^groupall', asdpx='ax')
+        +fitem('Group ID',{name:'id', _sqlid:'admin^groupid', class:'combobox fkey', required:true, validType:'length[1,15]'})
+        +fitem('Type',{name:'appid', class:'combobox','data-options':"data:[{text:'User',value:'user'},{text:'Admin',value:'admin'},{text:'Manufacturing',value:'vwltsa'},{text:'Quality',value:'dqm'},{text:'Sales',value:'sales'},{text:'Inventory',value:'inv'},{text:'Company',value:'co'},{text:'One-Stop Shop',value:'oss'}],required:true"})
+        +fitem('Description',{name:'descr', class:'textbox','data-options':"validType:['length[1,30]']"})
+
+    +tab-item#division('Divisions',{iconCls:'building-2'})
+      form.multi(_sqlid='admin^division', asdpx='ax')
+        +fitem('Site ID',{name:'siteid', class:'textbox', readonly:true})
+        +fitem('Division ID',{name:'value', _sqlid:'admin^divisionid', class:'combobox fkey', required:true, validType:'length[1,15]'})
+        +fitem('Description',{name:'text', class:'textbox','data-options':"validType:['length[1,30]']"})
+  
+    +tab-item#department('Departments',{iconCls:'briefcase'})
+      form.multi(_sqlid='admin^department', asdpx='ax')
+        +fitem('Department ID',{name:'value', _sqlid:'admin^departmentid', class:'combobox fkey', required:true, validType:'length[1,15]'})
+        +fitem('Description',{name:'text', class:'textbox','data-options':"validType:['length[1,30]']"})
+    
+    +tab-item#currency('Currency',{iconCls:'banknote'})
+      form.multi(_sqlid='admin^currall', asdpx='ax')
+        +fitem('Currency ID',{name:'id', _sqlid:'admin^curr', class:'combobox fkey', required:true, validType:'length[1,3]'})
+        +fitem('Description',{name:'description', class:'textbox','data-options':"validType:['length[1,30]']"})
+        +fitem('Exchange Rate',{name:'rate', class:'numberspinner','data-options':"precision:8"})
+    
+    +tab-item#gst('GST',{iconCls:'badge-percent'})
+      form.multi(_sqlid='admin^gstall', asdpx='ax')
+        +fitem('GST ID',{name:'id', _sqlid:'admin^gst', class:'combobox fkey', required:true, validType:'length[1,15]'})
+        +fitem('Description',{name:'description', class:'textbox','data-options':"validType:['length[1,30]']"})
+        +fitem('Percentage',{name:'percentage', class:'numberspinner','data-options':"precision:0"})

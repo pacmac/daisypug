@@ -1,0 +1,55 @@
++tabs#lists(data-options="fit:true, tabPosition:'left'" )
+
+  #sa_nng( title='Next Numbers')
+    form.multi(_sqlid='nngall' asdpx='x')
+      +input({name:'ID', value:'VMFG', type:'hidden'})
+      +fitem('Next Number ID',{id:'NNG_TYPE', name:'TYPE', _sqlid:'nngids', class:'combobox fkey fit', required:true, validType:'length[1,15]'})
+      +fitem('Description',{id:'NNG_DESC', name:'DESCRIPTION', class:'textbox','data-options':"validType:['length[1,255]']"})
+      +fitem('Prefix',{id:'NNG_PREFIX', name:'PREFIX', class:'textbox','data-options':"validType:['length[1,8]']"})
+      +fitem('Next Number',{name:'NEXT_NUMBER', class:'numberspinner', value:1, precision:0, min:1})
+      +fitem('Suffix',{name:'SUFFIX', class:'combobox', default:'$Y4','data-options':"data:[{text:'None',value:''},{text:'Year 4 Digits',value:'$Y4'},{text:'Year 2 Digits',value:'$Y2'},{text:'Month',value:'$M'},{text:'Month Name',value:'M3'},{text:'-Year 4 Digits',value:'-$Y4'},{text:'-Year 2 Digits',value:'-$Y2'},{text:'-Month',value:'-$M'},{text:'-Month Name',value:'-M3'},{text:'YYMMDD',value:'YYMMDD'},{text:'YYYYMMDD',value:'YYYYMMDD'},{text:'-YYMMDD',value:'-YYMMDD'},{text:'-YYYYMMDD',value:'-YYYYMMDD'}]"})
+      +fitem('User Defined Suffix',{id:'SUFFIX_UDF', name:'SUFFIX_UDF', class:'textbox','data-options':"validType:'length[1,5]'"})
+      +fitem('Decimal Digits',{name:'DECIMAL_PLACES', class:'numberspinner', value:1, min:1, max:5, precision:0})
+      +fitem('Table Name',{id:'TABLE_NAME1', name:'TABLE_NAME', class:'textbox', readonly:true, required:true})
+      +fitem('Column Name',{id:'COLUMN_NAME1', name:'COLUMN_NAME', class:'textbox',readonly:true, required:true})
+
+style.
+  
+  .fitem .ftype{
+    width:75px;
+    margin-left:12px; 
+  }
+  
+  .fitem .w12 {
+    width:12px;
+    display:inline-block
+  }
+        
+script.
+  
+  $( document ).ready(function() {
+    
+    $('form').on('loadDone',function(){
+      var asdpx = $(this).attr('asdpx');
+      butEn(asdpx+'s');
+    })
+    
+    $('#TABLE_NAME').combobox({
+      onSelect:function(rec){
+        var cbo = $('#COLUMN_NAME');
+        var url = '/?_func=get&_combo=y&_sqlid=dqm^columnname&TABLE_NAME='+rec.value;
+        cbo.combobox('clear');
+        cbo.combobox('reload',url);
+      }
+    })
+    
+    $('#lists').tabs({
+      onSelect:function(tit,idx){
+        tabcombos($(this));
+        var frm = $(this).tabs('getSelected').find('form').first();
+        frm.form('reset');
+        setTimeout(function(){butEn(frm.attr('asdpx'));},100)
+      }
+    }) 
+    
+  });

@@ -1,0 +1,15 @@
+extends ../content 
+block content 
+  #sa_employee(title='Machine Device')
+    form.multi(_sqlid='vwltsa^macall' asdpx='ax' data-lbut="ax" data-ebut="ax")
+      +fitem('Device ID',{_sqlid:'vwltsa^macid', name:'MAC_ID', class:'combobox fkey fit'})
+      +fitem('Location',{name:'LOCN', class:'textbox', required:true})
+      +fitem('Name',{name:'NAME', class:'textbox', required:true})
+      +fitem('LAN IP Address',{name:'IP', class:'textbox'})
+      +fitem('SSH IP:Port',{name:'NOTES', class:'textbox'})
+        
+      +fieldset('IOT Devices')
+        +fitem('WO Reference',{name:'WOREF', class:'textbox'})
+        +fitem('Employee ID',{name:'EMP_ID', class:'combobox',_sqlid:'vwltsa^empid',})
+        +fitem('Trigger Frequency',{name:'FREQ', class:'numberspinner','data-options':"min:1,value:5"})
+        +fitem('Trigger Type',{name:'FREQ_TYPE', class:'combobox', 'data-options':"editable:false,data:[{text:'time',value:'time'},{text:'qty',value:'qty'}]"})

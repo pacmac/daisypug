@@ -1,0 +1,40 @@
+{
+  "id": "cpfiles",
+  "rownumbers": false,
+  "fitColumns": true,
+  "singleSelect": true,
+  "striped": true,
+  "fit": true,
+  "columns": [
+    [
+      {
+        "field": "TSID",
+        "hidden": true
+      },
+      {
+        "field": "FILE_NAME",
+        "title": "File",
+        "width": 220,
+        "fixed": true
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Description",
+        "width": 260
+      },
+      {
+        "field": "USER_ID",
+        "title": "By",
+        "width": 90,
+        "fixed": true
+      },
+      {
+        "field": "STAMP",
+        "title": "Date",
+        "width": 110,
+        "fixed": true,
+        "formatter": "$.dui.fmt.date"
+      }
+    ]
+  ]
+}

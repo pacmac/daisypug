@@ -1,0 +1,29 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^coc_ids_sbox",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "COC_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "Shipment ID", "width": 100 },
+    { "field": "WOREF", "title": "Woref", "width": 100 },
+    { "field": "CUSTOMER_ID", "title": "Customer ID", "width": 200 },
+    { "field": "NAME", "title": "Customer Name", "width": 120 },
+    { "field": "SALES_ORDER_ID", "title": "SO ID", "width": 100 },
+    { "field": "STATUS", "title": "Status", "width": 120 }
+  ],
+  "filters": [
+    { "field": "WOREF", "title": "Woref", "editor": "textbox" },
+    { "field": "CUSTOMER_ID", "title": "Customer ID", "editor": "textbox" },
+    { "field": "NAME", "title": "Customer Name", "editor": "textbox" },
+    { "field": "SALES_ORDER_ID", "title": "SO ID", "editor": "textbox" }
+  ]
+}

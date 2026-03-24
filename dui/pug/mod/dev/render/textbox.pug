@@ -1,0 +1,216 @@
+extends ../../../layout/layout
+
+block content
+  +content("Textbox API Test", "Tests jQuery plugin API methods with DIRECT initialization (NO parser)")
+    +section("Test Inputs", "Target elements for testing API methods")
+      +form({cols: 2})
+        +fitem("Target Textbox:")
+          +input({id: 'target', class: 'input-bordered w-full', placeholder: 'Test me...'})
+        +fitem("Second Input (for testing multiple):")
+          +input({id: 'target2', class: 'input-bordered w-full', placeholder: 'Another input...'})
+
+    +section("API Methods", "Click buttons to test each method")
+      .grid.grid-cols-1.gap-4.mb-4(class="sm:grid-cols-2 lg:grid-cols-4")
+        div
+          h3.font-medium.mb-2 Value Methods
+          .space-y-2
+            button.btn.btn-sm.btn-primary.w-full#test-getValue getValue()
+            button.btn.btn-sm.btn-primary.w-full#test-setValue setValue('Test')
+            button.btn.btn-sm.btn-primary.w-full#test-getText getText()
+            button.btn.btn-sm.btn-primary.w-full#test-setText setText('Text')
+            button.btn.btn-sm.btn-primary.w-full#test-clear clear()
+            button.btn.btn-sm.btn-primary.w-full#test-reset reset()
+
+        div
+          h3.font-medium.mb-2 State Methods
+          .space-y-2
+            button.btn.btn-sm.btn-secondary.w-full#test-disable disable()
+            button.btn.btn-sm.btn-secondary.w-full#test-enable enable()
+            button.btn.btn-sm.btn-secondary.w-full#test-readonly readonly()
+            button.btn.btn-sm.btn-secondary.w-full#test-readonly-false readonly(false)
+            button.btn.btn-sm.btn-secondary.w-full#test-isValid isValid()
+            button.btn.btn-sm.btn-secondary.w-full#test-options options()
+
+        div
+          h3.font-medium.mb-2 Utility Methods
+          .space-y-2
+            button.btn.btn-sm.btn-accent.w-full#test-initValue initValue('Init')
+            button.btn.btn-sm.btn-accent.w-full#test-textbox textbox()
+            button.btn.btn-sm.btn-accent.w-full#test-resize resize(300)
+
+        div
+          h3.font-medium.mb-2 Selection Methods
+          .space-y-2
+            button.btn.btn-sm.btn-info.w-full#test-getSelectionStart getSelectionStart()
+            button.btn.btn-sm.btn-info.w-full#test-getSelectionRange getSelectionRange()
+            button.btn.btn-sm.btn-info.w-full#test-setSelection setSelectionRange(0,5)
+
+    +section("Test Output", "Results from API method calls")
+      +testOutput("output")
+        | Click buttons above to test API methods.
+        | Results will appear here...
+
+    +section("Event Log", "Events (onChange, onBlur, onFocus) logged here")
+      +testOutput("eventLog")
+
+  //- Load the textbox helper
+  script(src="/assets/js/textbox-helper.js")
+
+  //- Test script
+  script.
+    $(function() {
+      var $output = $('#output');
+      var $eventLog = $('#eventLog');
+
+      // Helper to log output
+      function log(msg) {
+        $output.append(msg + '\\n');
+        console.log(msg);
+      }
+
+      // Helper to log events
+      function logEvent(msg) {
+        var timestamp = new Date().toLocaleTimeString();
+        $eventLog.append('[' + timestamp + '] ' + msg + '\\n');
+        console.log('[EVENT]', msg);
+      }
+
+      // Clear output
+      $output.text('');
+      $eventLog.text('');
+
+      // Initialize textbox with options and event callbacks
+      log('Initializing textbox with callbacks...');
+      $('#target').textbox({
+        value: 'Initial value',
+        onChange: function(newVal, oldVal) {
+          logEvent('onChange: "' + oldVal + '" → "' + newVal + '"');
+        },
+        onBlur: function() {
+          logEvent('onBlur');
+        },
+        onFocus: function() {
+          logEvent('onFocus');
+        },
+        onKeyUp: function(e) {
+          logEvent('onKeyUp: key=' + e.key);
+        }
+      });
+
+      // Initialize second textbox (no callbacks)
+      $('#target2').textbox({
+        value: 'Second input'
+      });
+
+      log('Textbox initialized. Click buttons to test API methods.\\n');
+
+      //- ====================================================================
+      //- Value Methods Tests
+      //- ====================================================================
+      $('#test-getValue').click(function() {
+        var val = $('#target').textbox('getValue');
+        log('getValue() = "' + val + '"');
+      });
+
+      $('#test-setValue').click(function() {
+        $('#target').textbox('setValue', 'Test value set via API');
+        log('setValue("Test value set via API") - done');
+      });
+
+      $('#test-getText').click(function() {
+        var text = $('#target').textbox('getText');
+        log('getText() = "' + text + '"');
+      });
+
+      $('#test-setText').click(function() {
+        $('#target').textbox('setText', 'Text set via setText');
+        log('setText("Text set via setText") - done');
+      });
+
+      $('#test-clear').click(function() {
+        $('#target').textbox('clear');
+        log('clear() - done');
+      });
+
+      $('#test-reset').click(function() {
+        $('#target').textbox('reset');
+        log('reset() - value reset to original');
+      });
+
+      //- ====================================================================
+      //- State Methods Tests
+      //- ====================================================================
+      $('#test-disable').click(function() {
+        $('#target').textbox('disable');
+        log('disable() - input disabled');
+      });
+
+      $('#test-enable').click(function() {
+        $('#target').textbox('enable');
+        log('enable() - input enabled');
+      });
+
+      $('#test-readonly').click(function() {
+        $('#target').textbox('readonly');
+        log('readonly() - input is now readonly');
+      });
+
+      $('#test-readonly-false').click(function() {
+        $('#target').textbox('readonly', false);
+        log('readonly(false) - readonly removed');
+      });
+
+      $('#test-isValid').click(function() {
+        var valid = $('#target').textbox('isValid');
+        log('isValid() = ' + valid);
+      });
+
+      $('#test-options').click(function() {
+        var opts = $('#target').textbox('options');
+        log('options() = ' + JSON.stringify(opts, null, 2));
+      });
+
+      //- ====================================================================
+      //- Utility Methods Tests
+      //- ====================================================================
+      $('#test-initValue').click(function() {
+        $('#target').textbox('initValue', 'Initialized');
+        log('initValue("Initialized") - value set without triggering onChange');
+      });
+
+      $('#test-textbox').click(function() {
+        var $elem = $('#target').textbox('textbox');
+        log('textbox() returned element: ' + $elem[0].tagName + ' with id=' + $elem.attr('id'));
+      });
+
+      $('#test-resize').click(function() {
+        $('#target').textbox('resize', 300);
+        log('resize(300) - width set to 300px');
+      });
+
+      //- ====================================================================
+      //- Selection Methods Tests
+      //- ====================================================================
+      $('#test-getSelectionStart').click(function() {
+        var start = $('#target').textbox('getSelectionStart');
+        log('getSelectionStart() = ' + start);
+      });
+
+      $('#test-getSelectionRange').click(function() {
+        var range = $('#target').textbox('getSelectionRange');
+        log('getSelectionRange() = {start: ' + range.start + ', end: ' + range.end + '}');
+      });
+
+      $('#test-setSelection').click(function() {
+        $('#target').textbox('setSelectionRange', 0, 5);
+        $('#target').focus();
+        log('setSelectionRange(0, 5) - first 5 characters selected');
+      });
+
+      //- ====================================================================
+      //- Initial status
+      //- ====================================================================
+      log('\\n✅ All event handlers attached.');
+      log('✅ Try typing in the input to see onChange/onKeyUp events.');
+      log('✅ Try clicking in/out to see onFocus/onBlur events.\\n');
+    });

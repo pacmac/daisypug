@@ -1,0 +1,69 @@
+include ./globals.pug
+include ../mixins/mixins
+
+doctype html
+
+html(lang="en" data-theme="dark")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= title || 'Pure4'
+
+    //- Restore saved theme before CSS loads (prevent flash)
+    script.
+      (function(){var t=localStorage.getItem('dui-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
+
+    //- #############################
+    //- ########### CSS #############
+    //- #############################
+    link(href="/dui/css/main.css?v=" + Date.now() rel="stylesheet" type="text/css")
+    link(href="/dui/css/searchbox.css?v=" + Date.now() rel="stylesheet" type="text/css")
+    link(href="/dui/css/surface.css?v=" + Date.now() rel="stylesheet" type="text/css")
+
+    //- #############################
+    //- ########## JQUERY ###########
+    //- #############################
+    script(src=epath+iscache('jquery.min.js'))
+    script(src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/lucide@0.574.0/dist/umd/lucide.min.js" defer)
+
+    //- #############################
+    //- ############ DUI ############
+    //- #############################
+    script window.DUI_USE_PAGENAV_SHIM = true;
+
+    script(src="/dui/js/plugins/dui-helpers.js")
+    script(src="/dui/js/dui-plugins.min.js")
+
+    //- Icon map for client-side JS ($.dui.getIcon)
+    +_duiIconScript()
+
+    //- #############################
+    //- ####### $.dui DATA ##########
+    //- #############################
+    //- DISABLED: inline data injection — now fetched via /api/init AJAX call
+    //- script.
+    //-   Object.assign($.dui, !{JSON.stringify(_duiData)});
+
+    //- bundle.js removed — utils moved to utils-plugin.js, lifecycle to page-plugin.js
+    //- script(src='/dui/js/qbedef.js') — deprecated, replaced by searchbox
+
+    style.
+      body {
+        min-height: 100vh;
+        margin: 0;
+
+      }
+      main {
+        max-width: 75vw;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 4rem;
+      }
+
+  body
+    main
+      block content
+
+    //- Lucide icons initialized centrally by _startup.js after dashboard build
+    //- Page content icons handled by page-plugin.js onLoad
+

@@ -1,0 +1,6 @@
+# dui-backup-clean: user/pref
+# 2026-03-10T20:42:52.232235
+
+html/dui/mod/user/pref.pug -> pref.pug
+html/dui/mod/user/js/pref.js -> js/pref.js
+yaml/migrator/mod/user/pref.yaml -> pref.yaml

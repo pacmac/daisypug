@@ -1,0 +1,24 @@
+{
+  "title": "Un-Linked Jobs",
+  "iconCls": "icon-unlinked",
+  "url": "/",
+  "method": "post",
+  "fit": true,
+  "striped": true,
+  "singleSelect": true,
+  "rownumbers": true,
+  "asdpx": "a",
+  "columns": [
+    {"field": "_cbox", "checkbox": true, "title": "Sel"},
+    {"field": "OPERATION_REF", "title": "Operation Ref", "width": 120, "formatter": "$.dui.fmt.ref2text"},
+    {"field": "WO_CLASS", "title": "Job Class", "width": 100, "coloff": true},
+    {"field": "RESOURCE_ID", "title": "Resource ID", "width": 100},
+    {"field": "WO_RELEASE", "title": "Released", "width": 80, "formatter": "$.dui.fmt.date", "coloff": true},
+    {"field": "WO_WANT", "title": "Wanted", "width": 80, "formatter": "$.dui.fmt.date", "coloff": true},
+    {"field": "WO_QTY", "title": "Reqd Qty", "width": 60, "formatter": "$.page.fn.qtyfmt", "align": "right", "coloff": true},
+    {"field": "WO_COMPLETED_QTY", "title": "Comp Qty", "width": 60, "formatter": "$.page.fn.qtyfmt", "align": "right", "coloff": true},
+    {"field": "COC_QTY", "title": "COC Qty", "width": 60, "formatter": "$.page.fn.qtyfmt", "align": "right", "coloff": true},
+    {"field": "SALES_ORDER_REF", "title": "Order ID / Line", "width": 120, "formatter": "$.dui.fmt.ref2text"},
+    {"field": "CUSTOMER_ID", "title": "Cust ID", "width": 80, "fixed": true, "coloff": true}
+  ]
+}

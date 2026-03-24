@@ -1,0 +1,142 @@
+//- Actions Mixins
+//- Purpose: Buttons and links for user interaction.
+//- DaisyUI Components: button, fab, link
+
+//- ============================================================================
+//- Auto-generated skeleton: button
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+//- DaisyUI Button Mixin
+//- Renders a DUI button with text and attributes
+//- Signature: +button(text, vars)
+//- Legacy EUI equivalent: linkbutton with icon support via iconCls
+//- Classes: .btn (required), .btn-primary, .btn-secondary, .btn-lg, etc.
+
+mixin button(text = '', vars = {})
+  -
+    // Normalize inputs — +button({icon:'save', color:'primary'}) without text
+    if (typeof text === 'object') {
+      vars = text;
+      text = vars.text || '';
+    }
+
+    // Extract semantic params
+    const icon = vars.icon || '';
+    const color = vars.color || '';    // primary, secondary, accent, info, success, warning, error, neutral
+    const size = vars.size || '';      // xs, sm, md, lg
+    const style = vars.style || '';    // outline, ghost, link
+    const shape = vars.shape || '';    // circle, square, wide, block
+
+    // Resolve EUI iconCls via iconmap (if getIcon is available)
+    var resolvedIcon = icon;
+    if (!resolvedIcon && vars.iconCls) {
+      resolvedIcon = (typeof getIcon === 'function') ? getIcon(vars.iconCls) : '';
+    }
+
+    // Build class string — semantic params first, then escape-hatch classes
+    let btnClasses = 'btn';
+    if (color) btnClasses += ' btn-' + color;
+    if (size) btnClasses += ' btn-' + size;
+    if (style) btnClasses += ' btn-' + style;
+    if (shape) btnClasses += ' btn-' + shape;
+    if (vars.class) btnClasses += ' ' + vars.class;
+    if (vars.btnClass) btnClasses += ' ' + vars.btnClass;
+    if (resolvedIcon) btnClasses += ' gap-1';
+
+    // Build button attributes — spread vars, then remove non-HTML keys
+    const btnAttrs = { ...vars };
+    if (!btnAttrs.type) btnAttrs.type = 'button';
+    delete btnAttrs.text;
+    delete btnAttrs.btnClass;
+    delete btnAttrs.class;
+    delete btnAttrs.icon;
+    delete btnAttrs.iconCls;
+    delete btnAttrs.color;
+    delete btnAttrs.size;
+    delete btnAttrs.style;
+    delete btnAttrs.shape;
+
+  if resolvedIcon
+    button&attributes(btnAttrs)(class=btnClasses)
+      +icon(resolvedIcon)
+      if text
+        =text
+  else
+    button&attributes(btnAttrs)(class=btnClasses)=text
+
+
+//- ============================================================================
+//- Auto-generated skeleton: fab
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin fab(opts = {})
+  span.mixin-skeleton(data-mixin="fab")
+    | [SKELETON: fab]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: link
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin link(opts = {})
+  span.mixin-skeleton(data-mixin="link")
+    | [SKELETON: link]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: linkbutton
+//- Created: 2026-02-01
+//- Status: skeleton - awaiting implementation
+
+mixin linkbutton(opts = {})
+  span.mixin-skeleton.easyui-linkbutton(data-mixin="linkbutton")
+    | [SKELETON: linkbutton]
+//- ============================================================================
+//- MENUBUTTON — DaisyUI dropdown button with chevron indicator
+//- ============================================================================
+//- Usage:
+//-   +menubutton#but_print.tbut(title="Reports" icon="printer" menu-id="dui-printmen")
+//-   +menubutton(title="Theme" icon="sun" menu-id="theme-menu" position="end")
+//-     each t in themes
+//-       li.list-none: button.text-xs= t
+//-
+//- Attributes:
+//-   title      — Button label text
+//-   icon       — Feather icon name (optional)
+//-   menu-id    — ID for the <ul> dropdown menu
+//-   position   — Dropdown position: bottom (default), end, top, left, right
+//-   menu-class — Extra CSS classes on the <ul> (e.g. "max-h-80 overflow-y-auto")
+//- All other attributes pass through to the <button> element.
+//- Block content goes into the <ul> menu.
+//- ============================================================================
+mixin menubutton(opts = {})
+  - var title = attributes.title || ''
+  - var icon = attributes.icon || ''
+  - var menuId = attributes['menu-id'] || ''
+  - var pos = attributes.position || 'bottom'
+  - var menuCls = attributes['menu-class'] || ''
+  - delete attributes.title
+  - delete attributes.icon
+  - delete attributes['menu-id']
+  - delete attributes.position
+  - delete attributes['menu-class']
+  //- EUI compat — strip silently
+  - delete attributes.plain
+  - delete attributes.hasDownArrow
+  - delete attributes.menu
+  - var mbIconCls = attributes.iconCls || ''
+  - delete attributes.iconCls
+  - var mbResolvedIcon = icon || mbIconCls
+  .dropdown.shrink-0(class='dropdown-' + pos)
+    button.btn.btn-ghost.btn-sm.px-1.gap-1&attributes(attributes)(tabindex="0")
+      if mbResolvedIcon
+        +icon(mbResolvedIcon)
+      span= title
+      svg.w-3.h-3.opacity-60(fill="none" stroke="currentColor" viewBox="0 0 24 24")
+        path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7")
+    ul.dropdown-content.menu.menu-sm.bg-base-100.text-base-content.rounded-box.w-52.p-2.shadow-sm(id=menuId tabindex="0" class=menuCls style="z-index:1000")
+      block
+

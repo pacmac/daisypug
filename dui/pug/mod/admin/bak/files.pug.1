@@ -1,0 +1,67 @@
+extends ../content 
+block content 
+  include files.inc.pug
+      
+  +window#filefold(style="width:400px" title="Edit File Properties" closed="true" modal="true")
+    form#file(style="display:none")
+      input(type="hidden" name="tsid")
+      input(type="hidden" name="tsidl")
+      input(type="hidden" name="appid")
+      input(type="hidden" name="_func" value="add")
+      input(type="hidden" name="_sqlid" value="admin^file")      
+          
+      .fitem
+        label File Description
+        +textbox(name="description")
+      
+      .fitem
+        label Revision
+        +textbox(name="revn")
+
+      .fitem
+        label File Name
+        +textbox#fname(name="fname")
+
+      .fitem
+        label Extension
+        +textbox(name="extn" readonly="readonly")
+       
+      
+      .fitem
+        label Owner ID
+        +textbox(name="uid" readonly="readonly")
+      
+      .fitem
+        label View Access
+        +combobox(name="access" data-options="panelHeight:'auto', data:[{value:'view',text:'View as PDF',selected:true},{value:'dload',text:'Download Source'}]")
+      
+      .fitem
+        label Document ID
+        +textbox(name="appdoc" readonly="readonly" value="")
+
+      .fbuts.center
+        #filesave Save
+
+    form#fold(style="display:none")
+      input(type="hidden" name="id")
+      input(type="hidden" name="_func" value="add")
+      input(type="hidden" name="_sqlid" value="admin^dir")
+      
+      .fitem
+        label Folder Name
+        +textbox(name="name")
+
+      .fitem
+        label.icon-r(style="margin-right:10px;width:130px;") Folder Icon
+        input#icon(name="icon")
+
+      .fitem
+        label Autonumber Prefix
+        +textbox.upper(name="prefix")
+
+      .fitem
+        label Autonumber Next
+        +numberbox(name="next_number" min=1)
+      
+      .fbuts.center
+        #foldsave Save

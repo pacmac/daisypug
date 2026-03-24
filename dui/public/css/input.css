@@ -1,0 +1,36 @@
+/*
+ * input.css — Tailwind/DaisyUI entry point
+ * This file is the single input for the Tailwind CLI build.
+ * All custom styles are split into logical modules imported below.
+ * Build: npx @tailwindcss/cli -i input.css -o main.css
+ */
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+/* Scan all Pug and JS files for Tailwind classes */
+@source "../../../html/**/*.pug";
+@source "../../../public/**/*.js";
+
+/* Register corporate-suitable DaisyUI themes (dark is default) */
+@plugin "daisyui/theme" { name: "dark"; default: true; }
+@plugin "daisyui/theme" { name: "light"; }
+@plugin "daisyui/theme" { name: "corporate"; }
+@plugin "daisyui/theme" { name: "business"; }
+@plugin "daisyui/theme" { name: "nord"; }
+@plugin "daisyui/theme" { name: "night"; }
+@plugin "daisyui/theme" { name: "dim"; }
+@plugin "daisyui/theme" { name: "winter"; }
+@plugin "daisyui/theme" { name: "emerald"; }
+@plugin "daisyui/theme" { name: "lofi"; }
+
+/* Custom styles — split by concern */
+@import "./base.css";
+@import "./safelist.css";
+@import "./layout.css";
+@import "./forms.css";
+@import "./sidebar.css";
+@import "./components.css";
+@import "./searchbox.css";
+@import "./tree.css";

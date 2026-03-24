@@ -1,0 +1,68 @@
+extends ../content 
+block style 
+  style.
+    .legcol {
+      display: inline-block;
+      height: 12px;
+      margin: 16% 0 0 6%;
+      width: 80% !important;
+    }
+    
+    #mainlo > .panel > .panel-header .panel-tool {
+      left:12px;
+      height:24px;
+      top:42%;
+    }
+    
+    tr[datagrid-row-index="0"]:not(.datagrid-row-selected){
+      background: #FAFAFA !important;
+      color: navy;
+    }
+
+block script 
+  script: include ../../../../public/js3/flot/jquery.flot.js
+  script: include js/analysis.js
+block content 
+  +hsplit('50%')#mainlo
+    +panel('north')
+      +vsplit('50%')
+        +panel('west')
+          +tabs#dtype(fit="true")
+            div(title="Defect Summary")
+              div#westdg
+            div(title="Filtered Docs")
+              div#ncrlist
+
+
+        +panel('center')
+          +tabs(fit="true")
+            div#neast(title="Monthly By Class")
+            if(isdev)
+              div#neast_1(title="Monthly Status")
+              div#neast_2(title="Monthly By Code")
+
+    +panel('center')
+      +vsplit('50%')
+        +panel('west', { title: "Pareto Analysis" })
+        +panel('center', { title: "Total Defects By Month" })
+      
+      //div#legend(style="position:absolute; z-index:1000; height:24px; width:100%; top:45px; left:20px;")
+    div#ncatbar
+      form#filter
+        label(style="margin-right:10px;") Type
+        input#type(style="width:100px;")
+        span.vert-sep(style="margin-right:8px;")  
+        label(style="margin-right:10px;") View
+        input#views(style="width:150px;")
+        span.vert-sep(style="margin-right:8px;")
+        label(style="margin-left:0px;;margin-right:10px;") Date From
+        +datebox#frdate.bhave.frdate(style="width:100px;" data-options="value: $.dui.bhave.frdate")
+        label(style="margin-left:20px;;margin-right:10px;") Date To
+        +datebox#todate.today(style="width:100px;")
+        span.vert-sep(style="margin-right:8px;")
+        label(style="margin-left:0px;;margin-right:10px;") Status
+        input#ncrstat(style="width:70px;")
+        span.vert-sep
+        input#myncr(type="checkbox")
+        label(style="margin-left:6px;") My Documents
+      

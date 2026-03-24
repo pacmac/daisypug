@@ -1,0 +1,210 @@
+extends ../content
+
+block script        
+  //-+script('dqm',['js/qp_coatman.js'])
+  script: include js/qp_coatman.js
+  
+
+block content
+  form.multi.fit#main(_sqlid="dqm^coatman" asdpx="ax")
+    +vsplit()
+      +panel('west')
+        +input({name:'USER_NAME', id:'~', type:'hidden'})
+        +v-group('')
+        
+          +fitem('Test ID',{id:'ID', name:'ID', class:'searchbox fkey fit autonum', sbref:'coatman_ids'})
+        
+        //-div#job_info
+        +v-group('')
+          +fitem('Job ID',{name:'BASE_ID', id:'~', class:'searchbox',  required:true, sbref:'job'})
+            //-+button({id:'jobreload', icon:'refresh-cw', size:'xs', style:'ghost', class:'iconbut', title:'Reload Job'})
+          +fitem('Create Date',{name:'CREATE_DATE', class:'datebox today', readonly:true})
+  
+        //-div#coat_info 
+        +v-group('')  
+          +fitem('Status',{id:'~', name:'STATUS', value:'PENDING', required: true, class:'combobox','data-options':"data:[{value:'PENDING',text:'PENDING'},{value:'IN-PROCESS',text:'IN-PROCESS'},{value:'COMPLETED',text:'COMPLETED'}]"})
+          
+          +fitem('Inspected By',{name:'USER_ID', id:'~', class:'combobox', required:true,_sqlid:'admin^usercbo'})
+          
+          
+          +fitem('Qty',{name:'QTY', class:'numberspinner',precision:0, min:0, value:0, required:true})
+          +fitem('Top Coat Colour',{name:'COAT_COLOUR', class:'combobox', required:true})
+          +fitem('Coating Spec / Rev',{name:'COAT_SPEC_ID', class:'combobox', required:true})
+          +fitem('Quality Spec / Rev',{name:'QA_SPEC_ID', class:'combobox', required:true})
+          
+          +fitem('Batch ID',{ name:'TRACE_ID', class:'textbox', required:true})
+          +fitem('Serial Numbers',{name:'SERIAL_IDS', class:'textbox', 'data-options':"multiline:true",validType:['length[0,255]'], required:true})
+  
+      +panel('center')
+        +tabs(data-options="fit:true")
+          +tab-item("Order Info", {iconCls:"icon-app"})
+            +fitem('Part ID',{id:'PART_ID', class:'textbox', readonly:true})
+            +fitem('Sales Order / Line',{id:'SALES_ORDER_ID', class:'textbox',readonly:true})
+              +input({id:'SALES_ORDER_LINE_NO', class:'numberbox',precision:0, min:1,readonly:true})
+            +fitem('Customer ID',{id:'CUSTOMER_ID', class:'textbox',readonly:true})
+            +fitem('Customer PO',{id})
+            +fitem('Customer Part ID',{id:'CUST_PART_ID', class:'textbox',readonly:true})
+            +fitem('Part Description',{id:'CUST_PART_DESCRIPTION', class:'textbox',readonly:true})
+            +fitem('Project Name',{id:'USER_2', class:'textbox',readonly:true})
+            +fitem('Cust Prod / Proc ID',{id:'USER_1', class:'textbox',readonly:true})      
+      
+          +tab-item("Environment", {iconCls:"icon-bolt"})
+            table#enviro
+              tr.head
+                th Operation
+                th.center Start Blast
+                th.center Start Phos / Primer
+                th.center Start Coating
+                th.center Final Inspection
+              
+              tr.body
+                td Date & Time
+                td: +input({name:'ENV_START_BLAST',class:'datetimebox', required:true,'data-options':"editable:false"})
+                td: +input({name:'ENV_START_PRIMER',class:'datetimebox', required:false,'data-options':"editable:false"})
+                td: +input({name:'ENV_START_COAT',class:'datetimebox', required:true,'data-options':"editable:false"})
+                td: +input({name:'ENV_START_INSPECT',class:'datetimebox', required:true,'data-options':"editable:false"})
+                
+              tr.body
+                td Air Temp
+                td: +input({name:'ENV_AIR_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_AIR_PRIMER',class:'numberspinner',precision:0, suffix:' &deg;C', required:false})
+                td: +input({name:'ENV_AIR_COATING',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_AIR_INSPECT',class:'combobox comply','data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+  
+              tr.body
+                td Surface Temp
+                td: +input({name:'ENV_SURF_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_SURF_PRIMER',class:'numberspinner',precision:0, suffix:' &deg;C', required:false})
+                td: +input({name:'ENV_SURF_COAT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_SURF_INSPECT',class:'combobox comply','data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+  
+              tr.body#wetbulb
+                td Wet Bulb Temp
+                td: +input({name:'ENV_WET_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_WET_PRIMER',class:'numberspinner',precision:0, suffix:' &deg;C', required:false})
+                td: +input({name:'ENV_WET_COAT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_WET_INSPECT', id:'~', grpid:'#wetbulb', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+  
+              tr.body#drybulb
+                td Dry Bulb Temp
+                td: +input({name:'ENV_DRY_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DRY_PRIMER',class:'numberspinner',precision:0, suffix:' &deg;C', required:false})
+                td: +input({name:'ENV_DRY_COAT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DRY_INSPECT', id:'~', grpid:'#drybulb', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+  
+              tr.body#humid
+                td Relative Humidity
+                td: +input({name:'ENV_RH_BLAST',class:'numberspinner',precision:0, suffix:' %', required:true})
+                td: +input({name:'ENV_RH_PRIMER',class:'numberspinner',precision:0, suffix:' %', required:false})
+                td: +input({name:'ENV_RH_COAT',class:'numberspinner',precision:0, suffix:' %', required:true})
+                td: +input({name:'ENV_RH_INSPECT', grpid:'#humid', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+  
+              tr.body#dewpoint
+                td Dew Point Temp
+                td: +input({name:'ENV_DEW_BLAST',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DEW_PRIMER',class:'numberspinner',precision:0, suffix:' &deg;C', required:false})
+                td: +input({name:'ENV_DEW_COAT',class:'numberspinner',precision:0, suffix:' &deg;C', required:true})
+                td: +input({name:'ENV_DEW_INSPECT', grpid:'#dewpoint', class:'combobox comply','data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]", required:true})
+                
+            +v-group('Notes')
+              +input({name:'ENV_NOTES', class:'textbox spec', multiline:'true'})
+              ul.checklist
+  
+          +tab-item("Pre-Inspect", {iconCls:"icon-notes"})
+            +input({class:'textbox spec', name:'PRE_NOTES', 'data-options':"multiline:true"})
+            ul.checklist
+            
+          +tab-item("Surface", {iconCls:"icon-bhave"})
+            div.two()
+              div
+                +v-group('Air Cleanliness')
+                  +fitem('Blast Air',{name:'SURF_AIR', class:'combobox', required:true, 'data-options':"data:[{value:'CLEAN',text:'Clean'},{value:'NOT-CLEAN',text:'Not Clean'}]"}) 
+                  +fitem('Coating Air',{name:'SURF_COAT', class:'combobox', required:true, 'data-options':"data:[{value:'CLEAN',text:'Clean'},{value:'NOT-CLEAN',text:'Not Clean'}]"}) 
+    
+                +v-group('Solvent Pre-Clean')(id='surfsolv')
+                  +fitem('Type',{name:'SURF_SOLV_TYPE', grpid:'#surfsolv', class:'combobox',})
+                  +fitem('Amount Used (KG)',{name:'SURF_SOLV_KG', class:'numberspinner', precision:1, min:0,value:0})  
+    
+                +v-group('Blast / Grit')
+                  +fitem('Type / Size',{name:'SURF_BLAST_TYPE', class:'combobox', required:true})
+                  +fitem('Batch ID',{name:'SURF_BAST_BATCH', class:'textbox', required:true}) 
+              div
+                +v-group('Surface Anchor Profile')
+                  +fitem('Coupon (&mu;m)',{name:'SURF_ANCH_COUPON', class:'textbox', 'data-options':"validType:['csn','length[0,30]']"})
+                  +fitem('Part (&mu;m)',{name:'SURF_ANCH_PART', class:'textbox', 'data-options':"validType:['csn','length[0,30]']"})
+  
+                +v-group('Base Metal Readings')
+                  +fitem('Coupon (&mu;m)',{name:'SURF_BASE_COUPON', class:'textbox', 'data-options':"validType:['csn','length[0,30]']"})
+                  +fitem('Part (&mu;m)',{name:'SURF_BASE_PART', class:'textbox', 'data-options':"validType:['csn','length[0,30]']"})
+    
+                +v-group('Surface Cleanliness')
+                  +fitem('Specification',{name:'SURF_CLEAN_SPEC', class:'textbox', value:'SSPC-SP 5 / SA-3', readonly:true})
+                  +fitem('Compliance',{name:'SURF_COMPLY', required:true, class:'combobox comply', 'data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]"}) 
+          
+          +tab-item("Application", {iconCls:"icon-edit"})
+            div.two()
+  
+              +v-group('Phosphate')(id='appphos')
+                +fitem('Manufacturer',{name:'APP_PHOS_MFG', grpid:'#appphos', class:'combobox', required:true})
+                +fitem('Type',{name:'APP_PHOS_TYPE', class:'combobox', required:true})
+                +fitem('Colour',{name:'APP_PHOS_COLOUR', class:'combobox', required:true})
+                +fitem('Batch ID',{name:'APP_PHOS_BATCH', class:'textbox', required:true})
+                +fitem('Expiry Date',{name:'APP_PHOS_EXPDATE', class:'datebox', required:true})
+              +v-group('Primer')(id='apppri')
+                +fitem('Manufacturer',{name:'APP_PRIMER_MFG', grpid:'#apppri', class:'combobox', required:true})
+                +fitem('Type',{name:'APP_PRIMER_TYPE', class:'combobox', required:true})
+                +fitem('Batch ID',{name:'APP_PRIMER_BATCH', class:'textbox', required:true})
+                +fitem('Mixing Date / Time',{name:'APP_POT_PRIMER', class:'datetimebox', required:true})
+                +fitem('Expiry Date',{name:'APP_PRIMER_EXPDATE', class:'datebox', required:true})
+              +v-group('Top Coat')(id='appcoat')
+                +fitem('Manufacturer',{name:'APP_COAT_MFG', grpid:'#appcoat', class:'combobox', required:true})
+                +fitem('Type',{name:'APP_COAT_TYPE', class:'combobox', required:true})
+                //-+fitem('Top Coat Colour',{name:'COAT_COLOUR', class:'combobox', required:true})
+                +fitem('Batch ID',{name:'APP_COAT_BATCH', class:'textbox', required:true})
+                +fitem('Mixing Date / Time',{name:'APP_POT_COAT', class:'datetimebox', required:true})
+                +fitem('Expiry Date',{name:'APP_COAT_EXPDATE', class:'datebox', required:true})        
+          +tab-item("Inspection", {iconCls:"icon-value"})
+            div.two()
+              div
+                +v-group('Dry Film Thickness')
+                  +fitem('Primer (&mu;m)',{name:'INS_DRY_PRIMER', class:'textbox', 'data-options':"validType:['csn','length[0,30]']"})
+                  +fitem('Top Coat (&mu;m)',{name:'INS_DRY_COAT', class:'textbox', 'data-options':"validType:['csn','length[0,30]']"})
+  
+                +v-group('Final Dry Thickness')
+                  +fitem('Coupon (&mu;m)',{name:'INS_FINAL_THICK', class:'textbox', 'data-options':"validType:['csn','length[0,30]']"})
+                  +fitem('Part (&mu;m)',{name:'INS_FINAL_PART', class:'textbox',  'data-options':"validType:['csn','length[0,30]']"})
+                  +fitem('Notes',{name:'INS_FINAL_NOTES', class:'textbox','data-options':"multiline:true"})
+              
+              div
+                +v-group('DFT Results')
+                  +fitem('Compliance',{name:'INS_DFT_COMPLY', required:true, class:'combobox comply', 'data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]"}) 
+                  +fitem('NCR / QN #',{id:'~', name:'INS_DFT_QNID', class:'searchbox', sbref:'ncr_ids'})
+  
+                +v-group('Solvent Wipe Test')
+                  +fitem('MEK',{name:'INS_WIPE_MEK', class:'combobox', 'data-options':"data:[{value:'YES',text:'Yes'},{value:'NO',text:'No'}]"})
+                  +fitem('Tolune',{name:'INS_WIPE_TOLUNE', class:'combobox', 'data-options':"data:[{value:'YES',text:'Yes'},{value:'NO',text:'No'}]"}) 
+                  +fitem('Other',{name:'INS_WIPE_OTHER', class:'textbox'})
+                  +fitem('Compliance',{required:true, name:'INS_WIPE_COMPLY', class:'combobox comply', 'data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]"}) 
+                  +fitem('NCR / QN #',{name:'INS_WIPE_QNID', class:'searchbox', sbref:'ncr_ids'})
+   
+          +tab-item("Visual", {iconCls:"icon-focus"})
+            div.two()
+              div          
+                +v-group('Phosphate')
+                  +fitem('Compliance',{name:'VIS_PHOS_COMPLY', required:true, class:'combobox comply', 'data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]"}) 
+                  +fitem('NCR / QN #',{id:'~', name:'VIS_PHOS_QNID', class:'searchbox', sbref:'ncr_ids'})
+  
+                +v-group('Primer')
+                  +fitem('Compliance',{name:'VIS_PRIMER_COMPLY', required:true, class:'combobox comply', 'data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]"}) 
+                  +fitem('NCR / QN #',{id:'~', name:'VIS_PRIMER_QNID', class:'searchbox', sbref:'ncr_ids'})
+  
+                +v-group('Top Coat')
+                  +fitem('Compliance',{name:'VIS_COAT_COMPLY', required:true, class:'combobox comply', 'data-options':"data:[{value:'N/A',text:'N/A'},{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]"}) 
+                  +fitem('NCR / QN #',{name:'VIS_COAT_QNID',  class:'searchbox', sbref:'ncr_ids'})
+          
+          +tab-item("Adhesion", {iconCls:"icon-trace"})
+            div#adhesion
+              +fitem('Thickness',{id:'ADH_METHOD', name:'~', required:true, class:'combobox', grpid:'#adhesion', 'data-options':"data:[{value:'N/A',text:'N/A'},{value:'>5',text:'More Than 5 mils',desc:'X cut @ 1.5” long with 30-45 deg. Angle'},{value:'<5',text:'Less Than 5 mils',desc:'0 to 2 mils (0 to 50 microns) = 11 lines @ 1mm apart and 2 to 5 mils (50 to 125 microns) = 6 lines @ 2mm apart'}]"}) 
+              +fitem('Method',{id:'ADH_DESC', name:'~', class:'textbox','data-options':"multiline:true", readonly:true})
+              +fitem('Compliance',{name:'ADH_COMPLY', required:true, class:'combobox comply', 'data-options':"data:[{value:'ACCEPT',text:'Accept'},{value:'REJECT',text:'Reject'}]"}) 
+              +fitem('NCR / QN #',{name:'ADH_QNID', class:'searchbox', sbref:'ncr_ids'})

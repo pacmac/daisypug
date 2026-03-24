@@ -1,0 +1,81 @@
+{
+  "id": "tracedg",
+  "asdpx": "aed",
+  "rownumbers": false,
+  "fitColumns": true,
+  "singleSelect": true,
+  "striped": true,
+  "fit": true,
+  "columns": [
+    [
+      {
+        "field": "TRACE_ID",
+        "title": "Trace ID",
+        "width": 100,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "required": true
+          }
+        }
+      },
+      {
+        "field": "QTY",
+        "title": "Qty Rcv",
+        "width": 70,
+        "fixed": true,
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0,
+            "value": 0,
+            "readonly": false
+          }
+        }
+      },
+      {
+        "field": "L",
+        "title": "Length",
+        "width": 70,
+        "fixed": true,
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 1,
+            "readonly": false
+          }
+        }
+      },
+      {
+        "field": "W",
+        "title": "Width",
+        "width": 70,
+        "fixed": true,
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 1,
+            "readonly": false
+          }
+        }
+      },
+      {
+        "field": "H",
+        "title": "Height",
+        "width": 70,
+        "fixed": true,
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 1,
+            "readonly": false
+          }
+        }
+      }
+    ]
+  ]
+}

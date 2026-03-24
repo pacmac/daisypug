@@ -1,0 +1,49 @@
+extends ../content 
+block script 
+  +script("dqm",["js/qualification_man.js"])
+block content 
+  form#qualification.multi(_sqlid='dqm^qualification', asdpx='xa' mode="add" data-lbut="x" data-ebut="nsx").fit
+    .easyui-layout(data-options="fit:true")  
+      .easyui-panel(region="west" style="width:400px;background:#FAFAFA;")
+        +fitem('ID',{class:'easyui-combobox fkey fit',id:'~', name:'ID',_sqlid:'dqm^qualification_ids','data-options':"required:true"  })
+        +fitem('Type',{id:'~',name:'TYPE',class:'easyui-combobox',required:true,'data-options':'editable:false'})
+        +fitem('Class',{id:'~',name:'CLASS',class:'easyui-combobox',required:true,'data-options':'editable:false'})
+        +fitem('Description',{id:'~',name:'DESCRIPTION',class:'easyui-textbox'})
+        +fitem('Serial Number',{id:'~',name:'SERIAL_NO',class:'easyui-textbox'})
+        +fitem('Status',{id:'~',name:'STATUS',class:'easyui-combobox',required:true,'data-options':'editable:false'})
+
+      .easyui-panel(region="center")   
+        #gmtabs.easyui-tabs(fit="true")
+          div(title='Qualification' style="padding:12px 8px;" iconCls="icon-date")
+            +fitem('Method',{id:'~',name:'METHOD',class:'easyui-combobox',required:true,'data-options':'editable:false'})
+
+            +fieldset('Dates')
+              +fitem('Initial',{id:'~',name:'INITIAL_DATE',class:'easyui-datebox'})
+              +fitem('Expiry',{id:'~',name:'EXPIRY_DATE',class:'easyui-datebox'})
+            +fieldset('Periodic')  
+              +fitem('Freq Unit',{id:'~',name:'CYCLE_TYPE',class:'easyui-combobox',required:true,'data-options':"editable:false,data:[{text:'DAYS',value:'DAYS'},{text:'WEEKS',value:'WEEKS'},{text:'MONTHS',value:'MONTHS'}]"})
+              +fitem('Freq Value',{id:'~',name:'CYCLE_TIME',class:'easyui-numberspinner',precision:0,value:1})
+
+              
+            +fieldset('Last') 
+              +fitem('Completed',{id:'~',name:'COMPLETED_DATE',class:'easyui-datebox'})
+              +fitem('Doc Ref',{id:'~',name:'DOC_REF',class:'easyui-textbox'})
+              +fitem('Done by',{id:'~',name:'DONE_BY',class:'easyui-textbox'})
+            +fieldset('Next') 
+              +fitem('Due Date',{id:'~',name:'DUE_DATE',required:true,class:'easyui-datebox'})
+              +fitem('Due Alert Days',{id:'~',name:'DUE_DATE_ALERT_DAYS',class:'easyui-numberspinner',precision:0,value:1})
+
+          div(title='Specification' iconCls="aicon-page")
+            #dg_spec
+      
+          div(title='Results' fit="true" iconCls="aicon-clipboard")
+            #dg_result
+
+          div#Main(title='Attachments' fit="true" iconCls="icon-pclip")
+            #qmfiles.easyui-filegrid(data-options="fit:true")
+
+          div(title='User Fields' iconCls="aicon-list") 
+            fieldset(style="margin-top:12px;")
+              +fitem('UDF Layout',{id:'UDF_LAYOUT_ID',class:'easyui-combobox', name:'UDF_LAYOUT_ID'})
+            fieldset#udf
+              +udf

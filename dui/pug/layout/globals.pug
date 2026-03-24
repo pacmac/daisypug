@@ -1,0 +1,38 @@
+-
+  /*
+    Server-provided locals (pugData from helpers.js + route handler):
+      $        : object  — global config ($.bhave, $.codata, $.runmode, etc.)
+      fn       : object  — helper functions (license.moden, pug.jsonRead)
+      udata    : object  — user data (session.udata)
+      session  : object  — user session
+      req      : object  — Express request
+      title    : string  — page title
+      bhave    : object  — page-specific behavior (safety net default: {})
+      ronly    : bool    — read-only flag (safety net default: false)
+      data     : object  — page-specific data (safety net default: {})
+      mobile   : bool    — mobile mode flag
+
+    Config locals (from config.yaml):
+      themes, layout, menu_render, surface
+
+    Client-side data (via /api/init):
+      menus, reps, codata, _bhave, runmode, isdev, debug, idlemin, planplus
+  */
+
+  //- Cache-busting helper — appends server start timestamp to script URLs
+  function iscache(src){
+    return src+'?_='+$.stats.start.getTime().toString()
+  }
+
+  //- User data — ensure defaults for templates that reference udata properties
+  udata = udata || {userid:''}
+  udata.theme = udata.theme || 'default'
+  udata.tasks = 0;
+
+  //- EUI dynamic paths (jQuery EasyUI library)
+  $.euiver = $.euiver || '1.4.4';
+  var epath = `/js3/jquery-easyui-${$.euiver}/`;
+  var tpath = `${epath}/themes/${udata.theme}/`
+
+  //- Auth flag
+  var isauth = true;

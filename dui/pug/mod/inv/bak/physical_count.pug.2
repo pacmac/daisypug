@@ -1,0 +1,38 @@
+extends ../content 
+
+block content
+  +vsplit('400px')
+    +panel('west')
+      +form#physical_count(class='multi fit form', _sqlid='inv^physical_count', asdpx='adx')
+        //- [MANUAL FIX] +split inside +form — causes double margins. Move the split above the +form. Downgraded to +layout until fixed.
+        +layout
+          +panel('north', { style: "height:800px" })
+
+            +fitem('Physical Count ID',{id:'~', name:'PHYSICAL_COUNT_ID',class:'combobox fkey fit navi autonum', _sqlid:'inv^physical_count_ids' , panelWidth:'230px', validType:['length[1,30]'],'data-options':"groupField:'STATUS'"})
+            +fitem('Start Date',{id:'~',name:'START_DATE', class:'datebox today'})
+            +fitem('Inventory Lock',{id:'~', name:'INVENTORY_LOCK', required:true, class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+            +fitem('Cycle Count',{id:'~', name:'CYCLE_COUNT', required:true, class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+            
+            .fbuts.center
+              a.linkbutton#endcount(icon='icon-verified' style="margin-left:10px;margin-top:5px") End Count
+
+            +fitem('User Password',{'id':'pwd',class:'textbox',type:'password'})
+            +fieldset('End Count')
+              +fitem('Date',{'id':'~',name:'END_DATE', class:'datebox'})
+              +fitem('User',{'id':'~',name:'END_COUNT_USER',class:'textbox',readonly:true})
+            +fieldset('Part')
+              +fitem('Part ID',{id:'~',name:'PART_ID',class:'textbox '})
+              +fitem('Product Code',{id:'~',name:'PRODUCT_CODE', class:'combobox', _sqlid:'vwltsa^productcodeid'}) 
+              +fitem('Traceable',{id:'~',name:'TRACEABLE', class:'combobox ','data-options':"data:[{value:'',text:'All', selected:true},{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+              +fitem('Dimensions',{id:'~',name:'DIM_TRACKED', class:'combobox ','data-options':"data:[{value:'',text:'All', selected:true},{text:'Yes',value:'Y'},{text:'No',value:'N'}]"})
+              +fitem('Part Class',{id:'~',name:'PART_CLASS_ID', class:'combobox ','data-options':"data:[ {value:'',text:'All', selected:true}, {value:'FG',text:'Finished Goods'},{value:'COMP',text:'Component'},{value:'MAKE_STAGED',text:'Make Staged'}, {value:'MAKE_NOSTAGE',text:'Make Unstaged'}]"})
+            .fitem(style="margin-top:12px")
+              +label('Notes')
+              +input({eui:'textbox',id:'~', name:'NOTES','data-options':"multiline:true", validType:['length[1,255]'], style:'height:150px;width:345px'})       
+    +panel('center')
+      div#shipdiv
+        +datagrid#lines
+block script
+  +script("inv",['js/physical_count.js'])
+  script.
+    console.warn('[audit] physical_count L7: +split inside +form — causes double margins. Move the split above the +form. Downgraded to +layout until fixed.')

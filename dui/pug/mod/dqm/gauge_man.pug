@@ -1,0 +1,99 @@
+extends ../content
+block script
+  script: include js/gauge_man.js
+block content
+  form#gauge.multi(_sqlid='dqm^gauges', asdpx='xa' mode="add" data-lbut="x" data-ebut="nsx").fit
+    +vsplit('400px')
+      +panel.bg-base-200('west')
+        input(type='hidden' name='NUMBERING')#NUMBERING
+        +fitem('Asset ID',{id:'GAUGE_ID', name:'ID', class:'searchbox fkey fit navi', sbref:'gauge_ids', panelWidth:'230px', validType:['length[1,30]']})
+        +fitem('Asset Type',{id:'~',name:'GAUGE_TYPE',class:'combobox',_sqlid:'dqm^gaugeType',required:'required','data-options':"editable:false"})
+        +fitem('Asset Class',{name:'GAUGE_CLASS',class:'combobox','data-options':"validType:['inList'],editable:false,data:[{value:'ref',text:'Reference'},{value:'master',text:'Master'}, {value:'gauge',text:'Working Gauge'}, {value:'facility',text:'Facility Equipment'}, {value:'Licenses',text:'Licenses'}],panelHeight:'auto'"})
+        +fitem('Description',{id:'~',name:'DESCRIPTION'})
+        +fitem('Owner ID',{name:'DEPARTMENT_ID',class:'combobox',_sqlid:'dqm^department','data-options':"validType:['inList'],editable:false"})
+        +fitem('Ownership',{id:'OWNER_TYPE',name:'OWNER_TYPE',class:'combobox',required:'required','data-options':"validType:['inList'],editable:false,data:[{value:'short',text:'Rental, Short Term'},{value:'long',text:'Rental, Long Term'}, {value:'owned',text:'Self Owned'}],panelHeight:'auto'"})
+        +fitem('Store / Location',{name:'LOCATION',class:'textbox'})
+        +fitem('Received Date',{name:'ACQUIRED_DATE',class:'datebox today',readonly:'readonly'})
+        +fitem('Dispose / Return Date',{name:'RETURN_DATE',class:'datebox',readonly:'readonly'})
+        +fitem('Serial Number',{name:'SERIAL_NO',class:'textbox'})
+        +fitem('Plan ID',{name:'PLAN_ID',id:'~',class:'combobox'})
+        +fitem('Last Transaction',{id:'LAST_TX',class:'textbox',readonly:'readonly'})
+        +fitem('Status',{id:'STATUS',name:'STATUS',class:'combobox',required:'required',_sqlid:'dqm^gaugestatusid_gaugeman','data-options':"editable:false,validType:['inList']"})
+
+      +panel('center')
+        +tabs#gmtabs
+          +tab-item('Calibration', {iconCls:'icon-date', style:'padding:12px 8px'})
+            +fitem('Calibration Method',{name:'CAL_TYPE',class:'combobox','data-options':"validType:['inList'],editable:false,panelHeight:'auto',data:[{value:'VERIFY',text:'VERIFY ONLY'},{value:'TEST',text:'INTERNAL TEST'},{value:'EXTERNAL',text:'EXTERNAL TEST'}]",required:'required'})
+
+            +v-group('Initial Calibration')
+              +fitem('First Calibration',{id:'~',name:'CALDAYS_1',class:'numberspinner',precision:'0',suffix:' Days'})
+              +fitem('Second Calibration',{id:'~',name:'CALDAYS_2',class:'numberspinner',precision:'0',suffix:' Days'})
+
+            +v-group('Periodic Calibration')
+              +fitem('Frequency Units',{id:'CYCLE_TYPE',name:'CYCLE_TYPE',class:'combobox','data-options':"data:[{text:'DAYS',value:'DAYS'},{text:'WEEKS',value:'WEEKS'},{text:'MONTHS',value:'MONTHS'}],editable:false",required:'required',value:'MONTHS'})
+              +fitem('Frequency Value',{id:'~',name:'CYCLE_TIME',class:'numberspinner',precision:'0',required:'required',value:'1'})
+              +fitem('Due Alert Days',{id:'~',name:'DUE_DATE_ALERT_DAYS',class:'numberspinner',precision:'0',required:'required'})
+
+            +v-group('Last Calibration')
+              +fitem('Completed Date',{id:'~',name:'LAST_CAL',class:'datebox',readonlyx:'readonly'})
+              +fitem('Doc. Reference',{id:'~',name:'DOC_REF',class:'textbox',editable:'false'})
+              +fitem('Calibrated By',{id:'~',name:'CAL_BY',class:'textbox',readonlyx:'readonly'})
+
+            +v-group('Next Calibration')
+              +fitem('Due Date',{id:'~',name:'DUE_DATE',class:'datebox'})
+              +fitem('Usage Count',{id:'~',name:'CYCLE_COUNT',class:'numberbox',readonly:'readonly',value:'0'})
+              +fitem('Total Count',{id:'~',name:'TOTAL_COUNT',class:'numberbox',readonly:'readonly',value:'0'})
+
+          +tab-item('Specification', {iconCls:'file-text'})
+            +fitem('Manufacturer',{name:'MANUFACTURER',class:'textbox'})
+            +fitem('Model',{class:'textbox',name:'MODEL'})
+            +fitem('Operating Range',{id:'RANGE',class:'textbox',name:'OP_RANGE'})
+            +fitem('Operating Tolerance',{name:'TOLERANCE',class:'textbox'})
+            +fitem('Notes / Specs',{name:'NOTES',class:'textarea',style:'height:150px'})
+
+          +tab-item('Test Results', {iconCls:'icon-doc-ok'})
+            +hsplit('auto')
+              +panel('north')
+                .flex.items-center.gap-2.p-1.flex-wrap
+                  .flex.items-center.gap-1
+                    label.font-bold.whitespace-nowrap Test ID
+                    select#calids.select.select-bordered.select-xs.navi(style="width:100px")
+                  .flex.items-center.gap-1
+                    label.font-bold Status
+                    input#teststatus.input.input-bordered.input-xs(style="width:70px" readonly="readonly")
+                  .flex.items-center.gap-1
+                    label.font-bold Date
+                    input#caldate.input.input-bordered.input-xs(style="width:80px" readonly="readonly")
+                  .flex.items-center.gap-1
+                    label.font-bold.whitespace-nowrap Seq No
+                    select#calseq.select.select-bordered.select-xs(style="width:140px" readonly="readonly")
+                  button#dg2excel.btn.btn-xs.btn-ghost(disabled) Excel
+              +panel('center').bg-base-200.noborder(style="padding:8px")
+                +datagrid#dgtests
+
+          +tab-item('Attachments', {iconCls:'icon-pclip'})
+            +filegrid#gmfiles(data-options="fit:true")
+
+          +tab-item('User Fields', {iconCls:'icon-list'})
+            +v-group('UDF Group',{style:'margin-top:10px;'})
+              +fitem('UDF Layout',{id:'UDF_LAYOUT_ID',class:'combobox', name:'UDF_LAYOUT_ID', _sqlid:'admin^udfid'})
+              +udf
+
+          +tab-item('Rental', {iconCls:'icon-money'})
+            +custom('oms')
+              +oms_gauge_man_rental()
+
+  div.hidden
+    #addmenu(style="display:none")
+      div(name="GaugeType" data-options="iconCls:'icon-gauge'") GaugeType
+        div.no-icon
+
+    +modal#gaugerenameopt(title="Asset Rename" titlebar data-options="closed:true,modal:true" bordered max-w='sm')
+      form#gauge_rename
+        +fitem('Old ID',{id:'RENAME_GAUGE_ID',class:'textbox upper',required:true})
+        +fitem('New ID',{id:'NEW_GAUGE_ID',name:'',class:'textbox upper',required:true, 'data-options':"validType:'length[1,50]'"})
+
+        div(style="text-align:center;margin-top:12px")
+          +h-group()
+            +button('Rename', {id:'gaugerenamebtn', size:'xs', color:'primary'})
+            +button('Cancel', {id:'close', size:'xs', 'data-options':"onClick:function(){$('#gaugerenameopt').dialog('close')}"})

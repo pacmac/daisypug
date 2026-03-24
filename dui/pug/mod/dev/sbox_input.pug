@@ -1,0 +1,138 @@
+extends ../content
+
+block append head
+  style.
+    /* Sandbox: size label.input wrapper to match existing form input height */
+    form label.input {
+      height: var(--input-h);
+      min-height: var(--input-h);
+      font-size: var(--input-fs);
+    }
+
+    /* === Pattern A: Fieldset — label left, input right === */
+    form fieldset.fieldset {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      padding: 0;
+      margin-bottom: 0.25rem;
+    }
+    form fieldset.fieldset .fieldset-legend {
+      width: var(--fitem-label-w);
+      min-width: var(--fitem-label-min);
+      flex-shrink: 0;
+      font-size: var(--input-fs);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0;
+    }
+    form fieldset.fieldset label.input,
+    form fieldset.fieldset select.select {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* === Pattern B: Floating label === */
+    .sbox-floating .floating-label {
+      margin-bottom: 0.25rem;
+    }
+    .sbox-floating .floating-label .input {
+      width: 100%;
+      height: var(--input-h);
+      min-height: var(--input-h);
+      font-size: var(--input-fs);
+    }
+    .sbox-floating .floating-label .select {
+      width: 100%;
+      font-size: var(--input-fs);
+    }
+
+    /* === Pattern C: Inline span.label inside label.input === */
+    .sbox-inline label.input {
+      margin-bottom: 0.25rem;
+      width: 100%;
+    }
+
+    /* === Section headers === */
+    .sbox-heading {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.5;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid oklch(var(--bc) / 0.1);
+    }
+
+block content
+  +vsplit('25%')
+    //- LEFT: Three DaisyUI v5 native patterns
+    +panel('west', { title: 'DaisyUI v5 — Label Patterns' })
+      +form
+        //- ─── Pattern A: fieldset.fieldset + legend ───
+        .sbox-heading A. Fieldset + Legend (label left, input right)
+
+        fieldset.fieldset
+          legend.fieldset-legend Part ID
+          label.input.input-bordered
+            input(type="text" name="A_PART_ID" placeholder="Part ID")
+
+        fieldset.fieldset
+          legend.fieldset-legend Search
+          label.input.input-bordered
+            svg.h-4.w-4.opacity-50(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2")
+              circle(cx="11" cy="11" r="8")
+              line(x1="21" y1="21" x2="16.65" y2="16.65")
+            input.grow(type="search" name="A_SEARCH" placeholder="Search parts...")
+
+        fieldset.fieldset
+          legend.fieldset-legend Status
+          select.select.select-bordered
+            option(disabled selected) Select...
+            option(value="A") Active
+            option(value="I") Inactive
+
+        //- ─── Pattern B: floating-label ───
+        .sbox-heading.mt-4 B. Floating Label (label animates up on focus)
+
+        .sbox-floating
+          label.floating-label
+            span Part ID
+            input.input.input-bordered(type="text" name="B_PART_ID" placeholder="Part ID")
+
+          label.floating-label
+            span Search
+            input.input.input-bordered(type="search" name="B_SEARCH" placeholder="Search parts...")
+
+          label.floating-label
+            span Status
+            select.select.select-bordered
+              option(disabled selected) Select...
+              option(value="A") Active
+              option(value="I") Inactive
+
+        //- ─── Pattern C: inline span.label inside label.input ───
+        .sbox-heading.mt-4 C. Inline Label (span.label inside input wrapper)
+
+        .sbox-inline
+          label.input.input-bordered
+            span.label Part ID
+            input.grow(type="text" name="C_PART_ID" placeholder="Enter value")
+
+          label.input.input-bordered
+            span.label $
+            input.grow(type="text" name="C_PRICE" placeholder="0.00")
+
+          label.input.input-bordered
+            input.grow(type="text" name="C_DOMAIN" placeholder="domain name")
+            span.label .com
+
+    //- RIGHT: Current mixin output for comparison
+    +panel('east', { title: 'Current Mixin — +fitem()' })
+      +form
+        +fitem('Part ID', {id:'~', name:'PART_ID', class:'textbox', placeholder:'Part ID'})
+        +fitem('Search', {id:'~', name:'SEARCH', class:'searchbox', placeholder:'Search parts...'})
+        +fitem('Status', {id:'~', name:'STATUS', class:'combobox', 'data-options':"data:[{text:'Active',value:'A'},{text:'Inactive',value:'I'}]"})

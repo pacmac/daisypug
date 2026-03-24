@@ -1,0 +1,1 @@
+$('#sa_nng form.multi').on('loadDone',function(){ setTimeout(function(){butEn('sx')}); })

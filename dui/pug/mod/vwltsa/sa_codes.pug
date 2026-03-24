@@ -1,0 +1,115 @@
+
++tabs#lists(data-options="fit:true, tabPosition:'left'" )
+
+  #sa_nng( title='Next Numbers')
+    form.multi(_sqlid='vwltsa^nngall', asdpx='ax')
+      +fitem('Next Number ID',{id:'NNG_TYPE',name:'TYPE', _sqlid:'vwltsa^nng' ,required:true, 'data-options':"validType:'length[1,15]'",class:'combobox fkey fit' })
+      +fitem('Description',{id:'NNG_DESC',name:'DESCRIPTION', 'data-options':"validType:'length[1,255]'",class:'textbox' })
+      +fitem('Prefix',{id:'NNG_PREFIX',name:'PREFIX', 'data-options':"validType:'length[1,8]'",class:'textbox' })
+      +fitem('Next Number',{id:'NNG_NEXT',name:'NEXT_NUMBER', precision:0,min:1,class:'numberspinner' })
+      
+      +fitem('Suffix',{name:'SUFFIX', class:'combobox','data-options':"data:[{text:'None',value:''},{text:'Year 4 Digits',value:'$Y4'},{text:'Year 2 Digits',value:'$Y2'},{text:'Month',value:'$M'},{text:'Month Name',value:'M3'},{text:'-Year 4 Digits',value:'-$Y4'},{text:'-Year 2 Digits',value:'-$Y2'},{text:'-Month',value:'-$M'},{text:'-Month Name',value:'-M3'},{text:'YYMMDD',value:'YYMMDD'},{text:'YYYYMMDD',value:'YYYYMMDD'},{text:'-YYMMDD',value:'-YYMMDD'},{text:'-YYYYMMDD',value:'-YYYYMMDD'}]", default:'$Y4' })
+      
+      +fitem('Suffix User Defined',{id:'SUFFIX_UDF',name:'SUFFIX_UDF',class:'textbox' ,'data-options':"validType:'length[1,5]'"})
+      +fitem('Decimal Digits',{name:'DECIMAL_PLACES',class:'numberspinner' ,value:1,min:1,max:10,precision:0})
+      +fitem('Table Name',{id:'TABLE_NAME1', name:'TABLE_NAME', required:true, readonly:true, class:'combobox'})
+      +fitem('Column Name',{id:'COLUMN_NAME1',name:'COLUMN_NAME', required:true ,readonly:true, class:'combobox'})
+
+      script.
+        $('#sa_nng form.multi').on('loadDone',function(){ setTimeout(function(){butEn('sx')}); })  
+        
+  #sa_cust(title='Customers')
+    form.multi(_sqlid='vwltsa^custall', asdpx='adx')
+      div.two
+        div(style="width:420px;") 
+          +fitem('Customer ID',{name:'ID', _sqlid_:'custid', class:'combobox fkey',validType:['length[1,15]']})
+          +fitem('Name',{name:'NAME', class:'textbox' , validType:['length[1,80]']})
+          +fitem('Currency',{name:'CURRENCY_ID', class:'combobox' , _sqlid:'admin^curr',required:true,'data-options':"editable:false"})
+          +fitem('GST Code',{name:'GST_ID', id:'~', class:'combobox' , _sqlid:'admin^gst',required:true,'data-options':"editable:false"})
+
+          +fieldset('Main',{style:'margin-top:12px;'})
+            +fitem('Address 1',{name:'ADDR_1', class:'textbox' ,validType:['length[1,50]']})
+            +fitem('Address 2',{name:'ADDR_2', class:'textbox' ,validType:['length[1,50]']})
+            +fitem('Address 3',{name:'ADDR_3', class:'textbox' ,validType:['length[1,50]']})
+          
+          +fieldset('COC',{style:'margin-top:12px;'})
+            +fitem('Address 1',{name:'COC_ADDR_1', class:'textbox' ,validType:['length[1,50]']})
+            +fitem('Address 2',{name:'COC_ADDR_2', class:'textbox' ,validType:['length[1,50]']})
+            +fitem('Address 3',{name:'COC_ADDR_3', class:'textbox' ,validType:['length[1,50]']})
+            +fitem('Email',{name:'COC_EMAIL', class:'textbox',validType:['email']})
+        div
+          +fieldset('Contact',{style:'margin-top:12px;'})
+            +fitem('Person',{name:'CONTACT_PERSON', class:'textbox',validType:['length[1,80]']})
+            +fitem('Phone',{name:'CONTACT_PHONE', class:'textbox',validType:['length[1,80]']})
+            +fitem('Fax',{name:'CONTACT_fax', class:'textbox',validType:['length[1,80]']})
+            +fitem('Email',{name:'CONTACT_EMAIL', class:'textbox',validType:['email']})
+            +fitem('Subscribe To Events',{name:'SUBSCRIBE_EVENT', class:'combobox','data-options':"data:[{text:'YES',value:'Y'},{text:'NO',value:'N', selected:true}],editable:false"})
+          
+          +fieldset('Bill-To',{style:'margin-top:12px;'})
+            +fitem('Person',{name:'BILL_TO_PERSON', class:'textbox',validType:['length[1,80]']})
+            +fitem('Phone',{name:'BILL_TO_PHONE', class:'textbox',validType:['length[1,80]']})
+            +fitem('Fax',{name:'BILL_TO_FAX', class:'textbox',validType:['length[1,80]']})
+            +fitem('Email',{name:'BILL_TO_EMAIL', class:'textbox',validType:['email']})
+  
+ 
+  #sa_department(title='Departments')
+    form.multi(_sqlid='vwltsa^depall' asdpx='adx')
+      +fitem('Department ID',{name:'ID', _sqlid_:'depid2', class:'combobox fkey',validType:['length[1,15]']})
+      +fitem('Description',{name:'DESCRIPTION', class:'textbox' ,validType:['length[1,80]']})
+      +fitem('Head ID',{name:'HEAD_ID', _sqlid_:'empid', class:'combobox' ,'data-options':"formatter: cbocols, widths:['35%','55%'],editable:false"})
+
+  #sa_indi(title='Indirect Codes' data-options="fit:true")
+    form.multi(_sqlid='vwltsa^indall' asdpx='adx')
+      +fitem('Indirect ID',{name:'ID', _sqlid_:'indid', class:'combobox fkey',validType:['length[1,15]']})
+      +fitem('Description',{name:'DESCRIPTION', class:'textbox' ,validType:['length[1,40]']})
+  
+  #sa_devn(title='Deviation Codes')
+    form.multi(_sqlid='vwltsa^devall' asdpx='adx')
+      +fitem('Deviation ID',{name:'ID', _sqlid_:'devid', class:'combobox fkey',validType:['length[1,15]']})
+      +fitem('Description',{name:'DESCRIPTION', class:'textbox' ,validType:['length[1,80]']})
+
+style.
+  
+  .fitem .ftype{
+    width:75px;
+    margin-left:12px; 
+  }
+  
+  .fitem .w12 {
+    width:12px;
+    display:inline-block
+  }
+        
+script.
+  
+  $( document ).ready(function() {
+    
+    $('form').on('loadDone',function(){
+      var asdpx = $(this).attr('asdpx');
+      butEn(asdpx+'s');
+    })
+    
+    $('#TABLE_NAME').combobox({
+      onSelect:function(rec){
+        var cbo = $('#COLUMN_NAME');
+        var url = '/?_func=get&_combo=y&_sqlid=dqm^columnname&TABLE_NAME='+rec.value;
+        cbo.combobox('clear');
+        cbo.combobox('reload',url);
+      }
+    })
+
+    $('#lists').tabs({
+      onSelect:function(tit,idx){
+        tabcombos($(this));
+        var frm = $(this).tabs('getSelected').find('form').first();
+        frm.form('reset');
+        setTimeout(function(){butEn(frm.attr('asdpx'));},100)
+      }
+    }) 
+    
+
+    });
+  
+  
+
+  

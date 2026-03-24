@@ -1,0 +1,379 @@
+#job_planner {
+  display: flex;
+  flex-direction: column;
+}
+
+#job_planner table {
+  border-bottom:1px solid var(--color-base-300);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Override DaisyUI .table padding — planner needs zero cell padding for density */
+#job_planner th,
+#job_planner td {
+  padding: 0;
+  vertical-align: top;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+#job_planner tbody tr td {
+  border-width: 1px 1px 0 0;
+  border-color: var(--color-base-300);
+  border-style: solid;
+  background-color: var(--color-base-100);
+}
+
+#job_planner tbody tr td div {
+  padding:0;
+}
+
+/* === Frozen columns via CSS sticky ===
+   Uses data-field selectors because hidden columns (active, class, desc)
+   exist in DOM with display:none — nth-child would target wrong columns.
+   min-width prevents table-layout:auto from shrinking below JSON widths.
+   background-color on tbody td is set globally above (base-100). */
+#job_planner th[data-field="rid"],
+#job_planner td[data-field="rid"] {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  min-width: 100px;
+}
+#job_planner th[data-field="units"],
+#job_planner td[data-field="units"] {
+  position: sticky;
+  left: 100px;
+  z-index: 2;
+  min-width: 50px;
+}
+#job_planner th[data-field="unp"],
+#job_planner td[data-field="unp"] {
+  position: sticky;
+  left: 150px;
+  z-index: 2;
+  min-width: 132px;
+  border-right: 2px solid var(--color-base-300);
+}
+/* Header row sticky on top */
+#job_planner thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: var(--color-base-200);
+}
+/* Corner cells (frozen + header) need highest z-index */
+#job_planner thead th[data-field="rid"],
+#job_planner thead th[data-field="units"],
+#job_planner thead th[data-field="unp"] {
+  z-index: 4;
+}
+
+#job_planner tbody tr td ul.ulbar {
+} 
+
+#job_planner tbody tr td[data-field="bar"] {
+  width:110px;
+  text-align:left;
+}
+
+#job_planner tbody tr td[data-field="bar"] ul > li {
+  xbackground-color:#CAFFD8;  
+}
+
+#job_planner tbody tr td div ul.ulbar > li {
+  padding: 0 0 0 4px;
+  cursor:hand;
+  width:auto;
+  display: block;
+  border-width:0 0 1px 0;
+  z-index: 100000 !important;
+}
+
+ul.ulbar > li:last-child {
+  border:0;  
+}
+
+#job_planner thead th[data-field] {
+  text-align:center;
+  padding: 2px 4px;
+  font-size: 11px;
+}
+
+div.prox {
+  border:1px solid red;
+  padding: 0 4px;
+  font-size: 0.8em;
+} div.prox span.info {
+  display: none;
+  }
+  
+  
+ul.ulbar li span {
+  display: inline-block;
+} ul.ulbar li span:first-child {
+  width: 115px;
+} ul.ulbar li span.info {
+  color:var(--color-error);
+  width: 26px;
+  text-align: right;
+}
+
+ul.ulbar li .tooltip-content{
+  color:var(--color-error);  
+}
+
+ul.ulbar li.days {
+  opacity: 0.5;
+} ul.ulbar li.bg-grn span.info {
+  display:none; 
+}
+
+#job_planner li.hover, #job_planner ul.ulbar li:hover {
+  opacity:1;
+  color: var(--color-primary) !important;
+  font-weight: 700 !important;
+}
+
+#job_planner li.maxrun.hover, #job_planner ul.ulbar li.maxrun:hover {
+  /*color: red !important;*/
+}
+
+ul.ulbar.capex {
+  border-width: 1px 1px 1px 1px;
+  border-style: solid;
+  border-color: var(--color-error);
+}
+
+ul.ulbar.capmax {
+  border-width: 1px 1px 1px 1px;
+  border-style: solid;
+  border-color: blueviolet;
+}
+
+
+/* Planner Version 2 */
+td.capoff {
+    background-color: var(--color-base-200);
+} td.capor {
+    background-color: var(--color-base-300);
+}
+
+div.datagrid-cell {
+    border-width:1px;
+    border-color:transparent;
+    border-style: solid;
+} div.datagrid-cell.capmax {
+    border-color: blueviolet !important;    
+} div.datagrid-cell.capex {
+    border-color: var(--color-error) !important;    
+} div.datagrid-cell.capdis {
+    border-color: transparent !important;    
+} 
+
+ul.ulbar.off {
+  xbackground-color: #EEEEEE;
+}
+
+ul.ulbar li.over {
+  position:relative;
+  top: 18px;
+}
+
+/*
+tr > td:nth-child(2n+0) ul.ulbar.capex {
+  border-left:none;  
+}
+*/
+
+/*
+#job_planner td > div > ul.capex + td > div > ul.capex {
+
+td:not(:first-child) ul.capex {
+  border-left:none;
+}
+*/
+
+.ind {
+  position:fixed;
+  font-size:1em;
+  width:10px;
+  height:10px;
+  display:none;
+  color:var(--color-error);
+}
+
+.datagrid-cell-c1-key {
+  margin-left:4px;  
+}
+
+.tooltip-content {
+  color:var(--color-error);
+}
+
+td.droppable.over {
+  border: 1px solid var(--color-primary) !important;
+  background-color: var(--color-base-200) !important;
+}
+
+td.cap-off {
+  background-color: var(--color-base-200);
+}
+
+ul.ulbar li.parop.focus {
+  border-right: 3px solid var(--color-base-content) !important;
+}
+
+ul.ulbar li.jfocus {
+  background-color: var(--color-base-300) !important;
+  color: var(--color-error) !important;
+  opacity:1;
+}
+
+ul.ulbar li.active {
+    background-image: url(../img/blu-0.5.png);
+    background-repeat: no-repeat;
+    background-size: 100% 0;
+  }
+  
+
+li.maxrun {
+    /*
+    background-color: #CCCCCC !important;
+    color: var(--color-base-100);
+    */
+}
+
+/* === Inline styles from sa_jobplan.pug === */
+
+#priowin tbody tr:hover {
+  background: var(--color-base-200);
+  color: var(--color-primary);
+  cursor: default;
+}
+
+a#stats {
+  line-height:30px;
+} ul#ulstats {
+  padding: 0 8px 0 8px;
+  list-style-type: none;
+  color: var(--color-base-content);
+} ul#ulstats li span {
+  display: inline-block;
+  width:75px;
+  color: var(--color-primary);
+} ul#ulstats li span:after {
+  content: ':';
+}
+
+.ulbar > li.group {
+  background-repeat: repeat;
+  background-size: 100%;
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, color-mix(in oklch, var(--color-base-content) 15%, transparent) 15px) repeat scroll 0 0;
+}
+
+ul.ulbar:not(.ultot):not(:empty) + ul.ulbar:not(:empty) {
+  border-top: 2px solid gray;
+}
+
+li.slock {
+  position: relative !important;
+}
+
+li.slock::before, li.slock::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-color: transparent;
+  border-style: solid;
+} li.slock::before {
+  border-width: 0.40em;
+  border-right-color: var(--color-base-300);
+  border-top-color: var(--color-base-300);
+} li.slock::after {
+  border-width: 0.40em;
+  border-right-color: var(--color-base-content);
+  border-top-color: var(--color-base-content);
+}
+
+/* === Job bar background colors — theme-aware ===
+   Light theme: soft pastels (original EUI look).
+   Dark theme: deeper tones with forced dark text for contrast.
+   Class names match bhave config (pln_col, act_col, flt_col, etc.) */
+
+:root {
+  --jp-red: oklch(0.82 0.08 15);
+  --jp-grn: oklch(0.88 0.10 145);
+  --jp-ora: oklch(0.86 0.08 65);
+  --jp-blu: oklch(0.86 0.08 250);
+  --jp-gry: oklch(0.88 0.00 0);
+  --jp-sil: oklch(0.96 0.00 0);
+  --jp-pur: oklch(0.82 0.10 305);
+  --jp-cyn: oklch(0.85 0.06 210);
+  --jp-yel: oklch(0.93 0.08 100);
+  --jp-brn: oklch(0.82 0.05 45);
+  --jp-bar-text: oklch(0.25 0 0);
+}
+
+[data-theme="dark"] {
+  --jp-red: oklch(0.45 0.12 15);
+  --jp-grn: oklch(0.45 0.12 145);
+  --jp-ora: oklch(0.48 0.10 65);
+  --jp-blu: oklch(0.45 0.10 250);
+  --jp-gry: oklch(0.40 0.00 0);
+  --jp-sil: oklch(0.35 0.00 0);
+  --jp-pur: oklch(0.45 0.12 305);
+  --jp-cyn: oklch(0.45 0.08 210);
+  --jp-yel: oklch(0.50 0.10 100);
+  --jp-brn: oklch(0.45 0.06 45);
+  --jp-bar-text: oklch(0.90 0 0);
+}
+
+.bg-red { background-color: var(--jp-red) !important; color: var(--jp-bar-text) !important; }
+.bg-grn { background-color: var(--jp-grn) !important; color: var(--jp-bar-text) !important; }
+.bg-ora { background-color: var(--jp-ora) !important; color: var(--jp-bar-text) !important; }
+.bg-blu { background-color: var(--jp-blu) !important; color: var(--jp-bar-text) !important; }
+.bg-gry { background-color: var(--jp-gry) !important; color: var(--jp-bar-text) !important; }
+.bg-sil { background-color: var(--jp-sil) !important; color: var(--jp-bar-text) !important; }
+.bg-pur { background-color: var(--jp-pur) !important; color: var(--jp-bar-text) !important; }
+.bg-cyn { background-color: var(--jp-cyn) !important; color: var(--jp-bar-text) !important; }
+.bg-yel { background-color: var(--jp-yel) !important; color: var(--jp-bar-text) !important; }
+.bg-brn { background-color: var(--jp-brn) !important; color: var(--jp-bar-text) !important; }
+.bg-clr { background-color: transparent !important; }
+
+/* Utility classes used by job planner JS */
+.whtgry { background: linear-gradient(var(--color-base-100), var(--color-base-300)); }
+.bold { font-weight: bold; }
+.center { text-align: center; }
+
+/* === Day-of-week header coloring (weekends orange text) === */
+#job_planner thead th span.dow_0,
+#job_planner thead th span.dow_6 {
+  color: orange;
+}
+
+/* === Compact job bar styling === */
+#job_planner ul.ulbar {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#job_planner ul.ulbar > li {
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#job_planner .datagrid-cell {
+  height: auto;
+  white-space: normal;
+  overflow: visible;
+}
+
+/* === Unplanned column — stretch to fill row height === */
+#job_planner td[data-field="unp"] .datagrid-cell ul.ulbar.unp {
+  overflow: auto;
+}

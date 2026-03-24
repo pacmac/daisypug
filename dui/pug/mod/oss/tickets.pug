@@ -1,0 +1,37 @@
+extends ../content
+block script
+  script: include js/tickets.js
+block content
+  +vsplit('400px')
+    +panel('west')
+      form#main(asdpx='ax' _sqlid='oss^ticket' mode="add")
+        +input({type:'hidden', name:'_stamp', value:'y'})
+        +fitem('Transaction ID',{name:'TX_ID', class:'numberbox', readonly:true})
+        +fitem('Status',{name:'STATUS', id:'~', class:'combobox', 'data-options':"editable:false, data:[{value:'PENDING',text:'Pending', selected:true},{value:'APPROVED',text:'Approved'}]"})
+        +fitem('TX Date',{name:'TX_DATE', class:'datebox today'})
+
+        +fitem('Customer ID',{name:'CUSTOMER_ID', id:'~', _sqlid:'oss^cust_ids', class:'combobox', required:true})
+        +fitem('Service Type',{name:'SERVICE_TYPE', id:'~', _sqlid:'oss^svctype_ids', class:'combobox rates', required:true})
+        +fitem('Service Class',{name:'SERVICE_CLASS', id:'~', _sqlid:'oss^svccls_ids', class:'combobox rates', required:true})
+        +fitem('Employee ID',{name:'TX_USER_ID', _sqlid:'admin^cbo_uid', class:'combobox upper', required:true})
+
+        +fitem('Start Date/Time',{id:'~', name:'TX_STARTDATE', class:'datebox today calchrs'})
+          +input({id:'~', name:'TX_STARTTIME', class:'timespinner now calchrs'})
+
+        +fitem('End Date/Time',{id:'~', name:'TX_ENDDATE', class:'datebox today calchrs'})
+          +input({id:'~', name:'TX_ENDTIME', class:'timespinner now calchrs'})
+
+        +fitem('Qty Processed',{id:'~', name:'TX_QTY', class:'numberspinner', 'data-options':"precision:2, value:0"})
+        +fitem('Hours Multiplier',{id:'~', name:'MULTIPLIER', class:'numberspinner calchrs', 'data-options':"value:1, min:0, max:10, precision:2, increment:0.1"})
+        +fitem('Misc Changes',{id:'~', name:'MISC_CHARGE', class:'numberbox', 'data-options':"precision:2, value:0"})
+
+        +fitem('Cost Per Piece',{id:'~', name:'RATE_PIECE', class:'numberbox rates', readonly:true, 'data-options':"precision:2, value:0"})
+        +fitem('Cost Per Hour',{id:'~', name:'RATE_HOUR', class:'numberbox rates', readonly:true, 'data-options':"precision:2, value:0"})
+        +fitem('Hours Worked',{id:'~', name:'HOURS_WORKED', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+        +fitem('Hours Charged',{id:'~', name:'HOURS_CHARGE', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+        +fitem('Total Charged',{id:'~', name:'TOTAL_CHARGE', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0"})
+
+        +fitem('Notes & Comments',{name:'NOTES', class:'multiline', style:'height:100px'})
+
+    +panel('center')
+      +datagrid#dgtickets

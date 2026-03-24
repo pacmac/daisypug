@@ -1,0 +1,46 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "vwltsa^basid_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "BASE_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",              "title": "Job ID",          "width": 100 },
+    { "field": "WO_CLASS",           "title": "Job Class",       "width": 100 },
+    { "field": "STATUS",             "title": "Status",          "width": 80 },
+    { "field": "CUSTOMER_ID",        "title": "Customer ID",     "width": 100 },
+    { "field": "SALES_ORDER_ID",     "title": "Sales Order ID",  "width": 120 },
+    { "field": "DESIRED_WANT_DATE",  "title": "Want Date",       "width": 100 },
+    { "field": "PART_ID",            "title": "Our Part ID",     "width": 120 }
+  ],
+  "filters": [
+    { "field": "WO_CLASS", "title": "Job Class", "editor":"textbox"
+    },
+    { "field": "STATUS", "title": "Status", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "R", "text": "Released" },
+            { "value": "U", "text": "Unreleased" },
+            { "value": "C", "text": "Closed" },
+            { "value": "X", "text": "Cancelled" }
+          ]
+        }
+      }
+    },
+    { "field": "CUSTOMER_ID", "title": "Customer ID", "editor": "searchbox","sbref":"customer_ids"
+  
+    },
+    { "field": "SALES_ORDER_ID", "title": "Sales Order ID", "editor": "textbox" },
+    { "field": "DESIRED_WANT_DATE", "title": "Want Date", "editor": "datebox" },
+    { "field": "PART_ID", "title": "Our Part ID", "editor": "textbox" }
+  ]
+}

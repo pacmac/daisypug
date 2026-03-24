@@ -1,0 +1,40 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^rentids_sbox",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "RENTAL_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "NCR ID", "width": 100 },
+ { "field": "STATUS", "title": "Status", "width": 100 },
+    { "field": "GAUGE_ID", "title": "Gauge ID", "width": 100 },
+    { "field": "LICENSOR_ID", "title": "Licensor ID", "width": 100 },
+    { "field": "LICENSOR_SERIAL", "title": "Licensor Serial", "width": 80 },
+    { "field": "LICENSOR_GAUGE_NO", "title": "Licensor Gauge ID", "width": 120 }
+  ],
+  "filters": [
+    { "field": "STATUS", "title": "STATUS",   "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            {"name":"OPEN","text":"Open","selected":"true"},
+      {"name":"RECEIVED","text":"Received"},
+      {"name":"RETURNED","text":"Returned"},
+      {"name":"CLOSED","text":"Closed"}
+          ]
+        }
+      } },
+    { "field": "GAUGE_ID", "title": "Gauge ID", "editor": "searchbox","sbref":"gauge_ids" },
+    { "field": "LICENSOR_ID", "title": "Licensor ID", "editor": "textbox" },
+    { "field": "LICENSOR_SERIAL", "title": "Licensor Serial", "editor": "textbox" },
+    { "field": "LICENSOR_GAUGE_NO", "title": "Licensor Gauge ID", "editor": "textbox" }
+  ]
+}

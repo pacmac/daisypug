@@ -1,0 +1,91 @@
+extends ../content 
+block script 
+  script: include js/comp_enquiry.js
+block style 
+  style.
+    .flex-grid {
+      display: flex;
+      padding: 12px 0 0 12px;
+    }
+    .col {
+      flex: 1;
+      max-width:300px;
+      width: 25%;
+    }
+
+    #enquirytb {
+      height:35px;
+      line-height:35px;
+      
+    } #enquirytb > a {
+      margin-left:12px;  
+    }
+    
+    .col .fitem label {
+      width:100px;
+    }
+    
+    .col .fitem .textbox.combo {
+      width: 100px !important;
+    }
+
+    .y, .textbox-text.y{
+      background: #FFB5B5;
+    }
+
+    .n, .textbox-text.n {
+      background: #CAFFD8;
+    }
+
+    .ALL, .textbox-text.ALL {
+      background: #D0E6FF;
+    }
+    
+    .late {
+      color: red;	 
+    }
+    .otd {
+      color:green;
+    }
+
+    .datagrid-header-row .datagrid-cell{
+      line-height:normal;
+      height:auto;
+      white-space:normal;
+    }
+    .datagrid-row-overxxx{
+          cursor: pointer;
+          background: #B0C4DE;
+    }
+
+  +hsplit('150px').no-border
+    +panel('north')
+      form#filters
+        .flex-grid
+
+          .col
+
+            +fitem('Document Type',{id:'~',name:'DOCUMENT_TYPE', class:'combobox', 'data-options':{editable:false,panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'NCR',text:'NCR'},{value:'CPAR',text:'CPAR'},{value:'CF',text:'CF'},{value:'CI',text:'CI'}]}})
+            +fitem('Create Year',{id:'~',name:'CREATE_YR',class:'combobox',_sqlid:'dqm^yearno',required:true,'data-options':'editable:false'})
+            +fitem('Status',{id:'STATUS',name:'~',class:'easyui-multibox', 'data-options':{panelHeight:'auto',data:[{value:'PENDING',text:'PENDING'},{value:'ASSIGNED',text:'ASSIGNED'},{value:'FOLLOWUP',text:'FOLLOWUP'},{value:'COMPLETED',text:'COMPLETED'},{value:'TO_REVIEW',text:'TO_REVIEW'},{value:'REJECTED',text:'REJECTED'},{value:'REVIEWED',text:'REVIEWED'},{value:'VERIFIED',text:'VERIFIED'}]}})
+            +fitem('Severity',{id:'SEVERITY',name:'~', eui:'combobox', 'data-options':{panelHeight:'auto',data:[{value:'LOW',text:'LOW'},{value:'MEDIUM',text:'MEDIUM'},{value:'HIGH',text:'HIGH'},{value:'CRITICAL',text:'CRITICAL'}]}})
+          .col
+            +fitem('Recur Probability',{id:'RECURRENCE',name:'~', eui:'combobox','data-options':{panelHeight:'auto',data:[{value:'RARE',text:'RARE'},{value:'OCCASIONAL',text:'OCCASIONAL'},{value:'FREQUENT',text:'FREQUENT'}]}})
+            +fitem('Disposition Matl',{eui:'combobox',name:'DISPOSITION_MATERIAL',id:'~'}) 
+            +fitem('Cause',{id:'~',name:'CAUSE',  class:'combobox','data-options':{default:'ALL',queryParams:{_cboall:'y'}}})
+            +fitem('Operator',{name:'OPERATOR',  class:'combobox',_sqlid:'vwltsa^empid','data-options':{default:'ALL',queryParams:{_cboall:'y'}}})
+          .col
+            +fitem('Customer Name',{name:'CUSTOMER_NAME', class:'textbox'})
+            +fitem('Job Ref',{name:'JOB_ID', class:'textbox'})
+
+            
+                 
+    +panel('center', { style: "padding:8px" })
+      #enquirytb
+        a#gofilt       
+        a#dg2excel
+        a#setall
+        a#setwidth
+        
+      +datagrid#enquiry
+      

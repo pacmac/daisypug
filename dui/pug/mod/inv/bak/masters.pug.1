@@ -1,0 +1,77 @@
+extends ../content
+block script
+  +script("inv",['js/masters.js'])
+block content
+  +tabs#lists(data-options="fit:true, tabPosition:'left'" )
+
+    #sa_nng( title='Next Numbers', iconCls="icon-app")
+      form.multi(_sqlid='inv^nngall', asdpx='ax')
+        +input({name:'ID', value:'INV', type:'hidden'})
+        +fitem('Next Number ID',{id:'NNG_TYPE',name:'TYPE', _sqlid:'inv^nng' ,required:true, 'data-options':"validType:'length[1,15]'",class:'combobox fkey fit' })
+        +fitem('Description',{id:'NNG_DESC',name:'DESCRIPTION', 'data-options':"validType:'length[1,255]'",class:'textbox' })
+        +fitem('Prefix',{id:'NNG_PREFIX',name:'PREFIX', 'data-options':"validType:'length[1,8]'",class:'textbox' })
+        +fitem('Next Number',{id:'NNG_NEXT',name:'NEXT_NUMBER', precision:0,min:1,class:'numberspinner' })
+        
+        +fitem('Suffix',{name:'SUFFIX', class:'combobox','data-options':"data:[{text:'None',value:''},{text:'Year 4 Digits',value:'$Y4'},{text:'Year 2 Digits',value:'$Y2'},{text:'Month',value:'$M'},{text:'Month Name',value:'M3'},{text:'-Year 4 Digits',value:'-$Y4'},{text:'-Year 2 Digits',value:'-$Y2'},{text:'-Month',value:'-$M'},{text:'-Month Name',value:'-M3'},{text:'YYMMDD',value:'YYMMDD'},{text:'YYYYMMDD',value:'YYYYMMDD'},{text:'-YYMMDD',value:'-YYMMDD'},{text:'-YYYYMMDD',value:'-YYYYMMDD'}]", default:'$Y4' })
+        
+        +fitem('Suffix User Defined',{id:'SUFFIX_UDF',name:'SUFFIX_UDF',class:'textbox' ,'data-options':"validType:'length[1,5]'"})
+        +fitem('Decimal Digits',{name:'DECIMAL_PLACES',class:'numberspinner' ,value:1,min:1,max:10,precision:0})
+        +fitem('Table Name',{id:'TABLE_NAME1', name:'TABLE_NAME', required:true, readonly:true, class:'combobox'})
+        +fitem('Column Name',{id:'COLUMN_NAME1',name:'COLUMN_NAME', required:true ,readonly:true, class:'combobox'})
+
+
+    #sa_unit(title='Units of Measure', iconCls="icon-measure")
+      form.multi(_sqlid='inv^unitsall', asdpx='adx')
+        +fitem('UOM ID',{name:'ID', _sqlid:'inv^unitsid', class:'combobox fkey',validType:['length[1,15]']})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox',validType:['length[1,30]']})
+    
+    #sa_vendor(title='Vendors' ,iconCls="icon-vendor")
+      form.multi.fit(_sqlid='inv^vendorall', asdpx='adx')
+        +layout({border:false})
+          +panel('north', { style: "height:170px;", collapsible: "false", border: "false" })
+            +fitem('Vendor ID',{name:'ID', _sqlid_:'vendorid', class:'combobox fkey',validType:['length[1,15]']})
+            +fitem('Name',{name:'NAME', class:'textbox' , validType:['length[1,50]']})
+            +fitem('Currency',{name:'CURRENCY_ID', class:'combobox' , _sqlid:'admin^curr',required:true,'data-options':"editable:false"})
+            +fitem('GST Code',{name:'GST_ID', id:'~', class:'combobox' , _sqlid:'admin^gst',required:true,'data-options':"editable:false"})
+            +fitem('Payment Terms',{name:'PAYMENT_TERM', id:'~',_sqlid:'inv^paymentTermid',  class:'combobox',required:true,'data-options':"editable:false"})
+
+          +panel('center', { style: "padding:8px;" })
+            +tabs#ptabs(data-options="fit:true")
+              div(title="Main")
+                +fitem('Address 1',{name:'ADDR_1', class:'textbox' ,validType:['length[1,50]']})
+                +fitem('Address 2',{name:'ADDR_2', class:'textbox' ,validType:['length[1,50]']})
+                +fitem('Address 3',{name:'ADDR_3', class:'textbox' ,validType:['length[1,50]']})
+
+              div(title="Contact")
+                +fitem('Person',{name:'CONTACT_PERSON', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Phone',{name:'CONTACT_PHONE', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Fax',{name:'CONTACT_FAX', class:'textbox' ,validType:['length[1,80]']})
+                +fitem('Email',{name:'CONTACT_EMAIL', class:'textbox' ,validType:['email']})
+              div(title="Bill-To")
+                +fitem('Person',{name:'BILL_TO_PERSON', class:'textbox',validType:['length[1,80]']})
+                +fitem('Phone',{name:'BILL_TO_PHONE', class:'textbox',validType:['length[1,80]']})
+                +fitem('Fax',{name:'BILL_TO_FAX', class:'textbox',validType:['length[1,80]']})
+                +fitem('Email',{name:'BILL_TO_EMAIL', class:'textbox',validType:['email']})
+              div(title="Notes")
+                .fitem(style="margin-top:0")
+                  label(style="margin-bottom:8px;left:-8px;") Notes
+                  +input({eui:'textbox',name:'NOTES','data-options':"multiline:true", style:'height:250px;width:345px'})
+    #sa_devn(title='Product Codes',iconCls="icon-app")
+      form.multi(_sqlid='inv^productcodeall' asdpx='adx')
+        +fitem('ID',{name:'ID', _sqlid_:'productcodeid', class:'combobox fkey',validType:['length[1,15]']})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox' ,validType:['length[1,80]']})
+    #quotepaymentterm(title='Payment Terms',iconCls="icon-app")
+      form.multi(_sqlid='inv^paymentTerms' asdpx='ax')
+        +fitem('ID',{name:'ID', _sqlid_:'paymentTermid', class:'combobox fkey fit',validType:['length[1,15]'],required:true})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox',validType:['length[1,30]']})   
+    if(1==2)
+      #sa_poappv(title='PO Approval',iconCls="icon-app")
+        form.multi(_sqlid='poappvall' asdpx='adx')
+          +fitem('ID',{name:'ID', _sqlid_:'poappvid', class:'combobox fkey',validType:['length[1,15]']})
+          +fitem('Description',{name:'DESCRIPTION', class:'textbox' , validType:['length[1,50]']})
+          +fitem('User ID',{id:'~',_sqlid:'admin^usercbo' ,name:'APPV_USER_ID',class:'combobox',required:true })
+          +fitem('Email',{id:'~',name:'APPV_USER_EMAIL', class:'textbox' ,validType:['email'] ,readonly:true,required:true})
+          +fitem('Amount Limit',{name:'AMOUNT_LIMIT', required:true, class:'numberspinner', min:0, precision:2, value:0})
+        
+        //-script.
+          $('#APPV_USER_ID').combobox({onSelect:function(rec){$('#APPV_USER_EMAIL').textbox('setValue',rec.email);}})

@@ -1,0 +1,118 @@
+page: gauge_man
+module: dqm
+created_at: '2026-03-18'
+created_by: dui-init
+
+eui_baseline:
+  load_verified: true
+  discovered_at: '2026-03-18'
+  discovered_by: dui-discover
+  screenshots:
+    empty: .pw/discover-gauge_man-eui-empty.png
+    loaded: .pw/discover-gauge_man-eui-loaded.png
+    tabs:
+      - { tab: "Specification", path: .pw/discover-gauge_man-eui-tab-specification.png }
+      - { tab: "Test Results", path: .pw/discover-gauge_man-eui-tab-testresults.png }
+      - { tab: "Attachments", path: .pw/discover-gauge_man-eui-tab-attachments.png }
+      - { tab: "User Fields", path: .pw/discover-gauge_man-eui-tab-userfields.png }
+  load_element:
+    type: fkey_qbe
+    label: "Asset ID"
+    id: "#ASSET_ID_"
+    value: "TEST001"
+  fields:
+    - { label: "Asset ID", id: "#ASSET_ID_", value: "TEST001" }
+    - { label: "Asset Type", id: "#ASSET_TYPE_", value: "TEST" }
+    - { label: "Ownership", id: "#OWNERSHIP_", value: "Self Owned" }
+    - { label: "Received Date", id: "#RECV_DATE_", value: "2022-10-24" }
+    - { label: "Last Transaction", id: "#LAST_TRANS_", value: "IN" }
+    - { label: "Status", id: "#STATUS_", value: "ACTIVE" }
+  tabs:
+    - { label: "Calibration", id: "#tab_calibration", order: 1 }
+    - { label: "Specification", id: "#tab_specification", order: 2 }
+    - { label: "Test Results", id: "#tab_testresults", order: 3 }
+    - { label: "Attachments", id: "#tab_attachments", order: 4 }
+    - { label: "User Fields", id: "#tab_userfields", order: 5 }
+  default_tab: "#tab_calibration"
+  datagrids:
+    - { id: "#dgtests", tab: "Test Results", columns: ["Seq", "#", "Title", "Pass-Fail Criteria", "Result", "Variance", "Status", "Notes & Observations"], row_count: 0 }
+    - { id: "#dgfiles", tab: "Attachments", columns: ["Filename", "Description"], row_count: 0 }
+  buttons:
+    - { label: "Calibrate", id: "#btnCalibrate", context: "toolbar" }
+    - { label: "Rename", id: "#btnRename", context: "toolbar" }
+    - { label: "Copy text", id: "#btnCopy", context: "toolbar" }
+    - { label: "Excel", id: "#btnExcel", context: "Test Results tab" }
+  form_states:
+    on_add: "Clears form, sets defaults (Received Date to today)"
+    on_save: "Saves gauge record"
+    on_delete: "Deletes gauge record"
+    on_record_select: "Loads gauge data via QBE navigation"
+  layout_profile:
+    type: vsplit
+    panels:
+      - { region: west, content: form }
+      - { region: center, content: tabs }
+    has_toolbar: false
+    toolbar_fields: 0
+    toolbar_location: null
+    datagrids: 2
+    tabs: 5
+    form_fields: 13
+    form_fields_visible: 13
+    split_size: "560px"
+  user_notes: null
+
+dui_status: issues
+migrated_at: '2026-03-18'
+migrated_by: dui-migrate
+generated_files:
+  pug: html/dui/mod/dqm/gauge_man.pug
+  js: html/dui/mod/dqm/js/gauge_man.js
+  json:
+    - html/dui/mod/dqm/json/datagrid.gauge_man_dgtests.json
+fixes_applied:
+  - "Removed #FAFAFA element ID from +panel (was EUI background color)"
+  - "Changed div.hide to div.hidden (Tailwind compatibility)"
+  - "Converted +linkbutton to +button in rename dialog (2 instances)"
+  - "Converted 5 raw div(title=) tab items to +tab-item()"
+  - "Removed duplicate fit/fitColumns/striped from JS datagrid init (already in JSON)"
+  - "Changed icon-specs to file-text (valid Lucide icon)"
+  - "Added bhave guard: jsonParse($.dui.bhave.CBO_OUTSIDE_DIAMETER || '[]')"
+known_issues:
+  - "+oms_gauge_man_rental() mixin outputs EUI div(title=) — needs mixin update for DUI +tab-item"
+  - "QBE search/nav buttons don't render on <select> elements — plugin-level gap"
+
+dui_verify:
+  verified_at: '2026-03-18'
+  verified_by: dui-test
+  load_value: "047P109"
+  console_errors: 0
+  data_loads: true
+  structural:
+    toolbar_integration: pass
+    widget_types: pass (28/28 match)
+    filter_layout: pass (no toolbar filters)
+    rental_tab: fail (custom mixin outputs EUI div format — visible alongside active tab)
+  fields:
+    - { id: "#GAUGE_ID", expected: "047P109", actual: "047P109", pass: true }
+    - { id: "GAUGE_TYPE", expected: "THDGG", actual: "THDGG", pass: true }
+    - { id: "OWNER_TYPE", expected: "short", actual: "short", pass: true }
+    - { id: "ACQUIRED_DATE", expected: "2016-12-05", actual: "2016-12-05", pass: true }
+    - { id: "#LAST_TX", expected: "OUT, INV", actual: "OUT, INV, , AWB1003605422 / 3510020344", pass: true }
+    - { id: "STATUS", expected: "HOLD", actual: "HOLD", pass: true }
+    - { id: "DEPARTMENT_ID", actual: "GAGE-ROOM", pass: true }
+    - { id: "LOCATION", actual: "P.Y. OILTOOLS BRUNEI", pass: true }
+    - { id: "CAL_TYPE", actual: "VERIFY", pass: true }
+  tabs:
+    - { label: "Calibration", opens: true }
+    - { label: "Specification", opens: true }
+    - { label: "Test Results", opens: true }
+    - { label: "Attachments", opens: true }
+    - { label: "User Fields", opens: true }
+  lifecycle:
+    add_new: pass (form clears, defaults set, Cancel returns to idle)
+    save: skip (not tested — would modify production data)
+    delete_dialog: skip
+    navigate: skip (QBE nav buttons not rendered — plugin gap)
+  overall: issues
+  fail_reason: "Rental tab content visible alongside active tab (+oms_gauge_man_rental mixin outputs EUI div format). QBE nav buttons not rendered (plugin gap). All other checks pass."

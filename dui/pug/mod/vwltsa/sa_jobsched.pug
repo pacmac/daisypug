@@ -1,0 +1,22 @@
+extends ../content
+
+block style
+  style: include css/sa_jobsched.css
+
+block script
+  script: include js/sa_jobsched.js
+
+block content
+  #job_schedule(style="height:100%;overflow-y:hidden;")
+
+    +datagrid#jsched
+      a#dg2excel.btn.btn-ghost.btn-xs(data-always-enabled)
+        +icon('file-spreadsheet', {size: 'sm'})
+      .toolbar-sep.self-stretch.mx-1
+      button#bak.btn.btn-ghost.btn-xs(data-always-enabled)
+        +icon('chevron-left', {size: 'sm'})
+      button#fwd.btn.btn-ghost.btn-xs(data-always-enabled)
+        +icon('chevron-right', {size: 'sm'})
+
+    ul#opnmenu.menu.menu-sm.bg-base-100.text-base-content.rounded-box.shadow-lg.p-2(style="position:fixed; z-index:9999; display:none; width:160px;")
+      li: a(data-name="open") View Job

@@ -1,0 +1,525 @@
+# ============================================================================
+# sa_parts — Part Masters page spec
+# ============================================================================
+
+page:
+  id: inv/sa_parts
+  form:
+    id: partf
+    asdpx: asdx                    # Add, Save, Delete, Cancel
+  fkey:
+    id: "#ID"
+    widget: searchbox
+    sbref: part
+    preload: true
+  query:
+    form: partquery
+    field: "#QRY_PART_ID"
+    widget: searchbox
+    lock_on_load: true             # searchbox editable:false after record loads
+    strip_asdpx: true              # remove asdpx from query form so it doesn't interfere
+
+# ----------------------------------------------------------------------------
+register:
+  # no autonum — part IDs are manual or via partgen window
+
+# ----------------------------------------------------------------------------
+# What happens when a part record loads
+# ----------------------------------------------------------------------------
+onLoad:
+  - call: { fn: ecn, args: [false] }
+  - call: costitems
+  - docFiles: { grid: "#partfiles", fkey: "ID" }
+  - call: setudfs_from_combo       # reads UDF_LAYOUT_ID combo, calls setudfs()
+  - set: { "#_PART_REV_NO": "$fdat.PART_REV_NO" }
+  - butEn:
+      default: asdx
+      partgen:                     # conditional on bhave.partgen
+        "y":
+          group_check: PART-UD     # if user NOT in PART-UD → asdx, else nsdx
+          in_group: nsdx
+          not_in_group: asdx
+        "n": asdx
+  - lock: "#QRY_PART_ID"           # lock query searchbox to loaded part
+  - custom: prices_load            # build pricing grid data from currs + fdat.PRICE
+  - load: "#dgdim"
+  - clear: ["#usedin_src", "#usedin"]
+  - load:
+      grid: "#phycount"
+      source: inv^physical_count_lines_by_part
+      params: { PART_ID: "$fdat.ID" }
+  - load:
+      grid: "#boms"
+      source: inv^partbom
+      params: { PART_ID: "$fdat.ID" }
+  - call: part_ud
+  - bind_revision_change            # wire PART_REV_NO onChange → ecn toggle
+  - call: part_detail_upd
+  - call: material_unit_cost
+  - call: mandatory
+  - call: traceable_endis
+
+# ----------------------------------------------------------------------------
+# What happens on Add
+# ----------------------------------------------------------------------------
+onAdd:
+  - call: costitems
+  - clear: ["#phycount", "#boms"]
+  - custom: partgen_add             # conditional partgen/part_ud flow
+
+# ----------------------------------------------------------------------------
+# Child grids
+# ----------------------------------------------------------------------------
+grids:
+  "#prices":
+    source: null                   # data built client-side from currs + fdat.PRICE
+    fit: true
+    striped: true
+    fitColumns: true
+    columns:
+      - { field: PART_ID, hidden: true }
+      - { field: CURRENCY_ID, title: "Cur ID", width: 60 }
+      - { field: DESCRIPTION, title: "Description", width: 120 }
+      - field: UNIT_PRICE
+        title: "Price"
+        width: 60
+        align: right
+        formatter: currency
+        editor: { type: numberbox, options: { precision: 2, min: 0 } }
+    editor:
+      mode: inline
+      save_source: inv^part_price
+      hide_buttons: [add, edit, delete]  # read-only add/edit/del — only inline price edit
+    load_on: manual                # loaded via custom block in onLoad
+
+  "#dgdim":
+    load_on: auto                  # reloads on fkey load (datagrid('load'))
+
+  "#usedin":
+    source: inv^part_used
+    fit: true
+    fitColumns: true
+    striped: true
+    singleSelect: true
+    fkey_param: PART_ID
+    dynamic_columns: true          # columns change based on usedin_src selection
+    load_on: manual                # loaded when usedin_src combo changes
+
+  "#phycount":
+    source: inv^physical_count_lines_by_part
+    fkey_param: PART_ID
+    fit: true
+    striped: true
+    singleSelect: true
+    columns:
+      - { field: PHYSICAL_COUNT_ID, title: "Physical Count ID", width: 150 }
+      - { field: STATUS, title: "Status", width: 120 }
+      - { field: START_DATE, title: "Start Date", formatter: date, width: 120 }
+      - { field: END_DATE, title: "End Date", formatter: date, width: 120 }
+      - { field: NOTES, title: "Notes", width: 120 }
+    load_on: manual                # loaded in onLoad with explicit params
+
+  "#boms":
+    source: inv^partbom
+    fkey_param: PART_ID
+    fit: true
+    striped: true
+    singleSelect: true
+    fitColumns: true
+    columns:
+      - { field: PART_ID, hidden: true }
+      - { field: LINE_NO, title: "Line #" }
+      - field: _EXIST
+        title: "Exists"
+        styler: exist_icon          # custom: icon-tick if EXIST=="Y", icon-cross otherwise
+      - { field: ITEM_ID, title: "Item ID" }
+      - { field: QTY, title: "Qty" }
+      - { field: REV, title: "Rev" }
+      - { field: UOM_ID, title: "UOM" }
+      - { field: QOH, title: "QOH" }
+      - { field: DESCRIPTION, title: "Description" }
+    load_on: manual
+
+# ----------------------------------------------------------------------------
+# Field interaction rules
+# ----------------------------------------------------------------------------
+rules:
+  "#PART_CLASS_ID":
+    onSelect:
+      - call: costitems            # toggles material vs consumable cost visibility
+
+  "#LENGTH":
+    onSelect:
+      - call: { fn: dims, args: ["l"] }
+
+  "#WIDTH":
+    onSelect:
+      - call: { fn: dims, args: ["w"] }
+
+  "#HEIGHT":
+    onSelect:
+      - call: { fn: dims, args: ["h"] }
+
+  "#TRACEABLE":
+    onSelect:
+      - call: material_unit_cost
+    onChange:
+      - call: material_unit_cost
+
+  "#UDF_LAYOUT_ID":
+    onSelect:
+      - custom: setudfs_select     # calls setudfs(rec) with selected record
+
+# ----------------------------------------------------------------------------
+# Permission gates
+# ----------------------------------------------------------------------------
+permissions:
+  - group: PART-UD
+    deny:
+      - custom: part_ud_deny       # disable add or force partgen depending on bhave
+
+  - group: PART-DETAIL-UPD
+    deny:
+      - disable: "#header :input"
+      - disable: "#but_save"
+
+# ----------------------------------------------------------------------------
+# Bhave settings
+# ----------------------------------------------------------------------------
+bhave:
+  partTraceManual:
+    default: "y"
+    effect:
+      - set_default: { "#TRACEABLE": "$value.toUpperCase()" }
+
+  partgen:
+    default: "n"
+    effect:
+      - feature: partgen_window    # enables part number generator flow
+
+  MANDATORY_UNITCOST:
+    default: "n"
+    effect:
+      - custom: mandatory_unitcost # conditional required on UNIT_MATERIAL_COST
+
+  MANDATORY_REVISION:
+    default: "n"
+    effect:
+      - required: { "#PART_REV_NO": true }  # when value == "y"
+
+# ----------------------------------------------------------------------------
+# Used-in dynamic column selector
+# ----------------------------------------------------------------------------
+# This is a unique pattern: a combobox whose selection changes the columns
+# of an associated datagrid. Declaring it here so the generator can handle it.
+# ----------------------------------------------------------------------------
+usedin:
+  combo: "#usedin_src"
+  grid: "#usedin"
+  source: inv^part_used
+  fkey_param: PART_ID
+  contexts:
+    JOBS:
+      text: "Job Header"
+      group: Manufacturing
+      columns:
+        - { field: WO_CLASS, title: "Job Class" }
+        - { field: BASE_ID, title: "Job Number" }
+        - { field: STATUS, title: "Status" }
+        - { field: DESIRED_QTY, title: "Run Qty" }
+        - { field: DESIRED_WANT_DATE, title: "Want Date", formatter: date }
+        - { field: WO_TYPE, title: "Job Class" }
+
+    OPN:
+      text: "Job Operations"
+      group: Manufacturing
+      columns:
+        - { field: WO_JOB_ID, title: "Job Number" }
+        - { field: SEQ_NO, title: "Seq No" }
+        - { field: STATUS, title: "Status" }
+        - { field: REQUIRED_QTY, title: "Reqd Qty" }
+        - { field: WANT_DATE, title: "Want Date", formatter: date }
+
+    SO:
+      text: "Sales Order Lines"
+      group: Sales
+      columns:
+        - { field: SALES_ORDER_ID, title: "SO ID" }
+        - { field: LINE_NO, title: "Line #" }
+        - { field: DATE, title: "Order Date", formatter: date }
+        - { field: STATUS, title: "Status" }
+        - { field: CUST_ID, title: "Customer ID" }
+        - { field: CUST_NAME, title: "Customer Name" }
+        - { field: QTY, title: "Order Qty" }
+        - { field: QTY_SHIP, title: "Ship Qty" }
+
+    SHP:
+      text: "Shipment Lines"
+      group: Sales
+      columns:
+        - { field: SHIPMENT_ID, title: "Shipment ID" }
+        - { field: SHIPMENT_DATE, title: "Shipped Date", formatter: date }
+        - { field: LINE_NO, title: "Line #" }
+        - { field: INVOICE_ID, title: "Invoice ID" }
+        - { field: SO_ID, title: "Sales Order ID" }
+        - { field: SO_LINENO, title: "SO Line No" }
+        - { field: QTY, title: "Shipped Qty" }
+
+    COC:
+      text: "COC Source"
+      group: Quality
+      columns:
+        - { field: COC_ID, title: "COC ID" }
+        - { field: COC_REV, title: "Revn No" }
+        - { field: STATUS, title: "Status" }
+        - { field: CREATE_DATE, title: "COC Date", formatter: date }
+        - { field: PRINTED_DATE, title: "Print Date", formatter: date }
+        - { field: WOREF, title: "Job Number", formatter: nocarat }
+        - { field: CUSTOMER_ID, title: "Cust ID" }
+        - { field: QTY, title: "Qty" }
+        - { field: ISSUED_BY, title: "Creator" }
+
+    CPAR:
+      text: "CPAR Source"
+      group: Quality
+      columns:
+        - { field: NCR_ID, title: "NCR ID" }
+        - { field: CREATE_DATE, title: "Date", formatter: date }
+        - { field: STATUS, title: "Status" }
+        - { field: WOREF, title: "Linked Job", formatter: nocarat }
+        - { field: SUBJECT, title: "Subject" }
+        - { field: SEVERITY, title: "Severity" }
+
+    NCR:
+      text: "NCR Source"
+      group: Quality
+      columns:
+        - { field: NCR_ID, title: "NCR ID" }
+        - { field: CREATE_DATE, title: "Date", formatter: date }
+        - { field: STATUS, title: "Status" }
+        - { field: WOREF, title: "Linked Job", formatter: nocarat }
+        - { field: SUBJECT, title: "Subject" }
+        - { field: SEVERITY, title: "Severity" }
+
+# ----------------------------------------------------------------------------
+# Custom JS blocks
+# ----------------------------------------------------------------------------
+custom:
+  # --- onLoad: build pricing data from currencies + fdat.PRICE ---
+  prices_load: |
+    var data = [];
+    $.page.fn.currs.map(function(e) {
+      data.push({
+        PART_ID: fdat.ID,
+        CURRENCY_ID: e.id,
+        DESCRIPTION: e.description,
+        UNIT_PRICE: fdat.PRICE[e.id] || 0
+      });
+    });
+    $('#prices').datagrid('loadData', data);
+
+  # --- onLoad: wire revision change → ECN toggle ---
+  bind_revision_change: |
+    $('#PART_REV_NO').textbox({
+      onChange: function(nv, ov) {
+        ov = $('#_PART_REV_NO').val();
+        if (nv != ov) $.page.fn.ecn(true);
+        else $.page.fn.ecn(false);
+      }
+    });
+
+  # --- onAdd: partgen conditional flow ---
+  partgen_add: |
+    if (!$.page.fn.dogen) {
+      $.page.fn.traceable();
+      $.page.fn.material_unit_cost();
+      return;
+    }
+    $('#pngenwin').window('move', { left: 362, top: 78 });
+    $('#pngenwin').window('open');
+    $.page.fn.traceable();
+    $.page.fn.material_unit_cost();
+    $('#ORDER_TYPE').combobox('setValue', 'NONE');
+
+  # --- UDF layout selection ---
+  setudfs_select: |
+    setudfs(rec);
+
+  setudfs_from_combo: |
+    var rec = $('#UDF_LAYOUT_ID').combobox('getRec');
+    setudfs(rec, $(this));
+
+  # --- BOM exist icon styler ---
+  exist_icon: |
+    function(val, row, idx) {
+      var cls = (row.EXIST == 'Y') ? 'icon-tick' : 'icon-cross';
+      return {
+        class: cls,
+        style: 'background-position:center center;background-repeat:no-repeat;'
+      };
+    }
+
+  # --- nocarat formatter ---
+  nocarat: |
+    function(val) { return val ? val.replace(/\^/g, '-') : ''; }
+
+  # --- Permission: PART-UD deny logic ---
+  part_ud_deny: |
+    if ($.dui.bhave.partgen == 'y') {
+      $('#pngenwin').window('move', { left: 362, top: 78 });
+      $('#pngenwin').window('open');
+    } else {
+      $('#but_add').linkbutton('disable');
+    }
+
+  # --- Bhave: mandatory unit cost conditional ---
+  mandatory_unitcost: |
+    var traceable = $('#TRACEABLE').combobox('getValue');
+    var tf = false;
+    if (traceable == 'N' && $.dui.bhave.MANDATORY_UNITCOST.toUpperCase() == 'Y') tf = true;
+    $('#UNIT_MATERIAL_COST').numberbox('required', tf);
+    $('#UNIT_MATERIAL_COST').numberbox('enable');
+
+# ----------------------------------------------------------------------------
+# Functions — reusable page utilities registered on $.page.fn
+# ----------------------------------------------------------------------------
+# These are helper functions called by onLoad, rules, permissions, etc.
+# Each is a named JS function body.
+# ----------------------------------------------------------------------------
+functions:
+  traceable: |
+    var trace = $.dui.bhave.partTraceManual || 'y';
+    $('#TRACEABLE').combobox('setValue', trace.toUpperCase());
+
+  material_unit_cost: |
+    var traceable = $('#TRACEABLE').combobox('getValue');
+    var mat_unit_cost_behave = $.dui.bhave.MANDATORY_UNITCOST;
+    var tf = false;
+    if (traceable == 'N') {
+      if (mat_unit_cost_behave.toUpperCase() == 'Y') tf = true;
+    }
+    $('#UNIT_MATERIAL_COST').numberbox('required', tf);
+    $('#UNIT_MATERIAL_COST').numberbox('enable');
+
+  costitems: |
+    var fdat = $.page.fn.fdat();
+    var ucc = $('#UNIT_CONSUMABLE_COST'), umc = $('#UNIT_MATERIAL_COST');
+    var tf = false;
+    if (fdat.BAL_QTY > 0) tf = true;
+    umc.numberspinner('readonly', tf);
+    ucc.numberspinner('readonly', tf);
+    var pcId = $('#PART_CLASS_ID').combobox('getValue');
+    if (pcId == 'CONSUMABLE') {
+      umc.parent().hide(); ucc.parent().show();
+      umc.numberspinner('setValue', 0);
+    } else {
+      umc.parent().show(); ucc.parent().hide();
+      ucc.numberspinner('setValue', 0);
+    }
+
+  fdat: |
+    function(key) {
+      var data = frm2dic($('#partf'));
+      if (key) return data[key];
+      return data;
+    }
+
+  dims: |
+    function(lwh) {
+      var d = $('#DIM_TRACKED');
+      var l = $('#LENGTH').combobox('getValue');
+      var w = $('#WIDTH').combobox('getValue');
+      var h = $('#HEIGHT').combobox('getValue');
+      if (l == 'Y' || w == 'Y' || h == 'Y') d.combobox('setValue', 'Y');
+      if (l == 'N' && w == 'N' && h == 'N') d.combobox('setValue', 'N');
+    }
+
+  ecn: |
+    function(init) {
+      var ecn = $('#ECN_ID');
+      ecn.textbox('required', init);
+      ecn.textbox('readonly', !init);
+      if (init == true) ecn.textbox('clear');
+    }
+
+  mandatory: |
+    var rev = $.dui.bhave.MANDATORY_REVISION || 'n';
+    $('#PART_REV_NO').textbox('required', rev != 'n');
+
+  part_detail_upd: |
+    var pdu = $.dui.udata.groups.indexOf('PART-DETAIL-UPD');
+    var tf = (pdu == -1);
+    $('#header :input').attr('disabled', tf);
+    if (pdu == -1) $('#but_save').linkbutton('disable');
+    else $('#but_save').linkbutton('enable');
+
+  traceable_endis: |
+    var pdu = $.dui.udata.groups.indexOf('PART-DETAIL-UPD');
+    if (pdu == -1) {
+      $('#TRACEABLE').combobox('disable');
+    } else {
+      ajaxget('/', {
+        _sqlid: 'inv^part_sites', _func: 'get',
+        ID: $('#ID').searchbox('getValue')
+      }, function(res) {
+        var tf = (res.CNT != 0);
+        $('#TRACEABLE').combobox('readonly', tf);
+        $('#PRODUCT_CODE').combobox('readonly', tf);
+        $('#UOM_ID').combobox('readonly', tf);
+      });
+    }
+
+  part_ud: |
+    var partud = $.dui.udata.groups.indexOf('PART-UD');
+    $('#but_add').on('done', function(evt) {
+      $.page.fn.costitems();
+      $('#phycount').datagrid('loadData', []);
+      $('#boms').datagrid('loadData', []);
+      if (partud == -1 && $.dui.bhave.partgen == 'y') {
+        $('#pngenwin').window('move', { left: 362, top: 78 });
+        $('#pngenwin').window('open');
+      }
+    });
+    setTimeout(function() {
+      if (partud == -1 && $.dui.bhave.partgen == 'n') {
+        $('#but_add').linkbutton('disable');
+      }
+    });
+
+  prices: |
+    ajaxget('/', { _sqlid: 'admin^curr', _func: 'get' }, function(res) {
+      $.page.fn.currs = res;
+    });
+    var dg = $('#prices');
+    dg.datagrid().datagrid('rowEditor', {
+      editor: 'inline', striped: true, rownumbers: false,
+      _fitColumns: true, fit: true,
+      columns: [[
+        { field: 'PART_ID', hidden: true, title: '' },
+        { field: 'CURRENCY_ID', title: 'Cur ID', width: 60 },
+        { field: 'DESCRIPTION', title: 'Description', width: 120 },
+        { field: 'UNIT_PRICE', title: 'Price', width: 60, align: 'right',
+          editor: { type: 'numberbox', options: { precision: 2, min: 0 } },
+          formatter: $.dui.fmt.currency }
+      ]],
+      onEndEdit: function(idx, row, chg) {
+        ajaxget('/', $.extend(row, { _sqlid: 'inv^part_price', _func: 'upd' }),
+          function(res) { cl(res); });
+      }
+    });
+    var opt = dg.datagrid('options');
+    opt.tbar.dgre_del.hide();
+    opt.tbar.dgre_edit.hide();
+    opt.tbar.dgre_add.hide();
+
+  opengen: |
+    $('#pngenwin').window({
+      title: 'Part Number Generator', closed: true,
+      minimizable: false, draggable: true, modal: true,
+      onBeforeClose: function() {
+        if (!$('#ID').textbox('getValue')) {
+          alert('Please generate the part.');
+          return false;
+        }
+      }
+    });

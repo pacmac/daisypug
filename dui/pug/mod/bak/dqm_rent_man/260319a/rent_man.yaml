@@ -1,0 +1,41 @@
+page: rent_man
+module: dqm
+created_at: '2026-03-18T00:00:00+08:00'
+created_by: dui-init
+dui_status: migrated
+migrated_at: '2026-03-19T16:25:00+08:00'
+migrated_by: dui-migrate-v1.2
+mode: fix
+files:
+  pug: html/dui/mod/dqm/rent_man.pug
+  js: html/dui/mod/dqm/js/rent_man.js
+  json:
+    - html/dui/mod/dqm/json/datagrid.rent_man_joblist.json
+fixes_applied:
+  - added extends ../content + block structure (style, script, content)
+  - fieldset → v-group (6 instances)
+  - raw .fitem → +fitem (Notes/Specs)
+  - stripped theme-violating CSS (hardcoded colors)
+  - div(title=) → +tab-item() for both tab sets
+dui_verify:
+  verified_at: '2026-03-19T16:40:00+08:00'
+  verified_by: CLS
+  console_errors: 0
+  data_loads: true
+  fields_checked: 29
+  fields_pass: 29
+  tabs:
+    - { label: Dates, opens: true }
+    - { label: Specs, opens: true }
+    - { label: Job Usage, opens: true }
+    - { label: Freight, opens: true }
+    - { label: Purchase, opens: true }
+  lifecycle:
+    select_record: pass
+    add_new: pass
+    save: skip
+    delete_dialog: pass
+    navigate: pass
+  overall: pass
+fixes_applied_post_test:
+  - "bare #jobusage/#joblist divs → +datagrid#jobusage/+datagrid#joblist (mixin provides table structure)"

@@ -1,0 +1,399 @@
+//- Layout Mixins
+//- Purpose: Global page structure and partitioning.
+//- DaisyUI Components: divider, drawer, footer, hero, stack
+
+//- ============================================================================
+//- HELPERS
+//- ============================================================================
+//- getOpts is now in helpers.pug
+
+//- ============================================================================
+//- DIVIDER
+//- ============================================================================
+mixin divider(text, opts)
+  - var options = opts || {}
+  .divider&attributes(options)= text
+
+//- ============================================================================
+//- DRAWER
+//- ============================================================================
+mixin drawer(opts)
+  - var options = opts || {}
+  .drawer&attributes(options)
+    input.drawer-toggle(type="checkbox" id=options.id ? options.id + "-toggle" : "drawer-toggle")
+    .drawer-content
+      block content
+    .drawer-side
+      label.drawer-overlay(for=options.id ? options.id + "-toggle" : "drawer-toggle")
+      block side
+
+//- ============================================================================
+//- FOOTER
+//- ============================================================================
+mixin footer(opts)
+  - var options = opts || {}
+  footer.footer&attributes(options)
+    block
+
+//- ============================================================================
+//- HERO
+//- ============================================================================
+mixin hero(opts)
+  - var options = opts || {}
+  .hero&attributes(options)
+    .hero-content
+      block
+
+//- ============================================================================
+//- STACK
+//- ============================================================================
+mixin stack(opts)
+  - var options = opts || {}
+  .stack&attributes(options)
+    block
+
+//- ============================================================================
+//- VSPLIT / HSPLIT — simple 2-panel splits (no 3×3 grid overhead)
+//- ============================================================================
+
+//- +vsplit(size) — side-by-side split (left | right)
+//-   size: width of first panel (e.g. '30%', '400px', '1fr')
+//-         default: var(--east-west-w) — single source of truth from forms.css
+//-   Children: exactly 2 block children, rendered in order (left, right)
+mixin vsplit(size)
+  -
+    var _sz = size || 'var(--east-west-w)'
+    var _cols = _sz + ' 1fr'
+    var _savedPC = _state._panelCount || 0
+    var _savedInSplit = _state._inSplit
+    var _savedNoBorder = _state._splitNoBorder
+    _state._panelCount = 0
+    _state._inSplit = 'v'
+    _state._panelDepth = (_state._panelDepth || 0) + 1
+    var _cls = (attributes.class || '').split(/\s+/)
+    _state._splitNoBorder = _cls.indexOf('no-border') >= 0
+    if (_state._splitNoBorder) attributes.class = _cls.filter(function(c){return c !== 'no-border'}).join(' ') || undefined
+  .h-full.overflow-hidden(style={'display':'grid','grid-template-columns':_cols,'min-height':0})&attributes(attributes)
+    block
+  -
+    _state._panelDepth--
+    _state._panelCount = _savedPC
+    _state._inSplit = _savedInSplit
+    _state._splitNoBorder = _savedNoBorder
+
+//- +hsplit(size) — top/bottom split (top | bottom)
+//-   size: height of first panel (e.g. '50%', '200px', '1fr')
+//-         default '1fr' = equal 50/50 split
+//-   Children: exactly 2 block children, rendered in order (top, bottom)
+mixin hsplit(size)
+  -
+    var _sz = size || '1fr'
+    var _rows = _sz + ' 1fr'
+    var _savedPC = _state._panelCount || 0
+    var _savedInSplit = _state._inSplit
+    var _savedNoBorder = _state._splitNoBorder
+    _state._panelCount = 0
+    _state._inSplit = 'h'
+    _state._panelDepth = (_state._panelDepth || 0) + 1
+    var _cls = (attributes.class || '').split(/\s+/)
+    _state._splitNoBorder = _cls.indexOf('no-border') >= 0
+    if (_state._splitNoBorder) attributes.class = _cls.filter(function(c){return c !== 'no-border'}).join(' ') || undefined
+  .overflow-hidden(style={'display':'grid','grid-template-rows':_rows,'height':'100%','min-height':0})&attributes(attributes)
+    block
+  -
+    _state._panelDepth--
+    _state._panelCount = _savedPC
+    _state._inSplit = _savedInSplit
+    _state._splitNoBorder = _savedNoBorder
+
+//- ============================================================================
+//- LAYOUT + PANEL (panel-plugin.js compatible)
+//- ============================================================================
+
+//- Semantic alias: +split delegates to +layout (a layout IS a panel split)
+mixin split(opts)
+  script.
+    console.warn('[dui:deprecated] +split is deprecated — use +vsplit(size) or +hsplit(size) instead. Page:', location.pathname)
+  +layout(opts)
+    block
+
+//- Backward-compatible alias: +region delegates to +panel
+mixin region(name, opts)
+  +panel(name, opts)
+    block
+
+mixin panel(name, opts)
+  -
+    var options = opts || {}
+    // Support both calling conventions:
+    //   +panel('west', {opts})              — new DUI style (positional args)
+    //   +panel(region="west" style="...")    — legacy EUI style (HTML attributes)
+    var mAttrs = attributes || {}
+
+    // Parse data-options="key:val,..." from legacy EUI attributes
+    if (mAttrs['data-options']) {
+      var _dopts = getOpts(mAttrs['data-options'])
+      Object.keys(_dopts).forEach(function(k) {
+        if (options[k] === undefined) options[k] = _dopts[k]
+      })
+    }
+
+    var regionName = name || options.region || mAttrs.region || 'center'
+
+    // Extract width/height from style strings (options.style or HTML style attribute)
+    ;[options.style, mAttrs.style].forEach(function(s) {
+      if (s && typeof s === 'string') {
+        s.split(';').forEach(function(pair) {
+          var parts = pair.split(':')
+          if (parts.length >= 2) {
+            var k = parts[0].trim()
+            var v = parts.slice(1).join(':').trim()
+            if (k === 'width' && !options.width) options.width = v
+            if (k === 'height' && !options.height) options.height = v
+          }
+        })
+      }
+    })
+
+    // Enforce 2-panel-per-layout rule — only count panels with explicit region
+    var _isLayoutPanel = !!(name || options.region || mAttrs.region)
+    if (_isLayoutPanel) {
+      _state._panelCount = (_state._panelCount || 0) + 1
+      if (_state._panelCount > 2) {
+        throw new Error('[layout] Max 2 panels per layout — got panel "' + regionName + '" as child #' + _state._panelCount + '. Use nested layouts instead.')
+      }
+    }
+    // Surface depth — deprecated, no longer used
+    // var _frozen = !!_state._surfaceFrozen
+    // if (!_frozen) surfaceDepth(1)
+    // var depth = surfaceDepth()
+
+    // Panel owns all styling — pages only control size (width/height) and title.
+    // border, class, style, collapsible options from pages are ignored.
+    var classes = ['panel', 'pan-l' + (_state._panelDepth || 1), 'pan-' + regionName, 'easyui-panel', 'flex', 'flex-col', 'overflow-hidden', 'bg-base-100']
+
+    // Panel border dividers
+    var borderClass = 'border-base-300'
+    if (_state._inSplit) {
+      // Inside vsplit/hsplit: only first panel gets a divider border
+      // vsplit panel #1 → border-r; hsplit panel #1 → border-b; panel #2 → none
+      // no-border class on the split suppresses this
+      if (_state._panelCount === 1 && !_state._splitNoBorder) {
+        classes.push((_state._inSplit === 'v' ? 'border-r ' : 'border-b ') + borderClass)
+      }
+    } else {
+      if (regionName === 'north') classes.push('border-b ' + borderClass)
+      else if (regionName === 'south') classes.push('border-t ' + borderClass)
+      else if (regionName === 'west') classes.push('border-r ' + borderClass)
+      else if (regionName === 'east') classes.push('border-l ' + borderClass)
+      else if (regionName === 'center') classes.push('')
+    }
+
+    // Middle-row regions stretch to fill grid row
+    if (regionName === 'west' || regionName === 'center' || regionName === 'east') {
+      classes.push('h-full')
+    }
+
+    var panelStyle = {
+      'min-width': 0,
+      'min-height': 0
+    }
+    // Only set grid-area inside +layout (named-area grid), not inside +vsplit/+hsplit
+    if (!_state._inSplit) {
+      panelStyle['grid-area'] = regionName
+    }
+
+    // Size bindings — the ONLY thing pages can control
+    if (regionName === 'north' || regionName === 'south') {
+      if (options.height) panelStyle.height = options.height
+    }
+    if (regionName === 'west' || regionName === 'east') {
+      if (options.width) panelStyle.width = options.width
+    }
+
+    // Pass through id and data-* attributes only
+    var attrs = {}
+    var _allOpts = Object.assign({}, options, mAttrs)
+    Object.keys(_allOpts).forEach(function(k) {
+      if (k === 'id' || k.indexOf('data-') === 0) attrs[k] = _allOpts[k]
+    })
+
+    // Surface debug — disabled
+    // var rawDepth = _state._surfaceDepth || 1
+    // var surfaceInfo = sMode + ':raw=' + rawDepth + ',depth=' + depth + ',panel=' + panelDepth
+
+  //- Use div with ARIA roles instead of semantic tags (for form compatibility)
+  - var tag = 'div'
+  - var role = 'region'
+  - if (regionName === 'north') role = 'banner'
+  - if (regionName === 'south') role = 'contentinfo'
+  - if (regionName === 'west' || regionName === 'east') role = 'complementary'
+  - if (regionName === 'center') role = 'main'
+
+  #{tag}(class=classes style=panelStyle role=role data-region=regionName)&attributes(attrs)
+    if options.title
+      //- Surface header — disabled, using DaisyUI theme defaults
+      //- var _hdrClass = _frozen ? 'py-1.5' : 'py-1.5 surface-header-' + panelDepth + ' surface-border-' + panelDepth
+      - var _hdrClass = 'py-1.5 bg-base-200 border-base-300'
+      .panel-header.flex-none.px-3.font-bold.border-b.flex.items-center.uppercase.tracking-wider.text-base-content.opacity-80(class=_hdrClass)
+        if options.iconCls
+          +icon(options.iconCls, {cls: 'mr-1.5'})
+        span= options.title
+
+    -
+      var bodyClasses = ['panel-body', 'flex-1', 'min-h-0', 'flex', 'flex-col']
+      if (options.scroll !== false) bodyClasses.push('overflow-auto')
+      else bodyClasses.push('overflow-hidden')
+
+    div(class=bodyClasses)
+      block
+
+mixin layout(opts)
+  -
+    var options = opts || {}
+    // Support both calling conventions:
+    //   +layout({border:false})                    — new DUI style (positional arg)
+    //   +layout(fit="true" data-options="...")      — legacy EUI style (HTML attributes)
+    var mAttrs = attributes || {}
+
+    // Parse data-options="key:val,..." from legacy EUI attributes
+    if (mAttrs['data-options']) {
+      var _dopts = getOpts(mAttrs['data-options'])
+      Object.keys(_dopts).forEach(function(k) {
+        if (options[k] === undefined) options[k] = _dopts[k]
+      })
+    }
+
+    // Merge legacy fit attribute
+    if (mAttrs.fit !== undefined && options.fit === undefined) {
+      options.fit = mAttrs.fit === 'true' || mAttrs.fit === true
+    }
+
+    var depth = surfaceDepth()
+    // Save parent layout's panel count, reset for this layout
+    var _savedPanelCount = _state._panelCount || 0
+    _state._panelCount = 0
+
+    // Layout owns all styling — pages only control fit.
+    // border, class, style options from pages are ignored.
+    var classes = ['grid', 'easyui-layout']
+    if (options.fit) classes.push('h-screen w-full overflow-hidden')
+    else classes.push('h-full')
+    // No outer border on layout — panels' directional borders handle separators
+    // classes.push('border surface-border-' + depth)
+
+    var gridStyle = {
+      'grid-template-areas': '"north north north" "west center east" "south south south"',
+      'grid-template-rows': 'auto 1fr auto',
+      'grid-template-columns': 'auto 1fr auto',
+      'height': options.fit ? '100vh' : '100%'
+    }
+
+    // Pass through id and data-* attributes only
+    var attrs = {}
+    var _allOpts = Object.assign({}, options, mAttrs)
+    Object.keys(_allOpts).forEach(function(k) {
+      if (k === 'id' || k.indexOf('data-') === 0) attrs[k] = _allOpts[k]
+    })
+
+  div(class=classes style=gridStyle)&attributes(attrs)
+    if block
+      block
+    else
+      // Support config-mode: layout({ north: {}, center: {} })
+      each cfg, name in options
+        if ['north','south','west','east','center'].includes(name)
+          +panel(name, cfg)
+  - _state._panelCount = _savedPanelCount
+  //- No depth pop — panels increment globally
+
+//- ============================================================================
+//- ARCHIVED: Old layout/panel/region mixins (soft-deleted, recoverable)
+//- ============================================================================
+
+mixin __panel(opts)
+  -
+    var options = opts || {}
+    var regionName = options.region || 'center'
+    if (!options.class) options.class = 'easyui-panel'
+    else if (!options.class.includes('easyui-panel')) options.class += ' easyui-panel'
+  +__region(regionName, options)
+    block
+
+mixin __layout(opts)
+  -
+    var options = opts || {}
+    var classes = ['grid', 'easyui-layout']
+    if (options.fit) classes.push('h-screen w-full overflow-hidden')
+    else classes.push('h-full')
+    if (options.border !== false) classes.push('border border-base-300')
+    if (options.class) classes.push(options.class)
+    var gridStyle = {
+      'grid-template-areas': '"north north north" "west center east" "south south south"',
+      'grid-template-rows': 'auto 1fr auto',
+      'grid-template-columns': 'auto 1fr auto',
+      'height': options.fit ? '100vh' : '100%'
+    }
+    if (options.style && typeof options.style === 'string') {
+    } else if (options.style) {
+        Object.assign(gridStyle, options.style)
+    }
+    var attrs = Object.assign({}, options)
+  div(class=classes style=gridStyle)&attributes(attrs)
+    if block
+      block
+    else
+      each cfg, name in options
+        if ['north','south','west','east','center'].includes(name)
+          +__region(name, cfg)
+
+mixin __region(name, opts)
+  -
+    var options = opts || {}
+    var classes = ['eui-region', 'flex', 'flex-col', 'overflow-hidden']
+    if (name === 'west' || name === 'east') classes.push('bg-base-200/60')
+    else classes.push('bg-base-100')
+    if (options.border !== false) {
+      if (name === 'north') classes.push('border-b border-base-300/60')
+      else if (name === 'south') classes.push('border-t border-base-300/60')
+      else if (name === 'west') classes.push('border-r border-base-300/60')
+      else if (name === 'east') classes.push('border-l border-base-300/60')
+      else if (name === 'center') classes.push('')
+      else classes.push('border border-base-300/60')
+    }
+    if (name === 'west' || name === 'center' || name === 'east') {
+      classes.push('h-full')
+    }
+    if (options.class) classes.push(options.class)
+    var regionStyle = {
+      'grid-area': name,
+      'min-width': 0,
+      'min-height': 0
+    }
+    if (name === 'north' || name === 'south') {
+      if (options.height) regionStyle.height = options.height
+    }
+    if (name === 'west' || name === 'east') {
+      if (options.width) regionStyle.width = options.width
+    }
+    if (options.style && typeof options.style !== 'string') Object.assign(regionStyle, options.style)
+    var attrs = Object.assign({}, options)
+  - var tag = 'div'
+  - var role = 'region'
+  - if (name === 'north') role = 'banner'
+  - if (name === 'south') role = 'contentinfo'
+  - if (name === 'west' || name === 'east') role = 'complementary'
+  - if (name === 'center') role = 'main'
+  #{tag}(class=classes style=regionStyle role=role)&attributes(attrs)
+    if options.title
+      .region-header.flex-none.bg-base-200.px-3.font-bold.border-b.border-base-300.flex.items-center.uppercase.tracking-wider.text-base-content.opacity-80(class="py-1.5")
+        if options.iconCls
+          +icon(options.iconCls, {cls: 'mr-1.5'})
+        span= options.title
+    -
+      var contentClasses = ['region-content', 'flex-1', 'min-h-0', 'p-4', 'pt-2']
+      if (options.scroll !== false) contentClasses.push('overflow-auto')
+      else contentClasses.push('overflow-hidden')
+      if (options.padding) contentClasses.push('p-' + options.padding)
+    div(class=contentClasses)
+      block

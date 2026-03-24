@@ -1,0 +1,137 @@
+extends ../layout/layout.pug
+
+block content
+  - 
+    function formatSize(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    function formatDate(date) {
+      return new Date(date).toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+    }
+
+  +layout({ 
+    fit: true,
+    style: {
+      'grid-template-columns': '280px 1fr 0',
+    }
+  })
+    //- Header (DaisyUI navbar)
+    div(style="grid-area: north" class="navbar bg-base-100 border-b border-base-300")
+      .navbar-start
+        h1.font-bold= title
+      .navbar-end
+        form(method="get" action="/docs" class="flex gap-2")
+          input.input.input-sm.input-bordered(
+            type="search"
+            name="search"
+            placeholder="Search docs..."
+            value=searchQuery
+          )
+          button.btn.btn-sm.btn-primary(type="submit") Search
+
+    //- Sidebar (DaisyUI menu)
+    div(style="grid-area: west; overflow-y: auto;" class="bg-base-100 border-r border-base-300")
+      ul.menu.w-full.p-4
+        li.menu-title
+          span 📚 Documentation
+        
+        //- Render grouped files with proper menu nesting
+        each group, groupKey in groupedFiles
+          if !group.error && group.files && group.files.length > 0
+            li
+              span.menu-title 
+                span= group.icon + ' ' + group.label
+              ul
+                each file in group.files
+                  - const isActive = selectedFile && selectedFile.path === file.path
+                  - const filePath = encodeURIComponent(file.path)
+                  li(class=isActive ? 'bordered' : '')
+                    a(href=`/docs?file=${filePath}` class=isActive ? 'active' : '' title=file.titleFull || file.title)
+                      span= file.icon
+                      span= file.title
+
+    //- Content Area
+    div(style="grid-area: center; overflow-y: auto;" class="bg-base-100 p-8")
+      if selectedFile && !selectedFile.error
+        //- File view
+        div(style="max-width: 75vw;")
+          .mb-8
+            h2.font-bold.mb-4= selectedFile.name
+            .stats.shadow.bg-base-200
+              .stat.py-3
+                .stat-title Type
+                .stat-value= selectedFile.ext || 'unknown'
+              .stat.py-3
+                .stat-title Size
+                .stat-value= formatSize(selectedFile.size)
+              .stat.py-3
+                .stat-title Modified
+                .stat-value= formatDate(selectedFile.modified)
+              if selectedFile.lineCount
+                .stat.py-3
+                  .stat-title Lines
+                  .stat-value= selectedFile.lineCount
+
+          .mt-8
+            if selectedFile.ext === '.md'
+              .prose.max-w-none
+                != markdownToHtml(selectedFile.content)
+            else if selectedFile.ext === '.yaml' || selectedFile.ext === '.yml'
+              .mockup-code
+                pre
+                  code!= selectedFile.content
+            else
+              .mockup-code
+                pre
+                  code!= selectedFile.content
+
+      else if searchQuery && searchResults && searchResults.length > 0
+        //- Search results
+        div(style="max-width: 75vw;")
+          h2.font-bold.mb-4 Search Results
+          .alert.alert-info.mb-6
+            span= searchResults.length + " result" + (searchResults.length !== 1 ? "s" : "") + " found"
+          
+          .space-y-3
+            each result in searchResults
+              - const filePath = encodeURIComponent(result.path)
+              a.card.bg-base-200.shadow-sm.transition-shadow(href=`/docs?file=${filePath}` class="hover:shadow-md")
+                .card-body.p-4
+                  h3.card-title= result.name
+                  p.text-base-content/70= result.path
+
+      else if searchQuery
+        //- No results
+        .hero.min-h-96
+          .hero-content.text-center
+            div
+              .text-6xl.mb-4 🔍
+              h2.font-bold.mb-2 No Results Found
+              p.text-base-content/70= "No documentation matching \"" + searchQuery + "\""
+
+      else
+        //- Welcome screen
+        .hero.min-h-screen
+          .hero-content.text-center
+            div
+              h2.text-5xl.font-bold.mb-6 Welcome to FSD Docs
+              p.mb-8 Select a file from the sidebar or use the search above.
+              
+              .alert.alert-info.text-left
+                div
+                  h3.font-bold.mb-3 Five Documentation Categories
+                  ul.list-disc.list-inside.space-y-1
+                    li 🏗️ Architecture - System design docs
+                    li 📊 Specs - Component APIs and YAML
+                    li ⚙️ Procedures - Migration and test guides
+                    li 🧩 Components - Individual comp docs
+                    li 📈 Progress - Status and history

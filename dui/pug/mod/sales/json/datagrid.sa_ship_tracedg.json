@@ -1,0 +1,28 @@
+{
+  "asdpx": "ad",
+  "fit": true,
+  "fitColumns": true,
+  "striped": true,
+  "columns": [
+    [
+      {
+        "field": "TRACE_ID",
+        "title": "Trace ID",
+        "width": 100,
+        "editor": { "type": "combobox", "options": {} }
+      },
+      {
+        "field": "BAL_QTY",
+        "title": "Qty Bal",
+        "width": 70,
+        "editor": { "type": "numberbox", "options": { "readonly": true } }
+      },
+      {
+        "field": "QTY",
+        "title": "Qty OUT",
+        "width": 70,
+        "editor": { "type": "numberspinner", "options": { "precision": 2, "min": 0, "value": 0 } }
+      }
+    ]
+  ]
+}

@@ -1,0 +1,66 @@
+page: bhave
+module: dqm
+created_at: '2026-03-18T01:30:00Z'
+created_by: dui-init
+
+eui_baseline:
+  load_verified: true
+  discovered_at: '2026-03-18T01:40:00Z'
+  discovered_by: dui-discover
+  screenshots:
+    empty: .pw/discover-bhave-eui-empty.png
+    loaded: .pw/discover-bhave-eui-loaded.png
+    tabs: []
+  load_element:
+    type: auto
+    label: Auto-load
+    id: null
+    value: null
+  fields:
+    - { label: Job Class, id: '#JOB_CLASS', value: JHB-COAT }
+    - { label: Lock Completed, id: '#COMPLETE_LOCK', value: 'No' }
+    - { label: Coating Colour, id: '#CBO_COAT_COLOUR', value: 'Red #181 Xylan 1424*' }
+    - { label: Coating Spec ID, id: '#CBO_COAT_SPEC_ID', value: 'C81000 Rev N*' }
+    - { label: Quality Spec, id: '#CBO_QA_SPEC_ID', value: 'Q00280 Rev E*' }
+    - { label: Solvent Type, id: '#CBO_SURF_SOLV_TYPE', value: N/A }
+  tabs:
+    - { label: CAAS(AW)95, id: '#caas_aw95', order: 1 }
+    - { label: COC, id: '#coc_man', order: 2 }
+    - { label: NCR, id: '#ncr_man', order: 3 }
+    - { label: CPAR, id: '#cpar_man', order: 4 }
+    - { label: CF, id: '#cf_man', order: 5 }
+    - { label: Operators, id: '#operators', order: 6 }
+    - { label: Analysis, id: '#analysis', order: 7 }
+    - { label: Gauge Manager, id: '#gaugeman', order: 8 }
+    - { label: Gauge Trans, id: '#gaugeinv', order: 9 }
+    - { label: Test Plans, id: '#qpman', order: 10 }
+    - { label: Resin Coating, id: '#coatman', order: 11 }
+    - { label: Phosphate Coating, id: '#phosman', order: 12 }
+    - { label: Qualificatn Manager, id: '#quaman', order: 13 }
+    - { label: Everslik Coating, id: '#everslik', order: 14 }
+    - { label: Training Sessions, id: '#sessions', order: 15 }
+  default_tab: '#caas_aw95'
+  datagrids: []
+  buttons: []
+  form_states:
+    on_add: N/A - config page, no Add
+    on_save: Saves bhave settings for the active tab's form
+    on_delete: N/A - config page, no Delete
+    on_record_select: N/A - auto-load, each tab form loads independently
+  layout_profile:
+    type: tabs_only
+    panels:
+      - { region: tabs, content: tab_list_with_forms }
+    has_toolbar: false
+    toolbar_fields: 0
+    toolbar_location: null
+    datagrids: 0
+    tabs: 15
+    form_fields: 120
+    form_fields_visible: 8
+    split_size: null
+  user_notes: >-
+    Edit combos are the key feature — each tab has multiple combobox edit class fields
+    whose stored values ARE the JSON option lists. The DUI combobox-plugin handles
+    class='edit' automatically (add/edit icons, modal, JSON serialization).
+    The +custom('oms') block adds a Rental tab for OMS customers.

@@ -1,0 +1,74 @@
+extends ../content
+
+mixin wlh1(name,ic)
+  h1.wlh-bold=`Hello ${name}`
+  h2= `MY IC is: ${ic}`
+
+block style
+  style.
+    .wlh-bold {
+      font-weight: bold;
+      font-size: 3em;
+    }
+
+block script
+  script: include js/sbox_wlh.js
+
+block content
+
+  +vsplit()
+    +panel('west')
+      +form()
+        +fitem('Employee ID',{id:'~', name:'EMP_ID', class:'textbox', required:true, validType:['length[9]']})
+        +fitem('Name',{id:'~', name:'EMP_NAME', class:'textbox', required:false, validType:['length[10,20]']})
+
+        +v-group('Contact Details')
+          +fitem('Email',{id:'~', name:'EMAIL', class:'textbox', validType:['email','length[1,100]']})
+          +fitem('Mobile',{id:'~', name:'MOBILE', class:'textbox', validType:['length[1,20]']})
+          +fitem('Home Phone',{id:'~', name:'HOME_PHONE', class:'textbox', validType:['length[1,20]']})
+          +fitem('N1', {class:'numberbox', name:'N1', precision:2, min:0})
+
+        //- btn-group addd by PAC
+        .btn-group
+          +button('TEST', {icon:'save',color:'primary', style:'outline', size:'lg'})
+          +button('Titlebar Modal', {id:'btn-open-titlebar', color:'secondary', size:'sm'})
+
+    +panel('center')
+      h2 TEST
+      +hsplit('150px')
+        +panel('north')
+          h2 north east
+          +tabs#mytabs(default='Details')
+            +tab-item('General')
+              p General content here
+            +tab-item('Details')
+              p Details content � this tab is active by default
+            +tab-item('History')
+              p History content
+        +panel('south')
+          +vsplit('50%')
+            +panel('xxx')
+              +h-group('Rates')
+                +fitem('Currency', {name:'CURRENCY_ID', id:'~', class:'combobox', required:true, 'data-options':"data:[{text:'SGD',value:'SGD'},{text:'USD',value:'USD'}]"})
+                  +input({name:'SELL_RATE', id:'~', class:'numberbox', required:true, precision:8})
+                  +input({name:'BUY_RATE', id:'~', class:'numberbox', required:true, precision:8})
+                +fitem('GST Code / Rate %', {name:'GST_ID', id:'~', class:'combobox', required:true, 'data-options':"data:[{text:'GST9',value:'GST9'},{text:'GST0',value:'GST0'}]"})
+                  +input({name:'GST_RATE', id:'~', class:'numberbox', readonly:true, precision:1})
+
+              +menubutton(title="Actions" menu-id="act-menu")
+                li: a(href="#") Option A
+                li: a(href="#") Option B
+            +panel('xxx')
+              +wlh1('User','NRIC1234')
+              +spec('Description-spec',{name:'DESCRIPTION'})
+              +spec('',{name:'DESCRIPTION'})
+              +fitem('Description-fitem', {name:'DESCRIPTION1', multiline:true})
+
+  +modal#titlewin(title='Edit Details' titlebar iconCls='square-pen' bordered max-w='sm')
+    +fitem('Part ID', {name:'PART_ID'})
+    +fitem('Quantity', {class:'numberbox', name:'QTY'})
+    +spec('Description-spec',{name:'DESCRIPTION'})
+    +fitem('Description-fitem', {name:'DESCRIPTION1', multiline:true})
+    +modal-footer
+      +button('Save', {color:'primary', size:'sm', 'data-action':'save'})
+

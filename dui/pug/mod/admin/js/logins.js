@@ -1,0 +1,264 @@
+
+$.page.ready(function () {
+/*
+  
+  PAC 171103 - 2.2.156
+  1. Added new clear cache icon to toolbar.
+  
+  
+*/
+
+$.page.fn.mods = function(val,row,idx){
+  var page = row.last;
+  if (!page) return '';
+  var label = page.toUpperCase().replace(/\^/g,' > ');
+  return '<span class="inline-flex items-center gap-1"><a href="/#' + page + '"><i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60 hover:opacity-100"></i></a>' + label + '</span>';
+  
+  /*
+  if(!val) return 'HOME PAGE';
+  var bits = val.split('^');
+  var mod = {'vwltsa':'PURE-MFG','dqm':'PURE-QM','admin':'ADMIN','user':'USER','vmfg':'VISUAL-MFG','oss':'1STOP-SHOP'}[bits[0]];
+  //console.log(mod[bits[0]])
+  return mod[bits[0]]+' > '+bits.splice(1).join(' > ').toUpperCase().replace(/_/g,' ');
+  */
+}
+
+function vwebdg(dids){
+  
+  var devs = {}; 
+  dids.map(function(e){
+    devs[e.macid] = e.locn+' - '+e.name;
+  });
+  
+  $('#dgvwlogs').datagrid({
+    striped:true,
+    loadMsg:'',
+    rownumbers:true, 
+    singleSelect:true,    
+    
+    columns:[[
+
+      {field:'select',checkbox:true},
+
+     /*
+       	{
+    		"devid":"shopFloor#1",
+    		"login":"2019-01-14T03:11:54.770Z",
+    		"last":"2019-01-14T03:11:54.770Z",
+    		"id":"Kmo3s8IEXYY20V2Ep3-vAlV-sAZBkgeJ",
+    		"ua":"pure-shopfloor",
+    		"ip":"45.119.154.253",
+    		"empid":"",
+    		"lasttx":"",
+    		"nwlev":-1,
+    		"batlev":-1
+    	},
+      */     
+      
+      // 'vwkiosk','pure-kiosk','pure-monitor','pure-iotd','vwkiosk-mobile'
+      {field:'devic',title:'Dev',width:30, styler:function(val,row,idx){
+        
+        var cls = {
+          'vwkiosk':'icon-touch',
+          'pure-kiosk':'icon-touch',
+          'pure-monitor':'icon-monitor',
+          'pure-iotd':'icon-iotd',
+          'pure-shopfloor':'icon-touch'
+        }[row.ua] || 'icon-pc';
+        
+        /*
+        if(row.touch == true || row.monitor == true || row.iotd == true) {
+          
+          if(row.iotd == true) var cls = 'icon-iotd'; 
+          else if(row.touch == true) var cls = 'icon-touch'; 
+          else var cls = 'icon-monitor';         
+          
+          if(new Date() - new Date(parseInt(row.last)) > 40000) cls += ' bg-red';
+          else cls += ' bg-grn';
+        } 
+        else var cls = 'icon-pc'; 
+        */
+        
+        return {class:cls, style:'background-position:center center;background-repeat:no-repeat;'}
+      }},
+      {field:'devid',hidden:true},
+      {field:'dev',title:'Device ID', formatter:function(val,row,idx){
+        return row.devid.toUpperCase();
+        //return row.devid.replace(/:/g,'');
+        /*
+        if(!row.devid) return '???';
+        var mac = row.devid.toString().toUpperCase().replace(/:/g,'');
+        return devs[mac] || row.devid;
+        */
+      }},
+      
+      {field:'ua',title:'Dev Type',width:80},
+      
+      {field:'ip',title:'IP Address',formatter:function(val){
+        if(val) return val.replace('::ffff:','').split(',')[0];
+      }},
+      
+      {field:'login',title:'Login',formatter:datetimef,width:130},
+      {field:'uphr',title:'Up Hrs',align:'right',formatter:function(val,row,idx){
+        return ((new Date() - new Date(row.login))/3600000).toFixed(1);    
+      },width:50},
+      
+      //{field:'expires',title:'Expires',formatter:timef,width:70},
+      
+      {field:'last',title:'Last',formatter:timef,width:70},
+  
+      {field:'maxage',title:'Expires',formatter:timef,width:70,styler:$.page.fn.expires},
+      
+      {field:'nwlev',title:'Net %',align:'right',formatter:function(val,row,idx){
+       val = parseInt(val);
+       if(isNaN(val) || val==-1) return '-';
+       else return `${val * 20}%` 
+      },width:50},
+
+      {field:'batlev',title:'Bat %',align:'right',formatter:function(val,row,idx){
+       val = parseInt(val);
+       //console.log(val);
+       if(isNaN(val) || val == -1) return '-';
+       else return `${val * 100}%` 
+      
+      },width:50},
+
+      /*
+      { field:'last',
+        width:70,
+        title:'Last Ping',
+        formatter: function(val,row,idx){
+console.log(row.device);
+          return timef(row.last);
+      }},
+      {field:'miss',title:'Miss &Sigma;',align:'right',width:50},
+      {field:'misshr',title:'Miss Hr',align:'right',width:50},
+      {field:'count',title:'TX &Sigma;',align:'right',width:50},
+      {field:'lasttx',title:'Last TX',formatter: timef,width:70},
+      {field:'func',title:'Last TX Action',formatter:function(val,row){
+        if(row.monitor==true) return '';
+        var txt =  {
+          'jstop':'Stop Job',
+          'srun':'Start Run',
+          'sset':'Start Setup',
+          'wo_enq':'Job Enquiry',
+          'clk_out':'Clock Out',
+          'break':'Break',
+          'clk_in':'Clock In',
+          'put_ind':'Indirect',
+          'put_thold':'Shift Fix',
+          'emp_val':'Validate ID'
+        }[val] || val;
+        
+        var cls = 'vwlt-'+val;
+        return '<span style="width:20px" class="'+cls+' icon-dg"></span><span>'+txt+'</span>';
+      }},
+      {field:'empid',title:'Last TX UID'},
+      */
+    ]]
+  })
+}
+
+// expiry bargraph
+$.page.fn.expires = function(val,row,idx){
+
+  if('devid' in row) var life = parseInt((new Date(row.maxage) - new Date(row.last)) / 1000)+60; //maxage - last
+  else var life = ($.dui.idlemin || 30) * 60;
+
+  var sec = (new Date(row.maxage) - new Date()) / 1000;
+  var pct = 100 - ((sec / life) * 100);
+  var remaining = (sec / life) * 100;
+  var color = remaining > 50 ? '--color-success' : remaining > 20 ? '--color-warning' : '--color-error';
+  return {style:'background-image:linear-gradient(to right,color-mix(in oklch,var('+color+') 35%,transparent),color-mix(in oklch,var('+color+') 8%,transparent));background-repeat:no-repeat;background-size:'+pct+'% 100%;'}
+}  
+
+$('#logins').datagrid({
+  loadMsg:'',
+  rownumbers:true,
+  selectOnCheck: true,
+  url: '/',
+  queryParams:{
+    _func   :'get',
+    _sqlid  :'admin^logins'  
+  },
+  
+  loadFilter: function(data){
+    var rows=[]; data.ofc.rows.map(function(e,i){
+      if($.dui.udata.userid != e.uid) rows.push(e);
+    }); 
+        
+    // Load the Shop Floor Datagrid.
+    if($('#dgvwlogs').datagrid()) $('#dgvwlogs').datagrid('loadData',data.sf);  
+    return ({total:rows.length,rows:rows})
+  },
+  
+  columns:[[
+    {field:'select',checkbox:true},
+    {field:'icon', width:24,styler:function(val,row,idx){
+      var sec = ((new Date(row.maxage) - new Date()) / 60000); 
+      if(sec > 28) var cls = 'icon-tick'; else var cls = 'icon-cross'; 
+      return {class:cls, style:'background-position:center center;background-repeat:no-repeat;'}
+    }},
+    {field:'uid', width:100, title:'UID'},
+    {field:'ip', width:100, title: 'IP Address',formatter:function(val){
+      if(val) return val.replace('::ffff:','').split(',')[0];
+    }},
+    {field:'login', width:130, title:'Login',formatter:datetimef},
+    {field:'maxage', width:80, title:'Expires In', hidden:false,formatter: function(val,row,idx){ 
+      return ((new Date(row.maxage)-new Date())/1000/60).toFixed(1)+' Min';
+      },styler:$.page.fn.expires},
+    {field:'last', width:350, title:'Last Page',formatter: $.page.fn.mods}
+  ]] 
+});
+
+var refresh;
+
+// page init (already inside $.page.ready)
+
+  ajaxget('/',{_sqlid:'vwltsa^devices',_func:'get'},function(res){
+    if(res.macid) res=[res];
+    if(res.length > 0) vwebdg(res);
+    else vwebdg([]); 
+    $('#logins').datagrid('reload');
+    
+  });
+
+  // [DUI] toolbar buttons rendered server-side from datagrid.logins.json
+  // Plugin enables/disables on row select/unselect. Just wire click handlers.
+
+  $('#but_user_msg').on('click', function(){
+    var dlg = document.getElementById('user_msg');
+    if (dlg) dlg.showModal();
+  });
+
+  $('#but_user_logout').on('click', function(){
+    var rows = [];
+    $('#logins').datagrid('getSelections').map(function(e){ rows.push(e.uid); });
+    $('#dgvwlogs').datagrid('getSelections').map(function(e){ rows.push(e.devid); });
+
+    ajaxget('/',{_func:'logout',userids:rows.join(',')},function(res){
+      alert(res.msg);
+      $('#logins').datagrid('reload');
+    },{method:'get'});
+  });
+
+  // Send message handler (wired from modal)
+  $('#user_msg_send').on('click', function(){
+    var dg = $('#logins');
+    var rows = []; dg.datagrid('getSelections').map(function(e){ rows.push(e.uid); });
+
+    ajaxget('/',{_func:'usermsg',userid:rows.join('^'),msg:$('#user_msg_text').val()},function(res){
+      if(!res) msgbox('Error sending message.');
+      document.getElementById('user_msg').close();
+      dg.datagrid('unselectAll');
+    },{method:'get'});
+  });
+
+
+  clearInterval(refresh);
+  refresh = setInterval(function(){
+    if($('#logins').length==0) return clearInterval(refresh);
+    else if($('#logins').datagrid('getSelections').length===0) $('#logins').datagrid('reload');
+  },15000);     
+
+});  // $.page.ready

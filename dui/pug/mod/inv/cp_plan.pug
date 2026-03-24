@@ -1,0 +1,62 @@
+extends ../content
+block style
+  style.
+    #tbar {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }
+    #tbar form#gfilter {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:0;
+    }
+    #tbar form#gfilter .fitem {
+      display:inline-flex;
+      align-items:center;
+      margin:0;
+    }
+    
+    .partrow {
+      background-color:rgba(230, 230, 250, 0.3);
+      color:black;
+    }
+    
+    .exception,
+    .negative {
+      color: red;	    
+    }
+    
+    .demand,
+    .datagrid-header td[field=DEMAND_ORDER],
+    .datagrid-header td[field=DEMAND_QTY] {
+      color: blue;   
+    }
+
+    .supply,
+    .datagrid-header td[field=SUPPLY_ORDER],
+    .datagrid-header td[field=SUPPLY_QTY] {
+      color: green;    
+    }
+block content
+  +hsplit('72px')
+    +panel('north')
+      #tbar
+        div(style="display:inline-block")
+          +form#gfilter
+            +fitem('Customer Filter',{class:'combobox navi fit ', id:'CUSTOMER_ID_',name:'CUSTOMER_ID',_sqlid:'inv^cpplan_cust' })
+            +fitem('Name',{class:'textbox ', id:'CUSTOMER_NAME_',readonly:true })
+            +fitem('Status Filter',{class:'combobox',name:'REPORT_TYPE','data-options':"data:[{text:'All',value:'ALL'},{text:'Shortages',value:'SHORTAGE'},{text:'Open Orders',value:'RLS'},{text:'Open Orders - Job Order',value:'RLS-J'},{text:'In-House',value:'INHOUSE',selected:true},{text:'Return',value:'RETURN'}],editable:false"})
+            a#dg2excel(disabled="disabled")
+        span.vert-sep(style="margin:0 8px;")
+        div#colsel(style="display:inline-block;")
+        span.vert-sep(style="margin:0 8px;")
+    +panel('center')
+      +datagrid#cpplan
+block script
+  +script("inv",['js/cp_plan.js'])

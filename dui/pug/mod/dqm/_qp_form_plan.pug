@@ -1,0 +1,28 @@
++vsplit()
+  +panel('west')
+    //-div.qpplan.plain
+    +fitem('Plan ID',{name:'PLAN_ID',id:'~' , class:'textbox', readonly:"readonly"})
+    +fitem('Plan Version',{name:'PLAN_VER' ,class:'numberspinner',value:"1" ,precision:"0" ,min:"1"})
+    +fitem('Plan Type',{id:'plantype',name:'TYPE', 'data-options':"data:[{value:'PART',text:'PART'},{value:'JOB',text:'JOB'},{value:'GAUGE',text:'GAUGE'}]" ,readonly:"readonly"})
+
+    //-+v-group#PARTdiv
+    +fitem('Part ID',{name:'PART_ID',id:'~', class:'searchbox',sbref:'part' })
+    +fitem('Drawing ID',{name:'DRG_ID',class:'textbox'})
+    +fitem('Drawing Rev',{name:'DRG_REV',class:'textbox'})
+
+    //-+v-group#GAUGEdiv
+    +fitem('Gauge Type',{id:'~' ,class:'combobox',_sqlid:"dqm^gaugeType" ,name:'GAUGE_TYPE' ,'data-gid': "#GAUGE_ID", 'data-options':"editable:false"})
+    +fitem('Gauge ID',{class:'searchbox',name:'GAUGE_ID', id:'~',readonly:"readonly", sbref:'gauge_ids'})
+
+    //+v-group
+    +fitem('Sample Type',{id:'samtype',class:'combobox',name:'SAMPLE_TYPE', 'data-options':"data:[{value:'percent',text:'Percent'},{value:'fixed',text:'Fixed',selected:true}]" ,required:'required'})
+    +fitem('Sample Size',{id:'samqty',name:'SAMPLE_QTY' ,class:'numberspinner',precision:"1" ,increment:"0.5", value:"1" ,min:"0.5"})
+
+  +panel('center')
+    +tabs(data-options="plain:true,fit:true")
+      +tab-item("Notes", {iconCls:"icon-notes"})
+
+        //-+textbox(name='SPEC' data-options="multiline:true")
+        +spec('', {name:'SPEC'})
+      +tab-item("Attachments", {iconCls:"icon-pclip"})
+        +filegrid#qpfiles(style="width:100%;" data-options="fit:true")

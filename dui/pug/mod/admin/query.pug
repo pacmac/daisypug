@@ -1,0 +1,41 @@
+extends ../content 
+
+block script 
+  +script("admin",["js/query.js"])
+block style
+  style.
+    .datagrid-header, .easyui-accordion li, .tree li {
+      text-transform: none;
+    }
+
+    input#sql ~ span textarea {
+      color:lime;
+      background:black;
+      font-weight:100 !important;
+    }
+    
+    .textbox.easyui-fluid,(data-easyui-warning="easyui-fluid")
+    textarea.textbox-text.validatebox-text {
+        border-radius: 0;
+    }
+    
+    .fbuts > * {
+      margin: 0 4px;
+    }  
+
+block content
+  form.fit#sqlform
+    +layout({id:'sqlpan'})
+      div#sqldiv(region="north" style="height:40%;" minHeight="40%" split="true")
+        +layout()
+          div(region="west" style="width:400px;")
+            +fitem('Statement Type',{id:'type'})            
+              
+          div(region="center" style="")
+            input#sql(multiline="true" style="height:100%; width:100%;" prompt="SELECT * FROM ...")
+        
+      div(region="center" style="padding:4px;")
+        table#data
+  div#rowmenu(style="width:120px;")
+    div(name="getcols" data-options="iconCls:'aicon-database_table'") Get Columns
+    div(name="getdata" data-options="iconCls:'icon-dbgo'") Get Data

@@ -1,0 +1,18 @@
+extends ../content
+block script
+  script: include js/part_tracetrans_editor.js
+block content
+  +vsplit('410px')
+    +panel('west')
+      +form#parttrans(_sqlid='inv^part_trace')
+        +fitem('Part ID',{name:'PART_ID', readonlyx:true,requiredx:true,class:'textbox'})
+        +fitem('Trace ID',{name:'TRACE_ID', readonly:true,class:'textbox'})
+        +fitem('Unit Material Cost',{name:'UNIT_MATERIAL_COST',id:'~', requiredx:true, class:'numberspinner', min:0, precision:2, value:0})
+        +fitem('Expiry Date',{name:'EXPIRY_DATE',id:'~',  class:'datebox'})
+        div#traceprop
+          -for (var x=1; x<11; x++)
+            .fitem(id='TRACE_USER_'+x+'_LBL' style="display:none")
+              +label('')
+              +input({name:'TRACE_USER_'+x,class:'textbox','data-options':"validType:['length[1,80]']"})
+    +panel('center')
+      +datagrid#txgrid

@@ -1,0 +1,7 @@
+modified_pages:
+  - path: user/pref.pug
+    comment: extends ../content, block content was added
+    hashlink: #user^pref
+  - path: user/passwd.pug
+    comment: converted block content to nested +split/+panel layout
+    hashlink: #user^passwd

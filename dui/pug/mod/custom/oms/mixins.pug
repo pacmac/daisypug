@@ -1,0 +1,199 @@
+mixin oms_gauge_man_rental()
+  .two
+    div
+      +h-group('General')
+        +fitem('Term',{id:'~', name:'RENTAL_GAUGE_TYPE', class:'textbox', readonly:true})
+        +oms_LICENSOR_ID('RENTAL_LICENSOR_ID')
+
+      +h-group('Rental Costing')
+        +fitem('Currency',{name:'RENTAL_CURRENCY', id:'~', class:'combobox' , _sqlid:'admin^curr', 'data-options':"panelHeight:'auto',editable:false"})
+        +fitem('Daily Rate',{id:'~', name:'RENTAL_DAILY', class:'numberspinner', 'data-options':"precision:2, min:0, value:0, prefix:'$'"})
+
+      +h-group('Royalty Costing')
+        +fitem('Currency',{name:'ROYALTY_CURRENCY', id:'~', class:'combobox' , _sqlid:'admin^curr', 'data-options':"panelHeight:'auto',editable:false"})
+        +fitem('Rate',{id:'~', name:'RENTAL_ROYALTY', class:'numberspinner', 'data-options':"precision:2, min:0, value:0, prefix:'$'"})
+        +fitem('Type',{name:'GAUGE_ROYALTY_TYPE', id:'~', class:'combobox', 'data-options':"data:[{text:'ENDs Rate',value:'ENDS-RATE',selected:true},{text:'One Time Charge',value:'ONE-TIME'}], panelHeight:'auto',editable:false"})
+
+    div
+      +v-group('Long Term Rental',{id:'ltrental',class:'lock'})
+        +fitem('Start Date',{id:'~', name:'RENTAL_LT_START', class:'datebox'})
+        +fitem('Duration Days',{id:'~', name:'RENTAL_LT_PERIOD', class:'numberspinner', 'data-options':"precision:0, min:0, value:0"})
+        +fitem('End Date',{id:'~', name:'RENTAL_LT_END', class:'datebox', readonly:true})
+
+      +v-group('Specifications')
+        +oms_GAUGE_RENT_DIAMETER()
+        +oms_GAUGE_RENT_THREAD()
+        +fitem('Pin or Box',{name:'GAUGE_RENT_PINBOX', class:'combobox', 'data-options':"data:[{text:'Pin',value:'PIN'},{text:'Box',value:'BOX'}],panelHeight:'auto',editable:false"})
+        +fitem('Weight',{name:'GAUGE_RENT_WEIGHT', class:'textbox'})
+
+  script.
+    $('#OWNER_TYPE').combobox({
+      onChange: function(nv,ov){
+        setTimeout(function(){
+
+          $('#RENTAL_GAUGE_TYPE').textbox('setValue',nv.toUpperCase());
+
+          var ltr = $('#ltrental');
+          var day = $('#RENTAL_DAILY');
+          var per = $('#RENTAL_LT_PERIOD');
+          var sd = $('#RENTAL_LT_START');  
+          var tabs = $('#gmtabs'); cl(tabs);
+          
+          switch(nv){
+            case 'owned':
+              tabs.tabs('disableTab','Rental');
+              day.numberspinner('readonly',false);
+              ltr.addClass('lock');
+              break;
+            case 'short':
+              tabs.tabs('enableTab','Rental');
+              ltr.addClass('lock');
+              day.numberspinner('readonly',false);
+              break;
+            case 'long':
+              tabs.tabs('enableTab','Rental');
+              ltr.removeClass('lock');
+              day.numberspinner('readonly',true);
+              day.numberspinner('setValue',0);
+              break;
+          }
+               
+        },100)
+      }
+    });
+    
+    $('#RENTAL_LT_PERIOD').numberspinner({
+      onChange: function(nv,ov){
+        var date = $('#RENTAL_LT_START').datebox('getDate'); 
+        date.setTime(date.getTime()+(nv*24*60*60*1000));
+        $('#RENTAL_LT_END').datebox('setValue',date); 
+      }
+    })
+    
+    $('#RENTAL_LT_START').datebox({
+      onChange: function(nv,ov){
+        var nv = $('#RENTAL_LT_PERIOD').numberspinner('getValue');
+        var date = $('#RENTAL_LT_START').datebox('getDate'); 
+        date.setTime(date.getTime()+(nv*24*60*60*1000));
+        $('#RENTAL_LT_END').datebox('setValue',date);
+      }
+    })     
+    
+    
+mixin oms_LICENSOR_ID(name)
+  +fitem('Licensor',{name:name||'LICENSOR_ID', class:'combobox', _sqlid:'dqm^licensor_ids','data-options':"onChange:function(nv,ov){$('input[textboxname=GAUGE_RENT_THREAD]').combobox('load',{LICENSOR_ID:nv})},editable:false"})
+
+
+mixin oms_GAUGE_RENT_THREAD()
+  +fitem('Thread',{name:'GAUGE_RENT_THREAD', class:'combobox', _sqlid:'dqm^liccombo', 'data-options':"queryParams:{PARAM_TYPE:'THREAD'},editable:false"})
+
+mixin oms_GAUGE_RENT_DIAMETER()
+  //-+fitem('Outside Diameter',{id:'~',name:'GAUGE_RENT_DIAMETER', class:'combobox', 'data-options':"data:[{value:'ALL', text:'ALL'},{value:'MULTIPLE', text:'MULTIPLE'},{value:2.500, text:'2 1/2 inch'},{value:2.375, text:'2 3/8 inch'},{value:2.875, text:'2 7/8 inch'},{value:3.500, text:'3 1/2 inch'},{value:4.000, text:'4 inch'},{value:4.500, text:'4 1/2 inch'},{value:5.000, text:'5 inch'},{value:5.500, text:'5 1/2 inch'},{value:5.750, text:'5 3/4 inch'},{value:5.875, text:'5 7/8 inch'},{value:6.000, text:'6 inch'},{value:6.625, text:'6 5/8 inch'},{value:6.875, text:'6 7/8 inch'},{value:7.000, text:'7 inch'},{value:7.250, text:'7 1/4 inch'},{value:7.625, text:'7 5/8 inch'},{value:7.750, text:'7 3/4 inch'},{value:7.875, text:'7 7/8 inch'},{value:8.500, text:'8 1/2 inch'},{value:8.625, text:'8 5/8 inch'},{value:8.750, text:'8 3/4 inch'},{value:9.375, text:'9 3/8 inch'},{value:9.625, text:'9 5/8 inch'},{value:9.750, text:'9 3/4 inch'},{value:9.875, text:'9 7/8 inch'},{value:9.973,text:'9.973 inch' },{value:9.982, text:'9.982 inch'},{value:10.000, text:'10 inch'},{value:10.125, text:'10 1/8 inch'},{value:10.1875, text:'10 3/16 inch'},{value:10.750, text:'10 3/4 inch'},{value:10.875, text:'10 7/8 inch'},{value:10.947, text:'10 15/16 inch'},{value:11.267, text:'11.267 inch'},{value:11.750, text:'11 3/4 inch'},{value:11.875, text:'11 7/8 inch'},{value:12.063, text:'12 inch'},{value:12.125, text:'12 1/8 inch'},{value:12.750, text:'12 3/4 inch'},{value:13.375, text:'13 3/8 inch'},{value:13.625, text:'13 5/8 inch'},{value:13.875, text:'13 7/8 inch'},{value:14.000, text:'14 inch'},{value:14.150, text:'14.15 inch'},{value:15.000, text:'15 inch'},{value:16.000, text:'16 inch'},{value:17.875, text:'17 7/8 inch'},{value:17.938, text:'17 15/16 inch'},{value:18.000, text:'18 inch'},{value:18.625, text:'18 5/8 inch'},{value:20.000, text:'20 inch'},{value:21.500, text:'21 1/2 inch'},{value:22.000, text:'22 inch'},{value:24.000, text:'24 inch'},{value:24.500, text:'24 1/2 inch'},{value:26.000, text:'26 inch'}],editable:false"})
+  +fitem('Outside Diameter',{id:'~',name:'GAUGE_RENT_DIAMETER', class:'combobox'})
+
+  script.
+    ajaxget('/',{ _func: "get", _sqlid: "admin^bhave", appid: "dqm^gauges^gauge_man" },function (bh) {
+          $('#GAUGE_RENT_DIAMETER').combobox({
+            data: jsonParse(bh.CBO_OUTSIDE_DIAMETER),
+            editable:false
+          });
+    });
+mixin oms_wo_seq_inc_rental() 
+  //-div#tabgauge(title='Gauge' iconCls="aicon-gauge")
+  +tab-item('Gauge', {id:'tabgauge',iconCls:'aicon-gauge'})
+    +oms_LICENSOR_ID()
+    +fitem('Licensor Job ID',{name:'LICENSOR_JOB', class:'textbox', readonly:true})
+    +oms_GAUGE_RENT_DIAMETER()
+    +oms_GAUGE_RENT_THREAD()
+    +fitem('Pin or Box',{name:'GAUGE_RENT_PINBOX', class:'combobox', 'data-options':"data:[{text:'Pin',value:'PIN'},{text:'Box',value:'BOX'}], panelHeight:'auto',editable:false"})
+    
+    div(style="width: 400px;text-align: center;margin-top: 20px;")
+      +button('Clear Gauge',{id:'GAUGE_CLEAR', 'data-options':"onClick:function(){if(!$('input[textboxname=LICENSOR_JOB]').textbox('getValue')) $('#tabgauge input.textbox-f').textbox('clear');}"})
+
+mixin oms_bhave_rental()    
+  div(title='Rental' iconCls="icon-money" style="padding:12px")
+    form.single.load(_sqlid='admin^bhave' asdpx='s')#rentman
+      +input({name:'appid', value:'dqm^gauges^rent_man', type:'hidden'})
+      +fitem('Freight Company',{name:'CBO_FREIGHT_CO', class:'combobox edit first', 'data-options':"fields:[{'type':'textbox','label':'Name', 'id':'text'}],editable:false"})
+      +fitem('User Field Labels',{name:'LBL_UDF', class:'combobox edit first', 'data-options':"fields:[{'type':'textbox','label':'ID', 'id':'value','readonly':true},{'type':'textbox','label':'Label', 'id':'text'}],editable:false"})
+      
+      +fitem('TBA Job Warning',{class:'combobox', name:'TBA_WARNING', 'data-options':"data:[{text:'Yes', value:'y',selected:true},{text:'No', value:'n'}],editable:false"})
+
+      +fitem('Allow TBA Invoicing',{class:'combobox', name:'TBA_INVOICING', 'data-options':"data:[{text:'Yes', value:'y',selected:true},{text:'No', value:'n'}],editable:false"})
+      +fitem('Rental ID is PR ID',{class:'combobox', name:'PRID_CLONE', 'data-options':"data:[{text:'Yes', value:'y',selected:true},{text:'No', value:'n'}],editable:false"})
+        
+mixin oms_lists_rental()
+  #licensor(title='Gauge Licensors')
+    form.multi(_sqlid='dqm^licensor', asdpx='ax')
+      +fitem('ID',{class:'combobox fkey fit', id:'~', name:'LICENSOR_ID', _sqlid_:'licensor_ids' ,'data-options':"validType:'length[1,30]',editable:false",required:true})
+      +fitem('Name',{class:'textbox', name:'LICENSOR_NAME' ,'data-options':"validType:'length[1,80]'", required:true})
+
+      +v-group('Rental Days Method') 
+        +fitem('Mininum Days',{name:'MIN_DAYS', class:'numberspinner', 'data-options':"precision:0, min:0, value:0"})
+      +v-group('Rental Formula')
+        +fitem('Start Date',{class:'combobox', required:true, name:'LICENSOR_START_DATE', 'data-options':"data:[{text:'Ship Date', value:'SHIP_DATE'},{text:'Receipt Date', value:'RECEIPT_DATE'}],editable:false"}) 
+        +fitem('End Date',{class:'combobox', required:true, name:'LICENSOR_END_DATE', 'data-options':"data:[{text:'Return Date', value:'RETURN_DATE'},{text:'Arrival Date', value:'RETURN_ARRIVAL_DATE'}],editable:false"})
+    
+      +v-group('Parameters',{style:'width:345px;height:250px;overflow:visible'})
+        #licparam(_style="border-radius:6px;").radius
+  
+  script.
+    $('#licparam').datagrid({
+  
+    }).datagrid('rowEditor',{
+      
+      tbarPrepend: $('<span style="float:right;padding:2px 4px;"><input class="combobox" style="width:180px" _sqlid="dqm^licparam_ids" /></span>'),
+      cls:'radius-4',
+      fitColumns: true,
+      editor: 'inline',
+      striped: true,
+      url: '/',
+       
+      columns: [[
+        {field:'LICENSOR_ID',hidden:true},
+        {field:'PARAM_TYPE',hidden:true},
+        {field:'PARAM_KEY',title:'ID',width:100,editor:'text'},
+        {field:'PARAM_VALUE',title:'Text',width:200,editor:'text'}
+      ]],
+  
+      onLoadSuccess: function(data){
+      
+      },
+  
+      onEndEdit: function(idx,row,chg){ 
+        var me = $(this);
+        var opt = me.datagrid('options');
+        +combobox.tbarPrepend.find('input.easyui-combobox')
+        var type = cbo.combobox('getValue');
+        ajaxget('/',$.extend(row,{
+          _sqlid:'dqm^licparam',
+          PARAM_TYPE: type,
+          LICENSOR_ID: $('#LICENSOR_ID').combobox('getValue') 
+        }),function(res){
+          cbo.combobox('reload');
+          cl(res);  
+        })
+  
+      }
+    
+    }).datagrid('editButs',{edit:'hide'});
+    
+    var dgo = $('#licparam').datagrid('options');
+    
+    +combobox.tbarPrepend.find.combobox('input.easyui-combobox')
+      onSelect: function(rec){
+        var dg = $('#licparam');
+        dg.datagrid('load',{
+          _sqlid:'dqm^licparam',
+          _func: 'get',
+          _combo: 'y',
+          LICENSOR_ID: $('#LICENSOR_ID').combobox('getValue'),
+          PARAM_TYPE:rec.value,
+        })
+        cl(rec);
+      }
+    })
+    
+    $('#licensor form').on('loadDone',function(jq,data){
+      +combobox.tbarPrepend.find.combobox('input.easyui-combobox').combobox('reload')
+    })

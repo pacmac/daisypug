@@ -1,0 +1,18 @@
+{
+  "id": "cocspec",
+  "striped": true,
+  "fitColumns": true,
+  "fit": true,
+  "checkOnSelect": false,
+  "idField": "ID",
+  "url": "/?_func=get&_sqlid=dqm^coc_bspecs",
+  "method": "get",
+  "columns": [[
+    { "field": "_CK", "width": 50, "checkbox": true },
+    { "field": "TYPE", "title": "Type", "width": 100, "fixed": true, "formatter": "$.page.fn.fmtType" },
+    { "field": "DEFAULT_VAL", "title": "Def", "width": 40, "fixed": true, "align": "center", "formatter": "$.page.fn.fmtDefault" },
+    { "field": "ID", "title": "ID", "width": 120, "fixed": true },
+    { "field": "REV", "title": "Rev", "width": 30, "fixed": true },
+    { "field": "DESCRIPTION", "title": "Description", "width": 1000, "fixed": false }
+  ]]
+}

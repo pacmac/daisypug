@@ -1,0 +1,155 @@
+status: converted
+user: ''
+source: inv/tool_request.pug
+target: inv/tool_request.pug
+version: 4
+passes: 2
+fragments: {}
+datagrids: {}
+auto_fixed:
+  - 'L56: div.easyui-layout → +split'
+  - 'L10: strip easyui- prefix'
+  - 'L12: strip easyui- prefix'
+  - 'L13: strip easyui- prefix'
+  - 'L14: strip easyui- prefix'
+  - 'L15: strip easyui- prefix'
+  - 'L16: strip easyui- prefix'
+  - 'L36: strip easyui- prefix'
+  - 'L38: strip easyui- prefix'
+  - 'L39: strip easyui- prefix'
+  - 'L40: strip easyui- prefix'
+  - 'L41: strip easyui- prefix'
+  - 'L45: strip easyui- prefix'
+  - 'L58: strip easyui- prefix'
+  - 'L60: strip easyui- prefix'
+  - 'L61: strip easyui- prefix'
+  - 'L62: strip easyui- prefix'
+  - 'L63: strip easyui- prefix'
+  - 'L312: strip easyui- prefix'
+  - 'L19: .center → .text-center'
+  - 'L6: div(region:west) → +panel'
+  - 'L23: div(region:center) → +panel'
+  - 'L33: div(region:center) → +panel'
+  - 'L35: div(region:west) → +panel'
+  - 'L42: div(region:center) → +panel'
+  - 'L46: div(region:north) → +panel'
+  - 'L55: div(region:south) → +panel'
+  - 'L57: div(region:west) → +panel'
+  - 'L64: div(region:center) → +panel'
+  - 'L6: strip surface overrides'
+  - 'L33: strip surface overrides'
+  - 'L46: strip surface overrides'
+  - 'L55: strip surface overrides'
+  - 'L5: strip layout options'
+  - 'L6: strip panel options (keep size only)'
+  - 'L23: strip panel options (keep size only)'
+  - 'L27: strip layout options'
+  - 'L29: strip layout options'
+  - 'L33: strip panel options (keep size only)'
+  - 'L34: strip layout options'
+  - 'L35: strip panel options (keep size only)'
+  - 'L42: strip panel options (keep size only)'
+  - 'L46: strip panel options (keep size only)'
+  - 'L55: strip panel options (keep size only)'
+  - 'L56: strip split options'
+  - 'L57: strip panel options (keep size only)'
+  - 'L64: strip panel options (keep size only)'
+  - 'L5: +layout → +split'
+  - 'L27: +layout → +split'
+  - 'L29: +layout → +split'
+  - 'L34: +layout → +split'
+manual: []
+js_auto_fixed: []
+js_manual: []
+last_run_by: CLS
+last_run_at: '2026-02-24 09:02:10'
+dui_status: migrated
+dui_verified_at: '2026-03-04 18:21:27'
+dui_verified_by: dui-migrate
+migrated_at: '2026-03-04'
+migrated_by: dui-migrate
+generated:
+  pug: html/dui/mod/inv/tool_request.pug
+  js: html/dui/mod/inv/js/tool_request.js
+  json:
+    - html/dui/mod/inv/json/datagrid.tool_request_tool_tx.json
+dui_verify:
+  verified_at: '2026-03-04 18:21:27'
+  verified_by: dui-migrate
+  console_errors: 0
+  data_loads: true
+  screenshot: .pw/migrate-tool_request-dui.png
+  final_screenshot: .pw/migrate-tool_request-final.png
+  overall: pass
+eui_baseline:
+  load_verified: true
+  discovered_at: '2026-03-04 12:37:06 +0800'
+  discovered_by: dui-discover
+  screenshots:
+    empty: .pw/discover-tool_request-eui-empty.png
+    loaded: .pw/discover-tool_request-eui-loaded.png
+    tabs: []
+  load_elements:
+    - type: combobox
+      label: Operator ID
+      id: '#OPERATOR_ID'
+      value: DIS1
+    - type: combobox
+      label: Part ID
+      id: '#PART_ID'
+      value: A8000
+  fields:
+    - label: Operator ID
+      id: '#OPERATOR_ID'
+      value: DIS1
+    - label: Operator NAME
+      id: '#OPERATOR_NAME'
+      value: ''
+    - label: Trans Qty
+      id: '#QTY'
+      value: '0.00'
+    - label: Part Description
+      id: '#PART_DESC'
+      value: ''
+    - label: First Grid Part ID
+      id: '#tool_tx'
+      value: A8000
+  tabs: []
+  default_tab: null
+  datagrids:
+    - id: '#tool_tx'
+      tab: null
+      columns:
+        - Part ID
+        - Part Description
+        - Bal Qty
+        - Qty
+      row_count: 1
+  buttons:
+    - label: Clear
+      id: '#clr'
+      context: form
+    - label: Add
+      id: '#add'
+      context: form
+  form_states:
+    on_add: Adds pending tool request row using PART_ID, OPERATOR_ID, QTY; then reloads grid and clears part/qty/desc.
+    on_save: Grid inline editor on row end edit posts updates to inv^tool_request.
+    on_delete: No dedicated delete handler in page script; relies on standard toolbar behavior if enabled.
+    on_record_select: Disables datagrid row-editor add/insert/edit buttons.
+  layout_profile:
+    type: vsplit
+    panels:
+      - region: west
+        content: form
+      - region: center
+        content: grid
+    has_toolbar: false
+    toolbar_fields: 0
+    toolbar_location: null
+    datagrids: 1
+    tabs: 0
+    form_fields: 5
+    form_fields_visible: 5
+    split_size: '400px'
+  user_notes: operator ID load records, part id should load part list also

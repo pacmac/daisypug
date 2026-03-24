@@ -1,0 +1,36 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "vwltsa^ship_ids_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "Shipment ID", "width": 100 },
+    { "field": "CUST_ID", "title": "Customer ID", "width": 100 },
+    { "field": "CUST_NAME", "title": "Customer Name", "width": 200 },
+    { "field": "SO_ID", "title": "Sales Order ID", "width": 120 },
+    { "field": "INVOICE_ID", "title": "Invoice ID", "width": 100 },
+    { "field": "CUST_PO", "title": "Customer PO", "width": 120 },
+    { "field": "SHIPMENT_DATE", "title": "Shipment Date", "width": 100 },
+    { "field": "INVOICE_DATE", "title": "Invoice Date", "width": 100 },
+    { "field": "CREATE_DATE", "title": "Create Date", "width": 100 }
+  ],
+  "filters": [
+    { "field": "CUST_ID", "title": "Customer ID", "editor": "textbox" },
+    { "field": "CUST_NAME", "title": "Customer Name", "editor": "textbox" },
+    { "field": "SO_ID", "title": "Sales Order ID", "editor": "textbox" },
+    { "field": "INVOICE_ID", "title": "Invoice ID", "editor": "textbox" },
+    { "field": "CUST_PO", "title": "Customer PO", "editor": "textbox" },
+    { "field": "SHIPMENT_DATE", "title": "Shipment Date", "editor": "datebox" },
+    { "field": "INVOICE_DATE", "title": "Invoice Date", "editor": "datebox" },
+    { "field": "CREATE_DATE", "title": "Create Date", "editor": "datebox" }
+  ]
+}

@@ -1,0 +1,800 @@
+//- Data Input Mixins
+//- Purpose: Form elements for capturing user data.
+//- DaisyUI Components: calendar, checkbox, file-input, filter, input, radio, range, rating, select, textarea, toggle, validator
+
+//- ============================================================================
+//- HELPERS
+//- ============================================================================
+//- getOpts is now in helpers.pug
+
+//- ============================================================================
+//- INPUT (textbox, passwordbox, numberbox, etc.)
+//- ============================================================================
+//- Blueprint: fsd/yaml/daisyComponents.yaml line 400
+//- DaisyUI structure: input.input(type="text")
+//- NO wrappers - just a single <input> element
+//- ============================================================================
+mixin input(input)
+  -
+    // Legacy EUI logic
+    resolveInputId(input);
+    if(input.name=='~') input.name=input.id;
+    if(input.prompt){input.placeholder=input.prompt; delete(input.prompt);}
+    // Alias: textboxname = name (EUI compat — page scripts use input[textboxname=X])
+    if(input.name && !input.textboxname) input.textboxname = input.name;
+
+    // VALIDATION logic: convert validType to data-options AND native HTML5 attrs
+    var hasValidation = false;
+    if('validType' in input) {
+      var vt = "validType:'"+input.validType+"'";
+      if(!('data-options' in input)) input['data-options']=vt;
+      else input['data-options'] += ','+vt;
+      // Convert length[min,max] to native minlength/maxlength
+      var vtArr = Array.isArray(input.validType) ? input.validType : [input.validType];
+      vtArr.forEach(function(rule) {
+        var lm = String(rule).match(/^length\[(\d+),(\d+)\]$/);
+        if (lm) {
+          input.minlength = input.minlength || lm[1];
+          input.maxlength = input.maxlength || lm[2];
+        }
+      });
+      hasValidation = true;
+      delete(input.validType)
+    }
+    if (input.required) hasValidation = true;
+
+    // Required field visual indicator — subtle highlight
+    if (input.required) {
+      var rc = (input.class || '').split(/\s+/);
+      if (rc.indexOf('required-field') === -1) rc.push('required-field');
+      input.class = rc.join(' ');
+    }
+
+
+    // PANEL HEIGHT logic (legacy EUI style)
+    var opt={}; if(input['data-options']) opt = getOpts(input['data-options']);
+    if(opt.data && opt.data.length < 12) {input.panelHeight = 'auto';}
+
+    // Initialize class list - split and deduplicate
+    var classList = [];
+    if (input.class) {
+      classList = input.class.split(/\s+/).filter(c => c); // Remove empty strings
+    }
+
+    // MULTIBOX DETECTION — renders its own DOM structure (not a combobox)
+    var hasMultibox = classList.some(c => c === 'multibox' || c === 'easyui-multibox');
+    if (hasMultibox) {
+      classList = classList.filter(c => c !== 'multibox' && c !== 'easyui-multibox' && c !== 'input' && !c.match(/^input-/));
+      // Parse multibox-specific options from data-options
+      var mbColumns = opt.columns || 1;
+      var mbData = (opt.data && Array.isArray(opt.data)) ? opt.data : [];
+      var mbSqlid = input._sqlid || opt._sqlid || null;
+      var mbPrompt = opt.prompt || 'Select items...';
+      var mbSeparator = opt.seperator || opt.separator || ',';
+    }
+
+    // COMBOBOX DETECTION AND TRANSFORMATION
+    var hasCombobox = classList.some(c => c === 'combobox');
+    var hasNavi = classList.some(c => c === 'navi');
+    //- QBE removed — replaced by searchbox (sbref)
+    var comboboxOptions = [];
+
+    if (hasCombobox) {
+      // Parse data-options to extract option array
+      if (input['data-options'] && opt.data && Array.isArray(opt.data)) {
+        comboboxOptions = opt.data;
+      }
+
+      // Remove old input component classes and duplicates
+      classList = classList.filter(c =>
+        c !== 'combobox' &&
+        c !== 'navi' &&
+        c !== 'input' &&
+        !c.match(/^input-/) && // Remove input-*, not needed — CSS controls sizing
+        !c.match(/^select-/)    // Remove select-*, not needed — CSS controls sizing
+      );
+
+      // Add DaisyUI select classes (no duplicates)
+      if (!classList.includes('select')) classList.unshift('select');
+      if (!classList.includes('select-bordered')) classList.push('select-bordered');
+      if (!classList.includes('no-focus-border')) classList.push('no-focus-border');
+
+      // Ensure easyui-combobox is present (no duplicate)
+      if (!classList.includes('easyui-combobox')) {
+        classList.push('easyui-combobox');
+      }
+
+      // Add join classes for nav button layout
+      if (hasNavi) {
+        classList.push('join-item', 'flex-1', 'min-w-0');
+      }
+    }
+
+    // Add EasyUI identifier class if provided (no duplicate)
+    if(input.eui) {
+      var euiClass = 'easyui-' + input.eui;
+      if (!classList.includes(euiClass)) {
+        classList.push(euiClass);
+      }
+    }
+
+    // Detect multiline: class:'multiline', multiline:true property, or data-options multiline:true → textarea
+    var isMultiline = classList.includes('multiline');
+    if (isMultiline) {
+      classList = classList.filter(c => c !== 'multiline');
+    } else if (input.multiline === true || input.multiline === 'true') {
+      isMultiline = true;
+      delete input.multiline;
+    } else if (input['data-options'] && /multiline\s*:\s*true/.test(input['data-options'])) {
+      isMultiline = true;
+    }
+    if (isMultiline) {
+      if (!classList.includes('textarea')) classList.push('textarea');
+    }
+
+    // Add DaisyUI base component class (only for regular inputs, not hidden)
+    var isHidden = input.type === 'hidden';
+    var isOtherComponent = hasMultibox || classList.some(c =>
+      c === 'checkbox' ||
+      c === 'radio' ||
+      c === 'select' ||
+      c === 'textarea' ||
+      c === 'toggle' ||
+      c === 'combobox'
+    );
+
+    if (!isHidden && !isOtherComponent && !classList.includes('input')) {
+      classList.push('input');
+    }
+
+    // Add DaisyUI validator class for fields with validation
+    if (hasValidation && !isHidden && !classList.includes('validator')) {
+      classList.push('validator');
+    }
+
+    // Rejoin class string
+    input.class = classList.join(' ');
+
+    var isDateboxClass = classList.some(c => c === 'datebox' || c === 'easyui-datebox');
+    var isDatetimeboxClass = classList.some(c => c === 'datetimebox' || c === 'easyui-datetimebox');
+    var isNumberspinnerClass = classList.some(c => c === 'numberspinner' || c === 'easyui-numberspinner');
+    var isNumberboxClass = classList.some(c => c === 'numberbox' || c === 'easyui-numberbox');
+    var isNumeric = isNumberspinnerClass || isNumberboxClass || input.type === 'number';
+    // numberspinner/numberbox must always use number input
+    var inputType = isNumeric ? 'number' : (input.type || (isDateboxClass ? 'date' : (isDatetimeboxClass ? 'datetime-local' : 'text')));
+
+    // Numeric inputs: map EUI precision/increment to HTML5 step, hide spinners on numberbox
+    if (isNumeric) {
+      var _prec = input.precision !== undefined ? parseInt(input.precision, 10) : 0;
+      // increment takes priority (explicit step), else derive from precision
+      if (input.increment !== undefined) {
+        input.step = input.increment;
+      } else if (input.step === undefined) {
+        input.step = _prec > 0 ? (1 / Math.pow(10, _prec)) : 1;
+      }
+      // Default value to 0 (or 0.00 etc.) if not provided
+      if (input.value === undefined || input.value === null || input.value === '') {
+        input.value = _prec > 0 ? (0).toFixed(_prec) : 0;
+      }
+      // Numberbox hides native browser spinners
+      if (isNumberboxClass && !classList.includes('no-spinner')) {
+        classList.push('no-spinner');
+        input.class = classList.join(' ');
+      }
+    }
+
+    var attrs = Object.assign({}, input);
+    delete attrs.type;
+    delete attrs.class;
+    delete attrs.eui;
+    // Remove non-HTML attributes that were converted above
+    delete attrs.precision;
+    delete attrs.increment;
+
+  //- Output EXACT DaisyUI structure
+  if hasMultibox
+    -
+      var mbGridCls = 'multibox-grid';
+      if (mbColumns === 2) mbGridCls += ' grid grid-cols-2 gap-x-4 gap-y-1';
+      else if (mbColumns === 3) mbGridCls += ' grid grid-cols-3 gap-x-4 gap-y-1';
+      else if (mbColumns === 4) mbGridCls += ' grid grid-cols-4 gap-x-4 gap-y-1';
+      else mbGridCls += ' flex flex-col gap-y-1';
+      var mbContainerCls = ['multibox', 'dropdown', 'dropdown-end', 'w-full'].concat(classList).join(' ');
+      // Build data attributes for the plugin
+      var mbAttrs = {};
+      if (mbSqlid) mbAttrs['data-sqlid'] = mbSqlid;
+      if (mbColumns !== 1) mbAttrs['data-columns'] = mbColumns;
+      if (mbSeparator !== ',') mbAttrs['data-separator'] = mbSeparator;
+    //- Hidden input stores the comma-separated value for form submit
+    input(type="hidden" id=input.id name=input.name value=(input.value || ''))
+    div(class=mbContainerCls data-for=input.id)&attributes(mbAttrs)&attributes(attrs)
+      //- Trigger — styled like an input
+      div.multibox-trigger.input.input-bordered.input-sm.no-focus-border.w-full.flex.items-center.justify-between.cursor-pointer(tabindex="0" role="button")
+        span.multibox-text.opacity-50= mbPrompt
+        +icon('chevron-down', {size: 'xs'})
+      //- Dropdown panel with checkbox grid
+      div.multibox-panel.dropdown-content.bg-base-100.border.border-base-300.rounded-box.shadow-lg.z-50.min-w-full.max-h-60.overflow-y-auto.mt-1.p-3(tabindex="0")
+        div(class=mbGridCls)
+          //- Static items from data-options data array
+          if mbData.length
+            each item, idx in mbData
+              label.multibox-item.flex.items-center.gap-2.cursor-pointer.rounded.px-2.py-1(class='hover_bg-base-200')
+                input.checkbox.checkbox-xs.checkbox-primary(type="checkbox" value=item.value data-text=item.text)
+                span= item.text
+      //- Template for dynamic items (cloned by plugin for _sqlid AJAX data)
+      template.multibox-item-tpl
+        label.multibox-item.flex.items-center.gap-2.cursor-pointer.rounded.px-2.py-1.hover_bg-base-200
+          input.checkbox.checkbox-xs.checkbox-primary(type="checkbox")
+          span
+  else if hasCombobox
+    - var hasFkey = classList.includes('fkey')
+    -
+      if (hasFkey && config && config.fkey_remember && !classList.includes('remember')) {
+        classList.push('remember');
+        input.class = classList.join(' ');
+      }
+    -
+      // Pre-compute editbox data-options (used in both navi and non-navi branches)
+      var editboxDataOpts = undefined;
+      if (hasFkey && attrs['data-options']) {
+        var vtMatch = attrs['data-options'].match(/validType\s*:\s*(?:'[^']+'|\[[^\]]+\])/);
+        if (vtMatch) editboxDataOpts = vtMatch[0];
+      }
+      if (hasFkey && !editboxDataOpts) console.log('[input.pug] fkey combobox missing validType:', input.id || input.name);
+    -
+      // Bool detection is handled entirely client-side by combobox-plugin.js
+      // via dui:contentloaded handler — no server-side detection needed.
+    - var _needsWrap = hasNavi;
+    if _needsWrap
+      .flex.w-full.items-center.gap-0
+        select(class=input.class id=input.id name=input.name data-id=(hasFkey ? input.id : undefined) style="flex:1;min-width:0")&attributes(attrs)
+          if comboboxOptions.length === 0
+            option(value="" disabled selected) Select...
+          each opt in comboboxOptions
+            option(value=opt.value != null ? opt.value : opt.text)= opt.text
+        if hasFkey
+          template(data-editbox)
+            input.input.input-bordered.fkey.fkey-editbox.validator(type="text" name=input.name data-id=input.id required minlength=(attrs.minlength || undefined) maxlength=(attrs.maxlength || undefined) data-options=(editboxDataOpts || undefined))
+    else
+      select(class=input.class id=input.id name=input.name data-id=(hasFkey ? input.id : undefined))&attributes(attrs)
+        if comboboxOptions.length === 0 && !hasMultibox
+          option(value="" disabled selected) Select...
+        each opt in comboboxOptions
+          option(value=opt.value != null ? opt.value : opt.text)= opt.text
+      if hasFkey
+        template(data-editbox)
+          input.input.input-bordered.fkey.fkey-editbox.validator(type="text" name=input.name data-id=input.id required minlength=(attrs.minlength || undefined) maxlength=(attrs.maxlength || undefined) data-options=(editboxDataOpts || undefined))
+  else if (input.class.includes('checkbox'))
+    input.checkbox(class=input.class)&attributes(attrs)
+  else if (input.class.includes('radio'))
+    input.radio(class=input.class)&attributes(attrs)
+  else if (input.class.includes('toggle'))
+    input.toggle(class=input.class)&attributes(attrs)
+  else if (input.class.includes('select'))
+    select.select(class=input.class)&attributes(attrs)
+  else if (input.class.includes('textarea'))
+    textarea(class=input.class)&attributes(attrs)
+  else
+    input.input(type=inputType class=input.class)&attributes(attrs)
+
+
+//- ============================================================================
+//- FILEBOX - Wrapper around input with type="file"
+//- ============================================================================
+//- Blueprint: fsd/yaml/daisyComponents.yaml line 333 (file-input)
+//- DaisyUI structure: input.file-input(type="file")
+//- NO wrappers - just a single <input> element
+//- Usage: +filebox({id: 'file', multiple: true, accept: 'image/*'})
+//- ============================================================================
+mixin filebox(opts)
+  -
+    // Force type to file
+    var fileOpts = Object.assign({}, opts, { type: 'file' });
+    // Replace 'input' class with 'file-input' for DaisyUI
+    var classes = (fileOpts.class || '').split(' ').filter(c => c);
+    // Remove 'input' class if present, add 'file-input'
+    classes = classes.filter(c => c !== 'input');
+    if (!classes.includes('file-input')) classes.unshift('file-input');
+    fileOpts.class = classes.join(' ');
+    // Add easyui identifier for compatibility
+    if (!fileOpts.eui) fileOpts.eui = 'filebox';
+  +input(fileOpts)
+
+//- ============================================================================
+//- NUMBERBOX - Wrapper around input with type="number"
+//- ============================================================================
+//- Blueprint: fsd/yaml/daisyComponents.yaml (input)
+//- DaisyUI structure: input.input(type="number")
+//- NO wrappers - just a single <input> element
+//- Usage: +numberbox({id: 'num', min: 0, max: 100, precision: 2, value: 50})
+//- ============================================================================
+mixin numberbox(opts)
+  -
+    // Force type to number
+    var numOpts = Object.assign({}, opts, { type: 'number' });
+    // Add easyui identifier for compatibility
+    if (!numOpts.eui) numOpts.eui = 'numberbox';
+  +input(numOpts)
+
+
+//- ============================================================================
+//- SPINNER - Input with +/- buttons for numeric increment/decrement
+//- ============================================================================
+//- Blueprint: DaisyUI input + button pair in join group
+//- DaisyUI structure: .join > button[data-action="down"] + input + button[data-action="up"]
+//- Usage: +spinner({id: 'spin', min: 0, max: 100, step: 1, value: 50})
+//- ============================================================================
+mixin spinner(opts)
+  -
+    // Force type to text
+    var spinOpts = Object.assign({}, opts, { type: 'text' });
+    // Add easyui identifier for compatibility
+    if (!spinOpts.eui) spinOpts.eui = 'spinner';
+    // Constrain input width within join group
+    spinOpts.class = (spinOpts.class || '') + ' w-14';
+  .join
+    button.join-item.btn(type="button" data-action="down" tabindex="-1") −
+    +input(spinOpts)
+    button.join-item.btn(type="button" data-action="up" tabindex="-1") +
+
+//- ============================================================================
+//- NUMBERSPINNER - Generic number spinner with +/- buttons
+//- ============================================================================
+//- Blueprint: Spinner structure for generic numbers
+//- DaisyUI structure: .join > button[data-action="down"] + input(number) + button[data-action="up"]
+//- Usage: +numberspinner({id: 'num', min: 0, max: 100, step: 5, value: 50})
+//- ============================================================================
+mixin numberspinner(opts)
+  -
+    var attrObj = (typeof attributes === 'object' && attributes) ? attributes : {};
+    var numOpts = Object.assign({ type: 'number' }, attrObj, opts || {});
+    // HTML5 <input type="number"> provides native spinner buttons
+    if (!numOpts.eui) numOpts.eui = 'numberspinner';
+  +input(numOpts)
+
+//- ============================================================================
+//- TIMESPINNER - Spinner with time-specific formatting (HH:MM:SS)
+//- ============================================================================
+//- Blueprint: Spinner structure with time format
+//- DaisyUI structure: .join > button[data-action="down"] + input(time format) + button[data-action="up"]
+//- Usage: +timespinner({id: 'time', value: '08:30:45', showSeconds: true})
+//- ============================================================================
+mixin timespinner(opts)
+  -
+    // Force type to text for time input
+    var timeOpts = Object.assign({}, opts, { type: 'text' });
+    // Add easyui identifier for compatibility
+    if (!timeOpts.eui) timeOpts.eui = 'timespinner';
+    // Override width for time format (wider than generic spinner)
+    // Remove any existing width class and add larger width for HH:MM:SS display
+    var classes = (timeOpts.class || '').split(' ').filter(c => c && !c.match(/^w-\d+/));
+    timeOpts.class = classes.join(' ') + ' w-24';
+  .join
+    button.join-item.btn(type="button" data-action="down" tabindex="-1") −
+    +input(timeOpts)
+    button.join-item.btn(type="button" data-action="up" tabindex="-1") +
+
+//- ============================================================================
+//- COMBO - Dropdown selection with editable textbox and data panel
+//- ============================================================================
+//- Blueprint: DaisyUI input + button + dropdown menu
+//- DaisyUI structure: .combo-container > input + button + .combo-panel > .menu
+//- Usage: +combo({id: 'combo', data: [{text: 'Apple', value: 'a'}, ...]})
+//- ============================================================================
+mixin combo(opts)
+  -
+    // Force type to text
+    var comboOpts = Object.assign({}, opts, { type: 'text' });
+    // Add easyui identifier for compatibility
+    if (!comboOpts.eui) comboOpts.eui = 'combo';
+    // Constrain input width within join group
+    comboOpts.class = (comboOpts.class || '') + ' w-32';
+  .combo-container.relative.inline-block(style="display: inline-flex; flex-direction: column; position: relative;")
+    .join
+      +input(comboOpts)
+      button.join-item.btn(type="button" data-action="toggle-panel" tabindex="-1") ▼
+    //- Hidden dropdown panel with data list
+    .combo-panel.hidden.absolute.top-full.left-0.z-50.bg-base-100.border.border-base-300.rounded.shadow-lg(style="width: 100%; max-height: 200px; overflow-y: auto; margin-top: 4px;")
+      ul.menu.menu-compact(style="padding: 0; margin: 0;")
+        //- Items populated by JavaScript
+
+
+//- ============================================================================
+//- COMBOBOX - Dropdown selection (standalone)
+//- ============================================================================
+//- Calling patterns from pages:
+//-   +combobox#empid.all(_sqlid="vwltsa^empid" name="EMPLOYEE_ID" style="width:120px;")
+//-   +combobox(name="STATUS" data-options="data:[{value:'YES',text:'YES'}]" required="required")
+//-   +combobox.fkey#id.autonum(name="id" _sqlid="user^todoid" panelWidth="210")
+//-   +combobox#worcbo.navi.ronly-on(style="width:150px;")
+//- All args come via Pug attributes — NO positional args.
+//- Adds 'combobox' class to trigger combobox rendering path in +input.
+//- Client-side: combobox-plugin.js reads _sqlid from DOM to load options.
+//- ============================================================================
+mixin combobox(opts)
+  -
+    var attrObj = (typeof attributes === 'object' && attributes) ? attributes : {};
+    var cboOpts = Object.assign({}, attrObj, opts || {});
+    // Ensure 'combobox' is in the class list — triggers combobox rendering in +input
+    var cls = (cboOpts.class || '').split(/\s+/).filter(function(c) { return c; });
+    if (cls.indexOf('combobox') === -1) cls.push('combobox');
+    cboOpts.class = cls.join(' ');
+  +input(cboOpts)
+
+//- ============================================================================
+//- LABEL - Standalone label with translation support
+//- ============================================================================
+//- EUI signature: +label(label) where label is string OR {text:'Label', ...attrs}
+//- String: +label('Part ID') → <label>Part ID</label>
+//- Object: +label({text:'Part ID', for:'pid'}) → <label for="pid">Part ID</label>
+//- ============================================================================
+mixin label(lbl)
+  -
+    var attrObj = (typeof attributes === 'object' && attributes) ? attributes : {};
+    var _t = typeof _trans === 'function' ? _trans : function(t){ return t; };
+  if typeof lbl === 'string'
+    label&attributes(attrObj)!=_t(lbl)
+  else if lbl && typeof lbl === 'object'
+    -
+      var labelObj = Object.assign({}, lbl, attrObj);
+      var labelText = labelObj.text || '';
+      delete labelObj.text;
+    label&attributes(labelObj)!=_t(labelText)
+  else
+    label&attributes(attrObj)
+
+//- ============================================================================
+//- SPEC - Fill-parent textarea (standalone, NOT +fitem)
+//- ============================================================================
+//- +spec(label, input)  — with label: +v-group(label) > textarea; without: bare textarea
+//- ============================================================================
+mixin spec(label, input)
+  - var attrs = Object.assign({}, input || {});
+  - var cls = (attrs.class || '').split(/\s+/).filter(Boolean);
+  - if (!cls.includes('textarea')) cls.push('textarea');
+  - if (!cls.includes('spec')) cls.push('spec');
+  - if (!cls.includes('textarea-bordered')) cls.push('textarea-bordered');
+  - attrs.class = cls.join(' ');
+  - delete attrs.eui;
+  - delete attrs.multiline;
+  - delete attrs['data-options'];
+  if label
+    +v-group(label)
+      textarea&attributes(attrs)
+  else
+    textarea&attributes(attrs)
+
+mixin udfs(args)
+  -
+    args = args || {};
+    var _sqlid = args.sqlid || 'admin^udfid';
+    var _ron = !!args.ron;
+    var _select = args.select || '';
+    var _url = '/?_func=get&_combo=y&_sqlid=' + _sqlid;
+  +fieldset('UDF Layout',{style:"margin-top:12px;"})
+    +fitem('UDF Layout',{class:'combobox ronly-on udf-layout'})
+  +fieldset('UDF')
+    +udf(_ron)
+  script.
+    $('.udf-layout').combobox({
+      url: '!{_url}',
+      onSelect: setudfs,
+      value: '!{_select}',
+      onLoadSuccess: function(){
+        if ('!{_select}') $(this).combobox('select', '!{_select}');
+      }
+    })
+
+mixin udf(ron)
+  -
+    ron=ron || false;
+    var cls = 'easyui-textbox'; if(ron) cls += ' sub-off'; 
+  -for (var x=1; x<11; x++)
+    +fitem({text:'User Label '+x,id:'UDF_'+x},{name:'USER_'+x,readonly:ron, class:cls,'data-options':"validType:['length[1,80]']"},{'data-role':'fieldcontain',style:'display:none'})
+//- ============================================================================
+//- Auto-generated skeleton: calendar
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin calendar(opts = {})
+  span.mixin-skeleton(data-mixin="calendar")
+    | [SKELETON: calendar]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: checkbox
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin checkbox(opts = {})
+  span.mixin-skeleton.easyui-checkbox(data-mixin="checkbox")
+    | [SKELETON: checkbox]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: file-input
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin file-input(opts = {})
+  span.mixin-skeleton(data-mixin="file-input")
+    | [SKELETON: file-input]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: filter
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin filter(opts = {})
+  span.mixin-skeleton(data-mixin="filter")
+    | [SKELETON: filter]
+
+
+//- label skeleton replaced by real +label mixin above
+
+
+//- ============================================================================
+//- Auto-generated skeleton: radio
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin radio(opts = {})
+  span.mixin-skeleton(data-mixin="radio")
+    | [SKELETON: radio]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: range
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin range(opts = {})
+  span.mixin-skeleton(data-mixin="range")
+    | [SKELETON: range]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: rating
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin rating(opts = {})
+  span.mixin-skeleton(data-mixin="rating")
+    | [SKELETON: rating]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: select
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin select(opts = {})
+  span.mixin-skeleton(data-mixin="select")
+    | [SKELETON: select]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: textarea
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin textarea(opts = {})
+  span.mixin-skeleton(data-mixin="textarea")
+    | [SKELETON: textarea]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: toggle
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin toggle(opts = {})
+  span.mixin-skeleton(data-mixin="toggle")
+    | [SKELETON: toggle]
+
+
+//- ============================================================================
+//- Auto-generated skeleton: validator
+//- Created: 2026-01-29
+//- Status: skeleton - awaiting implementation
+
+mixin validator(opts = {})
+  span.mixin-skeleton(data-mixin="validator")
+    | [SKELETON: validator]
+//- ============================================================================
+//- Auto-generated skeleton: textbox
+//- Created: 2026-02-01
+//- Status: skeleton - awaiting implementation
+
+mixin textbox(opts = {})
+  -
+    // Default type to text (preserve password, etc. if explicitly set)
+    var textboxOpts = Object.assign({ type: 'text' }, opts);
+    // Add easyui identifier for compatibility
+    if (!textboxOpts.eui) textboxOpts.eui = 'textbox';
+  
+    //-console.log(textboxOpts);
+  +input(textboxOpts)
+  //-span.mixin-skeleton.easyui-textbox(data-mixin="textbox")
+    | [SKELETON: textbox]
+//- ============================================================================
+//- MULTILINE — textarea input (standalone)
+//- ============================================================================
+mixin multiline(opts = {})
+  -
+    var mlOpts = Object.assign({}, opts);
+    if (!mlOpts.class) mlOpts.class = 'multiline';
+    else if (!/\bmultiline\b/.test(mlOpts.class)) mlOpts.class += ' multiline';
+  +input(mlOpts)
+//- ============================================================================
+//- Auto-generated skeleton: datebox
+//- Created: 2026-02-01
+//- Status: skeleton - awaiting implementation
+
+mixin datebox(opts = {})
+  -
+    var attrObj = (typeof attributes === 'object' && attributes) ? attributes : {};
+    var dateOpts = Object.assign({ type: 'date' }, attrObj, opts || {});
+
+    var cls = String(dateOpts.class || '');
+    var hasTodayClass = /\btoday\b/.test(cls);
+    var hasTodayFlag = dateOpts.today === true || dateOpts.today === 'true' || dateOpts.today === 1 || dateOpts.today === '1';
+
+    // If declared as +datebox.today (or today:true), default to today's date.
+    // Otherwise keep empty unless caller explicitly provides a value.
+    if ((hasTodayClass || hasTodayFlag) && (dateOpts.value === undefined || dateOpts.value === null || dateOpts.value === '')) {
+      var _d = new Date();
+      var _mm = String(_d.getMonth() + 1).padStart(2, '0');
+      var _dd = String(_d.getDate()).padStart(2, '0');
+      dateOpts.value = _d.getFullYear() + '-' + _mm + '-' + _dd;
+    }
+
+    delete dateOpts.today;
+    // Add easyui identifier for compatibility
+    if (!dateOpts.eui) dateOpts.eui = 'datebox';
+  +input(dateOpts)
+//- ============================================================================
+//- SEARCHBOX — type-to-search input with optional JSON config
+//- JSON: searchbox.<pageName>_<id>.json — defines columns, fields, endpoint
+//- Server-side: builds wrapper, dropdown, table headers, row template
+//- Client-side: clones <template> for each result row, wires events
+//- ============================================================================
+mixin searchbox(opts = {})
+  -
+    var searchOpts = Object.assign({}, opts);
+    if (!searchOpts.eui) searchOpts.eui = 'searchbox';
+
+    // Load JSON config — sbref takes priority (SSOT: all configs in html/dui/json/)
+    // Fallback: legacy page-specific lookup (searchbox.pageName_id.json)
+    var sbCfg = null;
+    if (searchOpts.sbref) {
+      sbCfg = fn.pug.jsonRead('searchbox.' + searchOpts.sbref);
+      if (sbCfg) sbCfg._sbref = searchOpts.sbref;
+      delete searchOpts.sbref;
+    }
+    if (!sbCfg) {
+      var sbId = searchOpts.id && searchOpts.id !== '~' ? searchOpts.id : searchOpts.name;
+      var pgName = fn.pug.pageName || '';
+      sbCfg = sbId ? (fn.pug.jsonRead('searchbox.' + pgName + '_' + sbId) || fn.pug.jsonRead('searchbox.' + sbId)) : null;
+      if (sbCfg && sbCfg.$ref) {
+        var refCfg = fn.pug.jsonRead(sbCfg.$ref);
+        if (refCfg) {
+          var overrides = Object.assign({}, sbCfg);
+          delete overrides.$ref;
+          sbCfg = Object.assign({}, refCfg, overrides);
+        }
+      }
+    }
+    // Per-instance override: editable can be passed directly in mixin opts.
+    // Keep it inside data-searchbox config so plugin parseOptions picks it up.
+    if (searchOpts.editable !== undefined) {
+      if (!sbCfg) sbCfg = {};
+      sbCfg.editable = !(searchOpts.editable === false || searchOpts.editable === 'false' || searchOpts.editable === 0 || searchOpts.editable === '0');
+      delete searchOpts.editable;
+    }
+    var sbData = sbCfg ? Buffer.from(JSON.stringify(sbCfg)).toString('base64') : undefined;
+    var sbCols = (sbCfg && sbCfg.columns) || [];
+    var hasCols = sbCols.length > 0;
+    var sbFilters = (sbCfg && sbCfg.filters) || [];
+    var hasFilters = sbFilters.length > 0;
+    var sbPlaceholder = 'Use % Wildcard: %ABC%1';
+
+    // Build clean attrs for the <input> — strip non-HTML properties
+    var inputAttrs = {};
+    var skip = ['eui', 'class', 'id', 'name', 'type', 'attrs', 'editable'];
+    Object.keys(searchOpts).forEach(function(k) { if (skip.indexOf(k) === -1) inputAttrs[k] = searchOpts[k]; });
+
+  span.searchbox-wrap
+    input.input(type="search" class=searchOpts.class id=searchOpts.id name=searchOpts.name eui="searchbox" data-searchbox=sbData placeholder=sbPlaceholder)&attributes(inputAttrs)
+    .searchbox-dropdown
+      //- Filter accordion (only if filters defined in JSON config)
+      if hasFilters
+        .searchbox-filters
+          .searchbox-filters-hdr
+            span.searchbox-filters-toggle Filters
+          .searchbox-filters-body
+            .searchbox-filters-grid
+              each flt in sbFilters
+                -
+                  var editorType = typeof flt.editor === 'string' ? flt.editor : (flt.editor && flt.editor.type) || 'textbox';
+                  var editorOpts = (typeof flt.editor === 'object' && flt.editor.options) || {};
+                  var editorData = editorOpts.data || [];
+                  var fltId = '_sbf_' + flt.field;
+                  var fltSqlid = editorOpts._sqlid || '';
+                  var fltInput = { id: fltId, name: flt.field, 'data-filter-field': flt.field };
+                  if (editorType === 'textbox') fltInput.placeholder = sbPlaceholder;
+                  if (editorType === 'combobox' && fltSqlid) {
+                    fltInput.class = 'combobox';
+                    fltInput._sqlid = fltSqlid;
+                    fltInput['data-options'] = "editable:false,panelHeight:'auto'";
+                  } else if (editorType === 'combobox' && editorData.length) {
+                    fltInput.class = 'combobox';
+                    fltInput['data-options'] = "data:" + JSON.stringify(editorData).replace(/"/g, "'") + ",editable:false,panelHeight:'auto'";
+                  } else if (editorType === 'datebox') {
+                    fltInput.class = 'datebox';
+                  }
+                +fitem(flt.title || flt.field, fltInput)
+            .searchbox-filters-actions
+              button.searchbox-filters-apply(type="button") Apply
+              button.searchbox-filters-clear(type="button") Clear
+      .searchbox-list
+        if hasCols
+          table.searchbox-table
+            thead
+              tr
+                each col in sbCols
+                  th.coloff(style=col.align ? 'text-align:' + col.align : undefined)= col.title || col.field
+            tbody
+      .searchbox-recents
+        .searchbox-recents-hdr Recent
+        if hasCols
+          table.searchbox-table
+            tbody
+      .searchbox-status
+      if hasCols
+        template.searchbox-row-tpl
+          tr.searchbox-item
+            each col in sbCols
+              td.coloff(data-field=col.field style=col.align ? 'text-align:' + col.align : undefined)
+//- ============================================================================
+//- PASSWORDBOX — password input with easyui hook class
+//- ============================================================================
+mixin passwordbox(opts = {})
+  -
+    var pwOpts = Object.assign({}, opts, { type: 'password' });
+    if (!pwOpts.eui) pwOpts.eui = 'passwordbox';
+  +input(pwOpts)
+//- ============================================================================
+//- Auto-generated skeleton: radiobutton
+//- Created: 2026-02-01
+//- Status: skeleton - awaiting implementation
+
+mixin radiobutton(opts = {})
+  span.mixin-skeleton.easyui-radiobutton(data-mixin="radiobutton")
+    | [SKELETON: radiobutton]
+
+//- ============================================================================
+//- qbe: aliased to combobox (no separate DUI implementation needed)
+//- Original skeleton commented out:
+//-   mixin qbe(opts = {})
+//-     span.mixin-skeleton.easyui-qbe(data-mixin="qbe")
+//-       | [SKELETON: qbe]
+
+mixin qbe(opts = {})
+  +combobox(opts)
+
+//- ============================================================================
+//- QBEMODAL — Server-rendered modal shell for QBE search
+//- ============================================================================
+//- Rendered ONCE per page, shared by all QBE fields.
+//- Static structure: modal > vsplit > left filter panel + right datagrid.
+//- JS only configures dynamic columns, filter fields, and event wiring.
+//- ============================================================================
+mixin qbemodal()
+  +modal(title="Query By Exception" titlebar iconCls="list-filter" bordered no-form style="--qbe-w:80vw;--qbe-h:80vh")#qbe-modal.qbe-modal
+    +vsplit('280px')
+      .qbe-filters.overflow-y-auto.p-3
+      +datagrid()#qbe-datagrid
+    +modal-footer
+      +button("Search", {color: "primary", size: "sm", icon: "search", type: "button", id: "qbe-search-btn"})

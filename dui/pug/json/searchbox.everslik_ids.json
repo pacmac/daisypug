@@ -1,0 +1,35 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^everslik_ids_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",  "title": "Everslik ID", "width": 100 },
+    { "field": "WOREF",  "title": "Job ID",      "width": 100 },
+    { "field": "STATUS", "title": "Status",       "width": 100 }
+  ],
+  "filters": [
+    { "field": "WOREF", "title": "Job ID", "editor": "textbox" },
+    { "field": "STATUS", "title": "Status", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "", "text": "All" },
+            { "value": "PENDING", "text": "PENDING" },
+            { "value": "IN-PROCESS", "text": "IN-PROCESS" },
+            { "value": "COMPLETED", "text": "COMPLETED" }
+          ]
+        }
+      }
+    }
+  ]
+}

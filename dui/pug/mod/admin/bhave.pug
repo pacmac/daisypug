@@ -1,0 +1,96 @@
+extends ../content
+
+block script
+  script: include js/bhave.js
+
+block content
+  +tabs#bhtabs
+    +tab-item('UDF Labels')
+      +form#udf.multi(_sqlid='admin^udfall' asdpx='asx')
+        +fitem('UDF ID',{name:'ID',id:'~',_sqlid:'admin^udfid',class:'combobox fkey'})
+        div.two
+          div
+            - for (var x = 1; x <= 10; x++)
+              +fitem('Field Label ' + x,{name:'UDF_' + x,id:'~',class:'textbox LBL','data-options':"_validType:['udfLabels[20]']"})
+          div#udf20
+            - for (var x = 11; x <= 20; x++)
+              +fitem('Field Label ' + x,{name:'UDF_' + x,id:'~',class:'textbox LBL','data-options':"_validType:['udfLabels[20]']"})
+      div
+        h3 UDF Usage Notes
+        p Some screens have more UDFs available than others.
+        p Adding labels for UDFs that are not shown on a page will have no effect and will not make those fields visible or useable.
+        p The maximum length of any label is 20 characters,
+        p {} prefixes are excluded from field length calculations.
+        p No text is allowed in front of {}.
+        p If {} suffix is blank, will check the entire label.
+        p UDF fields can be defined as Drop-Down Boxes, Date Selectors and Number Fields by using the prefix {} feature.
+        p The following are valid prefix types:
+          ul
+            li Date Selector: {date}
+            li Number Box: {number}
+            li Number Spinner: Spinner {spinner}
+            li Drop-Down Box: {option1,option2,option3,...}
+        p For Drop-Down boxes, the selected value will be exactly as defined in the {list,of,items}.
+        p An asterisk (*) as the first character will force the field to be required i.e. *Notes or *{date}.
+
+    +tab-item('Reporting',{iconCls:'file-text'})
+      +form.single.load(_sqlid='admin^bhave' asdpx='sx')
+        +input({name:'appid',value:'pentaho',type:'hidden'})
+        +fitem('Server IP',{name:'host',class:'textbox',value:'127.0.0.1',readonly:true})
+        +fitem('Port Number',{name:'port',class:'numberbox',value:9898,min:1024,max:65535,readonly:true})
+
+    +tab-item('Events',{iconCls:'icon-date'})
+      +form.single.load(_sqlid='admin^bhave' asdpx='sx')
+        +input({name:'appid',value:'events',type:'hidden'})
+        +fitem('Timed Events',{name:'no_timed',class:'combobox','data-options':"data:[{value:1,text:'Enable',selected:true},{value:-1,text:'Disable'}],panelHeight:'auto'"})
+        +fitem('Email Events',{name:'no_email',class:'combobox','data-options':"data:[{value:1,text:'Enable',selected:true},{value:-1,text:'Disable'}],panelHeight:'auto'"})
+        +fitem('External Events',{name:'xevents',class:'combobox','data-options':"data:[{value:1,text:'Enable',selected:true},{value:-1,text:'Disable'}],panelHeight:'auto'"})
+        +fitem('Mon-Fri Only',{name:'week_only',class:'combobox','data-options':"data:[{value:1,text:'Yes'},{value:-1,text:'No'}],panelHeight:'auto'"})
+
+    +tab-item('Task Manager',{iconCls:'icon-postit'})
+      +form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid',value:'user^task_todo',type:'hidden'})
+        +v-group('Main Class List')
+          +fitem('Field Label',{name:'label_class',class:'textbox'})
+          +spec('Field List',{name:'field_class'})
+        +v-group('Sub Class 1')
+          +fitem('Field Label',{name:'label_class_1',class:'textbox'})
+          +spec('Field List',{name:'field_class_1'})
+        +v-group('Sub Class 2')
+          +fitem('Field Label',{name:'label_class_2',class:'textbox'})
+          +spec('Field List',{name:'field_class_2'})
+
+    +tab-item('Documents',{iconCls:'icon-pclip'})
+      +form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid',value:'admin^files',type:'hidden'})
+        +v-group('Global Folders')
+
+    +tab-item('Users',{iconCls:'aicon-group'})
+      +form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid',value:'admin^users',type:'hidden'})
+        +v-group('Name Format')
+          +fitem('Display Order',{name:'uid_display_order',class:'combobox','data-options':"panelHeight:'auto',data:[{text:'First Last',value:'FL',selected:true},{text:'First, Last',value:'F,L'},{text:'Last First',value:'LF'},{text:'Last, First',value:'L,F'},{text:'ID',value:'ID'}]"})
+
+    +tab-item('Global',{iconCls:'icon-global'})
+      +form.single.load(_sqlid='admin^bhave' asdpx='s')
+        +input({name:'appid',value:'global',type:'hidden'})
+        +v-group('Job Costing Labels')
+          +fitem('Cost Label 1',{class:'textbox w-40',name:'COST_LABEL_1',id:'~'})
+            +input({name:'EN_COST_LABEL_1',id:'~',class:'combobox w-16','data-options':"panelHeight:'auto',data:[{text:'Read',value:'true',selected:true},{text:'Write',value:'false'}]"})
+          +fitem('Cost Label 2',{class:'textbox w-40',name:'COST_LABEL_2',id:'~'})
+            +input({name:'EN_COST_LABEL_2',id:'~',class:'combobox w-16','data-options':"panelHeight:'auto',data:[{text:'Read',value:'true',selected:true},{text:'Write',value:'false'}]"})
+          +fitem('Cost Label 3',{class:'textbox w-40',name:'COST_LABEL_3',id:'~'})
+            +input({name:'EN_COST_LABEL_3',id:'~',class:'combobox w-16','data-options':"panelHeight:'auto',data:[{text:'Read',value:'true',selected:true},{text:'Write',value:'false'}]"})
+          +fitem('Cost Label 4',{class:'textbox w-40',name:'COST_LABEL_4',id:'~'})
+            +input({name:'EN_COST_LABEL_4',id:'~',class:'combobox w-16','data-options':"panelHeight:'auto',data:[{text:'Read',value:'true',selected:true},{text:'Write',value:'false'}]"})
+
+        if req.session.udata.super
+          +v-group('Attachments')
+            +fitem('Max Image Size (MB)',{id:'~',name:'max_image_size',class:'numberspinner',min:1,max:10,value:2,precision:0,step:1,editable:false,required:true})
+            +fitem('Max Other Size (MB)',{id:'~',name:'max_other_size',class:'numberspinner',min:1,max:10,value:5,precision:0,step:1,editable:false,required:true})
+
+    //-
+      if($.isdev)
+        +tab-item('Development',{iconCls:'icon-bug'})
+          +form.single.load(_sqlid='admin^bhave' asdpx='s')
+            +input({name:'appid',value:'admin^isdev',type:'hidden'})

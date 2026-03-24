@@ -1,0 +1,6 @@
+{
+  "id": "files",
+  "sourceFile": "admin/js/files.js",
+  "lineNumber": 34,
+  "configPreview": "('getSelected');\n    if(item.name=='fedit'){\n      row._func = 'upd';\n      if(row.appid.indexOf('sys')==0) $('input#fname').textbox('readonly',true);..."
+}

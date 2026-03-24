@@ -1,0 +1,195 @@
+extends ../../../layout/layout
+
+block content
+  +content("Timespinner Component Test", "Time selection input with increment/decrement buttons. Format: HH:MM:SS")
+
+    //- ============================================================================
+    //- TEST COMPONENT
+    //- ============================================================================
+    .card.bg-base-100.shadow-xl.mb-8
+      .card-body
+
+        h2.card-title.mb-4 Live Component
+
+        div.grid.grid-cols-3.gap-4.mb-4
+
+          div
+            label.label
+              span.label-text Time Selection
+            +timespinner({id: 'ts_main', value: '10:30:45', showSeconds: true})
+
+          div
+            label.label
+              span.label-text Time (No Seconds)
+            +timespinner({id: 'ts_short', value: '14:20', showSeconds: false})
+
+          div
+            label.label
+              span.label-text With Range
+            +timespinner({id: 'ts_range', value: '12:00:00', min: '06:00:00', max: '18:00:00'})
+
+    //- ============================================================================
+    //- CONTROL PANEL
+    //- ============================================================================
+    .card.bg-base-100.shadow-xl.mb-8
+      .card-body
+        h2.card-title.mb-4 Control Panel
+
+        .grid.grid-cols-3.gap-4
+
+          //- setValue() tests
+          div
+            h3.font-semibold.mb-3 setValue()
+            div.space-y-2
+
+              button.btn.btn-sm.btn-primary(onclick=`
+                let $ts = $('#ts_main');
+                $ts.timespinner('setValue', '08:15:30');
+                console.log('✓ setValue("08:15:30")', $ts.timespinner('getValue'));
+              `) Set 08:15:30
+
+              button.btn.btn-sm.btn-primary(onclick=`
+                let $ts = $('#ts_main');
+                $ts.timespinner('setValue', '23:59:59');
+                console.log('✓ setValue("23:59:59")', $ts.timespinner('getValue'));
+              `) Set 23:59:59
+
+              button.btn.btn-sm.btn-primary(onclick=`
+                let $ts = $('#ts_main');
+                $ts.timespinner('setValue', '00:00:00');
+                console.log('✓ setValue("00:00:00")', $ts.timespinner('getValue'));
+              `) Set 00:00:00
+
+              button.btn.btn-sm.btn-warning(onclick=`
+                let $ts = $('#ts_main');
+                $ts.timespinner('setValue', '99:99:99');
+                console.log('✓ setValue("99:99:99" clamped)', $ts.timespinner('getValue'));
+              `) Set Invalid (Clamped)
+
+          //- getValue() tests
+          div
+            h3.font-semibold.mb-3 getValue() & Extract
+            div.space-y-2
+
+              button.btn.btn-sm.btn-info(onclick=`
+                let val = $('#ts_main').timespinner('getValue');
+                console.log('✓ getValue()', val);
+              `) Get Value
+
+              button.btn.btn-sm.btn-info(onclick=`
+                let h = $('#ts_main').timespinner('getHours');
+                console.log('✓ getHours()', h);
+              `) Get Hours
+
+              button.btn.btn-sm.btn-info(onclick=`
+                let m = $('#ts_main').timespinner('getMinutes');
+                console.log('✓ getMinutes()', m);
+              `) Get Minutes
+
+              button.btn.btn-sm.btn-info(onclick=`
+                let s = $('#ts_main').timespinner('getSeconds');
+                console.log('✓ getSeconds()', s);
+              `) Get Seconds
+
+          //- Min/Max constraint tests
+          div
+            h3.font-semibold.mb-3 Min/Max Constraints
+            div.space-y-2
+
+              button.btn.btn-sm.btn-success(onclick=`
+                let $ts = $('#ts_range');
+                $ts.timespinner('setValue', '07:00:00');
+                console.log('✓ Clamped below min (07:00:00 → 06:00:00)', $ts.timespinner('getValue'));
+              `) Test Below Min
+
+              button.btn.btn-sm.btn-success(onclick=`
+                let $ts = $('#ts_range');
+                $ts.timespinner('setValue', '20:00:00');
+                console.log('✓ Clamped above max (20:00:00 → 18:00:00)', $ts.timespinner('getValue'));
+              `) Test Above Max
+
+              button.btn.btn-sm.btn-success(onclick=`
+                let $ts = $('#ts_range');
+                $ts.timespinner('setValue', '12:30:00');
+                console.log('✓ Within range (12:30:00)', $ts.timespinner('getValue'));
+              `) Test In Range
+
+    //- ============================================================================
+    //- INHERITED METHODS (SPINNER/TEXTBOX)
+    //- ============================================================================
+    .card.bg-base-100.shadow-xl.mb-8
+      .card-body
+        h2.card-title.mb-4 Inherited Methods
+
+        .grid.grid-cols-2.gap-4
+
+          button.btn.btn-sm(onclick=`
+            $('#ts_main').timespinner('disable');
+            console.log('✓ disable()');
+          `) disable()
+
+          button.btn.btn-sm(onclick=`
+            $('#ts_main').timespinner('enable');
+            console.log('✓ enable()');
+          `) enable()
+
+          button.btn.btn-sm(onclick=`
+            $('#ts_main').timespinner('clear');
+            console.log('✓ clear()');
+          `) clear()
+
+          button.btn.btn-sm(onclick=`
+            $('#ts_main').timespinner('reset');
+            console.log('✓ reset()');
+          `) reset()
+
+    //- ============================================================================
+    //- CALLBACK TEST
+    //- ============================================================================
+    .card.bg-base-100.shadow-xl.mb-8
+      .card-body
+        h2.card-title.mb-4 Spinner Callbacks (Inherited)
+
+        p.mb-4 Component inherits onSpinUp/onSpinDown callbacks from spinner.
+
+        div.space-y-2
+
+          button.btn.btn-sm(onclick=`
+            let $ts = $('#ts_main');
+            $ts.timespinner('options', {
+              onSpinUp: function(val) {
+                console.log('✓ onSpinUp fired:', val);
+              },
+              onSpinDown: function(val) {
+                console.log('✓ onSpinDown fired:', val);
+              }
+            });
+            console.log('Callbacks registered. Click [+] and [-] buttons.');
+          `) Register Spin Callbacks
+
+    //- ============================================================================
+    //- OUTPUT
+    //- ============================================================================
+    .card.bg-base-100.shadow-xl
+      .card-body
+        h2.card-title.mb-2 Console Output
+        p.text-gray-500 Open browser DevTools (F12) → Console tab to see results
+        code
+          pre#output
+            | (Click buttons above to test methods...)\n\n
+
+  script
+    | document.addEventListener('DOMContentLoaded', function() {
+    |   let $ts = $('#ts_main');
+    |   $ts.timespinner({
+    |     value: '10:30:45',
+    |     showSeconds: true,
+    |     onSpinUp: function() {
+    |       console.log('✓ Spinner onSpinUp (inherited):', $ts.timespinner('getValue'));
+    |     },
+    |     onSpinDown: function() {
+    |       console.log('✓ Spinner onSpinDown (inherited):', $ts.timespinner('getValue'));
+    |     }
+    |   });
+    |   console.log('Timespinner initialized:', $ts.timespinner('getValue'));
+    | });

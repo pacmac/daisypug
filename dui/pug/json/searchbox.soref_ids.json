@@ -1,0 +1,30 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "sales^sor_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "SO Ref", "width": 100 },
+    { "field": "PART_ID", "title": "Part ID", "width": 120 },
+    { "field": "CUST_ID", "title": "Customer ID", "width": 100 },
+    { "field": "CUST_PART_ID", "title": "Cust Part ID", "width": 120 },
+    { "field": "WANT_DATE", "title": "WANT Date", "width": 100 },
+    { "field": "QTY", "title": "Order Qty", "width": 80, "align": "right" }
+  ],
+  "filters": [
+    { "field": "PART_ID", "title": "Part ID", "editor": "textbox" },
+    { "field": "CUST_ID", "title": "Customer ID", "editor": "textbox" },
+    { "field": "CUST_PART_ID", "title": "Cust Part ID", "editor": "textbox" },
+    { "field": "WANT_DATE", "title": "WANT Date", "editor": "datebox" },
+    { "field": "QTY", "title": "Order Qty", "editor": "textbox" }
+  ]
+}

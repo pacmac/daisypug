@@ -1,0 +1,162 @@
+extends layout/layout.pug
+
+//- Dashboard Layout: Persistent Sidebar
+//- Desktop-first layout with always-visible sidebar navigation (like SAP/Jira/GitLab).
+//- Sidebar collapses to icon-only mode via toggle button, state persisted in localStorage.
+//- Contract: provides #content, nav#westMenu, +topnav() — same as dashboard_drawer.pug
+
+block content
+  style.
+    main { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+
+  .flex.h-screen.overflow-hidden
+
+    //- SIDEBAR: persistent left navigation (surface level from config)
+    - var _navLevel = (config && config.surface) ? (config.surface.nav || 0) : 0;
+    //- Surface classes disabled — using DaisyUI theme defaults
+    aside#sidebar.sidebar-expanded.flex-shrink-0.overflow-y-auto.bg-base-200.flex.flex-col.transition-all.duration-300
+      //- Header: brand + collapse toggle (matches toolbar height & color)
+      .sidebar-header.px-3.flex.items-center.justify-between.h-10.shrink-0.bg-primary.text-primary-content
+        span.sidebar-brand.font-bold.tracking-wide PURE4
+        button#sidebar-toggle.btn.btn-ghost.btn-xs.btn-square(title="Toggle sidebar")
+          svg.w-4.h-4.sidebar-icon-collapse(fill="none" stroke="currentColor" viewBox="0 0 24 24")
+            path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7")
+          svg.w-4.h-4.sidebar-icon-expand.hidden(fill="none" stroke="currentColor" viewBox="0 0 24 24")
+            path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7")
+
+      //- Menu navigation (same structure as drawer layout)
+      nav#westMenu.flex-1.overflow-y-auto.p-2.border-r.border-base-300
+        if config.menu_render == 'client'
+          //- Client-side: templates + empty container (JS builds menu from $.dui.udata.menus)
+          template#tpl-menu-group
+            li
+              details
+                summary
+                  span.menu-icon(data-lucide="")
+                  span.menu-text
+                ul.menu
+
+          template#tpl-menu-item
+            li
+              a(href="#" data-page="" data-appid="" data-iconCls="")
+                span.menu-icon(data-lucide="")
+                span.item-text
+
+          ul.menu.menu-sm.min-w-full#navmenu
+        else
+          ul.menu.menu-sm.min-w-full
+            each item in udata.menus
+              if item && item.text
+                +menuItem(item, true)
+
+    //- MAIN AREA: toolbar + content + footer
+    .flex.flex-col.flex-1.min-w-0
+      //- Toolbar (no hamburger needed — sidebar is always visible)
+      +topnav({layout: 'sidebar'})
+
+      //- Main content area
+      .flex-1.overflow-auto.h-full.bg-base-100#content
+        if pageContent
+          != pageContent
+        else
+          block page-content
+              .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+                .card.bg-base-200.shadow-xl
+                  .card-body
+                    .card-title Quick Links
+                    .card-content
+                      p This is the dashboard home page.
+                      p Welcome to Pure4 DaisyUI migration.
+
+                .card.bg-base-200.shadow-xl
+                  .card-body
+                    .card-title System Info
+                    .card-content
+                      p Theme: Dark Blue (Pure)
+                      p Menus loaded from session.json
+                      p Ready for Phase 1 testing
+
+      //- Footer
+      footer.border-t.border-base-300.px-4.py-2.flex-none.h-8.flex.items-center.text-base-content.opacity-75.bg-base-200
+        span.flex-1.text-left &copy; #{new Date().getFullYear()} DiGiTaL Information Systems Pte Ltd
+        .flex.items-center.gap-2.flex-1.justify-center
+          span#toolbar-status
+          span#footer-online.badge.badge-sm.badge-ghost.gap-1
+            svg.w-3.h-3.text-success(fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2")
+              path(d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2")
+              circle(cx="9" cy="7" r="4")
+              path(d="M22 21v-2a4 4 0 0 0-3-3.87")
+              path(d="M16 3.13a4 4 0 0 1 0 7.75")
+            span#footer-online-text Online
+          span#footer-theme.badge.badge-sm.badge-ghost.capitalize.gap-1
+        span#footer-page-name.flex-1.text-right
+
+    +print-modals
+    +filegrid-modals
+
+  //- Sidebar collapse/expand logic
+  script.
+    (function() {
+      var sidebar = document.getElementById('sidebar');
+      var toggle = document.getElementById('sidebar-toggle');
+      var STORAGE_KEY = 'sidebar-collapsed';
+      var iconCollapse = toggle.querySelector('.sidebar-icon-collapse');
+      var iconExpand = toggle.querySelector('.sidebar-icon-expand');
+
+      function setCollapsed(collapsed) {
+        if (collapsed) {
+          sidebar.classList.remove('sidebar-expanded');
+          sidebar.classList.add('sidebar-collapsed');
+          iconCollapse.classList.add('hidden');
+          iconExpand.classList.remove('hidden');
+        } else {
+          sidebar.classList.remove('sidebar-collapsed');
+          sidebar.classList.add('sidebar-expanded');
+          iconCollapse.classList.remove('hidden');
+          iconExpand.classList.add('hidden');
+        }
+        localStorage.setItem(STORAGE_KEY, collapsed);
+      }
+
+      // Restore saved state
+      if (localStorage.getItem(STORAGE_KEY) === 'true') {
+        setCollapsed(true);
+      }
+
+      toggle.addEventListener('click', function() {
+        var isExpanded = sidebar.classList.contains('sidebar-expanded');
+        setCollapsed(isExpanded);
+      });
+
+      // Accordion: only one top-level menu open at a time
+      var menu = document.querySelector('#westMenu > ul.menu');
+      if (menu) {
+        menu.addEventListener('toggle', function(e) {
+          if (!e.target.open || e.target.tagName !== 'DETAILS') return;
+          // Close all sibling <details> at the same level
+          var siblings = e.target.parentElement.parentElement.querySelectorAll(':scope > li > details[open]');
+          siblings.forEach(function(d) {
+            if (d !== e.target) d.removeAttribute('open');
+          });
+        }, true);
+
+        // When collapsed, clicking any menu icon expands the sidebar
+        // and opens the clicked menu group (collapsing others)
+        menu.addEventListener('click', function(e) {
+          if (!sidebar.classList.contains('sidebar-collapsed')) return;
+          e.preventDefault();
+          e.stopPropagation();
+          setCollapsed(false);
+          // Find the top-level <details> for the clicked icon
+          var li = e.target.closest('#westMenu > ul.menu > li');
+          if (!li) return;
+          var details = li.querySelector(':scope > details');
+          if (!details) return;
+          // Close all other top-level details, open this one
+          menu.querySelectorAll(':scope > li > details[open]').forEach(function(d) {
+            if (d !== details) d.removeAttribute('open');
+          });
+          details.setAttribute('open', '');
+        }, true);
+      }
+    })();

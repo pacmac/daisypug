@@ -1,0 +1,10 @@
+extends ../content 
+block content
+  form#seqf.multi.fit(_sqlid="vwltsa^seqcls"  asdpx='ax' data-lbut="ax" data-ebut="ax")
+    +layout(fit="true")
+      div(region="west" style="width:400px;")
+        +fitem('Template ID',{id:'id',name:'WORKORDER_BASE_ID', _sqlid:'vwltsa^seqclsid', class:'combobox fkey fit',validType:['length[1,30]'],required:true},{'class':'ui-field-contain'})
+        +fitem('Description',{name:'CLASS_DESCRIPTION', class:'textbox' , validType:['length[1,40]']})
+        
+      div(region="center")
+        include _wo_seq_inc.pug

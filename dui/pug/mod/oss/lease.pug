@@ -1,0 +1,26 @@
+extends ../content
+block script
+  script: include js/lease.js
+block content
+  +vsplit('400px')
+    +panel('west')
+      form.multi#main(asdpx='ax' _sqlid='oss^rental')
+        +fitem('Contract ID',{name:'RENTAL_ID', id:'~', _sqlid:'oss^rental_ids', class:'combobox autonum fkey fit', required:true})
+        
+        +fitem('Customer ID',{name:'CUSTOMER_ID', id:'~', _sqlid:'oss^cust_ids', class:'combobox', required:true})
+        +fitem('Customer Name',{id:'~', name:'CUSTOMER_NAME', class:'textbox', readonly:true})
+        +fitem('Currency ID',{id:'~', name:'CURRENCY_ID', class:'textbox', readonly:true})
+          
+        +fitem('Status',{name:'STATUS', id:'~', class:'combobox', required:true, 'data-options':"editable:false, data:[{value:'RELEASED',text:'Released'},{value:'CLOSED',text:'Closed'}]"})
+          
+        +fitem('Customer Doc',{name:'CUSTOMER_REF', class:'textbox'})
+
+        div
+          +fitem('Start Date',{name:'START_DATE', class:'datebox month'})
+          +fitem('End Date',{name:'END_DATE', class:'datebox today'})
+
+        div
+          +fitem('Total Cost',{id:'~', name:'TOTAL_COST', class:'numberbox', readonly:true, 'data-options':"precision:2, value:0, prefix:'$'"})
+      
+    +panel('center')
+      +datagrid#dgitems

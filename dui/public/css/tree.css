@@ -1,0 +1,124 @@
+/*
+ * tree.css — Tree component styling
+ * Overrides DaisyUI menu defaults for tree-specific density and proportions.
+ * Scoped to .dui-tree (marker class on tree UL elements).
+ *
+ * Reference: EUI tree — 18px rows, 16px icons, ~13px checkboxes,
+ * left-side expand arrows, Tahoma 12px. DUI target: slightly more
+ * spacious (~22px rows) but same tight proportions.
+ */
+
+/* ── Row density ────────────────────────────────────────────────────────── */
+.dui-tree li > a,
+.dui-tree li > details > summary {
+  padding-block: 2px;
+  padding-inline: 4px;
+  gap: 4px;
+  min-height: 0;
+}
+
+/* Root container */
+ul.dui-tree {
+  padding: 4px;
+  font-size: 12px;
+}
+
+/* Nested sub-trees */
+.dui-tree .menu {
+  padding-inline-start: 4px;
+  padding-block: 0;
+  margin-inline-start: 6px;
+}
+
+/* ── Expand/collapse arrow ──────────────────────────────────────────────── */
+/* Hide DaisyUI's default right-side chevron on tree summaries */
+.dui-tree details > summary::after {
+  display: none !important;
+}
+
+/* Grid layout for all tree rows (branch summaries and leaf anchors) */
+.dui-tree details > summary,
+.dui-tree li > a {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  grid-auto-columns: max-content;
+}
+
+/* Left-side expand arrow (CSS triangle) */
+.dui-tree details > summary::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 3.5px 0 3.5px 5px;
+  border-color: transparent transparent transparent currentColor;
+  opacity: 0.4;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+.dui-tree details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+/* Leaf indent — align with branch content (past the arrow) */
+.dui-tree li:not(:has(> details)) > a {
+  margin-inline-start: 5px;
+}
+
+/* ── Text colour reset ─────────────────────────────────────────────────── */
+/* cls on <li> colours both icon and text — reset text to base so only the
+   SVG icon (which uses currentColor) picks up the accent colour. */
+.dui-tree .tree-text {
+  color: var(--color-base-content);
+}
+
+/* ── Icons ──────────────────────────────────────────────────────────────── */
+.dui-tree .tree-icon,
+.dui-tree [data-lucide] {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+/* Force Lucide SVGs to match container (they default to 24×24) */
+.dui-tree svg[data-lucide],
+.dui-tree .lucide {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* ── Checkbox ───────────────────────────────────────────────────────────── */
+/* DaisyUI v5 checkbox-sm/xs/md all resolve to 24px (broken).
+   Force correct size for tree context. */
+.dui-tree .checkbox,
+.dui-tree input[type="checkbox"] {
+  width: 15px !important;
+  height: 15px !important;
+  min-height: 0 !important;
+  border-radius: 3px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* ── Selected node ──────────────────────────────────────────────────────── */
+/* Uses custom .tree-selected class — NOT DaisyUI's menu-active which
+   applies an opaque primary/neutral background that makes text invisible. */
+.dui-tree a.tree-selected,
+.dui-tree summary.tree-selected {
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent) !important;
+  border-radius: 4px;
+  color: inherit !important;
+}
+
+/* ── Hover ──────────────────────────────────────────────────────────────── */
+.dui-tree li > a:hover,
+.dui-tree li > details > summary:hover {
+  background: color-mix(in srgb, var(--color-base-content) 6%, transparent);
+  border-radius: 4px;
+}
+
+/* ── Locked/disabled nodes ──────────────────────────────────────────────── */
+.dui-tree li.pointer-events-none {
+  opacity: 0.45;
+}

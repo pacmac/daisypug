@@ -1,0 +1,99 @@
+{
+  "id": "eventdg",
+  "rownumbers": true,
+  "singleSelect": true,
+  "striped": true,
+  "fitColumns": true,
+  "fit": true,
+  "editor": "form",
+  "asdpx": "aed",
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "sales^crm_events",
+    "_dgrid": true,
+    "CO_ID": null
+  },
+  "columns": [
+    [
+      { "field": "CO_ID", "hidden": true },
+      { "field": "ROWID", "hidden": true },
+      { "field": "CREATE_DATE", "hidden": true },
+      {
+        "field": "EVENT_DATE",
+        "title": "Event Date",
+        "width": 100,
+        "fixed": true,
+        "formatter": "$.dui.fmt.date",
+        "editor": { "type": "datebox", "options": { "required": true } }
+      },
+      {
+        "field": "CONTACT_ID",
+        "title": "Contact ID",
+        "width": 110,
+        "fixed": true,
+        "editor": { "type": "combobox", "options": { "panelHeight": "auto" } }
+      },
+      {
+        "field": "EVENT_TYPE",
+        "title": "Event Type",
+        "width": 120,
+        "fixed": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "data": [
+              { "value": "CALL-IN", "text": "Call In" },
+              { "value": "CALL-OUT", "text": "Call Out" },
+              { "value": "EMAIL", "text": "Email" },
+              { "value": "DEMO", "text": "Demo" },
+              { "value": "MEETING", "text": "Meeting" },
+              { "value": "MAILER", "text": "Mail Blast" },
+              { "value": "QUOTE", "text": "Quotation" },
+              { "value": "OTHER", "text": "Other" }
+            ]
+          }
+        }
+      },
+      {
+        "field": "NEXT_STEP",
+        "title": "Next Step",
+        "width": 120,
+        "fixed": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "data": [
+              { "value": "CALL-IN", "text": "Call In" },
+              { "value": "CALL-OUT", "text": "Call Out" },
+              { "value": "EMAIL", "text": "Email" },
+              { "value": "DEMO", "text": "Demo" },
+              { "value": "MEETING", "text": "Meeting" },
+              { "value": "MAILER", "text": "Mail Blast" },
+              { "value": "QUOTE", "text": "Quotation" },
+              { "value": "OTHER", "text": "Other" }
+            ]
+          }
+        }
+      },
+      {
+        "field": "NEXT_DATE",
+        "title": "Next Date",
+        "width": 100,
+        "fixed": true,
+        "formatter": "$.dui.fmt.date",
+        "editor": { "type": "datebox", "options": { "required": true } }
+      },
+      {
+        "field": "DETAILS",
+        "title": "Details",
+        "editor": {
+          "type": "textbox",
+          "options": { "multiline": true, "height": "200px" }
+        }
+      }
+    ]
+  ]
+}

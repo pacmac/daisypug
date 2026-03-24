@@ -1,0 +1,111 @@
+extends ../content 
+block script 
+  script: include js/prodexc.js
+block style 
+  style.
+    .flex-grid {
+      display: flex;
+      padding: 12px 0 0 12px;
+    }
+    .col {
+      flex: 1;
+      max-width:300px;
+      width: 25%;
+    }
+
+    #pmrtb {
+      height:35px;
+      line-height:35px;
+      
+    } #pmrtb > a {
+      margin-left:12px;  
+    }
+    
+    .col .fitem label {
+      width:100px;
+    }
+    
+    .col .fitem .textbox.combo {
+      width: 100px !important;
+    }
+
+    .y, .textbox-text.y{
+      background: #FFB5B5;
+    }
+
+    .n, .textbox-text.n {
+      background: #CAFFD8;
+    }
+
+    .ALL, .textbox-text.ALL {
+      background: #D0E6FF;
+    }
+    
+    .late {
+      color: red;	 
+    }
+    .otd {
+      color:green;
+    }
+
+    .datagrid-header-row .datagrid-cell{
+      line-height:normal;
+      height:auto;
+      white-space:normal;
+    }
+    .datagrid-row-overxxx{
+          cursor: pointer;
+          background: #B0C4DE;
+    }
+
+  +layout({border:false})
+    +panel('north', { style: "height:350px;", collapsible: "false", border: "false" })
+      form#filters
+        .flex-grid
+
+          .col
+            +fieldset('Manufacturing')
+              +fitem('Job Status',{name:'M_STATUS', class:'combobox', 'data-options':{default:'A', panelHeight:'auto',data:[{value:'A',text:'ALL'},{value:'R',text:'RELEASED',selected:true},{value:'U',text:'UNRELEASED'}]}})
+              +fitem('Has CNC Prog',{name:'M_CNC', class:'combobox', 'data-options':{default:'ALL', panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('Has Coatings',{name:'M_COATING', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('Has SO Link',{name:'M_SO', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('Has Notes',{name:'M_NOTES', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('Has TPI Date',{name:'M_TPI', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              
+            +fieldset('Resource')
+              +fitem('Opn Resource',{name:'M_OPN_RES',  class:'combobox',_sqlid:'vwltsa^resid','data-options':{default:'ALL',queryParams:{_cboall:'y'}}})
+              +fitem('Opn Filter',{name:'M_OPN_FILTER',  class:'combobox','data-options':{default:'ALL',panelHeight:'auto',data:[{value:'y', text:'CURRENT',selected:true},{value:'n',text:'CONTAINS'}]}})
+                
+          .col
+            +fieldset('Sales')
+              .fitem
+                +input({id:'CUSTOMER_NAME',readonly:true,class:'textbox'})
+              +fitem('Customer',{id:'~', name:'CUSTOMER_ID', class:'combobox',_sqlid:'sales^custname_openSales','data-options':{default:'ALL',queryParams:{_cboall:'y'}}})
+              +fitem('Is Overdue',{name:'S_ODUE', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('Has Job Link',{id:'~',name:'S_JOB', class:'combobox', 'data-options':{default:'y',panelHeight:'auto',data:[{value:'y',text:'YES',selected:true},{value:'n',text:'NO'}]}})
+              +fitem('Delivery Concern',{name:'S_DELIVERY', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('Want Date Adj',{name:'S_WANT_ADJ', class:'numberspinner' ,value:1,min:-100,max:100, precision:0,style:'width:100px;'}) 
+            +fieldset('Schedule')
+              +fitem('Inactive Jobs',{id:'~',name:'SCH_INACTIVE_JOBS', class:'combobox', 'data-options':{default:'y',panelHeight:'auto',data:[{value:'y',text:'YES'},{value:'ALL',text:'NO',selected:true}]}})            
+              +fitem('Days',{id:'~',name:'SCH_DAYS',class:'combobox','data-options':{default:'7',panelHeight:'auto',data:[{value:'1',text:'1'},{value:'2',text:'2'},{value:'3',text:'3'},{value:'4',text:'4'},{value:'5',text:'5'},{value:'6',text:'6'},{value:'7',text:'7',selected:true},{value:'8',text:'8'},{value:'9',text:'9'},{value:'10',text:'10'},{value:'11',text:'11'},{value:'12',text:'12'},{value:'13',text:'13'},{value:'14',text:'14'}]}})
+          .col
+            +fieldset('Quality')
+              
+              +fitem('COC Complete',{name:'Q_COCOK', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('Has Gage',{name:'M_GAGE', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}}) 
+              +fitem('Has NCRs',{name:'Q_NCRS', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+          .col
+            +fieldset('Inventory')
+              +fitem('Raw Matl',{name:'I_RAWMAT', class:'combobox', 'data-options':{default:'ALL',panelHeight:'auto',data:[{value:'ALL',text:'ALL',selected:true},{value:'y',text:'YES'},{value:'n',text:'NO'}]}})
+              +fitem('CP Status',{id:'~',class:'combobox',name:'I_CPSHORT','data-options':{default:'ALL',data:[{text:'N/A',value:'ALL',selected:true},{text:'Shortages',value:'SHORTAGE'},{text:'Open Orders',value:'RLS'},{text:'In-House',value:'INHOUSE'},{text:'Return',value:'RETURN'}]}})
+
+                    
+    +panel('center', { style: "padding:8px;" })
+      #pmrtb
+        a#gofilt       
+        a#dg2excel
+        a#setall
+        a#setwidth
+        
+      +datagrid#pmr
+      

@@ -1,0 +1,144 @@
+{
+  "id": "cidg",
+  "url": "/?_func=get&_sqlid=dqm^ci_list&_dgrid=y&STATUS=PENDING,ACTIONED",
+  "method": "get",
+  "fit": true,
+  "fitColumns": true,
+  "striped": true,
+  "singleSelect": true,
+  "checkOnSelect": true,
+  "remoteSort": false,
+  "idField": "ID",
+  "columns": [
+    [
+      {
+        "field": "_CK",
+        "title": "S",
+        "width": 50,
+        "checkbox": true,
+        "fixed": true
+      },
+      {
+        "field": "ID",
+        "title": "CI ID",
+        "width": 80,
+        "fixed": true,
+        "sortable": true,
+        "order": "asc"
+      },
+      {
+        "field": "CREATE_DATE",
+        "title": "CI Date",
+        "width": 90,
+        "fixed": true,
+        "sortable": true,
+        "order": "asc"
+      },
+      {
+        "field": "STATUS",
+        "title": "CI Status",
+        "width": 90,
+        "fixed": true,
+        "sortable": true,
+        "order": "asc"
+      },
+      {
+        "field": "SRC_ID",
+        "title": "Source ID",
+        "width": 120,
+        "fixed": true,
+        "sortable": true,
+        "order": "asc"
+      },
+      {
+        "field": "SRC_CREATE_DATE",
+        "title": "Source Date",
+        "width": 90,
+        "fixed": true,
+        "sortable": true,
+        "order": "asc"
+      },
+      {
+        "field": "SRC_SEVERITY",
+        "title": "Severity",
+        "width": 75,
+        "fixed": true,
+        "sortable": true,
+        "order": "asc"
+      },
+      {
+        "field": "SRC_REPORTED_BY",
+        "title": "Action By",
+        "width": 120,
+        "fixed": true
+      },
+      {
+        "field": "USER_ID",
+        "title": "Created By",
+        "width": 120,
+        "fixed": true
+      },
+      {
+        "field": "SRC_SUBJECT",
+        "title": "Subject",
+        "width": 800,
+        "fixed": false
+      }
+    ]
+  ],
+  "toolbar": [
+    {
+      "id": "but_dg_view",
+      "text": "View",
+      "iconCls": "icon-godoc",
+      "disabled": true
+    },
+    {
+      "id": "but_dg_cf",
+      "iconCls": "icon-cf",
+      "disabled": true,
+      "toggle": true,
+      "selected": true
+    },
+    {
+      "id": "but_dg_cpar",
+      "iconCls": "icon-cpar",
+      "disabled": true,
+      "toggle": true,
+      "selected": true
+    },
+    {
+      "id": "but_dg_ncr",
+      "iconCls": "icon-ncr",
+      "toggle": true,
+      "disabled": true,
+      "selected": true
+    },
+    {
+      "id": "but_dg_ci",
+      "iconCls": "icon-ci",
+      "toggle": true,
+      "disabled": true,
+      "selected": true
+    },
+    {
+      "id": "but_dg_open",
+      "iconCls": "icon-unlocked",
+      "text": "Open",
+      "disabled": false,
+      "selected": true,
+      "toggle": true
+    },
+    {
+      "id": "but_dg_closed",
+      "iconCls": "icon-locked",
+      "text": "Closed",
+      "disabled": false,
+      "toggle": true
+    },
+    {
+      "id": "dg2excel",
+      "disabled": true
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+extends ../content
+
+
+block script
+  script: include js/masters.js
+  //-script.
+    
+    //if ($.fn.multibox) {
+    $('#QM_COLS').multibox({
+      data: [
+        {text:'ORDER_QTY',        value:'ORDER_QTY'},
+        {text:'LINE_NO',          value:'LINE_NO'},
+        {text:'UOM_ID',           value:'UOM_ID'},
+        {text:'UNIT_PRICE',       value:'UNIT_PRICE'},
+        {text:'TOTAL_PRICE',      value:'TOTAL_PRICE'},
+        {text:'CUST_PART_REF',    value:'CUST_PART_REF'},
+        {text:'DESCRIPTION',      value:'DESCRIPTION'},
+        {text:'WANT_DATE',        value:'WANT_DATE'},
+      ]
+    });
+    $('#QI_COLS').multibox({
+      data: [
+        {text:'UNIT_PRICE',   value:'UNIT_PRICE'},
+        {text:'SOURCE',       value:'SOURCE'},
+        {text:'UOM_ID',       value:'UOM_ID'},
+        {text:'DESCRIPTION',  value:'DESCRIPTION'}
+      ],
+    });
+    //}
+    
+block content
+  +tabs#lists(data-options="tabPosition:'left'")
+    +tab-item('Customers',{iconCls:"icon-customer"})
+      +form#custall.multi.fit(_sqlid='sales^custall', asdpx='adx')
+        +hsplit('100%')
+          +panel('north')
+            +fitem('Customer ID',{name:'ID',id:'~',  class:'searchbox fkey',validType:['length[1,15]'],sbref:'customer_ids'})
+            +fitem('Name',{name:'NAME', class:'textbox' , validType:['length[1,80]']})
+            +fitem('Currency',{name:'CURRENCY_ID', class:'combobox' , _sqlid:'admin^curr',required:true,'data-options':"editable:false"})
+            +fitem('GST Code',{name:'GST_ID', id:'~', class:'combobox' , _sqlid:'admin^gst',required:true,'data-options':"editable:false"})
+            +fitem('Payment Terms',{name:'PAYMENT_TERM', id:'~',_sqlid:'sales^quotepaymenttermid',  class:'combobox',required:true,'data-options':"editable:false"})
+
+
+            +tabs#ptabs()
+              +tab-item('Main',{iconCls:"icon-address"})
+                +fitem('Address 1',{name:'ADDR_1', class:'textbox' ,validType:['length[1,50]']})
+                +fitem('Address 2',{name:'ADDR_2', class:'textbox' ,validType:['length[1,50]']})
+                +fitem('Address 3',{name:'ADDR_3', class:'textbox' ,validType:['length[1,50]']})
+              +tab-item('COC',{iconCls:"icon-coc"})
+                +fitem('Address 1',{name:'COC_ADDR_1', class:'textbox' ,validType:['length[1,50]']})
+                +fitem('Address 2',{name:'COC_ADDR_2', class:'textbox' ,validType:['length[1,50]']})
+                +fitem('Address 3',{name:'COC_ADDR_3', class:'textbox' ,validType:['length[1,50]']})
+                +fitem('Email',{name:'COC_EMAIL', class:'textbox',validType:['email']})
+              +tab-item('Contact',{iconCls:"icon-contact"})
+                +fitem('Person',{name:'CONTACT_PERSON', class:'textbox',validType:['length[1,80]']})
+                +fitem('Phone',{name:'CONTACT_PHONE', class:'textbox',validType:['length[1,80]']})
+                +fitem('Fax',{name:'CONTACT_fax', class:'textbox',validType:['length[1,80]']})
+                +fitem('Email',{name:'CONTACT_EMAIL', class:'textbox',validType:['email']})
+                +fitem('Subscribe To Events',{name:'SUBSCRIBE_EVENT', class:'combobox','data-options':"data:[{text:'YES',value:'Y'},{text:'NO',value:'N', selected:true}],editable:false"})
+              +tab-item('Bill-To',{iconCls:"icon-money"})
+                +fitem('Person',{name:'BILL_TO_PERSON', class:'textbox',validType:['length[1,80]']})
+                +fitem('Phone',{name:'BILL_TO_PHONE', class:'textbox',validType:['length[1,80]']})
+                +fitem('Fax',{name:'BILL_TO_FAX', class:'textbox',validType:['length[1,80]']})
+                +fitem('Email',{name:'BILL_TO_EMAIL', class:'textbox',validType:['email']})
+              +tab-item('Notes',{iconCls:"icon-notes"})
+                +fitem('Notes',{name:'NOTES', class:'textbox','data-options':"multiline:true", style:'height:250px;width:345px'})
+              +tab-item("User Fields",{iconCls:"icon-udf"})
+                +fieldset(null, {style:"margin-top:12px;"})
+                  +fitem('UDF Layout',{ id:'UDF_LAYOUT_ID',class:'combobox',_sqlid:'vwltsa^udfid'})
+                +fieldset(null)#udf
+                  +udf
+    +tab-item('Payment Terms',{iconCls:"icon-money"})
+      +form.multi(_sqlid='sales^quotepaymentterm' asdpx='adx')
+        +fitem('ID',{name:'ID', _sqlid:'sales^quotepaymenttermid', class:'combobox fkey fit',validType:['length[1,15]'],required:true})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox',validType:['length[1,30]']})
+    +tab-item('Next Numbers',{iconCls:"icon-list"})
+      +form.multi(_sqlid='sales^nngall', asdpx='ax')
+        +fitem('Next Number ID',{id:'NNG_TYPE',name:'TYPE', _sqlid:'sales^nng' ,required:true, 'data-options':"validType:'length[1,15]'",class:'combobox fkey fit' })
+        +fitem('Description',{id:'NNG_DESC',name:'DESCRIPTION', 'data-options':"validType:'length[1,255]'",class:'textbox' })
+        +fitem('Prefix',{id:'NNG_PREFIX',name:'PREFIX', 'data-options':"validType:'length[1,8]'",class:'textbox' })
+        +fitem('Next Number',{id:'NNG_NEXT',name:'NEXT_NUMBER', precision:0,min:1,class:'numberspinner' })
+        +fitem('Suffix',{name:'SUFFIX', class:'combobox','data-options':"data:[{text:'None',value:''},{text:'Year 4 Digits',value:'$Y4'},{text:'Year 2 Digits',value:'$Y2'},{text:'Month',value:'$M'},{text:'Month Name',value:'M3'},{text:'-Year 4 Digits',value:'-$Y4'},{text:'-Year 2 Digits',value:'-$Y2'},{text:'-Month',value:'-$M'},{text:'-Month Name',value:'-M3'},{text:'YYMMDD',value:'YYMMDD'},{text:'YYYYMMDD',value:'YYYYMMDD'},{text:'-YYMMDD',value:'-YYMMDD'},{text:'-YYYYMMDD',value:'-YYYYMMDD'}]", default:'$Y4' })
+        +fitem('Suffix User Defined',{id:'SUFFIX_UDF',name:'SUFFIX_UDF',class:'textbox' ,'data-options':"validType:'length[1,5]'"})
+        +fitem('Decimal Digits',{name:'DECIMAL_PLACES',class:'numberspinner' ,value:1,min:1,max:10,precision:0})
+        +fitem('Table Name',{id:'TABLE_NAME1', name:'TABLE_NAME', readonly:true, class:'combobox'})
+        +fitem('Column Name',{id:'COLUMN_NAME1',name:'COLUMN_NAME', readonly:true, class:'combobox'})
+    +tab-item('Quote Format',{iconCls:"icon-form"})
+      +form.multi(_sqlid='sales^quoteformat' asdpx='adx')
+        +fitem('ID',{name:'ID', _sqlid:'sales^quoteformatid', class:'combobox fkey fit',validType:['length[1,30]'],required:true})
+        +fitem('Title',{name:'TITLE', class:'textbox',validType:['length[1,30]'],value:'New Quotation'})
+        +fitem('Pentaho Report',{name:'PHOID', class:'textbox',validType:['length[1,200]']})
+        +fitem('Totals',{name:'TOTALS', class:'combobox','data-options':"data:[{text:'Yes',value:'Y',selected:true},{text:'No',value:'N'}]" })
+    +tab-item('Quote Item Class',{iconCls:"icon-classes"})
+      +form.multi(_sqlid='sales^quoteitemclass' asdpx='adx')
+        +fitem('ID',{name:'ID', _sqlid:'sales^quoteitemclassColsid', class:'combobox fkey fit',validType:['length[1,30]'],required:true})
+        +fitem('Description',{name:'DESCRIPTION', class:'textbox',validType:['length[1,30]']})
+        +fitem('QI Field Disable',{id:'~', name:'QI_COLS', class:'multibox','data-options':"data:[{text:'UNIT_PRICE',value:'UNIT_PRICE'},{text:'SOURCE',value:'SOURCE'},{text:'UOM_ID',value:'UOM_ID'},{text:'DESCRIPTION',value:'DESCRIPTION'}]" })
+        +fitem('QM Field Disable',{id:'~', name:'QM_COLS', class:'multibox','data-options':"data:[{text:'ORDER_QTY',value:'ORDER_QTY'},{text:'LINE_NO',value:'LINE_NO'},{text:'UOM_ID',value:'UOM_ID'},{text:'UNIT_PRICE',value:'UNIT_PRICE'},{text:'TOTAL_PRICE',value:'TOTAL_PRICE'},{text:'CUST_PART_REF',value:'CUST_PART_REF'},{text:'DESCRIPTION',value:'DESCRIPTION'},{text:'WANT_DATE',value:'WANT_DATE'}]" })
+      
+    +tab-item('Quote Notes',{iconCls:"icon-notes"})
+      +form.multi(_sqlid='sales^quotenotes' asdpx='adx')
+        +fitem('ID',{name:'ID', _sqlid:'sales^quotenotesid', class:'combobox fkey fit',validType:['length[1,30]'],required:true})
+        +fitem('Notes',{name:'NOTES', class:'textbox','data-options':"multiline:true", style:'height:150px;width:345px'})

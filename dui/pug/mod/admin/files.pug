@@ -1,0 +1,76 @@
+extends ../content 
+//- ── MIGRATOR ──────────────────────────────────
+//- page: admin/files
+//- owner: root
+//- status: error
+//- passes: 1  version: 8
+//- last_run: 2026-02-28 18:52:04
+//- fragments:
+//-   _files.inc: converted
+//- ─────────────────────────────────────────────
+block content 
+  include _files.inc.pug
+      
+  #filefold.window(style="width:400px" title="Edit File Properties" closed="true" modal="true")
+    form#file(style="display:none")
+      input(type="hidden" name="tsid")
+      input(type="hidden" name="tsidl")
+      input(type="hidden" name="appid")
+      input(type="hidden" name="_func" value="add")
+      input(type="hidden" name="_sqlid" value="admin^file")      
+          
+      .fitem
+        label File Description
+        +input({class:'textbox', name:"description"})
+      
+      .fitem
+        label Revision
+        +input({class:'textbox', name:"revn"})
+
+      .fitem
+        label File Name
+        +input#fname({class:'textbox', name:"fname"})
+
+      .fitem
+        label Extension
+        +input({class:'textbox', name:"extn", readonly:"readonly"})
+       
+      
+      .fitem
+        label Owner ID
+        +input({class:'textbox', name:"uid", readonly:"readonly"})
+      
+      .fitem
+        label View Access
+        +combobox({name:"access", data-options:"panelHeight:'auto', data:[{value:'view',text:'View as PDF',selected:true},{value:'dload',text:'Download Source'}]"})
+      
+      .fitem
+        label Document ID
+        +input({class:'textbox', name:"appdoc", readonly:"readonly", value:""})
+
+      .fbuts.text-center
+        #filesave Save
+
+    form#fold(style="display:none")
+      input(type="hidden" name="id")
+      input(type="hidden" name="_func" value="add")
+      input(type="hidden" name="_sqlid" value="admin^dir")
+      
+      .fitem
+        label Folder Name
+        +input({class:'textbox', name:"name"})
+
+      .fitem
+        label.icon-r(style="margin-right:10px;width:130px;") Folder Icon
+        input#icon(name="icon")
+
+      .fitem
+        label Autonumber Prefix
+        +input({class:'textbox upper', name:"prefix"})
+
+      .fitem
+        label Autonumber Next
+        +input({class:'numberbox', name:"next_number", min:1})
+      
+      .fbuts.text-center
+        #foldsave Save

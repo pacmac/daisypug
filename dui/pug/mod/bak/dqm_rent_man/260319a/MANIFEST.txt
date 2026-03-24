@@ -1,0 +1,7 @@
+# dui-backup-clean: dqm/rent_man
+# 2026-03-19T17:00:56.694334
+
+html/dui/mod/dqm/rent_man.pug -> rent_man.pug
+html/dui/mod/dqm/js/rent_man.js -> js/rent_man.js
+html/dui/mod/dqm/json/datagrid.rent_man_joblist.json -> json/datagrid.rent_man_joblist.json
+yaml/migrator/mod/dqm/rent_man.yaml -> rent_man.yaml

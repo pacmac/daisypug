@@ -1,0 +1,176 @@
+H1 PAC ALPHA Test Page X
+
+if 1==2
+  +fitem('Part ID',{name:'PART_ID',id:'PART_ID', required:true, class:'combobox', _sqlid:'inv^traceparts', 'data-options':"panelWidth:'250px',groupField:'PART_CLASS_ID'"})
+
+
+if 1==2
+  div(style="width:400px;")
+    +fitem('Customer ID',{name:'CUSTOMER_ID', id:'ccx', class:'easyui-xmultibox'})
+  
+  script.
+    $('#ccx')._______multibox({
+      __sqlid : 'vwltsa^depDesc',
+      data:[
+        {text:'NON-STOCK PART', name:'N',value:'N'},
+        {text:'STOCK PART',     name:'P',value:'P'},
+      ]
+    });
+
+
+if 1==1
+  div(style="width:400px;")
+    +fitem('Test',{name:'TEST', id:'a', class:'textbox'})
+    #ccx(_sqlid="vwltsa^depDesc")
+
+  script.
+    cl = console.log;
+    
+    $('#ccx').multibox({
+      __sqlid: "vwltsa^depDesc",
+      columns:2,
+      data:[
+        {text:'NON-STOCK PART', name:'N',value:'N'},
+        {text:'STOCK PART',     name:'P',value:'P'},
+      ]
+    });
+  
+if 1==2
+  form#xlsx
+    .fitem
+      +button('Test 5000',{'data-options':{'clickms':5000}})
+    .fitem
+      +button('Test 0',{'data-options':{'clickms':0}})
+    .fitem
+      +button('Test default 2000')
+    .fitem
+      +button('Toggle',{'data-options':{'clickms':0,'toggle':true}})
+  
+    .fitem
+      +input({id:"fb"})
+    .fitem
+      +input({eui:'textbox',id:'~', name:'oput','data-options':"multiline:true", style:'height:400px;width:800px;margin-top:20px;'})
+  
+  script.
+    const cl = console.log
+    
+    dynjs('/js/xlsx.core.js');
+  
+    //$('#xxx').linkbutton()
+  
+    $('#fb').filebox({
+      multiple: false,
+      buttonText: 'Select',
+      buttonAlign: 'right',
+      prompt: 'Select File',    
+      onChange: function(nv,ov){
+        $(this).textbox('textbox')[0].value = nv.replace("C:\\fakepath\\", "");
+        var f = $(this).data('filebox').filebox.children('input[type=file]')[0].files[0];
+  
+        var name = f.name;
+        if((/\.xls|\.xlsx/).test(name)){
+          var reader = new FileReader();
+          reader.onload = go        
+          reader.readAsArrayBuffer(f);
+        }
+        
+        else msgbox('Excel Files Only.')
+  
+        /*
+          lastModified: 1554864770000
+          lastModifiedDate: Wed Apr 10 2019 10:52:50 GMT+0800 (Singapore Standard Time) {}
+          name: "PN-474411-01-5X3.xlsx"
+          size: 36193
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          webkitRelativePath: ""
+        */
+      } 
+    })
+    
+    function go(evt){
+      
+      /* GET ITEMS */
+      function getItems(ws,row){
+        
+        const cols = {
+          'E'   : 'NO',
+          'G'   : 'ID',
+          'M'   : 'REV',
+          'N'   : 'DESC',
+          'AD'  : 'QTY',
+          'AE'  : 'UOM'
+        };
+      
+        // loop rows starting from (row)
+        var done = false;
+        do {
+          
+          // loop columns
+          var rowdat = {}
+          for(var col in cols){
+            var cid = `${col}${row}`;
+            var cell = ws[cid];
+            if(cell && cell.v){
+              if(cell.v == last) {done = true; break;}
+              else rowdat[cols[col]] = cell.v;
+            }
+          }
+          if(rowdat.ID) data.items.push(rowdat)
+          row++;
+        }
+        while (!done); 
+        
+  
+        
+        ajaxget('/',Object.assign(data,{
+          _sqlid  : 'inv^partbom',
+          _func   : 'put',        
+        }),function(){
+          $('#oput').textbox('setValue',JSON.stringify(data,null,2));  
+        });
+        
+      }
+      
+      function head(){
+        var cells = {
+          'M3'    : 'ID',
+          'X3'    : 'REV',
+          'AC3'   : 'REV_DATE',
+          'A9'    : 'DESCRIPTION',
+        }
+        for(var cid in cells){
+          var cell = ws[cid];
+          var fid = cells[cid]; 
+          if(cell) data[fid] = cell.v;
+        }
+        
+      }
+      
+      // Find Start Row
+      function items(){
+        var row = 1;
+        while (row < maxrow) {
+          var srow = null;
+          var cid = `A${row}`; 
+          var cell = ws[cid];
+          row++;
+          if( row > maxrow || cell && cell.v == start){
+            return getItems(ws,row+1)
+          }
+        }
+      }
+  
+      // Main Code
+      const maxrow = 200;
+      const start = 'List Of Items';
+      const last = 'END';
+      var data = {items:[]};
+  
+      var wb = XLSX.read(evt.target.result, {type: 'binary'});
+      var sht0 = wb.SheetNames[0];
+      var ws = wb.Sheets[sht0];
+      
+      head();
+      items();
+      
+    }

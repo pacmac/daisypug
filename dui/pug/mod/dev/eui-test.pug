@@ -1,0 +1,135 @@
+//- EUI Component Test File - Auto-generated extracted components
+//- Generated: 2026-01-27 01:07:19
+//- Source: html/daisy/pug/content/eui/sa_parts.pug
+//- Purpose: Show all extracted EUI components from real usage
+
+extends ../../layout/layout
+
+block content
+  .container.mx-auto.p-6
+    h1.font-bold.mb-6 EUI Components - Extracted from Real Code
+
+    .grid.grid-cols-1.lg.grid-cols-2.gap-6
+
+      //- Pattern 1: Direct Syntax
+      .card.bg-base-100.shadow-xl
+        .card-body
+          h2.card-title Pattern 1: Direct Syntax
+          p Components using .easyui-* class syntax(data-easyui-warning="easyui-")
+
+          //- layout (1)
+          .mb-4
+            p.font-bold layout 
+            span (1 occurrence - sa_parts.pug:7)
+            div.border.p-2.bg-gray-50.mt-2
+              code.easyui-layout(data-options="fit:true,border:false")
+                | [layout content]
+
+          //- menu (1)
+          .mb-4
+            p.font-bold menu
+            span (1 occurrence - sa_parts.pug:63)
+            div.border.p-2.bg-gray-50.mt-2
+              code.easyui-menu
+                | [menu items]
+
+          //- panel (2)
+          .mb-4
+            p.font-bold panel
+            span (2 occurrences - sa_parts.pug:8, sa_parts.pug:41)
+            div.border.p-2.bg-gray-50.mt-2
+              code.easyui-panel(region="west" style="width:400px")
+                | [panel 1]
+            div.border.p-2.bg-gray-50.mt-2
+              code.easyui-panel#remarks(region="center")
+                | [panel 2]
+
+          //- tabs (2)
+          .mb-4
+            p.font-bold tabs
+            span (2 occurrences - sa_parts.pug:42, sa_parts.pug:57)
+            div.border.p-2.bg-gray-50.mt-2
+              code.easyui-tabs#usertabs(fit="true")
+                | [tabs 1]
+            div.border.p-2.bg-gray-50.mt-2
+              code.easyui-tabs(fit="true")
+                | [tabs 2]
+
+      //- Pattern 2: Class Parameters
+      .card.bg-base-100.shadow-xl
+        .card-body
+          h2.card-title Pattern 2: Class Parameters
+          p Components using class:'easyui-*' inside mixin calls
+
+          .space-y-3
+            //- combobox (10)
+            .border-l-4.border-blue-500.pl-3
+              p.font-bold combobox
+              span (10 occurrences - sa_parts.pug:11, ...)
+              div.text-gray-600
+                code class:'easyui-combobox'
+
+            //- textbox (6)
+            .border-l-4.border-green-500.pl-3
+              p.font-bold textbox
+              span (6 occurrences - sa_parts.pug:13, ...)
+              div.text-gray-600
+                code class:'easyui-textbox'
+
+            //- datebox (3)
+            .border-l-4.border-purple-500.pl-3
+              p.font-bold datebox
+              span (3 occurrences - sa_parts.pug:35, ...)
+              div.text-gray-600
+                code class:'easyui-datebox'
+
+            //- numberbox (2)
+            .border-l-4.border-orange-500.pl-3
+              p.font-bold numberbox
+              span (2 occurrences - sa_parts.pug:33, ...)
+              div.text-gray-600
+                code class:'easyui-numberbox'
+
+            //- datetimebox (1)
+            .border-l-4.border-red-500.pl-3
+              p.font-bold datetimebox
+              span (1 occurrence - sa_parts.pug:38)
+              div.text-gray-600
+                code class:'easyui-datetimebox'
+
+            //- validatebox (1)
+            .border-l-4.border-indigo-500.pl-3
+              p.font-bold validatebox
+              span (1 occurrence - sa_parts.pug:16)
+              div.text-gray-600
+                code class:'easyui-validatebox'
+
+    .card.bg-blue-50.mt-6.shadow-xl
+      .card-body
+        h2.card-title Component Summary
+        .grid.grid-cols-2.gap-4
+          div
+            p.font-bold Total Components: 10
+            ul.list-disc.ml-6
+              li combobox (10)
+              li textbox (6)
+              li datebox (3)
+              li numberbox (2)
+              li panel (2)
+              li tabs (2)
+          div
+            p.font-bold Other Components: 4
+            ul.list-disc.ml-6
+              li layout (1)
+              li menu (1)
+              li datetimebox (1)
+              li validatebox (1)
+
+        .mt-4.p-3.bg-white.rounded
+          p.font-bold 📊 Extraction Statistics:
+          ul.list-disc.ml-6
+            li Files scanned: 1 (sa_parts.pug)
+            li Total instances: 29
+            li Unique components: 10
+            li Direct syntax: 6
+            li Class parameters: 23

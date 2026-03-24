@@ -1,0 +1,39 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "vwltsa^resids_sbox",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "Resource ID", "width": 100 },
+    { "field": "COST_PER_HR", "title": "Cost Per Hour", "width": 80 },
+    { "field": "RESOURCE_CLASS_ID", "title": "CLASS_ID", "width": 100 },
+    { "field": "UNIT", "title": "Unit", "width": 50 },
+    { "field": "TOLERANCE_CLASS", "title": "TOLERANCE_CLASS", "width": 100 },
+    { "field": "ACTIVE", "title": "ACTIVE", "width": 50 }
+  ],
+  "filters": [
+    { "field": "CLASS_ID", "title": "Class ID", "editor": "textbox" },
+    {
+      "field": "ACTIVE",
+      "title": "Active",
+      "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "Y", "text": "Yes", "selected": true },
+            { "value": "N", "text": "No" }
+          ]
+        }
+      }
+    }
+  ]
+}

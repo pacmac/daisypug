@@ -1,0 +1,63 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "inv^gatepass_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value",      "title": "Gatepass ID",  "width": 100 },
+    { "field": "GP_TYPE",    "title": "GP Type",      "width": 80 },
+    { "field": "TX_TYPE",    "title": "Tx Type",      "width": 80 },
+    { "field": "DOC_TYPE",   "title": "Doc Type",     "width": 80 },
+    { "field": "DOC_ID",     "title": "Doc ID",       "width": 100 },
+    { "field": "PART_ID",    "title": "Part ID",      "width": 120 },
+    { "field": "GP_DATE",    "title": "GP Date",      "width": 100 },
+    { "field": "GP_TYPE_ID", "title": "Cust/Vendor",  "width": 100 },
+    { "field": "NAME",       "title": "Name",         "width": 150 }
+  ],
+  "filters": [
+    { "field": "GP_TYPE", "title": "GP Type", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "C", "text": "CUSTOMER" },
+            { "value": "V", "text": "VENDOR" }
+          ]
+        }
+      }
+    },
+    { "field": "TX_TYPE", "title": "Tx Type", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "S", "text": "Shipment" },
+            { "value": "R", "text": "Return" }
+          ]
+        }
+      }
+    },
+    { "field": "DOC_TYPE", "title": "Doc Type", "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "WO", "text": "Job" },
+            { "value": "SO", "text": "Sales" }
+          ]
+        }
+      }
+    },
+    { "field": "DOC_ID", "title": "Doc ID", "editor": "textbox" },
+    { "field": "PART_ID", "title": "Part ID", "editor": "textbox" },
+    { "field": "GP_DATE", "title": "GP Date", "editor": "datebox" },
+    { "field": "GP_TYPE_ID", "title": "Cust/Vendor", "editor": "textbox" },
+    { "field": "NAME", "title": "Name", "editor": "textbox" }
+  ]
+}

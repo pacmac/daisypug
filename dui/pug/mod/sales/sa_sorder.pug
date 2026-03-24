@@ -1,0 +1,72 @@
+extends ../content
+
+block script
+  script: include js/sa_sorder.js
+
+block content
+  +vsplit()
+    +panel('west')
+      +form#sohead.multi.fit(_sqlid='sales^sohead' asdpx='adx')
+        +fitem('Order ID',{id:'~', name:'ID', class:'searchbox fkey fit navi autonum', panelWidth:'230px', validType:['length[0,30]'], sbref:'sorder'})
+        +fitem('Status',{name:'STATUS', id:'~', required:true, class:'combobox', 'data-options':"editable:false,panelHeight:'auto'"})
+        +fitem('Revision',{name:'REV_NO', id:'~', class:'numberspinner', precision:0, min:0, value:0})
+        +fitem('Customer ID',{name:'CUST_ID', id:'~', class:'searchbox', required:true,sbref:'customer_ids'})
+        +fitem('Cust Name',{name:'CUST_NAME', class:'textbox', readonly:true})
+        +fitem('Date',{name:'DATE', class:'datebox today'})
+        +fitem('PO Number',{name:'CUST_PO', class:'textbox', validType:['length[1,50]']})
+  
+        +h-group('Rates')
+          +fitem('Currency',{name:'CURRENCY_ID', id:'~', class:'combobox',required:true,'data-options':"editable:false"})
+            +input({name:'CURRENCY_RATE', id:'~', class:'numberbox',required:true,precision:8})
+          +fitem('GST',{name:'GST_ID', id:'~', class:'combobox',required:true,'data-options':"editable:false"})
+            +input({name:'GST_RATE', id:'~', class:'numberbox',readonly:true,precision:1})
+
+    +panel('center')
+      +tabs(data-options="plain:true,justified:true,tabPosition:'Top'")
+        +tab-item('Line Items',{iconCls:'icon-list'})
+          +datagrid#solines
+        +tab-item('Contact',{iconCls:'icon-contact'})
+          +form#sohead
+            +fitem('Contact Name',{name:'CONTACT_PERSON', class:'textbox', validType:['length[1,80]']})
+            +fitem('Phone',{name:'CONTACT_PHONE', class:'textbox', validType:['length[1,80]']})
+            +fitem('Fax',{name:'CONTACT_fax', class:'textbox', validType:['length[1,80]']})
+            +fitem('Email',{name:'CONTACT_EMAIL', class:'textbox', validType:['email']})
+
+        +tab-item('Addresses',{iconCls:'icon-address'})
+          +form#sohead
+            +v-group('Ship To',{style:'margin-top:12px;'})
+              +fitem('Address 1',{name:'ADDR_1', class:'textbox', validType:['length[1,50]']})
+              +fitem('Address 2',{name:'ADDR_2', class:'textbox', validType:['length[1,50]']})
+              +fitem('Address 3',{name:'ADDR_3', class:'textbox', validType:['length[1,50]']})
+
+            +v-group('COC')
+              +fitem('Address 1',{name:'COC_ADDR_1', class:'textbox', validType:['length[1,50]']})
+              +fitem('Address 2',{name:'COC_ADDR_2', class:'textbox', validType:['length[1,50]']})
+              +fitem('Address 3',{name:'COC_ADDR_3', class:'textbox', validType:['length[1,50]']})
+              +fitem('Email',{name:'COC_EMAIL', class:'textbox', validType:['email']})
+
+            +v-group('Bill To')
+              +fitem('Contact Name',{name:'BILL_TO_PERSON', class:'textbox', validType:['length[1,50]']})
+              +fitem('Phone',{name:'BILL_TO_PHONE', class:'textbox', validType:['length[1,50]']})
+              +fitem('Fax',{name:'BILL_TO_FAX', class:'textbox', validType:['length[1,50]']})
+              +fitem('Email',{name:'BILL_TO_EMAIL', class:'textbox', validType:['email']})
+
+        +tab-item('Notes',{iconCls:'icon-notes'})
+          +vsplit('50%')
+            +panel('west',{title:'Order Notes'})
+              +form#sohead.fit
+                +spec('',{name:'NOTES'})
+
+            +panel('east',{title:'Revision Notes'})
+              +form#sohead.fit
+                +spec('',{name:'REV_NOTES', id:'~'})
+                
+
+        +tab-item('UDF',{iconCls:'icon-list'})
+          +form#sohead
+            +udfs({select:bhave.HEADER_UDF_LAYOUT_ID,ron:false})
+        +tab-item('Files',{iconCls:'icon-pclip'})
+          +filegrid#sofiles(data-options="fit:true")
+      
+        
+  include ./_sa_sorder_otd_inc.pug

@@ -1,0 +1,110 @@
+{
+  "id": "dgsql",
+  "columns": [
+    [
+      {
+        "field": "edit",
+        "checkbox": true,
+        "title": "apply"
+      },
+      {
+        "field": "skip",
+        "title": "skip",
+        "formatter": null
+      },
+      {
+        "field": "lock",
+        "align": "left",
+        "title": "Lock",
+        "styler": null,
+        "formatter": null
+      },
+      {
+        "field": "mod",
+        "title": "File Path",
+        "hidden": true
+      },
+      {
+        "field": "name",
+        "order": "asc",
+        "title": "File Name",
+        "width": 200,
+        "fixed": false,
+        "formatter": null
+      },
+      {
+        "field": "ver",
+        "order": "asc",
+        "title": "Ver",
+        "width": 40
+      },
+      {
+        "field": "note",
+        "order": "asc",
+        "title": "Notes",
+        "width": 500
+      }
+    ]
+  ],
+  "options": {
+    "_toolbar": "#dgtbar",
+    "queryParams": {
+      "_func": "upchange"
+    },
+    "url": "/",
+    "selectOnCheck": false,
+    "checkOnSelect": false,
+    "singleSelect": true,
+    "rownumbers": true,
+    "fitColumns": true,
+    "striped": true,
+    "fit": true,
+    "columns": [
+      [
+        {
+          "field": "edit",
+          "checkbox": true,
+          "title": "apply"
+        },
+        {
+          "field": "skip",
+          "title": "skip",
+          "formatter": null
+        },
+        {
+          "field": "lock",
+          "align": "left",
+          "title": "Lock",
+          "styler": null,
+          "formatter": null
+        },
+        {
+          "field": "mod",
+          "title": "File Path",
+          "hidden": true
+        },
+        {
+          "field": "name",
+          "order": "asc",
+          "title": "File Name",
+          "width": 200,
+          "fixed": false,
+          "formatter": null
+        },
+        {
+          "field": "ver",
+          "order": "asc",
+          "title": "Ver",
+          "width": 40
+        },
+        {
+          "field": "note",
+          "order": "asc",
+          "title": "Notes",
+          "width": 500
+        }
+      ]
+    ]
+  },
+  "sourceFile": "admin/js/update.js"
+}

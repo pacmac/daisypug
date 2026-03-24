@@ -1,0 +1,551 @@
+
+$.page.ready(function () {
+function dgField(name){
+var byId = $('#gplines_'+name);
+if (byId.length) return byId.first();
+
+var byTextboxName = $('#_dgform > form [textboxname='+name+']');
+if (byTextboxName.length) return byTextboxName.first();
+
+var byName = $('#_dgform > form [name='+name+']');
+if (byName.length) return byName.first();
+
+return $();
+}
+
+function dgSetValue(name, value){
+var fld = dgField(name);
+if (!fld.length) return;
+
+if (fld.is('select') || fld.hasClass('combobox-f')) fld.combobox('setValue', value);
+else if (fld.hasClass('numberspinner-f')) fld.numberspinner('setValue', value);
+else if (fld.hasClass('numberbox-f')) fld.numberbox('setValue', value);
+else if (fld.hasClass('datebox-f')) fld.datebox('setValue', value);
+else if (fld.hasClass('textbox-f')) fld.textbox('setValue', value);
+else fld.val(value);
+}
+
+function editorField(name){
+return $('#gplines_editor [name='+name+']').first();
+}
+
+function editorValue(name){
+var fld = editorField(name);
+if (!fld.length) return '';
+var val = fld.val();
+return val == null ? '' : val;
+}
+
+function nextLineNo(){
+var rows = $('#gplines').datagrid('getRows') || [];
+var max = 0;
+rows.map(function(r){
+    var no = parseInt(r.LINE_NO,10);
+    if (!isNaN(no) && no > max) max = no;
+});
+return max + 1;
+}
+
+function compactLineWritePayload(row, mode){
+var payload = {
+    _sqlid: 'inv^gpline',
+    _func: mode=='edit' ? 'upd' : 'add',
+    GP_ID: row.GP_ID,
+    LINE_NO: row.LINE_NO,
+    DOC_TYPE: row.DOC_TYPE,
+    DOC_ID: row.DOC_ID,
+    PART_ID: row.PART_ID,
+    QTY: row.QTY
+};
+
+// Keep DOC fields in payload so fallback persistence retains Doc Type/Doc ID context.
+if (row.PART_DESCRIPTION) payload.PART_DESCRIPTION = row.PART_DESCRIPTION;
+if (row.BAL_QTY!=='' && row.BAL_QTY!=null) payload.BAL_QTY = row.BAL_QTY;
+if (row.CUST_PART_ID) payload.CUST_PART_ID = row.CUST_PART_ID;
+if (row.CUST_PROD_ORDER_NO) payload.CUST_PROD_ORDER_NO = row.CUST_PROD_ORDER_NO;
+
+return payload;
+}
+
+function requestGpLine(payload, actionLabel, onDone){
+var done = false;
+var watchdog = setTimeout(function(){
+    if (done) return;
+    done = true;
+    msgbox(actionLabel+' timed out after 12s. Backend Gate Pass line endpoint is not responding.');
+},12000);
+
+ajaxget('/',payload,function(res){
+    if (done) return;
+    done = true;
+    clearTimeout(watchdog);
+    if (onDone) onDone(res);
+});
+}
+
+function saveGpLine(mode){
+var gpId = $('#GP_ID').textbox('getValue');
+if (!gpId) return msgbox('Please save Gate Pass header first.');
+
+var row = {
+    GP_ID: gpId,
+    DOC_TYPE: editorValue('DOC_TYPE'),
+    DOC_ID: editorValue('DOC_ID'),
+    PART_ID: editorValue('PART_ID'),
+    PART_DESCRIPTION: editorValue('PART_DESCRIPTION'),
+    QTY: editorValue('QTY'),
+    BAL_QTY: editorValue('BAL_QTY'),
+    CUST_PART_ID: editorValue('CUST_PART_ID'),
+    CUST_PROD_ORDER_NO: editorValue('CUST_PROD_ORDER_NO')
+};
+
+if (!row.DOC_TYPE) return msgbox('Doc Type is required.');
+if (row.DOC_TYPE!='NIL' && !row.DOC_ID) return msgbox('Doc ID is required.');
+if (row.DOC_TYPE=='NIL') row.DOC_ID = '';
+if (!row.PART_ID) return msgbox('Our Part ID is required.');
+if (row.QTY==='') return msgbox('Qty is required.');
+
+if (mode=='edit') {
+    var selected = $('#gplines').datagrid('getSelected') || {};
+    if (selected.LINE_NO==null || selected.LINE_NO==='') return msgbox('Unable to resolve selected line.');
+    row.LINE_NO = selected.LINE_NO;
+}
+else {
+    row.LINE_NO = nextLineNo();
+}
+
+var payload = compactLineWritePayload(row, mode);
+requestGpLine(payload, 'Save line', function(res){
+    if (res && res.error) return;
+    var dlg = $('#gplines_editor')[0];
+    if (dlg && dlg.close) dlg.close();
+    $('#gplines').datagrid('load',{_func:'get', _sqlid:'inv^gplines',_dgrid:'y',GP_ID:gpId});
+    $.messager.show({ msg: 'Saved', cls: 'success', timeout: 2000 });
+});
+}
+
+function deleteGpLine(idx,row){
+var gpId = row && row.GP_ID ? row.GP_ID : $('#GP_ID').textbox('getValue');
+var lineNo = row ? row.LINE_NO : null;
+if (!gpId || lineNo==null || lineNo==='') return false;
+
+$.messager.confirm('Delete', 'Delete this row?', function(ok) {
+    if (!ok) return;
+    requestGpLine({
+    _func:'del',
+    _sqlid:'inv^gpline',
+    GP_ID: gpId,
+    LINE_NO: lineNo
+    },'Delete line',function(res){
+    if (res && res.error) return;
+    $('#gplines').datagrid('load',{_func:'get', _sqlid:'inv^gplines',_dgrid:'y',GP_ID:gpId});
+    $.messager.show({ msg: 'Deleted', cls: 'success', timeout: 2000 });
+    });
+});
+}
+
+function reloadDocIdQbe(qbeDocId, sqlid, custId){
+var qbeOpts = qbeDocId.qbe('options');
+qbeOpts.queryParams = qbeOpts.queryParams || {};
+qbeOpts.queryParams._sqlid = sqlid;
+qbeOpts.queryParams._func = 'get';
+qbeOpts.queryParams._combo = 'y';
+
+if (custId) qbeOpts.queryParams.CUST_ID = custId;
+else if (qbeOpts.queryParams.CUST_ID) delete qbeOpts.queryParams.CUST_ID;
+
+// Legacy EUI qbe dialog path.
+if (qbeOpts.dlog && qbeOpts.dlog.dg && qbeOpts.dlog.dg.datagrid) {
+    qbeOpts.dlog.dg.datagrid('reload');
+    return;
+}
+
+// DUI select/combobox path.
+if (qbeDocId.combobox) {
+    ajaxget('/',qbeOpts.queryParams,function(rows){
+    var list = Array.isArray(rows) ? rows : (rows && Array.isArray(rows.rows) ? rows.rows : []);
+    qbeDocId.combobox('loadData', list);
+    });
+    return;
+}
+
+// Fallback to qbe reload for input-mode controls.
+qbeDocId.qbe('reload');
+}
+
+function loadGpTypeIdOptions(gptype, selectedId, opts){
+opts = opts || {};
+var cv = $('#GP_TYPE_ID');
+var sqlid = {'C':'sales^custid','V':'inv^vendorid'}[gptype];
+var cvOpts = cv.combobox('options');
+cvOpts.queryParams = cvOpts.queryParams || {};
+cvOpts.queryParams._sqlid = sqlid || '';
+
+if (!sqlid) {
+    cv.combobox('clear');
+    cv.combobox('loadData',[]);
+    $('#NAME').textbox('clear');
+    return;
+}
+
+ajaxget('/',{
+    _func : 'get',
+    _sqlid: sqlid,
+    _combo: 'y'
+},function(rows){
+    var list = Array.isArray(rows) ? rows : (rows && Array.isArray(rows.rows) ? rows.rows : []);
+    cv.combobox('loadData', list);
+    if (selectedId) cv.combobox('setValue', selectedId);
+    else if (opts.clearOnMissingId) cv.combobox('clear');
+});
+}
+
+//load Data
+$.page.fn.loadData=function(data){
+$('#gplines').datagrid('load',{_func:'get', _sqlid:'inv^gplines',_dgrid:'y',GP_ID:data.GP_ID});
+
+// Ensure GP_TYPE_ID combobox has the correct source and selected value on record load.
+var gptype = data.GP_TYPE || $('#GP_TYPE').combobox('getValue');
+var gptypeId = data.GP_TYPE_ID || $('#GP_TYPE_ID').combobox('getValue');
+loadGpTypeIdOptions(gptype, gptypeId);
+
+$('#GP_TYPE').textbox('readonly');
+$('#GP_TYPE_ID').textbox('readonly');
+$('#GP_DATE').datebox('readonly');
+$('#TX_TYPE').combobox('readonly');
+
+butEn('adx');
+
+//if GP_ID was selected, enabeld the datagrid add button
+$('#gplines').datagrid('options').tbar.dgre_add.linkbutton('enable'); 
+
+//based on selected GP_TYPE to populate correct DOC_TYPE
+var gptype=$('#GP_TYPE').combobox('getValue');
+var doctype={'C':'SO','V':'WO'}[gptype];    
+var doc=[{value:doctype,text:doctype},{value:'NIL',text:'NIL'}];
+    //prevent user click on DocID if DocType not selected
+    
+
+var dgDocType=dgField('DOC_TYPE');
+var qbeDocId=dgField('DOC_ID');
+qbeDocId.textbox('readonly',true);
+dgDocType.combobox('loadData',doc);
+dgDocType.combobox({
+    onSelect:function(rec){
+    if (rec.value=='NIL') {
+        qbeDocId.textbox('readonly');
+        qbeDocId.textbox('required',false);
+    }
+    else {
+        qbeDocId.textbox('readonly',false);
+        qbeDocId.textbox('required',true);
+        if (rec.value=='SO') {
+        reloadDocIdQbe(qbeDocId,'sales^sor_qbe',$('#GP_TYPE_ID').combobox('getValue'));
+        }
+        else {
+        reloadDocIdQbe(qbeDocId,'inv^gp_opnrefs_qbe');
+        }
+    }
+                
+    }
+})
+}
+$.page.fn.opts = {
+twoColumns: true,
+editor: 'form',
+rownumbers: false,
+fitColumns: true,
+fit: true,
+url: '/',
+queryParams:{
+    _sqlid:'inv^gplines',
+    _func:'get',
+    _dgrid:'y'
+},
+addData:{
+    LINE_NO: '$autonum:1',
+    GP_ID: '#GP_ID'
+},
+columns:[[
+    {field:'GP_ID',hidden:true},
+    {field:'LINE_NO',title:'#',width:40,fixed:true,align:'center'},
+    {field:'DOC_TYPE',title:'Doc Type',width:70,fixed:true,editor:{
+        type:'combobox',
+        options:{
+        panelHeight:'auto',
+        editable:false,
+        required:true
+        },
+    }},
+
+    {field:'DOC_ID',title:'Doc ID',width:120,fixed:true,editor:{
+        type:'qbe',options:{
+            queryParams:{
+                _sqlid:''
+            },
+            readonly:true,
+            onDemand: true,
+            multiCol: true,
+
+            fields:[
+            {field:'value',title:'Doc ID',width:80,fixed:true},
+            {field:'STATUS',title:'Status',editor:{type:'combobox',options:{
+                panelHeight: 'auto',
+                editable:false,
+                data:[
+                {value:'H',text:'On Hold'},
+                {value:'R',text:'Released', selected:true},
+                {value:'C',text:'Closed'},
+            ]}}},
+            {field:'QTY',title:'Qty',width:50,fixed:true},
+            {field:'GATEPASS_QTY',title:'Gatepass Qty',width:50,fixed:true},
+            {field:'PART_ID',title:'Part ID',width:100,fixed:true},
+            {field:'PART_DESCRIPTION',title:'Part Desc',width:150,fixed:true},
+            {field:'CUST_PART_ID',title:'Cust Part Ref',width:100,fixed:true},
+            {field:'USER_1',title:'Cust Prod Order #',width:150,fixed:true},
+            ],
+            onSelect:function(rec){
+            dgSetValue('PART_ID', rec.PART_ID);
+            dgSetValue('PART_DESCRIPTION', rec.PART_DESCRIPTION);
+
+            var dgDocType=dgField('DOC_TYPE');
+            switch (dgDocType.combobox('getValue')){
+                case 'SO':
+                    var txType=$('#TX_TYPE').combobox('getValue');
+                    var docId=rec.text;
+                    if (txType=='S')var docQty=rec.QTY-rec.GATEPASS_QTY;
+                    else var docQty=rec.GATEPASS_QTY;
+
+                    dgSetValue('DOC_ID', docId);
+                    dgField('QTY').numberspinner('set',{'min':0,'max':docQty});
+                    dgSetValue('BAL_QTY', docQty);
+
+                    dgSetValue('BAL_QTY', docQty);
+                    dgSetValue('CUST_PROD_ORDER_NO', rec.USER_1);
+                    dgSetValue('CUST_PART_ID', rec.CUST_PART_ID);
+                    
+                    
+                    break;
+                case 'WO':
+                    var docId=rec.text;
+                    var JobId=docId.split('^');
+                    var docId1=JobId.join('.');
+                    ajaxget('/',{_func:'get',_sqlid:'vwltsa^sub', WOREF:JobId[0]+'^'+JobId[1]},function(rs){
+                    var txType=$('#TX_TYPE').combobox('getValue');
+                    if (txType=='S')var docQty=rs.DESIRED_QTY-rs.GATEPASS_QTY;
+                    else var docQty=rs.GATEPASS_QTY;
+
+                    dgSetValue('DOC_ID', docId1);
+                    dgField('QTY').numberspinner('set',{'min':0,'max':docQty});
+                    dgSetValue('BAL_QTY', docQty);
+                    });
+                    break;
+                case 'NIL':
+                    break;
+
+            }
+
+
+            }
+        }
+
+    }},
+    {field:'PART_ID',title:'Our Part ID',width:160,fixed:true,editor:{type:'qbe',options:{
+        queryParams: {
+            _sqlid:'inv^partid_qbe'  
+        },
+        onDemand: true,
+        multiCol: true,
+        valueField: 'ID',
+
+        fields:[
+            {field:'value',title:'Part ID',editor:'textbox'},
+            {field:'DESCRIPTION',title:'Description',editor:'textbox',formatter:function(val){
+                if(!val) return '';
+                else return val.substring(0,50);
+                }},
+            {field:'UOM_ID',title:'UOM'},
+            {field:'ALIAS_DESC',title:'Alias',editor:'textbox'},
+            {field:'TRACEABLE',title:'Traceable', editor:{type:'combobox',options:{panelHeight:'auto',data:[
+                {value:'',text:'All', selected:true},
+                {value:'Y',text:'Yes'},
+                {value:'N',text:'No'},
+            ]}}},
+            
+            {field:'DIM_TRACKED',title:'Dimensions', editor:{type:'combobox',options:{panelHeight:'auto',data:[
+                {value:'',text:'All', selected:true},
+                {value:'Y',text:'Yes'},
+                {value:'N',text:'No'},
+            ]}}},
+            
+
+            {field:'PART_CLASS_ID',title:'Part Class', editor:{type:'combobox',options:{panelHeight:'auto',data:[
+                {value:'',text:'All', selected:true},
+                {value:'FG',text:'Finished Goods'},
+                {value:'COMP',text:'Component'},
+                {value:'CONSUMABLE',text:'Consumable'},
+                {value:'MAKE_STAGED',text:'Make Staged'},
+                {value:'MAKE_NOSTAGE',text:'Make Unstaged'},
+            ]}}},
+            {field:'USER_1',title:'UDF 1',editor:'textbox'},
+            {field:'USER_2',title:'UDF 2',editor:'textbox'},
+            {field:'USER_3',title:'UDF 3',editor:'textbox'},
+            {field:'USER_4',title:'UDF 4',editor:'textbox'},
+            {field:'USER_5',title:'UDF 5',editor:'textbox'},
+        ],
+
+        onSelect: function(rw){
+
+            dgSetValue('PART_DESCRIPTION', rw.DESCRIPTION);  
+            dgSetValue('PART_UOM', rw.UOM_ID);    
+        }  
+        }}
+    },
+
+    {field:'PART_UOM',title:'Part UOM',width:30,editor:{type:'textbox',options:{readonly:true}},coloff:true},
+    {field:'CUST_PART_ID',title:'Cust Part Ref',width:100,editor:'text',coloff:true},
+    {field:'CUST_PROD_ORDER_NO',title:'Cust Prod Order #',width:100,editor:'text',coloff:true},
+    {field:'QTY',title:'Qty Reqd',width:60,fixed:true,align:'center',editor:{type:'numberspinner',options:{
+    precision:2,
+    min:0,
+    required:true
+    }}},
+    {field:'BAL_QTY',title:'Bal Qty',width:60,fixed:true,align:'center',editor:{type:'numberbox',options:{ precision:2,readonly:true}}},
+    {field:'PART_DESCRIPTION',title:'Our Part Description',width:250,fixed:true,editor:{type:'textbox',options:{readonly:false,multiline:true,height:150,}},coloff:true},
+
+    ]],
+
+onRowContextMenu: function(e){return e.preventDefault()},
+onBeforeLoad:function(qp){
+    if(!qp.GP_ID) return false; 
+    },
+loadFilter: function(data){
+    if(!data || (!data.rows && data.length==0)) data = {rows:[],total:0}
+    return data;
+},
+onEndEdit: function(idx,row,chg){
+    // Save is handled by custom save/delete handlers above.
+},
+onDeleteRow: deleteGpLine,
+onSelect:function(idx,row){
+    if (row.DOC_ID)	$(this).datagrid('options').tbar.dgre_edit.linkbutton('disable');
+}
+}
+
+
+//$('#gplines').datagrid('editButs',{edit:'hide'})
+$('#GP_ID').qbe({defid:'gatepass_ids' });
+
+$('#GP_TYPE').combobox({
+editable: false,
+panelHeight: 'auto',
+data:[
+    {text:'CUSTOMER',value:'C'},
+    {text:'VENDOR',value:'V'}
+],
+
+onSelect:function(rec){
+    //console.log(rec);
+    loadGpTypeIdOptions(rec.value, null, {clearOnMissingId:true});
+    $('#NAME').textbox('clear');
+}         
+
+})
+
+$('#GP_TYPE_ID').combobox({
+url           : '/',
+editable      : false,
+panelHeight   : 200,
+queryParams   : {
+    _sqlid      : '',
+    _func       : 'get',
+    _combo      : 'y',
+},
+
+onBeforeLoad:function(qp){
+    if(!qp._sqlid) return false;  
+},
+
+onSelect:function(rec){
+    var cvall = $(this).combobox('options').queryParams._sqlid.replace(/id$/,'all');
+    ajaxget('/',{
+        _sqlid  : cvall,
+        _func   : 'get',
+        ID      : rec.value
+    },function(fields){
+        // console.log(fields);
+        for(var id in fields) {
+            var inp = $('input[textboxname='+id+']');
+            if (!inp.length) inp = $('#'+id);
+            if (!inp.length) continue;
+
+            if (inp.hasClass('combobox-f')) inp.combobox('setValue',fields[id]);
+            else if (inp.hasClass('datebox-f')) inp.datebox('setValue',fields[id]);
+            else if (inp.hasClass('textbox-f')) inp.textbox('setValue',fields[id]);
+            else inp.val(fields[id]);
+        }
+    })  
+}
+})
+
+// $('#gplines').datagrid('options').tbar.dgre_edit.linkbutton('disable'); 
+$('#gplines').datagrid('rowEditor',$.page.fn.opts).datagrid('columns',$('#dgre_tb'));
+$('#gplines').datagrid('options').tbar.dgre_add.linkbutton('disable');
+$('#gplines').datagrid('options').tbar.dgre_edit.linkbutton('disable');  
+
+var gplineEditMode = 'add';
+$('#gplines_add').off('click.gplineMode').on('click.gplineMode',function(){ gplineEditMode = 'add'; });
+$('#gplines_edit').off('click.gplineMode').on('click.gplineMode',function(){ gplineEditMode = 'edit'; });
+$('#gplines').off('dblclick.gplineMode').on('dblclick.gplineMode','tbody tr',function(){ gplineEditMode = 'edit'; });
+$('#gplines_editor').find('[data-action="save"]').off('click.dgsave').on('click.dgsave',function(evt){
+evt.preventDefault();
+saveGpLine(gplineEditMode);
+});
+
+
+$('#but_add').on('done',function(){
+//empty the datagrid
+$('#gplines').datagrid('loadData',{"total":0,"rows":[]});
+$('#GP_TYPE').textbox('readonly',false);
+$('#GP_TYPE_ID').textbox('readonly',false);
+$('#GP_DATE').datebox('readonly',false);
+$('#TX_TYPE').combobox('readonly',false);
+
+var gp=$('#GP_ID');
+gp.textbox('required',false);
+gp.textbox('readonly',true);
+
+loadGpTypeIdOptions();
+butEn('x');
+$('#gplines').datagrid('options').tbar.dgre_add.linkbutton('disable'); 
+})
+
+//empty the datagrid when delete the GP head and GPL
+$('#but_del').on('done',function(){
+$('#gplines').datagrid('loadData',{"total":0,"rows":[]});
+$('#gplines').datagrid('options').tbar.dgre_add.linkbutton('disable'); 
+})
+$('form#gphead').on('loadDone',function(jq,data){
+if(!data.GP_ID) return;
+$.page.fn.loadData(data);
+}).on('changed',function(jq,data){
+
+    var opts = $(this).form('options');
+    if(!opts.loading) {
+    butEn('sadx');
+    } 
+}).on('success',function(data){
+
+$('#gplines').datagrid('options').tbar.dgre_add.linkbutton('enable');  
+}).on('done',function(evt,payload){
+var data = payload && typeof payload=='object' ? payload : null;
+if(!data || !data.GP_ID) data={
+    GP_ID: $('#GP_ID').textbox('getValue'),
+    GP_TYPE: $('#GP_TYPE').combobox('getValue'),
+    GP_TYPE_ID: $('#GP_TYPE_ID').combobox('getValue')
+};
+if(!data.GP_ID) return;
+$.page.fn.loadData(data);
+})
+
+});  // $.page.ready

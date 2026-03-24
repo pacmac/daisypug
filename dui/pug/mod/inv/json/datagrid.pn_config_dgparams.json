@@ -1,0 +1,45 @@
+{
+  "id": "dgparams",
+  "striped": true,
+  "rownumbers": true,
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "inv^pn_classparam",
+    "_dgrid": true,
+    "TYPE_ID": "",
+    "CLASS_ID": ""
+  },
+  "columns": [
+    [
+      {
+        "field": "CLASS_ID",
+        "title": "Class"
+      },
+      {
+        "field": "TYPE_ID",
+        "title": "Type"
+      },
+      {
+        "field": "PARA_ID",
+        "title": "Param ID",
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "required": true
+          }
+        }
+      },
+      {
+        "field": "CODE_STR",
+        "title": "Code",
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "required": true
+          }
+        }
+      }
+    ]
+  ]
+}

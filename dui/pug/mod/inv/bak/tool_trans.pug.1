@@ -1,0 +1,86 @@
+extends ../content
+
+block content
+  #tool_tx
+
+block script
+  script.
+    $.dui.page.toolbar=function(flag){
+      var dg=$('#tool_tx');
+            dg.datagrid('options').tbar.dgre_add.linkbutton(flag)  
+        dg.datagrid('options').tbar.dgre_del.linkbutton(flag)
+        dg.datagrid('options').tbar.dgre_insert.linkbutton(flag)
+        dg.datagrid('options').tbar.dgre_edit.linkbutton(flag)  
+        dg.datagrid('options').tbar.dgre_ok.linkbutton(!flag)
+
+    }
+    $.dui.page.opts = {
+      editor: 'inline',
+      striped: true,
+      url: '/',
+      queryParams: {
+          _func:'get',
+          _sqlid:'inv^tool_tx',
+      },
+    selectOnCheck:true,
+      singleSelect:false,
+      rownumbers: true,
+      fitColumns: true,
+      fit: true,
+      columns: [[
+        {field:'PENDING_ID', hidden:true},
+        {field:'TRANSACTION_DATE',title:'Transaction Date',width:100,fixed:true,formatter:eui.date},
+        {field:'OPERATOR_ID',title:'Operator ID',width:100,fixed:true},
+        {field:'NAME',title:'Operator Name',width:200,fixed:true},
+        {field:'PART_ID',title:'Part ID',width:200,fixed:true},
+        {field:'DESCRIPTION',title:'Part Description',width:200,fixed:true},
+        {field:'BAL_QTY',title:'Bal Qty',width:100,fixed:true},
+        {field:'QTY',title:'Qty',fixed:true,width:100,align:'right'},
+        {field:'TRANSACTED',title:'Transacted',fixed:true,align:"center",width:80,editor:{type:'checkbox',options:{on:'1',off:'0'}}},
+        {field:'INVALID',title:'Invalid',fixed:true,width:80,align:"center",editor:{type:'checkbox',options:{on:'-1',off:'0'}}},
+      ]],
+      loadFilter: function(data){
+          if(!data || (!data.rows && data.length==0)) data = {rows:[],total:0}
+          return data;
+        },
+      onSelect:function(idx,row){
+           
+         $.dui.page.toolbar('disable');
+
+
+        } ,
+      onEndEdit: function(idx,row,chg){        
+
+            var url = "/?_sqlid=inv^tool_tx";
+            var data = clone(row);
+            data.TRANSACTION_DATE = ms2date(data.TRANSACTION_DATE);
+            ajaxget(url,data,function(data){
+              $('#tool_tx').datagrid('reload')
+            })       
+          
+
+        }     
+    }
+
+
+    $(document).ready(function(){
+    
+      var dg=$('#tool_tx')
+      dg.datagrid('rowEditor',$.dui.page.opts)
+      $.dui.page.toolbar('disable')
+
+    })
+
+block style
+  style.
+    #tbar {
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }
+    
+    .partrow {
+      background-color:rgba(230, 230, 250, 0.3);
+      color:black;
+    }
+    

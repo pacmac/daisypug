@@ -1,0 +1,88 @@
+{
+  "id": "contactdg",
+  "rownumbers": true,
+  "singleSelect": true,
+  "striped": true,
+  "fitColumns": true,
+  "fit": true,
+  "editor": "form",
+  "asdpx": "aed",
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "sales^crm_contact",
+    "_dgrid": true,
+    "CO_ID": null
+  },
+  "columns": [
+    [
+      { "field": "CO_ID", "hidden": true },
+      {
+        "field": "CONTACT_ID",
+        "title": "Contact ID",
+        "width": 110,
+        "fixed": true,
+        "editor": {
+          "type": "textbox",
+          "options": { "required": false, "readonly": true }
+        }
+      },
+      {
+        "field": "NAME_FIRST",
+        "title": "First Name",
+        "width": 120,
+        "editor": "text"
+      },
+      {
+        "field": "NAME_LAST",
+        "title": "Last Name",
+        "width": 120,
+        "editor": "text"
+      },
+      {
+        "field": "JOB_TITLE",
+        "title": "Job Title",
+        "width": 150,
+        "editor": "text"
+      },
+      {
+        "field": "EMAIL",
+        "title": "Email Address",
+        "width": 200,
+        "formatter": "$.page.fn.contactEmail",
+        "editor": { "type": "textbox", "options": { "validType": "email" } }
+      },
+      {
+        "field": "MOBILE",
+        "title": "Mobile",
+        "width": 120,
+        "fixed": true,
+        "editor": "text"
+      },
+      {
+        "field": "PHONE",
+        "title": "Phone",
+        "width": 120,
+        "fixed": true,
+        "editor": "text"
+      },
+      {
+        "field": "IS_PRIMARY",
+        "title": "Primary",
+        "width": 70,
+        "fixed": true,
+        "align": "center",
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "data": [
+              { "value": "Y", "text": "Yes" },
+              { "value": "N", "text": "No", "selected": true }
+            ]
+          }
+        }
+      },
+      { "field": "NOTES", "title": "Notes", "editor": "text" }
+    ]
+  ]
+}

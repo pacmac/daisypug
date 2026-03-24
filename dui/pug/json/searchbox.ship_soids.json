@@ -1,0 +1,40 @@
+{
+  "url": "/",
+  "queryParams": {
+    "MODE": "S",
+    "_sqlid": "sales^ship_soids_qbe",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "SO Ref", "width": 100 },
+    { "field": "value", "title": "SO ID", "width": 100 },
+    { "field": "CUST_ID", "title": "Customer ID", "width": 100 },
+    { "field": "CUST_NAME", "title": "Customer Name", "width": 100 },
+    { "field": "CUST_PO", "title": "Customer PO", "width": 100 },
+    {
+      "field": "DATE",
+      "title": "Order Date",
+      "width": 100
+    },
+    { "field": "STATUS", "title": "Status", "width": 100 },
+    { "field": "CURRENCY_ID", "title": "Currency", "width": 100 },
+    { "field": "GST_ID", "title": "GST", "width": 100 }
+  ],
+  "filters": [
+    { "field": "CUST_PO", "title": "Customer PO", "editor": "textbox" },
+    { "field": "CUST_ID", "title": "Customer ID", "editor": "textbox" },
+    { "field": "CUST_NAME", "title": "Customer Name", "editor": "textbox" },
+    { "field": "DATE", "title": "Order Date", "editor": "datebox" },
+    { "field": "STATUS", "title": "Status", "editor": "textbox" },
+    { "field": "CURRENCY_ID", "title": "Currency", "editor": "textbox" },
+    { "field": "GST_ID", "title": "GST", "editor": "textbox" }
+  ]
+}

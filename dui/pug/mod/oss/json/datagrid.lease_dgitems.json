@@ -1,0 +1,20 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "oss^rentlines",
+    "_dgrid": "y",
+    "RENTAL_ID": ""
+  },
+  "striped": true,
+  "fitColumns": true,
+  "columns": [
+    { "field": "RENTAL_ID", "hidden": true },
+    { "field": "LINE_NO", "title": "&nbsp;&nbsp;#", "width": 30, "fixed": true },
+    { "field": "TYPE", "title": "Rental Type", "width": 100, "fixed": true },
+    { "field": "QTY", "title": "Area / Qty", "width": 100, "fixed": true, "align": "right", "formatter": "eui.number" },
+    { "field": "UNIT_COST", "title": "Unit Cost", "width": 80, "fixed": true, "align": "right", "formatter": "eui.currency" },
+    { "field": "TOTAL_COST", "title": "Total Cost", "width": 80, "fixed": true, "align": "right", "formatter": "eui.currency" },
+    { "field": "DESCRIPTION", "title": "Description", "width": 200, "fixed": true }
+  ]
+}

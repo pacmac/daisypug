@@ -1,0 +1,28 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "dqm^phosmanids_sbox",
+    "_func": "get",
+    "_combo": "y"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "value", "title": "Test ID", "width": 100 },
+    { "field": "BASE_ID", "title": "Job ID", "width": 100 },
+    { "field": "PART_ID", "title": "Part ID", "width": 100 },
+    { "field": "CUSTOMER_ID", "title": "Customer ID", "width": 120 },
+    { "field": "STATUS", "title": "Status", "width": 80 }
+  ],
+  "filters": [
+    { "field": "BASE_ID", "title": "Base ID", "editor": "textbox" },
+    { "field": "PART_ID", "title": "Part ID", "editor": "textbox" },
+    { "field": "CUSTOMER_ID", "title": "Customer ID", "editor": "textbox" },
+    { "field": "STATUS", "title": "Status", "editor": "textbox" }
+  ]
+}

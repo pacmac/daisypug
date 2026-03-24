@@ -1,0 +1,367 @@
+/*
+ * forms.css — Form containers, field states, and indicators
+ * form.fit flex container, form-lock (disable non-fkey fields),
+ * readonly/required field styling, boolean indicator dots (bool-dot)
+ */
+
+/* ── Global DUI design tokens ── */
+:root {
+  --east-west-w: 25rem;
+}
+
+@layer components {
+  /* ── form: base typography and input sizing ── */
+  /* All form variants (.fit, .multi, etc.) inherit these defaults */
+  form {
+    --fitem-label-w: calc(var(--east-west-w) * 0.32);
+    /* font-size inherits from body — no override needed */
+    padding: 0.5em 0.5rem 0;
+  }
+  /* Consistent fitem spacing on all forms regardless of nesting */
+  .fitem + .fitem { margin-top: 0.5rem; }
+  /* Horizontal flex forms (e.g. datagrid toolbar filters) — no vertical margin */
+  form.flex > .fitem + .fitem { margin-top: 0; }
+  /* Bridge spacing when a wrapper div breaks the fitem sibling chain */
+  .fitem + div > .fitem:first-of-type { margin-top: 0.25rem; }
+  div + .fitem { margin-top: 0.5rem; }
+  /* Column layout: .two/.three/.four — last column fills remaining space */
+  .two {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0 1rem;
+  }
+  .three {
+    display: grid;
+    grid-template-columns: repeat(2, max-content) 1fr;
+    gap: 0 1rem;
+  }
+  .four {
+    display: grid;
+    grid-template-columns: repeat(3, max-content) 1fr;
+    gap: 0 1rem;
+  }
+  /* Grid forms: first item in column 2+ is a DOM sibling, remove its inherited margin */
+  /* Must use child combinator (>) — descendant selector wrongly zeroes nested fitems */
+  form.two > .fitem:nth-child(2),
+  form.three > .fitem:nth-child(2),
+  form.three > .fitem:nth-child(3),
+  form.four > .fitem:nth-child(2),
+  form.four > .fitem:nth-child(3),
+  form.four > .fitem:nth-child(4),
+  fieldset.two > .fitem:nth-child(2),
+  fieldset.three > .fitem:nth-child(2),
+  fieldset.three > .fitem:nth-child(3),
+  fieldset.four > .fitem:nth-child(2),
+  fieldset.four > .fitem:nth-child(3),
+  fieldset.four > .fitem:nth-child(4),
+  div.two > .fitem:nth-child(2),
+  div.three > .fitem:nth-child(2),
+  div.three > .fitem:nth-child(3),
+  div.four > .fitem:nth-child(2),
+  div.four > .fitem:nth-child(3),
+  div.four > .fitem:nth-child(4) { margin-top: 0; }
+
+  /* ── v-group: lightweight vertical titled group (no border/padding) ── */
+  .v-group .fitem:first-of-type { margin-top: 0.09375rem; }
+  .v-group > .fitem { padding-left: 1em; }
+  .fitem + .v-group,
+  .v-group + .v-group,
+  .v-group + .h-group,
+  .h-group + .v-group,
+  .v-group + .fitem { margin-top: 0.75rem; }
+  .v-group-title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── h-group: horizontal row of side-by-side compound fitems ── */
+  .h-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 1.5rem;
+  }
+  /* Title spans full width, pushing fitems to the next row */
+  .h-group-title {
+    flex-basis: 100%;
+    margin-bottom: 0.1875rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  /* Fitems fill h-group width — no overflow, both rows identical */
+  .h-group > .fitem {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  /* Vertical spacing between sibling fitems inside h-group */
+  .h-group > .fitem + .fitem { margin-top: 0.5rem; }
+  /* Primary widget and secondary input share available width 50/50 with gap */
+  .h-group > .fitem .fitem-body {
+    gap: 1.5em;
+  }
+  .h-group > .fitem .fitem-body > :not(.fitem-pre):not(.fitem-suf) {
+    flex: 0 0 calc(50% - 0.75em);
+    min-width: 0;
+  }
+  .h-group > .fitem .fitem-suf {
+    flex: 0 0 calc(50% - 0.75em);
+    min-width: 0;
+  }
+  .h-group > .fitem .fitem-suf > * {
+    width: 100%;
+    min-width: 0;
+  }
+  /* Vertical rhythm: same as v-group */
+  .fitem + .h-group,
+  .h-group + .h-group,
+  .h-group + .fitem { margin-top: 0.75rem; }
+
+  /* Tabs inside a form always get breathing room */
+  form .easyui-tabs { margin-top: 2em; }
+
+  /* .fit modifier — fill container */
+  form.fit {
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* Form lock - used by form-plugin.js state engine (enable/disable) */
+  /* fkey fields stay interactive, everything else is dimmed and locked */
+  .form-lock input:not(.fkey):not(.tab),
+  .form-lock select:not(.fkey),
+  .form-lock textarea:not(.fkey) {
+    pointer-events: none;
+    opacity: 0.65;
+  }
+
+
+  /* ── fitem: label + input row layout (structure only) ── */
+  /* Spacing between rows controlled by parent form (space-y-*) */
+  /* Typography, colors, dimensions inherited from form — not set here */
+  .fitem {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: calc(var(--east-west-w) + 3rem);
+    padding-right: 0.5rem;
+  }
+  .fitem > label,
+  .fitem > .fitem-label-wrap {
+    width: var(--fitem-label-w, calc(var(--east-west-w) * 0.32));
+    min-width: 4rem;
+    flex-shrink: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* fitem-body: flex row containing prefix, input, suffix */
+  .fitem-body {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+  }
+  /* fitem-pre: prefix slot ($ sign, icon) — hidden when empty */
+  .fitem-pre {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 4px;
+    padding-right: 4px;
+  }
+  .fitem-pre:empty { display: none; }
+  /* fitem-suf: suffix slot (buttons, icons) — hidden when empty, shrinks input */
+  .fitem-suf {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 4px;
+    padding-left: 4px;
+  }
+  .fitem-suf:empty { display: none; }
+  /* Input fills space between prefix and suffix — targets any widget, not .fitem-pre/.fitem-suf */
+  .fitem-body > :not(.fitem-pre):not(.fitem-suf) {
+    flex: 1;
+    min-width: 0;
+  }
+  /* Inside combobox plugin wrapper: select shrinks to make room for appended buttons */
+  .fitem-body > div > select.select {
+    flex: 1;
+    min-width: 0;
+    width: 0;
+  }
+
+  /* Multiline (textarea) — top-align label with first line */
+  .fitem-multiline {
+    align-items: flex-start;
+  }
+  .fitem-multiline > label {
+    padding-top: 0.4em;
+  }
+}
+
+/* Numberbox — hide native browser spinner buttons */
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
+/* Readonly fields — subtle visual distinction from editable */
+input.input[readonly],
+textarea.textarea[readonly] {
+  opacity: 0.7;
+  border-style: dashed;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Non-editable state (separate from readonly/disabled):
+   plugins toggle `.dui-noedit` when manual text entry is blocked. */
+.dui-noedit {
+  cursor: default;
+}
+input.dui-noedit,
+textarea.dui-noedit,
+.dui-noedit select,
+.dui-noedit input,
+.dui-noedit textarea,
+.dui-noedit select {
+  caret-color: transparent;
+  background-color: var(--color-base-200);
+}
+
+/* Required field indicator — subtle border tint */
+.required-field {
+  border-color: color-mix(in oklch, var(--color-warning) 30%, var(--color-base-300));
+}
+
+/* Full: textbox, combobox — no max-width (default flex fill) */
+
+/* ── Form input sizing — outside @layer to override DaisyUI components ── */
+/* Single source of truth: change --input-h and --input-fs to resize all form inputs */
+form {
+  --input-h: 1.625rem;
+  --input-fs: 0.8125rem;
+}
+input.input,
+select.select,
+textarea.textarea {
+  height: var(--input-h);
+  min-height: var(--input-h);
+}
+form .fitem:has(select.fkey),
+form .fitem:has(input.fkey) {
+  margin-bottom: 0.75rem;
+}
+/* Remove DaisyUI double-border focus gap — apply .no-focus-border to any element */
+.no-focus-border:focus,
+.no-focus-border:focus-within {
+  outline-offset: -1px;
+}
+
+/* Textareas — no resize handle, inherit form font */
+textarea.textarea {
+  resize: none;
+}
+
+
+/* Spec textarea — fills entire container (tab panel, fieldset, etc.) */
+textarea.spec {
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+  flex: 1 1 0%;
+  min-height: 0;
+  margin: 0.5rem;
+}
+
+/* Fieldsets inside forms — visual separation from preceding fields (skip first) */
+form > fieldset:not(:first-child) {
+  margin-top: 1.5em;
+}
+/* Consecutive fieldsets — consistent spacing between siblings */
+fieldset + fieldset {
+  margin-top: 1em;
+}
+/* Fieldset legend — uppercase with horizontal padding */
+fieldset {
+  background-color: color-mix(in oklab, var(--color-base-200) 20%, transparent);
+}
+fieldset > legend {
+  text-transform: uppercase;
+  font-weight: 500;
+  padding-inline: 0.5em;
+  margin-left: -0.5rem;
+}
+
+/* Spaced inline button row — use .btn-group to wrap sibling buttons */
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  margin-top: 2em;
+}
+
+/* Buttons inside forms (not in .fitem) — vertical spacing + center */
+form > button.btn {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  align-self: center;
+}
+
+/* Textarea in fitem — reset browser default margin, override intrinsic cols-based width */
+.fitem-body > textarea.textarea {
+  margin: 0;
+  width: 100%;
+  min-width: 100%;
+}
+
+/* vgroup/hgroup title color — outside @layer so it overrides DaisyUI */
+.v-group-title,
+.h-group-title {
+  color: var(--color-primary);
+}
+
+/* ── Field help tooltip — outside @layer so styles apply over DaisyUI ── */
+.fitem-label-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  overflow: visible;
+}
+.fitem-label-wrap > label {
+  width: auto;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fitem-help {
+  position: relative;
+  flex-shrink: 0;
+  cursor: help;
+  display: inline-flex;
+  align-items: center;
+}
+.fitem-help-icon {
+  width: 13px;
+  height: 13px;
+  color: oklch(var(--bc) / 0.25);
+  transition: color 0.15s ease;
+}
+.fitem-help:hover .fitem-help-icon {
+  color: oklch(var(--in));
+}
+/* Tooltip handled by tooltip-plugin.js via [data-tip] */

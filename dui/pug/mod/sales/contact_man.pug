@@ -1,0 +1,61 @@
+extends ../content
+
+block script
+  script: include js/contact_man.js
+block content
+  +vsplit('39em')
+    +panel('west', {id:'ticket'})
+      //-+button('Blast', {id:'mblast', iconCls:'mail', size:'sm', style:'ghost'})
+      form#main(asdpx="ax" _sqlid="sales^crm_company").multi.fit
+        +fitem('Company ID',{id:'~', name:'CO_ID', class:'qbe fkey fit navi autonum'})
+        +fitem('Company Name',{name:'CO_NAME', class:'textbox', required:true})
+        //-br
+
+        +fitem('Create Date',{name:'CREATE_DATE', class:'datebox sub-off', readonly:true})
+        +fitem('Status',{id:'~', name:'STATUS_ID' , class:'combobox', required: true})
+        +fitem('Stage',{id:'~', name:'STAGE_ID' , class:'combobox', required: true})
+        +fitem('Lead Source',{id:'~', name:'SOURCE_ID' , class:'combobox', required: true}) 
+        
+        +fitem('Order-Mode',{id:'~', name:'ORDER_MODE' , class:'combobox', required: true}) 
+        +fitem('Industry',{id:'~', name:'INDUSTRY_ID' , class:'combobox', required: true})
+        +fitem('Products/Services',{name:'PRODSERV' , class:'textbox'})  
+
+        +fitem('Next Mailer ?',{id:'~', name:'MAIL_FLAG' , class:'combobox'})
+        
+      
+        +tabs(data-options="plain:true,justified:false")
+          +tab-item("Notes",{id:'notes_subtab', iconCls:'icon-notes'})
+            .fitem(style="height:80%")
+              +input({eui:'textbox',name:'NOTES','data-options':"multiline:true", style:'height:100%;width:100%'})            
+          
+          +tab-item("Contact",{id:'contact_subtab', iconCls:'icon-contact'})
+            +fitem('Phone No',{name:'PHONE_NO', class:'textbox' ,'data-options':"validType:['length[1,50]']",required:true})
+            +fitem('Fax No',{name:'FAX_NO', class:'textbox' ,'data-options':"validType:['length[1,50]']"}) 
+            +fitem('Website',{name:'WEBSITE', class:'textbox' ,'data-options':"validType:['url']"})
+            +fitem('Primary Contact',{id:'~', name:'PRIMARY_CONTACT_ID' , class:'textbox sub-off', readonly:true})
+                        
+          +tab-item("Address",{id:'address_subtab', iconCls:'icon-address'})
+            +fitem('Address 1',{name:'ADDR_1', class:'textbox' ,validType:['length[1,50]'],required:true})
+            +fitem('Address 2',{name:'ADDR_2', class:'textbox' ,'data-options':"validType:['length[1,50]']",_required:true})
+            +fitem('Address 3',{name:'ADDR_3', class:'textbox' ,'data-options':"validType:['length[1,50]']",_required:true})
+            +fitem('Postcode',{name:'POSTCODE', class:'textbox' ,'data-options':"validType:['length[1,50]']",required:true})
+            +fitem('Country',{name:'COUNTRY', class:'textbox' ,'data-options':"validType:['length[1,50]']",required:true})            
+
+          +tab-item("Last Event",{id:'lastevent_subtab', iconCls:'icon-calendar'})
+            +fitem('Event ID',{name:'LAST_EVENT_ID' , class:'textbox sub-off' ,readonly:true})
+            +fitem('Event Name',{name:'LAST_EVENT_NAME' , class:'textbox sub-off',readonly:true})
+            +fitem('Event Date',{name:'LAST_EVENT_DATE' , class:'datebox sub-off',readonly:true})
+          
+          +tab-item("UDF",{id:'udf_subtab', iconCls:'icon-udf'})
+            +udfs({sqlid:'sales^udfid',select:bhave.UDF_LAYOUT_ID,ron:false})
+    
+    +panel('center')
+      +tabs#maintab(data-options="tabPosition:'top',plain:true,fit:true")
+        +tab-item("Contacts",{iconCls:"icon-user",style:'padding:0px;',id:'contact_tab'})
+          +datagrid#contactdg
+
+        +tab-item("Events",{iconCls:"icon-date",style:'padding:0px;',id:'event_tab'})
+          +datagrid#eventdg
+ 
+        +tab-item("Documents",{iconCls:"icon-pclip",style:'padding:0px;',id:'doc_tab'})
+          +filegrid#cofiles(data-options="fit:true")

@@ -1,0 +1,6 @@
+{
+  "id": "hist",
+  "sourceFile": "admin/js/users.js",
+  "lineNumber": 457,
+  "configPreview": "('reload',{UID:$('input#UID').combobox('getValue'),'YEAR_NO':2018}"
+}

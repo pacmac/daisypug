@@ -1,0 +1,25 @@
+{
+  "url": "/?_sqlid=inv^partplan&_func=get",
+  "fit": true,
+  "fitColumns": true,
+  "singleSelect": true,
+  "checkOnSelect": false,
+  "toolbar": [
+    { "type": "field", "label": "Part Filter", "id": "PART_ID_", "name": "PART_ID", "editor": { "type": "qbe", "options": { "_sqlid": "inv^partid_qbe" } } },
+    { "type": "field", "label": "Product Code", "id": "PCODE_", "name": "PCODE", "editor": { "type": "combobox", "options": { "_sqlid": "vwltsa^productcodeid", "editable": false, "required": true } } },
+    { "type": "field", "label": "Status Filter", "name": "REPORT_TYPE", "editor": { "type": "combobox", "options": { "data": [{"text":"All Parts","value":"ALL"},{"text":"Shortages","value":"SHORTAGE"},{"text":"Open Orders","value":"RLS"}], "editable": false } } }
+  ],
+  "columns": [[
+    {"field": "PART_ID", "title": "Part ID"},
+    {"field": "PRODUCT_CODE", "title": "Product Code"},
+    {"field": "UOM_ID", "title": "UOM"},
+    {"field": "WANT_DATE", "title": "Want Date", "formatter": "$.page.fn.date", "width": 80, "fixed": true},
+    {"field": "DOC_TYPE", "title": "Order Type", "formatter": "$.page.fn.upperCase"},
+    {"field": "DEMAND_DOC", "title": "Demand Order", "formatter": "$.page.fn.docref", "width": 100, "fixed": true},
+    {"field": "DEMAND_QTY", "title": "Demand Qty", "formatter": "$.page.fn.dd", "width": 80, "fixed": true, "align": "right"},
+    {"field": "PROJ_QTY", "title": "Projected Bal", "formatter": "$.page.fn.integer", "width": 80, "fixed": true, "align": "right"},
+    {"field": "SUPPLY_DOC", "title": "Supply Order", "formatter": "$.page.fn.docref", "width": 100, "fixed": true},
+    {"field": "SUPPLY_QTY", "title": "Supply Qty", "formatter": "$.page.fn.ss", "width": 80, "fixed": true, "align": "right"},
+    {"field": "DESCRIPTION", "title": "Description", "width": 200, "fixed": false}
+  ]]
+}

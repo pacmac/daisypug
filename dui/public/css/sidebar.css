@@ -1,0 +1,82 @@
+/*
+ * sidebar.css — Sidebar navigation layout and collapse behavior
+ * Background color, expand/collapse transitions, collapsed state rules
+ * (icon centering, label hiding, sub-menu hiding, padding tightening)
+ * Menu padding overrides are outside @layer to beat DaisyUI specificity
+ */
+
+/* Sidebar nav menu — compact padding (outside @layer to beat DaisyUI) */
+#westMenu .menu li > a,
+#westMenu .menu li > details > summary {
+  padding-inline: 0.25rem;
+  gap: 0.35rem;
+}
+#westMenu .menu .menu {
+  padding-inline-start: 0.25rem;
+  padding-block: 0;
+}
+#westMenu > .menu {
+  padding: 0.25rem;
+}
+
+/* Sidebar background — uses surface-2 level to sit between toolbar and content */
+.sidebar-bg {
+  background: color-mix(in oklch, var(--color-base-content) 6%, var(--color-base-100));
+}
+
+/* Sidebar layout — expand/collapse transitions */
+#sidebar {
+  transition: width 0.3s ease;
+}
+.sidebar-expanded {
+  width: 14rem;
+}
+.sidebar-collapsed {
+  width: 2.75rem; /* icon-only strip */
+  overflow-x: hidden;
+}
+
+/* Collapsed: hide text labels, sub-menus, disclosure arrows */
+.sidebar-collapsed .sidebar-brand,
+.sidebar-collapsed .menu li > details > summary::after,
+.sidebar-collapsed .menu a span,
+.sidebar-collapsed .menu summary span {
+  display: none;
+}
+
+/* Collapsed: hide ALL nested sub-menus — only top-level module icons visible */
+.sidebar-collapsed .menu .menu,
+.sidebar-collapsed .menu li > details > ul,
+.sidebar-collapsed .menu li > details > div {
+  display: none !important;
+}
+
+/* Collapsed: center icons in the strip */
+.sidebar-collapsed .menu > li {
+  display: flex;
+  justify-content: center;
+}
+.sidebar-collapsed .menu a,
+.sidebar-collapsed .menu summary {
+  justify-content: center;
+  padding: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Collapsed: center the header toggle button */
+.sidebar-collapsed .sidebar-header {
+  justify-content: center;
+  padding: 0;
+}
+
+/* Collapsed: tighten nav padding */
+.sidebar-collapsed nav#westMenu {
+  padding: 0.25rem;
+}
+.sidebar-collapsed .menu {
+  padding: 0;
+  gap: 0.125rem;
+}

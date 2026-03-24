@@ -1,0 +1,28 @@
+extends ../content
+
+block script
+  +script('user',['js/passwd.js'])
+
+block content
+  +split({fit:true, border:false, id:'user-passwd-layout'})
+    +panel('west',{width:'460px', title:'My Password'})
+      +split({border:false})
+        +panel('center',{scroll:false})
+          .p-4
+            +form#upwd.single(_sqlid='user^passwd', asdpx='xs', autocomplete='off')
+              +fitem('Old Password',{name:'oldpwd',id:'oldpwd',type:'password',required:true,class:'textbox w-full'})
+              +fitem('New Password',{name:'passwd',id:'passwd',type:'password',required:true,class:'textbox w-full'})
+              +fitem('Confirm Password',{name:'passwd_2',id:'passwd_2',type:'password',required:true,class:'textbox w-full'})
+              .mt-4.flex.justify-end
+                +button('Submit',{id:'pwdsub',type:'button',class:'btn-primary',disabled:true})
+
+    +panel('center',{title:'Password Tips'})
+      +split({border:false})
+        +panel('north',{height:'96px',scroll:false})
+          .p-4.opacity-85
+            | After a successful password change, you will be signed out and asked to log in again.
+        +panel('center')
+          .p-4
+            ul.list-disc.list-inside.space-y-2
+              li Ensure your new password is easy for you to remember but hard for others to guess.
+              li Confirm the new password exactly to avoid accidental lockout.

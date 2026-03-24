@@ -1,0 +1,38 @@
+/*
+ * base.css — Global defaults and browser chrome
+ * HTML root font size, scrollbar appearance (theme-adaptive)
+ */
+
+@layer base {
+  html {
+    font-size: 16px;
+    --noise: 0;
+  }
+
+  /* Scrollbar — adapts to base colors */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: color-mix(in oklch, var(--color-base-content) 3%, var(--color-base-100)); }
+  ::-webkit-scrollbar-thumb { background: color-mix(in oklch, var(--color-base-content) 15%, var(--color-base-100)); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: color-mix(in oklch, var(--color-base-content) 25%, var(--color-base-100)); }
+}
+
+/* Body font — unlayered to beat all @layer rules (DaisyUI, Tailwind base) */
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.8125rem;
+}
+/* Force DaisyUI components to inherit body font-size instead of setting their own */
+.input, .select, .textarea, .btn,
+.tab, .table, .menu, .badge, .card-body {
+  font-size: inherit;
+}
+/* Prose (Tailwind Typography) — inherit body size, not its own 16px default */
+.prose {
+  font-size: inherit;
+}
+
+/* Bold icon variant — thicker stroke for emphasis (used via $.dui.icon opts.bold) */
+.icon-bold svg,
+svg.icon-bold {
+  stroke-width: 2.75;
+}

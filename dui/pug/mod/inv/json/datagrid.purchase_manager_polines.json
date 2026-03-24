@@ -1,0 +1,194 @@
+{
+  "id": "polines",
+  "url": "/?_sqlid=inv^polines&_func=get&_dgrid=y",
+  "asdpx": "aed",
+  "method": "post",
+  "rownumbers": false,
+  "fitColumns": true,
+  "singleSelect": true,
+  "striped": true,
+  "fit": true,
+  "columns": [
+    [
+      {
+        "field": "PO_ID",
+        "hidden": true
+      },
+      {
+        "field": "LINE_NO",
+        "title": "#",
+        "width": 30,
+        "fixed": true,
+        "align": "center"
+      },
+      {
+        "field": "LINE_STATUS",
+        "title": "Ln Status",
+        "width": 60,
+        "fixed": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "required": true,
+            "editable": false,
+            "data": [
+              {
+                "text": "CLOSE",
+                "value": "CLOSE"
+              },
+              {
+                "text": "OPEN",
+                "value": "OPEN"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "field": "ORDER_TYPE",
+        "title": "Order Type",
+        "width": 100,
+        "fixed": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "required": true,
+            "editable": false,
+            "data": [
+              {
+                "text": "EXPENSE",
+                "value": "E"
+              },
+              {
+                "text": "FREIGHT",
+                "value": "F"
+              },
+              {
+                "text": "INSPECTION & CERTIFICATION",
+                "value": "I"
+              },
+              {
+                "text": "JOB RELATED",
+                "value": "J"
+              },
+              {
+                "text": "OTHERS",
+                "value": "O"
+              },
+              {
+                "text": "PART ORDER",
+                "value": "P"
+              },
+              {
+                "text": "SUBCONTRACT",
+                "value": "S"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "field": "ORDER_QTY",
+        "title": "Order Qty",
+        "width": 60,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": {
+            "precision": 2,
+            "min": 0,
+            "required": true
+          }
+        }
+      },
+      {
+        "field": "TOTAL_RECEIVED_QTY",
+        "title": "Rcvd Qty",
+        "width": 60,
+        "fixed": true,
+        "align": "right"
+      },
+      {
+        "field": "UNIT_PRICE",
+        "title": "Unit Price",
+        "align": "right",
+        "width": 70,
+        "fixed": true,
+        "formatter": "$.dui.fmt.currency",
+        "editor": {
+          "type": "numberbox",
+          "options": {
+            "value": 0,
+            "precision": 2,
+            "min": 0,
+            "required": true
+          }
+        }
+      },
+      {
+        "field": "TOTAL_PRICE",
+        "title": "Total Price",
+        "align": "right",
+        "width": 100,
+        "fixed": true,
+        "formatter": "$.dui.fmt.currency"
+      },
+      {
+        "field": "DELIVERY_DATE",
+        "title": "Delivery Date",
+        "width": 80,
+        "fixed": true,
+        "formatter": "$.dui.fmt.date",
+        "editor": {
+          "type": "datebox",
+          "options": {
+            "required": false
+          }
+        }
+      },
+      {
+        "field": "PART_ID",
+        "title": "Our Part ID",
+        "width": 100,
+        "editor": {
+          "type": "searchbox",
+          "sbref": "part"
+        }
+      },
+      {
+        "field": "PURCHASE_UOM",
+        "title": "UOM",
+        "width": 50,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": false
+          }
+        }
+      },
+      {
+        "field": "WOREF",
+        "title": "Job ID",
+        "width": 120,
+        "editor": {
+          "type": "searchbox",
+          "sbref": "opnrefs"
+        }
+      },
+      {
+        "field": "LINE_DESCRIPTION",
+        "title": "Line Description",
+        "width": 150,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": false
+          }
+        }
+      }
+    ]
+  ]
+}

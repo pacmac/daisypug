@@ -1,0 +1,11 @@
+script.  
+  $.dui.pdata = {'udfid':[],'unitsid':[],'seqclsid':[],'resid':[]};
+
+div.fit#woseq
+  include _wo_seq_inc.pug
+
+script.
+  $('#seqf').form('changeFieldName', function(name){return 'SEQ_' + name;});
+
+  
+  

@@ -1,0 +1,32 @@
+{
+  "id": "dgitems",
+  "asdpx": "ae",
+  "rownumbers": true,
+  "striped": true,
+  "fitColumns": true,
+  "fit": true,
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "dqm^dept_training_ref",
+    "_dgrid": "y",
+    "DEPARTMENT_ID": ""
+  },
+  "columns": [[
+    { "field": "ROWID", "hidden": true },
+    { "field": "DEPARTMENT_ID", "hidden": true },
+    { "field": "MODULE_ID", "title": "Module", "width": 150, "fixed": true,
+      "editor": "$.page.fn.module" },
+    { "field": "MODULE_CLASS", "title": "Module Class", "width": 50,
+      "editor": { "type": "textbox", "options": { "readonly": true } } },
+    { "field": "MODULE_DESC", "title": "Module Description", "width": 150,
+      "editor": { "type": "textbox", "options": { "readonly": true } } },
+    { "field": "REQUIRED", "title": "Required", "width": 50,
+      "editor": { "type": "combobox", "options": {
+        "panelHeight": "auto",
+        "data": [
+          { "text": "Required", "value": "R" },
+          { "text": "Optional", "value": "O", "selected": true }
+        ]
+      }}}
+  ]]
+}

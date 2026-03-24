@@ -1,0 +1,22 @@
+extends ../content 
+block content 
+  +fitem('Language',{id:'lang_cbo', class:'combobox','data-options':"editable:false, data:[{text:'English',value:'eng'},{text:'Simple Chinese',value:'chs'},{text:'Bahasa',value:'bah'},{text:'Thai',value:'tha'}]" })
+    
+  form#main(asdpx='ax' _sqlid='lang')
+    +input({type:'hidden', name:'_sqlid', value:'admin^lang'})
+    +input({type:'hidden', name:'lang', id:'~'})
+    +fitem('Phrase',{name:'~', id:'key', class:'combobox navi'})
+    +fitem('Translated Text',{id:'~', name:'val', class:'textbox clear'})
+    div(style="margin-top:12px;")
+      +fitem({text:'Label Text',id:'labval'},{id:'test', class:'textbox', readonly:'true', value:'ABCDEFGHIJ 1234567890'})
+    div(region="west" style="width:450px;")
+      +fitem('Language',{name:'lang', class:'combobox','data-options':"editable:false, data:[{text:'English',value:'eng'},{text:'Simple Chinese',value:'chs'},{text:'Bahasa',value:'bah'}]" })
+        
+      form.multi#users(asdpx='ax' _sqlid='lang')
+        +fitem('Phrase',{name:'key', __sqlid:'lang_', class:'combobox fkey'})
+        +fitem('Translated Text',{name:'val',readonly:true, class:'jqm-text'})
+    div(region="center")
+      +tabs(data-options="plain:true,fit:true")
+        div#Main(title='Main' fit="true")
+block script 
+  +script("admin",["js/language.js"])

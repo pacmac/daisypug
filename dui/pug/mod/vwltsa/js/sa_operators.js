@@ -1,0 +1,400 @@
+
+$.page.ready(function () {
+/*
+  CLS,171124,2.2.245
+  1, added EXPIRY_DATE into EMPLOYEE CERTIFICATE and removed EXPIRY_DATE from EMPLOYEE QUALIFICATION
+  
+  CLS, 180202, 2.2.248
+  1, Added EXPIRY_DATE into EMPLOYEE QUALIFICATION
+  2, updted EMPLOYEE ID from combobox to qbe
+
+  CLS, 180205,2.2.252
+  1, enabled saved button when operator data was loaded
+
+  CLS, 180510, 3.13
+  1, removed repeated module ID on rating tab
+  2, added Module Desc on Rating tab
+  3, new field, CATEGORY on Rating tab
+*/
+$.page.fn.settabs = function(appid){
+  setTimeout(function(){
+
+    $.page.fn.tabids = {
+      udfen: 'User Fields',
+      resen: 'Resources',
+      certen: 'Certification',
+      qualen: 'Qualifications',
+      ncren:  'NCRs',
+      docen: 'Attachments',
+      rating:'Rating'
+    }
+
+    for(var t in $.page.fn.tabids){
+      if($.dui.bhave[t] != 'n') var ed = 'enableTab';
+      else var ed = 'disableTab'; 
+      $('#optabs').tabs(ed,$.page.fn.tabids[t]);
+    }
+  },100)
+}
+
+
+$.page.fn.RATING=[{"text":"A","value":"A"},{"text":"B","value":"B"},{"text":"C","value":"C"},{"text":"Trainee","value":"T"}];
+$.page.fn.ratingopts={
+  twoColumns: false,
+  editor:'form',
+  rownumbers: false,
+  fitColumns: true,
+  fit: true,
+  url: '/',
+  queryParams:{
+      _sqlid:'dqm^operator_rating',
+      _func:'get',
+      _dgrid:'y'
+  },
+  addData:{ EMPLOYEE_ID: '#empid'},
+
+  onRowContextMenu: function(e){return e.preventDefault()},
+  onBeforeLoad:function(qp){
+    if(!qp.EMPLOYEE_ID) return false; 
+  },
+  loadFilter: function(data){
+      if(!data || (!data.rows && data.length==0)) data = {rows:[],total:0};
+      return data;
+  },
+  onEndEdit: function(idx,row,chg){
+      var url = "/?_sqlid=dqm^operator_rating";
+      var data = clone(row);
+      delete data.MODULE_DESC;
+      ajaxget(url,data,function(data){}) 
+  },
+  onSelect:function(idx,row){
+
+  },
+  columns:
+  [[
+    {field:'ROWID',hidden:true},
+    {field:'EMPLOYEE_ID',hidden:true},
+    {field:'RATING_MODULE_ID',title:'Module',width:20,editor:{type:'combobox',options:{ required: true,editable:false}}},
+    {field:'MODULE_DESC',title:'Module Desc',width:20,editor:{type:'textbox',options:{readonly:true}}},
+    {field:'CATEGORY',title:'Category',width:10,editor:{type:'textbox'}},
+    {field:'RATING_DATE',title:'Rating Date',width:20, formatter: eui.date,editor:{type:'datebox',options:{required:true}}},
+    {field:'RATING',title:'Rating',width:10,editor:{type:'combobox',options:{data:$.page.fn.RATING,required:true,editable:false}}},
+  ]]
+}
+
+
+
+$(document).ready(function(){  
+
+    //CLS, 180202
+    $('#empid').qbe({defid:'operator'})
+    $('#SHIFT_ID').combobox({url:'/?_func=get&_combo=y&_sqlid=vwltsa^shiftid&SHIFT_TYPE=O&ACTIVE=Y'})
+  $('#MODULE_ID').combobox({
+    url:'/?_func=get&_combo=y&_sqlid=dqm^moduleid',
+    onSelect:function(rec){
+      $('#MODULE_TYPE').textbox('setValue',rec.MODULE_TYPE);
+      $('#MODULE_DESC').textbox('setValue',rec.MODULE_DESC);
+    }
+  })
+
+  $('#QUALIFICATION_ID').combobox({url:'/?_func=get&_combo=y&_sqlid=dqm^qualificationid',})
+
+  
+//qualification
+  $('#qdg').datagrid({
+    url: '/',
+    method: 'get',
+    queryParams: {_func:'get',_sqlid:'dqm^opqualification',dgrid:'y'},
+    singleSelect:true,
+    fitColumns:true,
+    columns: [[{field:'ROWID',title:'RowID',hidden:true},
+    		{field:'QUALIFICATION_ID',title:'Qualification',width:200,fixed:true},
+    		{field:'DESCRIPTION',title:'Description',width:200,fixed:true},
+        {field:'QUALIFICATION_DATE',title:'Date',width:80,fixed:true, formatter:tz2date},
+        {field:'EXPIRY_DATE',title:'Expiry Date',width:80,fixed:true, formatter:tz2date}
+        ]],
+    onBeforeLoad:function(qp){
+          if(!qp.EMPLOYEE_ID) return false; 
+    },
+    onSelect:function(idx,row){
+      $('#qfrm').data('idx',idx).form('load',row);
+
+      if($.dui.ronly) {
+        $('#qwin #qbut #qdel').linkbutton('disable');
+        $('#qwin #qbut #qsav').linkbutton('disable');
+      }
+ 
+      $('#qwin').window('open');
+    },
+    toolbar: [{
+      iconCls: 'icon-add',
+      text: 'Add New',
+      handler: function(){
+        $('#qfrm').data('idx',-1).form('reset');
+        $('#qwin').window('open');
+      }
+    }]
+  })
+ 
+
+  $('#qbut > a').linkbutton({
+    onClick:function(){
+      var frm = $('#qfrm');
+      var idx = frm.data('idx'); 
+      var dg = $('#qdg');
+      var me = $(this);
+      var data = frm2dic(frm);
+      
+      if(me.attr('id')=='qdel') {
+        dg.datagrid('deleteRow',idx);
+        var mode='del';
+      }
+      
+      else if(me.attr('id')=='qsav') {
+        if(!frm.form('validate')) return false;
+        if(idx > -1){
+          dg.datagrid('updateRow',{index:idx,row:data});
+          var mode='upd';
+        } else {
+          dg.datagrid('insertRow',{row:data});
+          var mode='add';          
+        }
+      }
+      
+      if(mode) {
+        data.EMPLOYEE_ID = $('#empid').textbox('getValue');
+        data._sqlid = 'dqm^opqualification';
+        data._func = mode;
+        delete data.DESCRIPTION;
+        ajaxget('/',data,function(res){
+          cl(res);
+          $('#qwin').window('close');
+          $('#qdg').datagrid('reload');
+
+        })
+      }
+    $('#qwin').window('close');
+      $('#qdg').datagrid('reload');
+    }
+  })
+
+
+
+
+//NCRs
+  $('#ncrdg').datagrid({
+    url: '/',
+    queryParams: {_func:'get',_sqlid:'dqm^opncr',dgrid:'y'},
+    method: 'get',
+    singleSelect:true,
+    fitColumns:true,
+    columns: [[{field:'NCR_ID',title:'NCR ID',width:120,fixed:true},{field:'YEAR',title:'Year',width:150,fixed:true}]],
+    onBeforeLoad:function(qp){
+      if(!qp.EMPLOYEE_ID) return false; 
+    },
+  })
+
+    $('#ncrdg1').datagrid({
+    url: '/',
+    queryParams: {_func:'get',_sqlid:'dqm^opncr_groupByYear',dgrid:'y'},
+    method: 'get',
+    singleSelect:true,
+    fitColumns:true,
+    columns: [[{field:'YEAR',title:'YEAR',width:120,fixed:true},{field:'CNT',title:'Count',width:150,fixed:true}]],
+    onBeforeLoad:function(qp){
+      if(!qp.EMPLOYEE_ID) return false; 
+    },
+  })
+
+//Certification
+
+  $('#certdg').datagrid({
+    url: '/',
+    method: 'get',
+    queryParams: {_func:'get',_sqlid:'dqm^opcert',dgrid:'y'},
+    singleSelect:true,
+    fitColumns:true,
+    columns: [[
+      {field:'STAT',width:24,fixed:true,formatter:function(val,row,idx){return '<div class="'+row.RESULT+'"></div>'}},
+      {field:'ROWID',title:'RowID',hidden:true},{field:'MODULE_ID',title:'Module',width:80,fixed:true},
+      {field:'MODULE_TYPE',title:'Type',width:100,fixed:true},
+      {field:'PLAN_DATE',title:'Planned',width:80,fixed:true, formatter:tz2date},
+      {field:'EXPIRY_DATE',title:'Expiry',width:80,fixed:true, formatter:tz2date},
+      {field:'COMPLETED_DATE',title:'Completed',width:80,fixed:true, formatter:tz2date},
+      {field:'ATTENDED',title:'Attend',width:50,fixed:true},
+      {field:'RESULT',title:'Result',width:50,fixed:true},
+      {field:'TRAINING_ID',title:'Training ID',width:100,fixed:true},
+      {field:'MODULE_DESC',title:'Description',width:500,fixed:false}
+    ]],
+    onBeforeLoad:function(qp){
+      if(!qp.EMPLOYEE_ID) return false; 
+    },
+    onSelect:function(idx,row){
+      $('#certfrm').data('idx',idx).form('load',row);
+
+      if($.dui.ronly) {
+        $('#certwin #certbut #certdel').linkbutton('disable');
+        $('#certwin #certbut #certsav').linkbutton('disable');
+      }
+      $('#certwin').window('open');
+    },
+    toolbar: [{
+      iconCls: 'icon-add',
+      text: 'Add New',
+      handler: function(){
+        $('#certfrm').data('idx',-1).form('reset');
+        $('#certwin').window('open');
+      }
+    }]
+  })
+
+  $('#certbut > a').linkbutton({
+    onClick:function(){
+      var frm = $('#certfrm');
+      var idx = frm.data('idx'); 
+      var dg = $('#certdg');
+      var me = $(this);
+      var data = frm2dic(frm);
+      //data.STAT = data.RESULT;
+      
+      if(me.attr('id')=='certdel') {
+        dg.datagrid('deleteRow',idx);
+        var mode='del';
+      }
+      
+      else if(me.attr('id')=='certsav') {
+        if(!frm.form('validate')) return false;
+        if(idx > -1){
+          dg.datagrid('updateRow',{index:idx,row:data});
+          var mode='upd';
+        } else {
+          dg.datagrid('insertRow',{row:data});
+          var mode='add';          
+        }
+      }
+      
+      if(mode) {
+        data.empid = $('#empid').textbox('getValue');
+        data._sqlid = 'dqm^opcert';
+        data._func = mode;
+        ajaxget('/',data,function(res){
+          cl(res);
+        })
+      }
+      $('#certwin').window('close');
+    }
+  })
+
+  //RATING
+  $('#ratingrid').datagrid('rowEditor',$.page.fn.ratingopts).datagrid('columns',$('#dgre_tb'));
+  $('#ratingrid').datagrid('options').tbar.dgre_edit.linkbutton('disable');
+
+  
+
+  $('form#opers').on('loadDone',function(jq,data){
+    
+
+    butEn('asdx');
+    var rt = $('#res_tree');
+    var rids = data.RESOURCE_IDS.split(',');
+    
+    rt.css('opacity',1).tree('options').mode = 'lock';
+    rt.tree('collapseAll');
+    for(var i in $.page.fn.trdata){
+      var seltgt = false, type = $.page.fn.trdata[i].children;
+      for(var t in type){
+        var node = type[t]; //cl(node);
+        var tgt = rt.tree('find',node.id).target; 
+        var chun = 'uncheck'; if(rids.indexOf(node.id) != -1) chun = 'check';
+        rt.tree(chun,tgt);
+        if(!seltgt && chun=='check') {rt.tree('expandTo',tgt); seltgt = true;}
+      }
+    };
+    
+    rt.tree('options').mode = 'get';
+    rt.tree('options').empid = data.ID;
+	
+
+    // load certifications
+    var empid = $('#empid').textbox('getValue');
+    if(data.ID) {
+    //	$('#certdg').datagrid('load',{_func:'get',_sqlid:'dqm^opcert',dgrid:'y',empid:empid});
+    	$('#qdg').datagrid('load',{_func:'get',_sqlid:'dqm^opqualification',dgrid:'y',EMPLOYEE_ID:empid});
+    	$('#ncrdg').datagrid('load',{_func:'get',_sqlid:'dqm^opncr',dgrid:'y',EMPLOYEE_ID:empid});
+      $('#ncrdg1').datagrid('load',{_func:'get',_sqlid:'dqm^opncr_groupByYear',dgrid:'y',EMPLOYEE_ID:empid});
+      $('#ratingrid').datagrid('load',{_func:'get',_sqlid:'dqm^operator_rating','_dgrid':'y',EMPLOYEE_ID:empid});
+      var cRATING_MODULE=$('#_dgform > form input[textboxname=RATING_MODULE_ID]');
+      ajaxget('/',{_func:'get',_sqlid:'dqm^opcert', '_dgrid':'y',empid:empid},function(rs){
+        $('#certdg').datagrid('loadData',rs);
+        var arr=[];
+        rs.map(function(r){ 
+          var foundIt=false;
+          for (var i=0 ;i<arr.length;i++){
+            var el=arr[i];
+            if (r.MODULE_ID==el.value) foundIt=true;
+          }
+          if (foundIt==false) arr.push({value:r.MODULE_ID,text:r.MODULE_ID,desc:r.MODULE_DESC})
+        })
+        cRATING_MODULE.combobox('loadData',arr);
+        //$('#_dgform > form input[textboxname=RATING_MODULE_ID]').combobox('loadData',arr);
+      });
+      cRATING_MODULE.combobox({
+        onSelect:function(rec){
+          $('#_dgform > form input[textboxname=MODULE_DESC]').textbox('setValue',rec.desc)
+        }
+      })
+
+    }
+   // console.log(dwap.ronly);
+    // disable when embedded
+    if($.dui.ronly) {
+      $(this).form('disable','.fkey');
+      butEn('');
+    }
+    $('#operatorfiles').datagrid('docFiles',empid);
+
+
+
+  })
+  
+  $('#res_tree').tree({
+    url:"/?_func=get&_sqlid=vwltsa^restree",
+    cascadeCheck:false,
+    onlyLeafCheck:true,
+    mode: 'init',
+    checkbox:true,
+    
+    onBeforeExpand:function(node){if($(this).tree('getLevel', node.target)==1) $(this).tree('collapseAll');},
+    onLoadSuccess:function(node,data){
+      $(this).tree('collapseAll');
+      $.page.fn.trdata = data;
+    },
+    
+    onBeforeCheck:function(){
+      var opt = $(this).tree('options');
+      if(opt.mode=='init') return false;
+    },
+    
+    onCheck:function(node,chk){
+      var opt = $(this).tree('options');
+      if(chk) $(node.target).addClass('on'); else $(node.target).removeClass('on');
+      if(opt.mode=='lock') return;
+      var nodes = $(this).tree('getChecked');
+      var arr = []; for(var n in nodes){arr.push(nodes[n].id)}
+      
+      // app.get not allowing form arrays !
+      var url = '/?RESOURCE_IDS='+arr.toString();
+      var vars = {_func:'upd', _sqlid:'vwltsa^emprids', ID:opt.empid};
+      ajaxget(url,vars,function(data) {if(data.error) alert(data.msg)});
+     
+    }
+  })
+  
+  $.page.fn.settabs($.page.state.pageId);  
+
+
+
+})
+
+
+});  // $.page.ready

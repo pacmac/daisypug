@@ -1,0 +1,126 @@
++window#otdwin(style="width:520px; height:50%;" closed="true" title="On-Time Delivery Reason" iconCls="icon-gantt")
+  #otddg
+
+//-style.
+  div#toolbut {
+    position: relative;
+    top: -3px;
+  }
+
+  td[field=LINE_NO] {
+    background: linear-gradient(to bottom,#F9F9F9 0,#efefef 100%);
+  } td[field=LINE_NO] > .datagrid-cell {
+    color: #000000;
+  }
+
+script.
+  cl = console.log;
+
+  $.dui.page.status = function(){
+    var opt = $('#otddg').datagrid('options');
+    opt.tbar.dgre_add.hide();
+    opt.tbar.dgre_del.hide();
+    opt.tbar.dgre_edit.hide();
+    $('input[comboname=OTD_CODE]').addClass('ronly-on');
+    //opt.tbar.dgre_edit.linkbutton('enable');
+    if($.dui.udata.groups.indexOf('OTD-EDITOR')==-1) $('#otdopen').linkbutton('disable');
+    else $('#otdopen').linkbutton('enable'); 
+  }
+
+  $.dui.page.rotext = {
+    type:'text' 
+  }
+  
+  $.dui.page.otdcombo = {
+    type:'combobox',
+    cls: 'unlock',
+    options:{
+      panelWidth:300,
+      url:'/?_func=get&_sqlid=dqm^otdcause&_combo=y',
+      editable:false,
+      loadFilter: function(data){
+        data.map(function(e){e.text = e.value +' - '+e.description})
+        return data;  
+    }
+    },
+
+  }
+
+  $('#otdwin').window({
+    minimizable: false,
+    draggable: true,
+    modal:false,
+    onOpen: function(){
+      var data = $('#solines').datagrid('getData');
+      //var data = [{SALES_ORDER_ID:'ALIBABA-1234-17',LINE_NO:10,WANT_DATE:'22 May 2017',OTD_CODE:'M1'}]
+      $('#otddg').datagrid('loadData',data); 
+    },
+    
+    onBeforeClose: function(){
+      var opt = $('#otddg').datagrid('options');
+      if(!opt.tbar.dgre_ok.hasClass('l-btn-disabled')){
+        beep('error'); 
+        alert('Please finish editing.')
+        return false;  
+      }
+    }
+    
+  })
+
+  $('#otddg').datagrid({
+    fit:true,
+    singleSelect: true,
+    checkOnSelect: true,
+    remoteSort: false,
+    striped: true,
+    method: 'get',
+    fitColumns: true,
+
+    onEndEdit: function(idx,row,chg){
+      var data ={
+        _sqlid:'vwltsa^soline',
+        _func: 'upd',
+        SALES_ORDER_ID: row.SALES_ORDER_ID,
+        LINE_NO: row.LINE_NO,
+        OTD_CODE: row.OTD_CODE,
+        WANT_DATE: row.WANT_DATE
+      }
+      
+      ajaxget('/',data,function(data){
+        $('#solines').datagrid('reload');
+      }) 
+        
+    }
+    
+  }).datagrid('rowEditor',{
+    editor: 'inline',
+    addData:{},    
+    columns: [[
+      //{field:'_CK',title:'S', width:50,checkbox:true,fixed:true},
+      {field:'SALES_ORDER_ID',hidden:true},
+      {field:'LINE_NO',title:'#', width:30,fixed:true,align:'center'},
+      {field:'OTD_CODE',title:'OTD Code', width:100, fixed:false, editor:$.dui.page.otdcombo},
+      {field:'PART_ID',title:'Part ID', width:150, fixed:false},
+      {field:'WANT_DATE',title:'Want Date',width:80,fixed:false,formatter:eui.date},
+      
+    ]]
+  }); 
+
+  $(document).ready(function(){
+
+    toolbut([
+      {
+        id: 'otdopen',
+        iconCls: 'icon-gantt',
+        text: 'OTD',
+        disabled: true,
+        noText: false,
+        onClick:function(){$('#otdwin').window('open')}
+      },
+
+    ])
+    
+    $.dui.page.status();
+  
+  })
+  

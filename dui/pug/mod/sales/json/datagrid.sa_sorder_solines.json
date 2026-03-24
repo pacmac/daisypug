@@ -1,0 +1,204 @@
+{
+  "url": "/?_sqlid=sales^solines&_func=get&_dgrid=y",
+  "fit": true,
+  "title": "Line Items",
+  "fitColumns": true,
+  "striped": true,
+  "rownumbers": false,
+  "asdpx": "adx",
+  "toolbar": [
+    { "type": "sep" },
+    { "id": "print_form", "text": "Print Form", "icon": "printer" },
+    { "id": "otdopen", "text": "OTD", "icon": "chart-gantt", "disabled": true }
+  ],
+  "columns": [
+    [
+      { "field": "SALES_ORDER_ID", "hidden": true },
+      { "field": "_OPNDATA", "hidden": true },
+      { "field": "_CPDATA", "hidden": true },
+      {
+        "field": "_NCR",
+        "title": "NCRS",
+        "width": 45,
+        "fixed": true,
+        "align": "center"
+      },
+      {
+        "field": "_JOB",
+        "title": "JOBS",
+        "width": 45,
+        "fixed": true,
+        "align": "center"
+      },
+      {
+        "field": "LINE_NO",
+        "title": "#",
+        "width": 30,
+        "fixed": true,
+        "align": "center"
+      },
+      {
+        "field": "LINE_STATUS",
+        "title": "Ln Status",
+        "width": 60,
+        "fixed": true,
+        "hidden": true,
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "data": [
+              { "text": "Closed", "value": "C" },
+              { "text": "Open", "value": "", "selected": true }
+            ]
+          }
+        },
+        "coloff": true
+      },
+      {
+        "field": "CUST_PO_LINE_NO",
+        "title": "PO LN",
+        "width": 50,
+        "fixed": true,
+        "editor": {
+          "type": "numberspinner",
+          "options": { "precision": 0, "min": 1 }
+        }
+      },
+      {
+        "field": "QTY",
+        "title": "Qty Reqd",
+        "width": 60,
+        "fixed": true,
+        "align": "right",
+        "editor": {
+          "type": "numberspinner",
+          "options": { "precision": 2, "min": 0 }
+        }
+      },
+      {
+        "field": "QTY_SHIP",
+        "title": "Qty Ship",
+        "width": 60,
+        "fixed": true,
+        "align": "right"
+      },
+      {
+        "field": "GATEPASS_QTY",
+        "title": "Qty GP",
+        "width": 60,
+        "fixed": true,
+        "align": "right",
+        "coloff": true,
+        "hidden": true
+      },
+      {
+        "field": "UNIT_ESTIMATOR_COST",
+        "title": "Unit Est. Cost",
+        "width": 70,
+        "fixed": true,
+        "align": "right",
+        "formatter": "$.dui.fmt.currency",
+        "editor": {
+          "type": "numberbox",
+          "options": {
+            "value": 0,
+            "precision": 2,
+            "min": 0,
+            "prefix": "$",
+            "required": true
+          }
+        }
+      },
+      {
+        "field": "UNIT_PRICE",
+        "title": "Unit Price",
+        "width": 70,
+        "fixed": true,
+        "align": "right",
+        "formatter": "$.dui.fmt.currency",
+        "editor": {
+          "type": "numberbox",
+          "options": { "value": 0, "precision": 2, "min": 0, "prefix": "$" }
+        }
+      },
+      {
+        "field": "TOTAL_PRICE",
+        "title": "Total Price",
+        "width": 100,
+        "fixed": true,
+        "align": "right"
+      },
+      {
+        "field": "WANT_DATE",
+        "title": "Want Date",
+        "width": 80,
+        "fixed": true,
+        "formatter": "$.dui.fmt.date",
+        "editor": { "type": "datebox", "options": { "required": true } }
+      },
+      {
+        "field": "PART_ID",
+        "title": "Our Part ID",
+        "width": 100,
+        "editor": {
+          "type": "searchbox",
+          "sbref": "part"
+        }
+      },
+      {
+        "field": "PART_UOM",
+        "title": "Our Part UOM",
+        "width": 150,
+        "editor": { "type": "textbox", "options": { "readonly": true } },
+        "coloff": true
+      },
+      {
+        "field": "CUST_PART_ID",
+        "title": "Cust Part Ref",
+        "width": 100,
+        "editor": { "type": "textbox", "options": { "readonly": true } }
+      },
+      {
+        "field": "CUST_PART_DESCRIPTION",
+        "title": "Ref Description",
+        "width": 150,
+        "editor": { "type": "textbox", "options": { "readonly": true } },
+        "coloff": true,
+        "hidden": true
+      },
+      {
+        "field": "CP_REF",
+        "title": "CP Reference",
+        "width": 120,
+        "editor": {
+          "type": "combobox",
+          "options": { "groupField": "CUST_ID" }
+        },
+        "coloff": true,
+        "hidden": true
+      },
+      {
+        "field": "OTD_CODE",
+        "title": "OTD Code",
+        "width": 120,
+        "coloff": true,
+        "hidden": true
+      },
+      {
+        "field": "PART_DESCRIPTION",
+        "title": "Our Part Description",
+        "width": 1000,
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "readonly": false,
+            "multiline": true,
+            "height": 150,
+            "style": "padding:1em;"
+          }
+        }
+      }
+    ]
+  ]
+}

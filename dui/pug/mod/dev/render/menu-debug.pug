@@ -1,0 +1,32 @@
+extends ../../../layout/layout
+
+block content
+  .container.mx-auto.p-4
+    h1.font-bold.mb-4 Menu Debug Test
+
+    //- Direct menu render test
+    div.mb-8
+      h2.font-semibold Menu (Direct):
+      nav
+        ul.menu.bg-base-200.rounded-box
+          li
+            a(href="#") Test Item 1
+          li
+            a(href="#") Test Item 2
+
+    //- Debug: Show menus data
+    div.mb-8
+      h2.font-semibold Menus Data:
+      pre.bg-gray-100.p-4
+        = JSON.stringify(menus, null, 2).substring(0, 500)
+
+    //- Test mixin rendering
+    div.mb-8
+      h2.font-semibold Menu (Via Mixin):
+      nav
+        ul.menu.bg-base-200.rounded-box
+          each item in (Array.isArray(menus) ? menus : Object.values(menus || {}))
+            if item && item.text
+              +menuItem(item, true)
+            else
+              li.text-error= "(ERROR: " + JSON.stringify(item).substring(0, 30) + ")"

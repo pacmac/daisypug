@@ -1,0 +1,88 @@
+;(function($){
+  "use strict";
+
+  function init(target, options) {
+    var state = $.data(target, 'textbox');
+    var opts = $.extend({}, $.fn.textbox.defaults, options);
+
+    if (!state) {
+      state = $.data(target, 'textbox', {
+        options: opts,
+        input: $(target),
+        wrapper: $(target).closest('.form-control')
+      });
+    }
+  }
+
+  $.fn.textbox = function(options, param) {
+    if (typeof options === 'string') {
+      var method = $.fn.textbox.methods[options];
+      if (method) return method(this, param);
+    }
+    return this.each(function() {
+      init(this, options);
+    });
+  };
+
+  $.fn.textbox.methods = {
+    options: function(jq) {
+      return $.data(jq[0], 'textbox').options;
+    },
+    textbox: function(jq) {
+      return jq;
+    },
+    button: function(jq) {
+      return $.data(jq[0], 'textbox').wrapper.find('.btn');
+    },
+    destroy: function(jq) {
+      return jq.each(function() {
+        $.removeData(this, 'textbox');
+      });
+    },
+    getValue: function(jq) {
+      return jq.val();
+    },
+    setValue: function(jq, value) {
+      return jq.each(function() {
+        var oldVal = $(this).val();
+        $(this).val(value);
+        var opts = $.data(this, 'textbox').options;
+        if (opts.onChange && oldVal !== value) {
+          opts.onChange.call(this, value, oldVal);
+        }
+      });
+    },
+    getText: function(jq) {
+      return jq.val();
+    },
+    setText: function(jq, text) {
+      return jq.each(function() {
+        $(this).val(text);
+      });
+    },
+    clear: function(jq) {
+      return jq.each(function() {
+        $(this).textbox('setValue', '');
+      });
+    },
+    reset: function(jq) {
+      return jq.each(function() {
+        var opts = $.data(this, 'textbox').options;
+        $(this).textbox('setValue', opts.value || '');
+      });
+    },
+    isValid: function(jq) {
+      return jq[0].checkValidity();
+    },
+    validate: function(jq) {
+      return jq.each(function() {
+        this.reportValidity();
+      });
+    }
+  };
+
+  $.fn.textbox.defaults = {
+    onChange: function(newValue, oldValue) {}
+  };
+
+})(jQuery);

@@ -1,0 +1,150 @@
+extends ../content 
+//- ── MIGRATOR ──────────────────────────────────
+//- page: vwltsa/sa_operators
+//- owner: root
+//- status: error
+//- passes: 1  version: 8
+//- last_run: 2026-02-27 20:13:03
+//- manual:
+//-   #1: +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts
+//-   #2: raw div with region= attribute — convert to +panel(region)
+//-   #3: +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts
+//-   #4: raw div with region= attribute — convert to +panel(region)
+//-   #5: raw div with region= attribute — convert to +panel(region)
+//- ─────────────────────────────────────────────
+block content 
+  form.form.multi#opers(_sqlid='vwltsa^empall' asdpx='ax' data-lbut="ax" data-ebut="ax").fit
+    //- [MANUAL FIX #1] +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts
+    +split
+      //- [MANUAL FIX #2] raw div with region= attribute — convert to +panel(region)
+      .panel(region="west" style="width:400px;background: #FAFAFA;") 
+          +fitem('Operator ID',{_sqlid:'vwltsa^operators_qbe', id:'empid' , name:'ID', class:'qbe navi fkey fit',required:true})
+          +fitem('Last Name',{name:'LAST_NAME', class:'textbox' , validType:['length[1,30]']})
+          +fitem('First Name',{name:'FIRST_NAME', class:'textbox' , validType:['length[1,30]']})
+          +fitem('Password',{name:'PASSWD', class:'textbox' ,type:'password', validType:['length[1,30]']})
+          +fitem('Country',{name:'COUNTRY', class:'textbox' , validType:['length[1,50]']})
+          +fitem('Phone',{name:'PHONE', class:'textbox' , validType:['length[1,20]']})
+          +fitem('Email',{name:'EMAIL_ADDR', class:'textbox' , validType:['email']})
+          +fitem('RFID Tag',{name:'RFID_TAG', class:'textbox' , validType:['length[1,15]']})
+          +fitem('Hourly Cost',{name:'BASE_PAY_RATE', class:'numberspinner', value:0, min:0, max:1000, precision:2, increment:1,required:true})
+          +fitem('Active',{name:'ACTIVE', class:'combobox','data-options':"data:[{text:'Yes',value:'Y', selected:true},{text:'No',value:'N'}],editable:false",required:true})
+          +fitem('Screen Language',{name:'LANGUAGE_ID', class:'combobox','data-options':"data:[{text:'English',value:'eng', selected:true},{text:'Simple Chinese',value:'chs'},{text:'Vietnamese',value:'vie'},{text:'Bahasa',value:'bah'},{text:'Thai',value:'thai'}],editable:false",required:true})
+          +fitem('Department',{ name:'DEPARTMENT_ID', _sqlid:'vwltsa^depid1', class:'combobox',validType:['length[1,255]'],required:true,'data-options':"editable:false"})
+          +fitem('Shift',{ name:'SHIFT_ID',id:'~', _sqlidXXX:'vwltsa^shiftid', class:'combobox',validType:['length[1,15]'],required:true,'data-options':"editable:false"})
+          +fitem('Remote',{name:'REMOTE', class:'combobox','data-options':"data:[{text:'Yes',value:'Y'},{text:'No',value:'N', selected:true}],editable:false",required:true})
+
+      +panel('center')
+        +tabs#optabs(data-options="fit:true")
+          
+          +tab-item('User Fields')#udftab
+            +udfs({select:bhave.defudf,ron:false})
+          
+          +tab-item('Resources')#restab
+            ul#res_tree(style="opacity:0.5;" _sqlid="vwltsa^restree")
+            
+          +tab-item('Certification')
+            +datagrid#certdg
+          +tab-item('Qualifications')
+            +datagrid#qdg
+          +tab-item('NCRs')
+            //- [MANUAL FIX #3] +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts
+            +split
+              //- [MANUAL FIX #4] raw div with region= attribute — convert to +panel(region)
+              div(region="north" style="height:50%;padding:6px;" title="NCR" collapsible="false" iconCls="icon-ncr" resizable="true" split="true")
+                +datagrid#ncrdg
+            
+              //- [MANUAL FIX #5] raw div with region= attribute — convert to +panel(region)
+              div(region="center" style="height:50%;padding:6px;" title="Summary" collapsible="false" iconCls="icon-ncr" resizable="true" split="true")
+                +datagrid#ncrdg1
+
+          +tab-item('Attachments')
+            +filegrid#operatorfiles(style="width:100%;", data-options="fit:true")
+          +tab-item('Rating')#rating
+            +datagrid#ratingrid
+  div#certwin.window(data-options="modal:true,closed:true,iconCls:'icon-edit',title:'Operator Certification'")
+    form#certfrm(style="padding-right:16px;")
+      input(name='ROWID' type='hidden')
+      .fitem
+        label Module
+        +combobox#MODULE_ID({name:"MODULE_ID", required:"required"})
+
+      .fitem
+        label Description
+        +input#MODULE_DESC({class:'textbox', name:"MODULE_DESC", readonly:"readonly"})
+
+      .fitem
+        label Type
+        +input#MODULE_TYPE({class:'textbox', name:"MODULE_TYPE", readonly:"readonly"})
+
+      .fitem
+        label Planned
+        +datebox({name:"PLAN_DATE", today:true})
+
+      .fitem
+        label Expiry
+        +datebox({name:"EXPIRY_DATE", today:true})
+
+      .fitem
+        label Completed
+        +datebox({name:"COMPLETED_DATE", today:true})
+
+      .fitem
+        label Attended
+        +combobox({name:"ATTENDED", data-options:"data:[{value:'Yes',text:'Yes'},{value:'No',text:'No'}], panelHeight:'auto'", required:"required"})
+
+      .fitem
+        label Result
+        +combobox({name:"RESULT", data-options:"data:[{value:'Pass',text:'Pass'},{value:'Fail',text:'Fail'}], panelHeight:'auto'", required:"required"})
+
+      .fitem
+        label Training ID
+        +input({class:'textbox', name:"TRAINING_ID", required:"required"})
+      
+      div#certbut(style="margin-top:20px;text-align:right;margin-bottom:12px;")
+        a.linkbutton#certclr(iconCls="icon-cancel") Cancel
+        a.linkbutton#certdel(iconCls="icon-delete") Delete
+        a.linkbutton#certsav(iconCls="icon-save") Save
+
+  div#qwin.window(data-options="modal:true,closed:true,iconCls:'icon-edit',title:'Operator Qualification'")
+    form#qfrm(style="padding-right:16px;")
+      input(name='ROWID' type='hidden')
+      .fitem
+        label Qualification
+        +combobox#QUALIFICATION_ID({name:"QUALIFICATION_ID", required:"required"})
+
+      .fitem
+        label Date
+        +datebox({name:"QUALIFICATION_DATE", today:true})
+      .fitem
+        label Expiry Date
+        +datebox({name:"EXPIRY_DATE", today:true})
+      div#qbut(style="margin-top:20px;text-align:right;margin-bottom:12px;")
+        a.linkbutton#qclr(iconCls="icon-cancel") Cancel
+        a.linkbutton#qdel(iconCls="icon-delete") Delete
+        a.linkbutton#qsav(iconCls="icon-save") Save
+
+block script 
+  script: include js/sa_operators.js
+  script.
+    console.warn('[audit] sa_operators #1: +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts')
+    console.warn('[audit] sa_operators #2: raw div with region= attribute — convert to +panel(region)')
+    console.warn('[audit] sa_operators #3: +split is deprecated — convert to +vsplit/+hsplit with nested splits for 3+ panel layouts')
+    console.warn('[audit] sa_operators #4: raw div with region= attribute — convert to +panel(region)')
+    console.warn('[audit] sa_operators #5: raw div with region= attribute — convert to +panel(region)')
+block style
+  style.
+    .tree-node.on {
+      color:blue;
+    }
+    
+    td[field="STAT"] div.Pass,
+    td[field="STAT"] div.P {
+      height: 16px; width:16px;
+      background: url('../icons/tick.png');
+    } 
+    
+    td[field="STAT"] div.Fail,
+    td[field="STAT"] div.F {
+      height: 16px; width:16px;
+      background: url('../icons/cross.png');
+    }

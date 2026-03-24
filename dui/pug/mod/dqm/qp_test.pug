@@ -1,0 +1,42 @@
+extends ../content
+block script
+  script: include js/qp_test.js
+block content
+  +vsplit()
+    +panel('west')
+      +fitem('TEST ID',{id:'QPID',class:'searchbox', required:true,sbref:"qt_ids"})
+      ul#QPTREE(style="margin-top:10px")
+
+    #addmenu(style="width:100px;display:none;")
+      div(name="PART" iconCls="icon-gear") Part Test
+      div(name="GAUGE" iconCls="icon-gauge") Gauge Test
+
+    +panel('center')
+      +tabs#MAINTAB.offx(data-options="fit:true,showHeader:true")
+        +tab-item("Main" ,{iconCls:"icon-qtest"})
+          +vsplit('450px')
+            +panel('west')
+              +form(_sqlid="dqm^qt_test")#qtplan
+                fieldset
+                  legend Test Details
+                  include _qp_form_test.pug
+            +panel('center')
+              +form#qpplan(style="display:none")
+                fieldset
+                  legend Plan Details
+                  +fitem('Plan Type',{id:'PLAN_TYPE', name:'TYPE', class:'textbox',readonly:true})
+                  +fitem('Plan ID',{id:'~',name:'PLAN_ID', class:'textbox', 'data-options':"editable:false"})
+                  +fitem('Plan Version',{id:'~',name:'PLAN_VER', class:'textbox',readonly:true})
+                  +fitem('Sample Type',{id:'~',name:'SAMPLE_TYPE', class:'textbox',readonly:true})
+                  +fitem('Sample Size',{id:'~',name:'SAMPLE_QTY', class:'textbox',readonly:true})
+                  +fitem('Notes',{id:'~',name:'SPEC', class:'textbox', readonly:true, 'data-options':"multiline:true", style:'height:200px;'})
+
+        +tab-item("Procedure",{ iconCls:"icon-lists"})
+          +form.lock.fit(_sqlid="dqm^qpproc" mode="add")#qpproc
+            input(type='hidden', name='QPI_ID')#QPI_ID
+            include _qp_form_seq.pug
+        +tab-item("Tests", { iconCls:"icon-config" })
+          include _qp_tests_inc.pug
+
+        +tab-item("Attachments",{iconCls:"icon-pclip"})
+          +filegrid#qtfiles(data-options="fit:true")

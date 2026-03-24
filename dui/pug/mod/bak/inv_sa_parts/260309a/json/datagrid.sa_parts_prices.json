@@ -1,0 +1,35 @@
+{
+  "id": "prices",
+  "asdpx": "e",
+  "singleSelect": true,
+  "filler": true,
+  "queryParams": { "_sqlid": "inv^part_price" },
+  "columns": [
+    [
+      { "field": "PART_ID", "hidden": true, "title": "" },
+      {
+        "field": "CURRENCY_ID",
+        "title": "Cur ID",
+        "width": 30,
+        "editor": { "type": "textbox", "options": { "readonly": true } }
+      },
+      {
+        "field": "DESCRIPTION",
+        "title": "Description",
+        "width": 150,
+        "editor": { "type": "textbox", "options": { "readonly": true } }
+      },
+      {
+        "field": "UNIT_PRICE",
+        "title": "Price",
+        "width": 30,
+        "align": "right",
+        "formatter": "$.dui.fmt.currency",
+        "editor": {
+          "type": "numberbox",
+          "options": { "precision": 2, "min": 0 }
+        }
+      }
+    ]
+  ]
+}

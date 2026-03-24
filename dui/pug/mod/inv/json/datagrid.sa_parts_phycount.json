@@ -1,0 +1,45 @@
+{
+  "id": "phycount",
+  "url": "/",
+  "type": null,
+  "queryParams": {
+    "_func": "get",
+    "_dgrid": true,
+    "_sqlid": "inv^physical_count_lines_by_part",
+    "PART_ID": null
+  },
+  "fit": true,
+  "striped": true,
+  "singleSelect": true,
+  "columns": [
+    [
+      {
+        "field": "PHYSICAL_COUNT_ID",
+        "title": "Physical Count ID",
+        "width": 150
+      },
+      {
+        "field": "STATUS",
+        "title": "Status",
+        "width": 120
+      },
+      {
+        "field": "START_DATE",
+        "title": "Start Date",
+        "formatter": "$.dui.fmt.date",
+        "width": 120
+      },
+      {
+        "field": "END_DATE",
+        "title": "End Date",
+        "formatter": "$.dui.fmt.date",
+        "width": 120
+      },
+      {
+        "field": "NOTES",
+        "title": "Notes",
+        "width": 120
+      }
+    ]
+  ]
+}

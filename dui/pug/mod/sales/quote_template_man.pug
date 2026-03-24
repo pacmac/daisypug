@@ -1,0 +1,26 @@
+extends ../content
+
+block script
+  +script('sales',['js/quote_template_man.js'])
+
+block content
+  +vsplit()
+    +panel('west', { style: "width:400px; background:#FAFAFA;", collapsible: "false" })
+      +form#qhead.multi.fit(_sqlid='sales^quote_template_head' asdpx='adx')
+        +fitem('Template ID',{id:'~', name:'QUOTE_ID', class:'qbe fkey fit navi', panelWidth:'230px', validType:['length[1,30]']})
+        +fitem('Quote Type',{name:'QUOTE_TYPE', id:'~', required:true,readonly:true, value:'T',class:'combobox','data-options':"editable:false,panelHeight:'auto'"})
+        +fitem('Currency',{name:'CURRENCY_ID', id:'~', class:'combobox' ,style:'width:130px;',required:true,'data-options':"editable:false,panelHeight:'auto'"})
+        +fitem('Payment Term',{name:'PAYMENT_TERM', id:'~',  class:'combobox',required:true})
+
+        +tabs(data-options="plain:true,justified:true")
+          +tab-item("Notes", {iconCls:"icon-notes"})
+            +fitem(style="margin-top:0")
+              label(style="margin-bottom:8px;left:-8px;") Order Notes
+              +input({eui:'textbox',name:'NOTES','data-options':"multiline:true", style:'height:150px;width:345px'})
+          +tab-item('User Fields' ,{_iconCls="icon-udf"}) 
+            fieldset(style="margin-top:12px;")
+              +fitem('UDF Layout',{id:'UDF_LAYOUT_ID',class:'combobox ronly-on',readonly:true,})
+            fieldset#udf
+              +udf                     
+
+      +datagrid#qlines

@@ -1,0 +1,52 @@
+extends ../../content 
+block style 
+  style.
+    #tbar {
+      height:30px;
+      line-height:10px;  
+    } #tbar label {
+      margin-left:16px;
+      margin-right:4px;  
+    }
+block script 
+  //-+script("admin",["js/xevents.js"])
+  script.
+    $.dui.page.gl = {
+      //$('#xevts').datagrid({
+        editor: 'form',	
+        striped: true,
+        rownumbers: true,
+
+          singleSelect:true,
+
+          url: '/?_func=get&_sqlid=vwltsa^gl_interfaces',
+          columns:[[
+            {field:"ACCT_TYPE", title:"Account Type", width:200,editor:{type:'textbox',options:{required:true,readonly:true}}},
+            {field:"ACCT_ID", title:"Account ID", width:200,editor:{type:'textbox',options:{readonly:false}}},
+            //-{field:"ACCT_ID", title:"Account ID", width:200,editor:{type:'textbox',options:{readonly:false,multiline:true,height:200}}},
+          ]],
+            onEndEdit: function(idx,row,chg){        
+              var url = "/?_sqlid=vwltsa^gl_interfaces";
+              var data = clone(row);
+              ajaxget(url,data,function(data){})       
+      }
+
+    //	});
+    }
+    $(document).ready(function(){
+       setTimeout(function(){
+        var tbar = $('#gl').datagrid('options').tbar;
+        tbar.dgre_add.hide();
+        tbar.dgre_del.hide();
+        //tbar.dgre_edit.hide();
+        tbar.dgre_ok.hide();
+      });
+      var dg = $('#gl'); 
+      dg.datagrid('rowEditor',$.dui.page.gl);   
+      $('#gl').datagrid('reload');
+
+
+    })
+block content
+  #gl(title='GL Interface')
+    table#gl(fit="true")

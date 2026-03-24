@@ -1,0 +1,25 @@
+{
+  "id": "svclist",
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "oss^linkticks",
+    "_func": "get",
+    "_dgrid": "y"
+  },
+  "fit": true,
+  "rownumbers": true,
+  "singleSelect": true,
+  "striped": true,
+  "columns": [
+    [
+      { "field": "TX_ID", "title": "ID", "width": 40, "fixed": true },
+      { "field": "SERVICE_TYPE", "title": "Type", "width": 100, "fixed": true },
+      { "field": "SERVICE_CLASS", "title": "Class", "width": 100, "fixed": true },
+      { "field": "TX_QTY", "title": "TX Qty", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.integer" },
+      { "field": "HOURS_WORKED", "title": "Work Hours", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.number" },
+      { "field": "HOURS_CHARGE", "title": "Charge Hrs", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.number" },
+      { "field": "MISC_CHARGE", "title": "$Misc", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.currency" },
+      { "field": "TOTAL_CHARGE", "title": "$Total", "width": 80, "fixed": true, "align": "right", "formatter": "$.dui.fmt.currency" }
+    ]
+  ]
+}

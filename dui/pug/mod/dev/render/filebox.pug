@@ -1,0 +1,204 @@
+extends ../../../layout/layout
+
+block content
+  +content("Filebox API Test", "Tests jQuery plugin API methods with DIRECT initialization (NO parser)")
+    +section("Test Inputs", "Target elements for testing API methods")
+      +form({cols: 2})
+        +fitem("Single File:")
+          +filebox({id: 'target', class: 'file-input-bordered w-full'})
+        +fitem("Multiple Files:")
+          +filebox({id: 'target2', class: 'file-input-bordered w-full', multiple: true})
+        +fitem("Images Only:")
+          +filebox({id: 'target3', class: 'file-input-bordered w-full', accept: 'image/*'})
+
+    +section("API Methods", "Click buttons to test each method")
+      .grid.grid-cols-1.gap-4.mb-4(class="sm:grid-cols-2 lg:grid-cols-4")
+        div
+          h3.font-medium.mb-2 File Methods
+          .space-y-2
+            button.btn.btn-sm.btn-primary.w-full#test-files files()
+            button.btn.btn-sm.btn-primary.w-full#test-getValue getValue()
+            button.btn.btn-sm.btn-primary.w-full#test-clear clear()
+            button.btn.btn-sm.btn-primary.w-full#test-reset reset()
+
+        div
+          h3.font-medium.mb-2 Value Methods
+          .space-y-2
+            button.btn.btn-sm.btn-secondary.w-full#test-setValue setValue('test.txt')
+            button.btn.btn-sm.btn-secondary.w-full#test-setValues setValues(['a.txt', 'b.txt'])
+
+        div
+          h3.font-medium.mb-2 State Methods
+          .space-y-2
+            button.btn.btn-sm.btn-accent.w-full#test-disable disable()
+            button.btn.btn-sm.btn-accent.w-full#test-enable enable()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly readonly()
+            button.btn.btn-sm.btn-accent.w-full#test-readonly-false readonly(false)
+            button.btn.btn-sm.btn-accent.w-full#test-options options()
+
+        div
+          h3.font-medium.mb-2 Inherited Methods
+          .space-y-2
+            button.btn.btn-sm.btn-info.w-full#test-textbox textbox()
+            button.btn.btn-sm.btn-info.w-full#test-isValid isValid()
+            button.btn.btn-sm.btn-info.w-full#test-resize resize(400)
+
+    +section("Test Output", "Results from API method calls")
+      +testOutput("output")
+        | Click buttons above to test API methods.
+        | Results will appear here...
+
+    +section("Event Log", "Events (onChange) logged here")
+      +testOutput("eventLog")
+
+  //- Load dependencies in correct order
+  script(src="/assets/js/textbox-helper.js")
+  script(src="/assets/js/filebox-helper.js")
+
+  //- Test script
+  script.
+    $(function() {
+      var $output = $('#output');
+      var $eventLog = $('#eventLog');
+
+      // Helper to log output with visual separation
+      function log(msg) {
+        $output.append(msg + '\n\n');
+        console.log(msg);
+      }
+
+      // Helper to log events
+      function logEvent(msg) {
+        var timestamp = new Date().toLocaleTimeString();
+        $eventLog.append('[' + timestamp + '] ' + msg + '\n');
+        console.log('[EVENT]', msg);
+      }
+
+      // Clear output on initialization
+      $output.text('');
+      $eventLog.text('');
+
+      // Initialize filebox with options and event callbacks
+      log('Initializing filebox with callbacks...');
+      $('#target').filebox({
+        onChange: function(newVal, oldVal) {
+          logEvent('onChange: file changed to "' + newVal + '"');
+        }
+      });
+
+      // Initialize second filebox (multiple)
+      $('#target2').filebox({
+        onChange: function() {
+          var files = $('#target2').filebox('files');
+          logEvent('onChange: ' + files.length + ' files selected');
+        }
+      });
+
+      // Initialize third filebox (images)
+      $('#target3').filebox({
+        onChange: function(newVal) {
+          logEvent('onChange: image selected "' + newVal + '"');
+        }
+      });
+
+      log('Filebox initialized. Click buttons to test API methods.');
+      log('─────────────────────────────────────────────────────────────────');
+
+      //- ====================================================================
+      //- File Methods Tests
+      //- ====================================================================
+      $('#test-files').click(function() {
+        var fileList = $('#target').filebox('files');
+        if (fileList && fileList.length > 0) {
+          log('► files() returned FileList with ' + fileList.length + ' files:');
+          for (var i = 0; i < fileList.length; i++) {
+            var file = fileList[i];
+            log('  [' + i + '] ' + file.name + ' (' + file.size + ' bytes, ' + file.type + ')');
+          }
+        } else {
+          log('► files() returned empty FileList (no files selected)');
+        }
+      });
+
+      $('#test-getValue').click(function() {
+        var val = $('#target').filebox('getValue');
+        log('► getValue() = "' + val + '"');
+      });
+
+      $('#test-clear').click(function() {
+        $('#target').filebox('clear');
+        log('► clear() - files cleared');
+      });
+
+      $('#test-reset').click(function() {
+        $('#target').filebox('reset');
+        log('► reset() - reset to initial state (empty)');
+      });
+
+      //- ====================================================================
+      //- Value Methods Tests
+      //- ====================================================================
+      $('#test-setValue').click(function() {
+        $('#target').filebox('setValue', 'test.txt');
+        log('► setValue("test.txt") - Note: Files cannot be programmatically set (security)');
+      });
+
+      $('#test-setValues').click(function() {
+        $('#target2').filebox('setValues', ['a.txt', 'b.txt']);
+        log('► setValues(["a.txt", "b.txt"]) - Note: Files cannot be programmatically set (security)');
+      });
+
+      //- ====================================================================
+      //- State Methods Tests
+      //- ====================================================================
+      $('#test-disable').click(function() {
+        $('#target').filebox('disable');
+        log('► disable() - input disabled');
+      });
+
+      $('#test-enable').click(function() {
+        $('#target').filebox('enable');
+        log('► enable() - input enabled');
+      });
+
+      $('#test-readonly').click(function() {
+        $('#target').filebox('readonly');
+        log('► readonly() - Note: File inputs have limited readonly support');
+      });
+
+      $('#test-readonly-false').click(function() {
+        $('#target').filebox('readonly', false);
+        log('► readonly(false) - readonly removed');
+      });
+
+      $('#test-options').click(function() {
+        var opts = $('#target').filebox('options');
+        log('► options() = ' + JSON.stringify(opts, null, 2));
+      });
+
+      //- ====================================================================
+      //- Inherited Methods Tests
+      //- ====================================================================
+      $('#test-textbox').click(function() {
+        var $elem = $('#target').filebox('textbox');
+        log('► textbox() returned element: ' + $elem[0].tagName + ' with id=' + $elem.attr('id') + ', type=' + $elem.attr('type'));
+      });
+
+      $('#test-isValid').click(function() {
+        var valid = $('#target').filebox('isValid');
+        log('► isValid() = ' + valid);
+      });
+
+      $('#test-resize').click(function() {
+        $('#target').filebox('resize', 400);
+        log('► resize(400) - width set to 400px');
+      });
+
+      //- ====================================================================
+      //- Initial status
+      //- ====================================================================
+      log('✅ All event handlers attached.');
+      log('✅ Select files to see onChange events.');
+      log('✅ Test files() to inspect FileList object.');
+      log('✅ Note: setValue/setValues are no-ops (browser security).');
+    });

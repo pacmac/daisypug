@@ -1,0 +1,14 @@
+extends ../content
+block script
+  script: include js/svc_pricing.js
+block content
+  +vsplit('400px')
+    +panel('west')
+      form.multi#main(asdpx='x' _sqlid='oss^price')
+        +input({type:'hidden', name:'_stamp', value:'y'})
+        +fitem('OSS Customer ID',{name:'CUSTOMER_ID', id:'~', _sqlid:'oss^price_ids', class:'combobox fkey fit',required:true})
+        .info
+          +fitem('Customer Name',{name:'CUSTOMER_NAME', class:'textbox sub-off', readonly:true})
+          +fitem('Currency ID',{name:'CURRENCY_ID', class:'textbox sub-off', readonly:true})
+    +panel('center')
+      +datagrid#dgitems

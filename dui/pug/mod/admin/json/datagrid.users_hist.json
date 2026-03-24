@@ -1,0 +1,91 @@
+{
+  "id": "hist",
+  "editor": "form",
+  "asdpx": "aedx",
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "admin^user_leaveHistory",
+    "_dgrid": "y",
+    "UID": ""
+  },
+  "fit": true,
+  "striped": true,
+  "rownumbers": true,
+  "singleSelect": true,
+  "columns": [
+    [
+      {
+        "field": "UID",
+        "hidden": true
+      },
+      {
+        "field": "TRANSACTION_ID",
+        "title": "Tx ID",
+        "width": 150
+      },
+      {
+        "field": "YEAR_NO",
+        "title": "Year No",
+        "width": 60
+      },
+      {
+        "field": "START_DATE",
+        "title": "Start Date",
+        "width": 80,
+        "formatter": "tz2date"
+      },
+      {
+        "field": "START_PERIOD",
+        "title": "AM/PM",
+        "width": 50
+      },
+      {
+        "field": "END_DATE",
+        "title": "End Date",
+        "width": 80,
+        "formatter": "tz2date"
+      },
+      {
+        "field": "END_PERIOD",
+        "title": "AM/PM",
+        "width": 50
+      },
+      {
+        "field": "DAYS",
+        "title": "# Days",
+        "width": 50
+      },
+      {
+        "field": "STATUS",
+        "title": "Status",
+        "width": 70,
+        "formatter": "$.page.fn.leaveStatus",
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "editable": false,
+            "data": [
+              { "value": "A", "text": "Approve", "selected": true },
+              { "value": "R", "text": "Reject" },
+              { "value": "P", "text": "Pending" },
+              { "value": "X", "text": "Cancel" }
+            ]
+          }
+        }
+      },
+      {
+        "field": "STATUS_DATE",
+        "title": "Approved Date",
+        "width": 160,
+        "formatter": "$.page.fn.leaveTimestamp"
+      },
+      {
+        "field": "CREATE_DATE",
+        "title": "Apply Date",
+        "width": 160,
+        "formatter": "$.page.fn.leaveTimestamp"
+      }
+    ]
+  ]
+}

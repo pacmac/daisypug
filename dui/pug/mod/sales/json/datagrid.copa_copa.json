@@ -1,0 +1,45 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "sales^CostOfProfitAnalysis",
+    "_dgrid": "y"
+  },
+  "singleSelect": true,
+  "striped": true,
+  "rownumbers": true,
+  "fitColumns": true,
+  "nowrap": true,
+  "fit": true,
+  "toolbar": [
+    { "id": "gofilt", "text": "Go", "icon": "play" },
+    { "id": "dg2excel", "text": "Excel", "icon": "sheet" },
+    { "id": "setwidth", "text": "Auto-Width", "icon": "panel-right-close" }
+  ],
+  "columns": [
+    [
+      { "field": "WOREF", "title": "Job Ref", "align": "left", "width": 100, "fixed": false },
+      { "field": "WO_CLASS", "title": "Job Class", "align": "left", "width": 80, "fixed": false },
+      { "field": "WO_TYPE", "title": "Job Type", "align": "left", "width": 80, "fixed": false },
+      { "field": "PART_ID", "title": "Part ID", "align": "left", "width": 100, "fixed": false },
+      { "field": "JOB_STATUS", "title": "Job Status", "align": "left", "width": 65, "fixed": false },
+      { "field": "CUSTOMER_ID", "title": "Cust ID", "align": "left", "width": 85, "fixed": false },
+      { "field": "CUST_NAME", "title": "Cust Name", "align": "left", "width": 100, "fixed": false },
+      { "field": "SALES_ORDER_ID", "title": "SO ID", "align": "left", "width": 150, "fixed": false },
+      { "field": "SALES_ORDER_LINE_NO", "title": "SO Line#", "align": "left", "width": 50, "fixed": false },
+      { "field": "SO_REVENUE", "title": "SO Revenue", "align": "left", "width": 75, "fixed": false },
+      { "field": "COST_MATL", "title": "Cost Item-Fix/Tool", "align": "left", "width": 75, "fixed": false },
+      { "field": "COST_SUBCON", "title": "Cost Item-SubCon", "align": "left", "width": 75, "fixed": false },
+      { "field": "COST_TOOLING", "title": "Cost Item-Tooling", "align": "left", "width": 75, "fixed": false },
+      { "field": "COST_OTHERS", "title": "Cost Item-Others", "align": "left", "width": 75, "fixed": false },
+      { "field": "ACT_MATERIAL_COST", "title": "Actual Cost-Matl", "align": "left", "width": 75, "fixed": false },
+      { "field": "ACT_LABOR_COST", "title": "Actual Cost-Labor", "align": "left", "width": 75, "fixed": false },
+      { "field": "ACT_BURDEN_COST", "title": "Actual Cost-Overhead", "align": "left", "width": 75, "fixed": false },
+      { "field": "ACT_SUBCON_COST", "title": "Actual Cost-Subcon", "align": "left", "width": 75, "fixed": false },
+      { "field": "ACT_RENTAL_COST", "title": "Actual Cost-Gage", "align": "left", "width": 75, "fixed": false },
+      { "field": "GRAND_TOTAL_COST", "title": "Total Cost", "align": "left", "width": 75, "fixed": false },
+      { "field": "GROSS_PROFIT", "title": "Gross Profit", "align": "left", "width": 75, "fixed": false },
+      { "field": "_dummy", "title": "", "width": 20, "fixed": false }
+    ]
+  ]
+}

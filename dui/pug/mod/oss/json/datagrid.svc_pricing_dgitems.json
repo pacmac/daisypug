@@ -1,0 +1,20 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_func": "get",
+    "_sqlid": "oss^svc_price_ln",
+    "_dgrid": "y",
+    "CUSTOMER_ID": ""
+  },
+  "rownumbers": true,
+  "striped": true,
+  "fitColumns": true,
+  "columns": [
+    { "field": "_stamp", "hidden": true },
+    { "field": "CUSTOMER_ID", "hidden": true },
+    { "field": "SERVICE_TYPE", "title": "Service Type", "width": 100, "fixed": true },
+    { "field": "SERVICE_CLASS", "title": "Service Class", "width": 100, "fixed": true },
+    { "field": "RATE_PIECE", "title": "Rate $Piece", "width": 80, "fixed": true, "align": "right", "formatter": "eui.currency" },
+    { "field": "RATE_HOUR", "title": "Rate $Hour", "width": 80, "fixed": true, "align": "right", "formatter": "eui.currency" }
+  ]
+}

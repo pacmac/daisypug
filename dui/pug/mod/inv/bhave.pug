@@ -1,0 +1,82 @@
+extends ../content
+
+block script
+  //-+script("inv",['js/bhave.js'])
+  script: include js/bhave.js
+block content
+  +tabs#bhtabs(style='min-width:800px;', fit="true", tabPosition="left")
+  
+    +tab-item('Service Items', {iconCls:"icon-repair"})
+      +form#cprop(class='single load', _sqlid='admin^bhave', asdpx='s')
+        input(type="hidden" name="appid" value="inv^cp_man")
+        +fitem('Menu Name',{name:'menu_inv^cp_man', class:'textbox'})
+        +fitem('Dispositions',{name:'ACTION', class:'edit',id:'~'}) 
+        //-+fitem('UDF Layout',{'data-options':"data:dwap.pdata.udfid", id:'UDF_LAYOUT_ID',class:'combobox',name:'UDF_LAYOUT_ID'})
+        //-+fitem('UDF Layout',{'data-options':"url:'/',queryParams:{_sqlid:'vwltsa^udf_layout',_func:'get'}", id:'UDF_LAYOUT_ID',class:'combobox',name:'UDF_LAYOUT_ID'})
+        +fitem('UDF Layout',{'_sqlid':"vwltsa^udfid", id:'UDF_LAYOUT_ID',class:'combobox',name:'UDF_LAYOUT_ID'})
+    
+    +tab-item('Parts', {iconCls:"icon-part"})
+      +form(class='single load', _sqlid='admin^bhave', asdpx='s')
+        .two
+          div(style="width:420px;")
+            +input({name:'appid', type:'hidden',value:'inv^sa_parts'})
+            br
+            +fieldset('Mandatory Fields')
+              +fitem('Revision',{name:'MANDATORY_REVISION', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+            +fieldset('Non-Traceable')
+              +fitem('Mandatory - Unit Cost ',{name:'MANDATORY_UNITCOST', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+              
+            +fieldset('User Entered')
+              +fitem('Traceable',{name:'partTraceManual', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+
+            +fieldset('Balances')
+              +fitem('Sort By',{name:'sortBy', class:'combobox','data-options':"data:[{text:'Trace ID',value:'trace'},{text:'Trans Date',value:'trans',selected:true}]" })            
+            if($.license.moden('inv^pn_config'))
+              //-+fieldset('Features')
+                +fitem('Enable Generator',{name:'partgen', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+        
+              +fieldset('Generator ID')
+                +fitem('Null ID',{name:'idnull', class:'textbox'})
+                        
+              +fieldset('Generator Description')
+                +fitem('Null ID',{name:'descnull', class:'textbox'})
+                +fitem('Prefix-Suffix',{name:'prefixSuffix', class:'textbox'})
+                +fitem('Suffix-Prefix',{name:'suffixPrefix', class:'textbox'})
+                +fitem('Separator Padding',{name:'padsep', class:'combobox','data-options':"data:[{text:'NONE',value:'n',selected:true},{text:'LEFT',value:'l'},{text:'RIGHT',value:'r'},{text:'BOTH',value:'b'}]" })
+              
+          div(style="width:420px;")
+            br
+            +fieldset('BOM Import Columns')
+              +fitem('NO Column',{name:'IMPORT_COL_NO', class:'textbox upper',value:'E'})
+              +fitem('ID Column',{name:'IMPORT_COL_ID', class:'textbox upper',value:'G'})
+              +fitem('Revision Column',{name:'IMPORT_COL_REV', class:'textbox upper',value:'M'})
+              +fitem('Description Column',{name:'IMPORT_COL_DESC', class:'textbox upper',value:'N'})
+              +fitem('QTY Column',{name:'IMPORT_COL_QTY', class:'textbox upper',value:'AD'})
+              +fitem('UOM Column',{name:'IMPORT_COL_UOM', class:'textbox upper',value:'AE'})
+
+            +fieldset('BOM Import Cells')
+              +fitem('ID Cell',{name:'IMPORT_CELL_ID', class:'textbox upper',value:'M3'})
+              +fitem('Revision Cell',{name:'IMPORT_CELL_REV', class:'textbox upper',value:'X3'})
+              +fitem('Revision Date Cell',{name:'IMPORT_CELL_REV_DATE', class:'textbox upper',value:'AC3'})
+              +fitem('Description Cell',{name:'IMPORT_CELL_DESCRIPTION', class:'textbox upper',value:'A9'})
+      
+    +tab-item('Part Trans', {iconCls:"icon-inout"})
+      +form#parttrans(class='single load', _sqlid='admin^bhave', asdpx='s')
+        input(type="hidden" name="appid" value="inv^part_trans")
+        +fitem('FG Max Receipt',{name:'FG_MAXRECV', class:'numberspinner' ,value:100, min:100, precision:0, suffix:'%'})
+        +fitem('Allowed Misc Tx',{name:'ALLOWED_MISC_TX', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+        +fitem('Allowed Edit Date',{name:'ALLOWED_EDIT_TXDATE', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+        br
+        +fieldset('FG Receipt') 
+          +fitem('Use Job as Trace ID',{name:'FG_IN_DEF_JOB_AS_TRACE', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+          +fitem('Unit Trace Cost',{name:'FG_IN_UNIT_TRACE_COST', class:'combobox','data-options':"data:[{text:'Part Master',value:'P'},{text:'Job',value:'J',selected:true}]" })
+          +fitem('Trace Cost Overwrite',{name:'FG_IN_TRACE_COST_OVERWRITE', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+          +fitem('Job Type',{name:'FG_JOB_TYPE',class:'multibox','data-options':"data:[{text:'Make To Stock',value:'FG'},{text:'Make To Order - Staged',value:'MAKE_STAGED'},{text:'Make To Order - Un-Staged',value:'MAKE_NOSTAGE'}]"})
+        +fieldset('Expired Materials')
+          +fitem('Allow Job Issue',{name:'EXPIRED_ALLOW_JOB_OUT', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+        +fieldset('WIP Count')
+          +fitem('Allow Job Issue',{name:'WIP_COUNT_ALLOW_JOB_OUT', class:'combobox','data-options':"data:[{text:'YES',value:'y'},{text:'NO',value:'n',selected:true}]" })
+    +tab-item('Tool Request', {iconCls:"icon-repair"})
+      +form#tool_request(class='single load', _sqlid='admin^bhave', asdpx='s')
+        input(type="hidden" name="appid" value="inv^tool_room^tool_request")
+        +fitem('Part Filter',{name:'part_filter', class:'textbox'})

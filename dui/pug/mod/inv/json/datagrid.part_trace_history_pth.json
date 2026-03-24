@@ -1,0 +1,102 @@
+{
+  "id": "pth",
+  "toolbar": "#tbar",
+  "fit": true,
+  "fitColumns": true,
+  "queryParams": null,
+  "url": "/?_sqlid=inv^part_trace_history&_func=get",
+  "checkOnSelect": false,
+  "singleSelect": true,
+  "columns": [
+    [
+      {
+        "field": "PART_ID_IN",
+        "title": "In Part ID",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "TRANSACTION_ID_IN",
+        "title": "In Tx ",
+        "width": 50,
+        "fixed": true
+      },
+      {
+        "field": "TRANS_TYPE_IN",
+        "title": "In Tx Type",
+        "width": 50,
+        "fixed": true
+      },
+      {
+        "field": "TRACE_ID_IN",
+        "title": "In Trace ID",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "QTY_IN",
+        "title": "In Qty",
+        "width": 30,
+        "fixed": true
+      },
+      {
+        "field": "TRANSACTION_DATE_IN",
+        "title": "In Tx Date",
+        "formatter": "$.dui.fmt.date",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "WOREF_IN",
+        "title": "In WOREF",
+        "width": 120,
+        "fixed": true,
+        "formatter": "$.page.fn.docref"
+      },
+      {
+        "field": "PART_ID_OUT",
+        "title": "Out Part ID",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "TRANSACTION_ID_OUT",
+        "title": "Out Tx ",
+        "width": 50,
+        "fixed": true
+      },
+      {
+        "field": "TRANS_TYPE_OUT",
+        "title": "Out Tx Type",
+        "width": 50,
+        "fixed": true
+      },
+      {
+        "field": "TRACE_ID_OUT",
+        "title": "Out Trace ID",
+        "width": 100,
+        "fixed": true
+      },
+      {
+        "field": "QTY_OUT",
+        "title": "Out Qty",
+        "width": 30,
+        "fixed": true
+      },
+      {
+        "field": "TRANSACTION_DATE_OUT",
+        "title": "Out Tx Date",
+        "formatter": "$.dui.fmt.date",
+        "width": 80,
+        "fixed": true
+      },
+      {
+        "field": "WOREF_OUT",
+        "title": "Out WOREF",
+        "width": 120,
+        "fixed": true,
+        "formatter": "$.page.fn.docref"
+      }
+    ]
+  ]
+}

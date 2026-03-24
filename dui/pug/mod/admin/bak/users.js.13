@@ -1,0 +1,734 @@
+
+$.page.ready(function () {
+/*
+// the qroups sqlid is wrong in config.js
+dwap.page.udata = function(rec,cb){
+  ajaxget('/',{
+    _func: 'get',
+    _sqlid: 'admin^userdata',
+    userid: rec.value  
+  },function(data) {
+    //{user, auth:usersevents, usersgroup}  
+    cl(data); 
+  })
+}
+*/
+$.page.fn.user_auth=function(rec){
+  var endis='enable';
+  if (rec.user_auth>9) endis='disable';
+  $('#user_auth').combobox(endis);
+}
+
+
+// Called by Authority - report checkapps.
+$.page.fn.appreps = function(node,chk){
+  var tr = $("#reports");
+  var opt = tr.tree('options');
+  opt.checkLock = true;
+  var reps = tr.tree('getChildren'); 
+  var ids=[]; reps.map(function(e,i){if(e.app == node.id) ids.push(e)})
+  ids.map(function(e,i){   
+    if(i==ids.length-1) opt.checkLock = false;
+    if(chk) tr.tree('check',e.target);
+    else tr.tree('uncheck',e.target);
+  })
+}
+
+// Reset all User Reports.
+$.page.fn.represet = function(){
+  var tr = $("#reports");
+  var opt = tr.tree('options');
+  var ua = $('ul#adm_auth_t');
+  var apps = ua.tree('getChildren');
+  var reps = tr.tree('getChildren'); 
+  var ids=[]; 
+  
+  apps.map(function(app,i){
+    reps.map(function(e,i){
+      if(e.app == app.id) {
+        e.checked = app.checked;
+        ids.push(e);
+      }
+    })    
+  })
+
+  opt.checkLock = true;
+  ids.map(function(e,i){   
+    if(i==ids.length-1) opt.checkLock = false;
+    if(e.checked) tr.tree('check',e.target);
+    else tr.tree('uncheck',e.target);
+  })
+}
+
+// set REPORTS Tree.
+$.page.fn.rp = function(rec,data){
+  //dwap.page.udata(rec);
+  var ug = $("#reports");
+  ug.data('lock',true).css('opacity',1);
+  var roots = ug.tree('getChecked');
+  for(var i in roots){ug.tree('uncheck',roots[i].target);};  
+  
+  ajaxget('/',{
+    _func: 'get',
+    _sqlid: 'admin^usersreports',
+    userid: rec.value  
+  },function(data) {
+    if(!Array.isArray(data)) data=[data];
+    data.map(function(e){
+      var grp = ug.tree('find',e);
+      if(grp) ug.tree('check',grp.target);      
+    })
+    
+    ug.data('lock',false);
+  })
+}
+
+// set Events Tree
+// PAC >> this is almost a duplicate of dwap.page.ug and I should probably combine them into one function.
+// or creat subfunctions for common code.
+$.page.fn.ev = function(rec,data){
+  //dwap.page.udata(rec);
+  var ug = $("#events");
+  ug.data('lock',true).css('opacity',1);
+  var roots = ug.tree('getChecked');
+  for(var i in roots){ug.tree('uncheck',roots[i].target);};  
+  
+  ajaxget('/',{
+    _func: 'get',
+    _sqlid: 'admin^usersevents',
+    userid: rec.value  
+  },function(data) {
+    if(!Array.isArray(data)) data=[data];
+    for(var grps in data){
+      var gid = data[grps]['id'];
+      var grp = ug.tree('find',gid);
+      if(grp) ug.tree('check',grp.target);
+    }
+    ug.data('lock',false);
+  })
+}
+
+// set User Groups Tree
+$.page.fn.ug = function(rec,data){
+  var ug = $("#ugroups");
+  ug.data('lock',true).css('opacity',1);
+  //var url = gurl('/?_func=get&_sqlid=usersgroup&userid='+rec.value);
+  var roots = ug.tree('getChecked');
+  for(var i in roots){ug.tree('uncheck',roots[i].target);};  
+
+  ajaxget('/',{
+    _func: 'get',
+    _sqlid: 'admin^usersgroup',
+    userid: rec.value  
+  },function(data) {
+    if(!Array.isArray(data)) rows=[data];
+    for(var grps in data){
+      var gid = data[grps]['value'];
+      var grp = ug.tree('find',gid);
+      if(grp) ug.tree('check',grp.target);
+    }
+    ug.data('lock',false);
+  })
+}
+
+// set User Groups Tree
+$.page.fn.uaXX = function(rec,data){
+
+	  function iter(mod,umens){
+    for(var i in mod){
+      if(mod[i].children) iter(mod[i].children,umens);
+      else {
+        $(mod[i].target).removeClass('ronly');
+        if(umens.indexOf(mod[i].id+'.ro') !== -1){
+          os.tr.tree('check',mod[i].target);
+          $(mod[i].target).addClass('ronly');
+          os.tr.tree('update',{'target':mod[i].target,'ronly':true});
+        } 
+        else if(umens.indexOf(mod[i].id) !== -1) os.tr.tree('check',mod[i].target);
+      }
+    }        
+  }
+
+
+  var ug = $("#adm_auth_t");
+  ug.data('lock',true).css('opacity',1);
+  //var url = gurl('/?_func=get&_sqlid=usersgroup&userid='+rec.value);
+  var roots = ug.tree('getChecked');
+  for(var i in roots){ug.tree('uncheck',roots[i].target);};  
+
+  ajaxget('/',{
+    _func: 'get',
+    _sqlid: 'admin^auth',
+    userid: rec.value  
+  },function(data) {
+    if(!Array.isArray(data)) rows=[data];
+    for(var grps in data){
+      var gid = data[grps]['value'];
+      var grp = ug.tree('find',gid);
+      if(grp) ug.tree('check',grp.target);
+    }
+    ug.data('lock',false);
+  })
+}
+
+// set user authority tree
+$.page.fn.ua = function(rec){
+  
+  function iter(mod,umens){
+    for(var i in mod){
+      if(mod[i].children) iter(mod[i].children,umens);
+      else {
+        $(mod[i].target).removeClass('ronly');
+        if(umens.indexOf(mod[i].id+'.ro') !== -1){
+          os.tr.tree('check',mod[i].target);
+          $(mod[i].target).addClass('ronly');
+          os.tr.tree('update',{'target':mod[i].target,'ronly':true});
+        } 
+        else if(umens.indexOf(mod[i].id) !== -1) os.tr.tree('check',mod[i].target);
+      }
+    }        
+  }
+  
+  var os = {tr:$("#adm_auth_t")};
+  os.tr.data('lock',true).css('opacity',1);
+  os.tr.tree('getRoots').map(function(e){os.tr.tree('uncheck',e.target)})
+  os.tr.tree('getLeafs').map(function(e){
+    os.tr.tree('uncheck',e.target);
+    $(e.target).removeClass('ronly');
+    os.tr.tree('update',{'target':e.target,'ronly':false});
+  }) 
+  
+  os.url = gurl('/?_func=get&_sqlid=admin^auth&userid='+rec.value);
+  ajaxget(os.url,{},function(data) {
+    os.umens  = JSON.parse(data.menus);
+    for(var mod in os.umens){
+      os.mod = os.tr.tree('find',mod);
+      if(os.mod) iter(os.mod.children,os.umens[mod]);
+    }
+    os.tr.data('lock',false);
+  })
+}
+
+// readonly append .ro
+$.page.fn.ronly = function(men){
+  var tr = $('ul#adm_auth_t'); 
+  var sel = tr.tree('getSelected');
+  var tgt = $(sel.target);
+  if(!sel.checked && !tgt.hasClass('ronly')) return;
+  tgt.toggleClass('ronly');
+  var dat = {'target':sel.target,'ronly':true}
+  if(!tgt.hasClass('ronly')) dat.ronly = false;
+  tr.tree('update',dat);
+  $.page.fn.uastat();
+}
+
+$.page.fn.uastat = function(dbug){
+  var oc = {sel:$('ul#adm_auth_t').tree('getChecked',['checked','indeterminate']),list:[],umen:{}};
+  oc.userid = $('input[name="userid"]').val();
+  
+  oc.sel.map(function(e,i){
+    var mod = e.id.split('^')[0];
+    if(!oc.umen[mod]) oc.umen[mod] = [];
+    var id = e.id; if(e.ronly) var id = e.id+'.ro';
+    oc.umen[mod].push(id);
+  })
+
+  ajaxget('/',{
+    _func:'upd',
+    _sqlid:'admin^umenus',
+    menus: JSON.stringify(oc.umen),
+    userid: oc.userid
+  });
+}
+
+$.page.fn.user = function(){return $('#UID').combobox('getValue')}
+
+$.page.fn.icons = function(me,node,chk){if(!node.children) me.tree('update', {target: node.target,iconCls:{true:'icon-tick',false:'icon-cross'}[chk]});}
+
+$.page.fn.apps = function(tree){
+  if(!tree) return;
+  var apps=[],idx={};
+  //console.log(dwap.page.menus);
+  //$('#westMenu').tree('getRoots')
+  $.page.fn.menus.map(function(me,i){
+   // console.log(me);
+    apps.push({id: me.id,text: me.text,iconCls: me.iconCls,children:[]}); idx[me.id]=i;     
+
+  })
+
+  tree.map(function(e){
+
+        e.iconCls = 'icon-cross';
+        var id = e.appid || e.id.split('^')[0];
+        //console.log('idx[id]:',idx[id]);
+       // console.log('e:',e)
+        //if (idx[id]) apps[idx[id]].children.push(e); //2021-7-16 12:01PM, CLS orig code, missing admin details 
+       /* if (!idx[id] ){}
+        else {
+          //if (idx[id]!=0)
+          if(apps[idx[id]].children) apps[idx[id]].children.push(e);
+        }
+        */
+       if (idx[id]==undefined){}
+       else if(apps[idx[id]].children) apps[idx[id]].children.push(e);
+        
+   // }
+  })
+  return apps;
+}
+
+//CLS,181204, Leave Manager
+
+$.page.fn.leave = {
+
+  editor: 'form',	
+  striped: true,
+  rownumbers: true,
+  addData:{
+        UID: '#UID'
+    },
+    singleSelect:true,
+
+    url: '/',
+    queryParams:{
+      _func:'get',
+      _sqlid:'user_leaveEntitlement',
+      _dgrid:'y',
+      UID:''
+    },
+    columns:[[
+      {field:'UID',hidden:true},
+      {field:"YEAR_NO", title:"Year No", width:100,editor:{type:'combobox',options:{editable:false,"data":[
+        {"value":"2018","text":"2018","selected":true},{"value":"2019","text":"2019"},{"value":"2020","text":"2020"},
+        {"value":"2021","text":"2021"},{"value":"2022","text":"2022"},{"value":"2023","text":"2023"}]}}},
+      {field:"BALANCE" , title:"Balance", width:80,fixed:true,align:'right',editor:{type:'numberspinner',options:{
+        precision:2, min:0
+      }}},
+      {field:"BAL_BF", title:"Balance BF", width:80,fixed:true,align:'right',editor:{type:'numberspinner',options:{
+        precision:2,
+        min:0
+      }}},
+    ]],
+    onBeforeLoad: function(){
+      var fdat = $('form#users').form('getData');
+      
+            if(!fdat.userid) return false;  
+    },
+      onEndEdit: function(idx,row,chg){        
+        var url = "/?_sqlid=admin^user_leaveEntitlement";
+        var data = clone(row);
+        ajaxget(url,data,function(data){})       
+      }
+}
+
+$.page.fn.subttl = function(val,row){
+  if (row){
+    var thecolor='red';
+    if (row.START_DATE=='') {
+     
+      return '<span style="color:'+thecolor+'>'+val+'</span>';
+    } 
+    else {
+      
+      return '<span style="color:'+thecolor+'>'+val+'</span>';
+    }
+     ;
+
+  }
+  else return val;
+
+}
+
+$.page.fn.leaveHistory = {
+  editor: 'form',	
+  striped: true,
+  rownumbers: true,
+    url: '/',
+    queryParams:{
+      _func:'get',
+      _sqlid:'admin^user_leaveHistory',
+      _dgrid:'y',
+      UID:''
+    },
+    columns:[[
+      {field:'UID',hidden:true},
+      {field:'TRANSACTION_ID', title:"Tx ID", width:150},
+      {field:"YEAR_NO", title:"Year No", width:60},
+      {field:"START_DATE", title:"Start Date", width:80,formatter:function(val){ return val ? val.substring(0,10) : ''; }},
+      {field:"START_PERIOD", title:"AM/PM", width:50},
+      {field:"END_DATE", title:"End Date", width:80,formatter:function(val){ return val ? val.substring(0,10) : ''; }},
+      {field:"END_PERIOD", title:"AM/PM", width:50},
+      {field:"DAYS", title:"# Days", width:50},
+      {field:"STATUS", title:"Status", width:70,
+        formatter:function(val,row,idx){  
+          var status={"R":"Rejected","A":"Approved","P":"Pending","X":"Cancelled"}[val];
+          return status;
+        },
+        editor:{type:'combobox',options:{editable:false,"data":[{"value":"A","text":"Approve","selected":true},{"value":"R","text":"Reject"},{"value":"P","text":"Pending"},{"value":"X","text":"Cancel"}]}}},
+      {field:"STATUS_DATE", title:"Approved Date", width:160,
+        formatter:function(val,row,idx){  
+          if (val) return val.replace('T',' ').replace('.000Z','');   
+          else return '';
+      }},
+      {field:"CREATE_DATE", title:"Apply Date", width:160,formatter:function(val,row,idx){  
+        if (val)     return val.replace('T',' ').replace('.000Z','');   
+        else return '';
+      }},
+
+      
+    ]],
+    onBeforeLoad: function(){
+      var fdat = $('form#users').form('getData');
+
+      if(!fdat.userid) return false;  
+    },
+      onEndEdit: function(idx,row,chg){        
+        var url = "/?_sqlid=admin^user_leaveHistory";
+        var data = clone(row);
+        ajaxget(url,data,function(data){})       
+      },
+      onSelect:function(idx,row){
+        var dg=$('#hist');
+        if (row.STATUS=='') {
+          // [DUI] dg.datagrid('options').tbar.dgre_del.prop('disabled', true);
+          // [DUI] dg.datagrid('options').tbar.dgre_edit.prop('disabled', true);         
+        }
+       /* if (row.STATUS=='P') var en_dis='enable';
+        else var en_dis='disable';
+          dg.datagrid('options').tbar.dgre_del.linkbutton(en_dis);
+          dg.datagrid('options').tbar.dgre_edit.linkbutton(en_dis);
+          */
+        }
+    
+
+}
+
+$(document).ready(function(){
+
+//console.log(dwap);
+  ajaxget('/',{_sqlid:'admin^menus',_func:'get'},function(menus){
+    $.page.fn.menus = menus
+  })  
+  
+
+  // Toolbar buttons.
+  toolbut([
+    {
+      id:'pwdsub',
+      text:'Reset Password',
+      iconCls: 'icon-lock-go',
+      disabled: true,
+      noText: true,
+      onClick: function(){
+		    $(this).prop('disabled', true);
+        var vars = {_sqlid:'admin^user_pwd', _func:'upd', userid:$('input#UID').combobox('getValue')}
+        ajaxget('/',vars,function(res){
+          msgbox(res.msg);  
+		    });    
+		}
+
+    },
+    {
+      id:'rep_reset',
+      text:'Reset Reports',
+      iconCls: 'icon-report-user',
+      disabled: true,
+      noText: true,
+      onClick: function(){
+		    $(this).prop('disabled', true);
+        $.page.fn.represet();
+        msgbox('User reports have been reset.')
+		  }  
+		},{},
+  ])
+  
+  $('input.fkey').on('done',function(jq,rec){
+    //console.log(rec);
+
+    // PAC > Combine all 3 into one ajax call !
+    //dwap.page.udata(function(data){})
+    $.page.fn.ua(rec);
+    $.page.fn.ug(rec);
+    $.page.fn.ev(rec);
+    $.page.fn.rp(rec);
+    $.page.fn.user_auth(rec);
+
+    
+
+    
+    //$('#hist').datagrid('reload',{UID:$('input#UID').combobox('getValue'),'YEAR_NO':2018});
+
+    //$('a#user_reset').linkbutton('enable');
+    $('#pwdsub').prop('disabled', false);
+    $('#rep_reset').prop('disabled', false);
+
+    if(!$.page.fn.init) {
+      $('#usertabs').tabs('enableAll',0);
+      $.page.fn.init = true;
+    }    
+
+    // only show where users^leaveForm module is enabled
+    if($('#lvl').length > 0){
+      $('#lvl').datagrid('load',{ _dgrid:'y',_sqlid:'admin^user_leaveEntitlement', _func:'get',UID:$('input#UID').combobox('getValue')});
+      $('#hist').datagrid('load',{ _dgrid:'y',_sqlid:'admin^user_leaveHistory', _func:'get',UID:$('input#UID').combobox('getValue')});
+    }
+    
+
+  })     
+/*
+  $('form#users').on('success',function(jq,res){
+
+  }).on('loadDone',function(jq,data){
+    $('#lvl').datagrid('load',{
+      _func:'get',
+      _sqlid:'user_leaveEntitlement',
+      _dgrid:'y',
+      UID:$('input#UID').combobox('getValue')
+    });
+    $('#hist').datagrid('reload',{UID:$('input#UID').combobox('getValue')});
+  })
+  */
+
+  // Add New
+  $('#but_add').on('done',function(){
+    $('input#active').combobox('select','y');
+    $('input#theme').combobox('select','default');
+    
+    // Here's that but again where inputs are being disabled !
+    $('input.textbox-value').removeAttr('disabled');
+  })
+  
+  $('input#theme').combobox({
+	editable:false,
+    panelHeight:'auto',
+    required:true,
+    data:[
+      {value:'default',text:'Default Theme'},
+      {value:'bootstrap',text:'Bootstrap Theme'},
+      {value:'gray',text:'Grey'},
+      {value:'metro',text:'Metro Blue'}
+    ]
+  })
+  
+  $('input#active').combobox({
+	  editable:false,
+    required:true,
+    panelHeight:'auto',
+    data:[
+      {value:'y',text:'Yes',selected:true},
+      {value:'n',text:'No'}
+    ]
+  })
+  
+  $('#pwdsub').linkbutton({
+    onClick: function(){
+      $(this).prop('disabled', true);
+      var vars = {_sqlid:'admin^user_pwd', _func:'upd', userid:$('input#UID').combobox('getValue')}
+      ajaxget('/',vars,function(res){
+        msgbox(res.msg);  
+      });    
+    }
+  })
+  
+  // user-groups tree
+  $('ul#ugroups').tree({
+    url:'/?_sqlid=admin^usersgroupid&_func=get&_combo=y',
+    onlyLeafCheck:true,
+    checkbox:true,
+    
+    loadFilter: function(data){
+      return $.page.fn.apps(data);
+    },
+    
+    formatter: function(node){
+      if(node.children) return node.text
+      return node.desc;
+    },
+  
+    onBeforeCheck:function(node,chkd){
+      if(node.id=='SYSADM'){
+        if($.dui.udata.userid == 'SYSADM' || $.dui.udata.groups.indexOf('SYSADM')!=-1) return true;
+        else return false;
+      }
+    },
+    
+    onCheck:function(node,chk){
+      var me = $(this);
+      $.page.fn.icons(me,node,chk);
+      if(me.data('lock')) return;
+      var chkd = me.tree('getChecked');
+      var csv = chkd.map(function(e){return e.id}).join(',');
+      var vars = {_sqlid:'admin^usersgroup',_func:'upd',userid:$.page.fn.user(),grpids:csv}
+      ajaxget('/',vars);
+    }
+  })
+  
+  // rebuild authority array.
+  $('a#user_reset').linkbutton({
+    iconCls: 'icon-reload',
+    disabled: true,
+    onClick:function(){
+      //cl(dwap.page.uastat(true))
+    }
+  })
+
+  // user-EVENTS tree
+  $('ul#events').tree({
+    url:'/',
+    queryParams: {
+      _sqlid:'admin^emailevents',
+      _func:'get'
+    },
+    
+    cascadeCheck:false,
+    onlyLeafCheck:true,
+    checkbox:true,
+
+    onBeforeExpand:function(node){
+      if($(this).tree('getLevel', node.target)==2) $(this).tree('collapseAll');
+    },
+  
+    loadFilter: function(data){
+      return $.page.fn.apps(data);
+    },
+    
+    onCheck:function(node,chk){
+      var me = $(this);
+      $.page.fn.icons(me,node,chk);
+      if(me.data('lock')) return;
+      var chkd = me.tree('getChecked');
+      var csv = chkd.map(function(e){return e.id}).join(',');
+      var vars = {_sqlid:'admin^usersevents',_func:'upd',userid:$.page.fn.user(),evtids:csv}
+      ajaxget('/',vars);
+    }
+         
+  })
+  
+  // user-authority tree
+  $('ul#adm_auth_t').tree({
+    cascadeCheck:true,
+    onlyLeafCheck:false,
+    data: $.page.fn.menus,
+    checkbox:true,
+    onlyLeafCheck:false,
+    
+    onBeforeExpand:function(node){
+      if($(this).tree('getLevel', node.target)==1) $(this).tree('collapseAll');
+    },
+    
+    onLoadSuccess:function(node,data){ 
+      var me = $(this);
+      me.tree('collapseAll');
+      //me.tree('getRoots').map(function(e){me.tree('expand',e.target);})
+    },
+    
+    onBeforeCheck: function (node,chkd){
+      var me = $(this);
+      if($.dui.udata.groups.indexOf('SYSADM')==-1 && node.attributes && node.attributes.dev) return false;
+      if($.dui.ronly && !me.attr('ok')) return false;
+      //dwap.page.icons(me,node,chkd);
+    },
+    
+    onCheck: function(node,chk){
+      var me = $(this);
+      if(me.data('lock')) return;
+      me.tree('select', node.target);
+      if(!chk && $(node.target).hasClass('ronly')) $.page.fn.ronly();
+      else $.page.fn.uastat();
+      $.page.fn.appreps(node,chk);
+      
+    },
+    
+    onContextMenu: function(e,node){
+      e.preventDefault();
+      $(this).tree('select', node.target);
+      $('#mm').menu('show',{left: e.pageX,top: e.pageY});
+    }      
+  })
+
+  // REPORTS tree
+  $('ul#reports').tree({
+    url:'/',
+    queryParams: {
+      _sqlid:'admin^templates',
+      _func:'get'
+    },
+    
+    checkLock: false,
+    cascadeCheck:false,
+    onlyLeafCheck:true,
+    checkbox:true,
+
+    onBeforeExpand:function(node){
+      if($(this).tree('getLevel', node.target)==2) $(this).tree('collapseAll');
+    },
+  
+    loadFilter: function(data){
+      return $.page.fn.apps(data);
+    },
+    
+    onCheck:function(node,chk){
+      var me = $(this);
+      var opt = me.tree('options');
+      $.page.fn.icons(me,node,chk); 
+      if(me.data('lock')) return;
+      var chkd = me.tree('getChecked');
+      var csv = chkd.map(function(e){return e.id}).join(',');
+      var vars = {_sqlid:'admin^usersreports',_func:'upd',userid:$.page.fn.user(),repids:csv}
+      if(opt.checkLock) return;
+      ajaxget('/',vars);
+    }
+         
+  })
+ 
+  //CLS,181204, Leave Entitlement
+  // only where users^leaveForm module is enabled
+  if ($('#lvl').length > 0) { 
+    var dg = $('#lvl'); 
+    dg.datagrid($.page.fn.leave);  
+    var dg1=$('#hist');
+    dg1.datagrid($.page.fn.leaveHistory);
+  
+    //disable the Leave History add button
+    // [DUI] dg1.datagrid('options').tbar.dgre_add.prop('disabled', true); 
+  }
+
+  $('#user_auth').combobox({
+    onSelect:function(nv){
+      if (nv.value>9){
+        msgbox('Not allowed to select this category');
+          var ua=$('#UID').combobox('getRec');
+          if (ua==false) $(this).combobox('setValue',0);
+          else $(this).combobox('setValue',ua.user_auth)
+        
+      }
+    }
+  })
+})
+
+/*
+dwap.page.uastat = function(me,node){
+  var oc = {sel:me.tree('getChecked',['checked','indeterminate']),list:[],umen:{}};
+  cl(oc.sel);
+  //var oc = {sel:me.tree('getChecked'),list:[],umen:{}};
+  oc.userid = $('input[name="userid"]').val();
+  for(var i in oc.sel){
+    oc.vp = me.tree('getRoot',oc.sel[i].target).id;
+    if(!oc.umen[oc.vp]) oc.umen[oc.vp] = [];
+    oc.id = oc.sel[i].id;
+    if(oc.vp != oc.id) {
+      oc.checked = oc.sel[i].checked;    
+      if(oc.sel[i].ronly) oc.aid = oc.id+'.ro';
+      else oc.aid = oc.id; 
+      if(oc.checked && oc.id) oc.umen[oc.vp].push(oc.aid);
+    }
+  }
+  cl(oc.umen);
+  
+  url = gurl('/?_func=umenus&menus='+JSON.stringify(oc.umen)+'&userid='+oc.userid);
+  $.ajax({async: false,type:"GET", url: url}); 
+}
+*/
+
+
+});  // $.page.ready

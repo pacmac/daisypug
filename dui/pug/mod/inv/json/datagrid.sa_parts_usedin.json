@@ -1,0 +1,90 @@
+{
+  "id": "usedin",
+  "type": "COC",
+  "asdpx": "",
+  "columns": [
+    [
+      {
+        "field": "COC_ID",
+        "title": "COC ID",
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "required": true,
+            "cls": "upper"
+          }
+        }
+      },
+      {
+        "field": "COC_REV",
+        "title": "Revn No",
+        "editor": {
+          "type": "numberbox",
+          "options": {
+            "precision": 0,
+            "min": 0
+          }
+        }
+      },
+      {
+        "field": "STATUS",
+        "title": "Status",
+        "editor": {
+          "type": "combobox",
+          "options": {
+            "panelHeight": "auto",
+            "data": [
+              { "value": "OPEN", "text": "OPEN" },
+              { "value": "CLOSED", "text": "CLOSED" },
+              { "value": "VOID", "text": "VOID" }
+            ]
+          }
+        }
+      },
+      {
+        "field": "CREATE_DATE",
+        "title": "COC Date",
+        "formatter": "$.dui.fmt.date"
+      },
+      {
+        "field": "PRINTED_DATE",
+        "title": "Print Date",
+        "formatter": "$.dui.fmt.date"
+      },
+      {
+        "field": "WOREF",
+        "title": "Job Number",
+        "formatter": "$.page.fn.nocarat",
+        "editor": {
+          "type": "textbox",
+          "options": {
+            "cls": "upper",
+            "validType": ["length[1,20]"]
+          }
+        }
+      },
+      {
+        "field": "CUSTOMER_ID",
+        "title": "Cust ID",
+        "editor": {
+          "type": "textbox"
+        }
+      },
+      {
+        "field": "QTY",
+        "title": "Qty",
+        "editor": {
+          "type": "numberbox",
+          "options": {
+            "precision": 0,
+            "min": 1
+          }
+        }
+      },
+      {
+        "field": "ISSUED_BY",
+        "title": "Creator"
+      }
+    ]
+  ]
+}

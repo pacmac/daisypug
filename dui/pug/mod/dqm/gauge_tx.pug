@@ -1,0 +1,84 @@
+extends ../content
+block script 
+  script.
+
+    $.page.fn.dodgrid = function(){
+      $('#txgrid').datagrid({
+        toolbar:'#tbar',
+
+        onSelect:function(idx,dat){
+                    $(this).data('idx',idx);
+          var frm = $('form#gtrans');
+          $.each(dat, function(k,v){
+            if(v && typeof v !== 'object') frm.find('[name="'+k+'"]').val(v);
+          });
+          $('.tbut').addClass('opacity-40 pointer-events-none');
+          $('#but_save').removeClass('opacity-40 pointer-events-none');
+        },
+
+
+        onLoadSuccess:function(){
+          $('form#gtrans')[0].reset();
+          $('.tbut').addClass('opacity-40 pointer-events-none');
+        }
+      });
+    }
+
+    $.page.ready(function(){
+
+      $('#but_save').on('beforeClick',function(){
+        var frm = $('form#gtrans');
+        var data = frm2dic(frm);
+        var dg = $('#txgrid');
+        dg.datagrid('updateRow',{index:dg.data('idx'),row:data});
+        data._func = 'upd';
+        data._sqlid = 'dqm^gaugetrans';
+        ajaxget('/', data, function(res){
+          saveok();
+          $('.tbut').addClass('opacity-40 pointer-events-none');
+          $('#but_save').removeClass('opacity-40 pointer-events-none');
+        });
+        return false;
+      })
+
+      setTimeout(function(){
+        $.page.fn.dodgrid();
+        
+        $('form#gfilter').on('change', 'input', function(){
+            var pvar = frm2dic($('form#gfilter'));
+            pvar._func='get';
+            pvar._sqlid='dqm^gaugetrans';
+            ajaxget('/', pvar, function(data) {
+              $('#txgrid').datagrid('loadData', data);
+            });
+        })      
+          
+      })
+      
+    })
+block content
+  +vsplit('410px').no-border
+    +panel('west')
+      form#gtrans
+        input(name='TRANSACTION_ID' type='hidden')
+        +fitem('Transaction Type',{name:'TYPE', class:'textbox',readonly:true})
+        +fitem('Gauge ID',{name:'GAUGE_ID', class:'textbox',readonly:true})
+        +fitem('Transaction Date',{name:'TRANSACTION_DATE',class:'datebox today'})  
+        +fitem('Rental Id',{name:'RENTAL_ID',class:'textbox'})  
+        //-+fitem("Vendor ID",{name:"VENDOR_ID",class:"searchbox",sbref:"vendor_ids"})
+        //-+fitem("Doc Ref",{name:"PO_REF",class:"textbox"})
+        //-+fitem("Job ID",{name:"DOC_ID",class:"searchbox", sbref:"job"})
+        //-+fitem('Operator ID',{name:"EMPLOYEE_ID",class:"searchbox" , sbref:"operator"})
+
+          
+    +panel('center')
+
+      #tbar
+        form#gfilter
+          +v-group
+            +fitem('From',{name:"sdate",class:"datebox today"})
+            +fitem('To',{name:"edate",class:"datebox today"})
+            +fitem('Gauge ID',{name:"id", class:"searchbox", sbref:"gauge_ids"})
+
+      +datagrid#txgrid
+

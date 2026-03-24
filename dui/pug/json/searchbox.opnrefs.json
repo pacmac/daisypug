@@ -1,0 +1,45 @@
+{
+  "url": "/",
+  "queryParams": {
+    "_sqlid": "vwltsa^opnrefs_qbe",
+    "_func": "get",
+    "_combo": "y",
+    "STATUS": "R"
+  },
+  "valueField": "value",
+  "textField": "text",
+  "searchParam": "WORKORDER_BASE_ID_LIKE_",
+  "searchSuffix": "%",
+  "maxRecents": 5,
+  "autocomplete": "off",
+  "pageSize": 20,
+  "columns": [
+    { "field": "WORKORDER_BASE_ID", "title": "Job ID", "width": 100 },
+    { "field": "WORKORDER_LOT_ID", "title": "Lot ID", "width": 80 },
+    { "field": "WORKORDER_SUB_ID", "title": "Sub ID", "width": 80 },
+    { "field": "SEQUENCE_NO", "title": "Seq No", "width": 70 },
+    { "field": "RESOURCE_ID", "title": "Resource ID", "width": 100 },
+    { "field": "STATUS", "title": "Status", "width": 80 }
+  ],
+  "filters": [
+    { "field": "WORKORDER_BASE_ID", "title": "Job ID", "editor": "textbox" },
+    { "field": "WORKORDER_LOT_ID", "title": "Lot ID", "editor": "textbox" },
+    { "field": "WORKORDER_SUB_ID", "title": "Sub ID", "editor": "textbox" },
+    { "field": "SEQUENCE_NO", "title": "Seq No", "editor": "textbox" },
+    { "field": "RESOURCE_ID", "title": "Resource ID", "editor": "textbox" },
+    {
+      "field": "STATUS",
+      "title": "Status",
+      "editor": {
+        "type": "combobox",
+        "options": {
+          "data": [
+            { "value": "R", "text": "Released" },
+            { "value": "C", "text": "Closed" },
+            { "value": "X", "text": "Cancelled" }
+          ]
+        }
+      }
+    }
+  ]
+}

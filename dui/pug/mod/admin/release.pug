@@ -1,0 +1,17 @@
++layout()
+  div(region="west" style="width:400px;background:$FAFAFA;")
+    form.flock#main(asdpx='x' _sqlid='oss^price')
+      +fitem('Version',{name:'rver', id:'~', class:'fkey fit unlock',required:true})
+      +fitem('Type',{name:'type', id:'~',required:true})
+      +fitem('Status',{name:'status', id:'~',required:true})
+      +fitem('Release Date',{name:'date', id:'~', class:'datebox'})
+      +fitem('Notes',{name:'notes', id:'~',class:'textbox','data-options':"multiline:true,height:100"}) 
+      .fbuts.center
+        a#sendmail        
+    
+  div.flock(region="center")
+    table#release
+      
+script.
+  $.dui.page.editor = true;
+script(type="text/javascript"): include js/release.js

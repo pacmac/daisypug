@@ -1,0 +1,68 @@
+extends layout/layout.pug
+
+//- Dashboard Layout (Index)
+//- Extends base layout with DaisyUI navbar (topnav) + drawer (left nav) + content area
+//- Full width/height viewport coverage using DaisyUI patterns
+//- Purpose: Provide foundation for all dashboard pages (admin, production, inventory, etc.)
+
+block content
+  - const drawer_id = 'dashboard-drawer'
+  
+  style.
+    main { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+  
+  //- Drawer structure (DaisyUI drawer component) - full screen
+  //- Following DaisyUI pattern: drawer > (drawer-toggle, drawer-content + navbar, drawer-side + menu)
+  .drawer.h-screen
+    input.drawer-toggle(type="checkbox" id=drawer_id + "-toggle" checked)
+    
+    //- DRAWER CONTENT: Flex column with navbar (flex-none) and content (flex-1 overflow)
+    .drawer-content.flex.flex-col.h-screen
+      
+      //- Toolbar (Topnav) — form action buttons + status + branding
+      +topnav({drawerId: drawer_id})
+
+
+      //- Main content area (flex-1 takes remaining space, overflow-auto for scrolling)
+      .flex-1.overflow-auto.bg-base-100.h-full#content
+        div.p-4
+          if pageContent
+            != pageContent
+          else
+            block page-content
+              //- Default Home Page Content (Merged from content/index.pug)
+              .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+                .card.bg-base-200.shadow-xl
+                  .card-body
+                    .card-title Quick Links
+                    .card-content
+                      p This is the dashboard home page.
+                      p Welcome to Pure4 DaisyUI migration.
+
+                .card.bg-base-200.shadow-xl
+                  .card-body
+                    .card-title System Info
+                    .card-content
+                      p Theme: Dark Blue (Pure)
+                      p Menus loaded from session.json
+                      p Ready for Phase 1 testing
+
+      //- Footer (static, half height of navbar - navbar is typically h-16/64px, so footer is h-8/32px)
+      footer.bg-base-200.border-t.border-base-300.px-4.py-2.flex-none.h-8.flex.items-center.text-base-content.opacity-75
+        span &copy; #{new Date().getFullYear()} DiGiTaL Information Systems Pte Ltd
+
+    //- DRAWER SIDE (Left navigation panel)
+    //- Following DaisyUI pattern: drawer-side > (drawer-overlay + sidebar content)
+    .drawer-side
+      label.drawer-overlay(for=drawer_id + "-toggle")
+      .bg-base-200.w-64.overflow-auto.min-h-full.px-2.py-4
+
+        //- Menu navigation ($.menus is set by preLoader from session.udata.menus)
+        nav#westMenu
+          ul.menu.bg-base-200.rounded-box.w-full
+            each item in udata.menus
+              if item && item.text
+                +menuItem(item, true)
+
+    +print-modals
+    +filegrid-modals
