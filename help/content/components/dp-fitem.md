@@ -64,6 +64,24 @@ base: dp-fitem
 +dp-fitem('Part', {class: 'textbox', name: 'PART', post: {action: true, icon: 'search', id: 'btn_lookup'}})
 ```
 
+### Font Size / Density
+
+All DaisyPug components use `rem`-based sizing from DaisyUI — set the root font-size to control page density from one place (SSOT). Use the `--font-size` render option or set `font-size` on `<html>`:
+
+```pug
+//- Via CLI
+//- daisypug render page.pug --font-size 0.9em
+
+//- Or in HTML directly
+//- html(style="font-size: 0.9em")
+```
+
+| Root font-size | Density | Label | Input height |
+|----------------|---------|-------|-------------|
+| `1em` (default) | Standard | 16px | 40px |
+| `0.9em` | Compact | 14.4px | 36px |
+| `0.85em` | Dense | 13.6px | 34px |
+
 ### Inline Layout (label + input side by side)
 
 Add `.inline` to the form for horizontal label/input alignment. Labels get a fixed width, inputs fill the rest.

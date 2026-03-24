@@ -670,3 +670,4 @@ rules:
   tab-active: "Never add tab-active class — use checked attribute only"
   autoWidth: "Tables default to autoWidth:true — columns fit content"
   lucide-icons: "Use +dp-icon(name) for all icons — Lucide icon set"
+  font-size-ssot: "Root font-size is SSOT for page density — set on <html> via --font-size CLI option (e.g. 0.9em). All DaisyUI components use rem so they scale proportionally. Never use px for component sizing."

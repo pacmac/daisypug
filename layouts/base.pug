@@ -1,5 +1,5 @@
 doctype html
-html(lang=locals.lang || 'en' data-theme=locals.theme || undefined)
+html(lang=locals.lang || 'en' data-theme=locals.theme || undefined style=locals.fontSize ? `font-size:${locals.fontSize}` : undefined)
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover")

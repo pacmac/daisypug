@@ -33,6 +33,7 @@ program
   .option('--css <mode>', 'CSS mode: cdn (default) or local (compiled Tailwind+DaisyUI)', 'cdn')
   .option('--minify', 'minify compiled CSS (only with --css local)')
   .option('--api', 'include dp.js component API for interactive pages')
+  .option('--font-size <size>', 'root font-size on html element (e.g. 0.9em, 14px)')
   .option('--fragment', 'render without HTML layout wrapper')
   .option('-o, --output <file>', 'write output to file instead of stdout')
   .action(async (file, opts) => {
@@ -46,6 +47,7 @@ program
         css: opts.css,
         minify: opts.minify,
         api: opts.api,
+        fontSize: opts.fontSize,
       };
 
       let html;
