@@ -8,12 +8,13 @@ mixin dp-form(opts)
   - const isFormPart = formId && _dpFormIds[formId]
   - if (formId) _dpFormIds[formId] = true
   - const cls = ['dp-form', opts.class].filter(Boolean).join(' ')
+  - const formStyle = opts.labelWidth ? `--label-w:${opts.labelWidth}` : opts.style
   if isFormPart
     //- Duplicate ID detected: render as form-part
-    form(class=cls data-form-part=formId)&attributes({...attributes, id: undefined})
+    form(class=cls data-form-part=formId style=formStyle)&attributes({...attributes, id: undefined})
       block
   else
-    form(class=cls id=formId)&attributes(attributes)
+    form(class=cls id=formId style=formStyle)&attributes(attributes)
       block
 
 //- Form item: label + auto-detected input

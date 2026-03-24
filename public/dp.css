@@ -14,6 +14,63 @@
 .dp-form.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 1rem; }
 .dp-form.four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 1rem; }
 
+/* Forms: inline layout — label fixed width, input fills remainder */
+.dp-form.inline .dp-fitem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+.dp-form.inline .dp-fitem > .dp-fitem-label {
+  width: var(--label-w, 8rem);
+  min-width: var(--label-w, 8rem);
+  flex-shrink: 0;
+  text-align: right;
+}
+/* Input (or slots wrapper, or combobox) fills remaining space */
+.dp-form.inline .dp-fitem > .dp-fitem-label ~ * { flex: 1; min-width: 0; }
+
+/* Multiline: label aligns to top, not center */
+.dp-form.inline .dp-fitem-multiline { align-items: flex-start; }
+.dp-form.inline .dp-fitem-multiline > .dp-fitem-label { padding-top: 0.5rem; }
+
+/* Checkbox/radio/toggle: label wraps both, keep centered */
+.dp-form.inline .dp-fitem:has(.dp-checkbox, .dp-radio, .dp-toggle) > .dp-fitem-label {
+  text-align: left;
+  width: auto;
+  min-width: 0;
+  margin-left: calc(var(--label-w, 8rem) + 0.75rem);
+}
+
+/* Group headings span full width */
+.dp-form.inline .dp-group-title,
+.dp-form.inline .dp-hgroup-title { margin-left: calc(var(--label-w, 8rem) + 0.75rem); }
+
+/* Responsive inline: stack on mobile, inline on desktop */
+.dp-form.inline-responsive .dp-fitem { display: flex; flex-direction: column; }
+@media (min-width: 640px) {
+  .dp-form.inline-responsive .dp-fitem {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .dp-form.inline-responsive .dp-fitem > .dp-fitem-label {
+    width: var(--label-w, 8rem);
+    min-width: var(--label-w, 8rem);
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .dp-form.inline-responsive .dp-fitem > .dp-fitem-label ~ * { flex: 1; min-width: 0; }
+  .dp-form.inline-responsive .dp-fitem-multiline { align-items: flex-start; }
+  .dp-form.inline-responsive .dp-fitem-multiline > .dp-fitem-label { padding-top: 0.5rem; }
+  .dp-form.inline-responsive .dp-fitem:has(.dp-checkbox, .dp-radio, .dp-toggle) > .dp-fitem-label {
+    text-align: left;
+    width: auto;
+    min-width: 0;
+    margin-left: calc(var(--label-w, 8rem) + 0.75rem);
+  }
+}
+
 /* Fit utilities — child stretches to fill parent */
 .fit { width: 100%; height: 100%; }
 .fit-w { width: 100%; }

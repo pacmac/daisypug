@@ -58,11 +58,15 @@ dp-toolbar:
 dp-form:
   replaces: "form element"
   mixin: "+dp-form(opts)"
-  args: "{id, class}"
-  classes: ".two .three .four for column grid"
+  args: "{id, class, labelWidth}"
+  classes: ".two .three .four for column grid; .inline for horizontal label+input; .inline-responsive for auto-switch"
+  labelWidth: "opts.labelWidth sets --label-w CSS variable (default 8rem for inline forms)"
   help: dp-fitem.md#multi-column-forms
   notes: "Duplicate id auto-detected → renders data-form-part for multi-tab forms"
-  example: "+dp-form({id: 'head'}).two"
+  example: |
+    +dp-form({id: 'head'}).two
+    +dp-form({class: 'inline', labelWidth: '10rem'})(id="details")
+    +dp-form({class: 'two inline', labelWidth: '6rem'})(id="grid-form")
 
 dp-fitem:
   replaces: "label + input pair"

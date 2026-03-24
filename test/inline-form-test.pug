@@ -1,0 +1,85 @@
+//- Inline form layout test
+
++navbar({class: 'bg-base-100 shadow-sm'})
+  +navbar-start
+    span.text-xl.font-bold.px-4 Inline Form Test
+  +navbar-end
+    +theme-radios({themes: ['light', 'dark', 'cupcake'], as: 'btn', active: 'light'})
+
+div.p-6.max-w-4xl.mx-auto
+
+  +tabs({style: 'lifted', class: 'mb-6'})
+
+    //- Tab 1: Stacked (default)
+    +tab({name: 'form-tabs', label: 'Stacked', active: true})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Default Stacked Layout
+      p.text-sm.mb-4.opacity-70 Labels on top, inputs below. Standard mobile layout.
+      +dp-form({class: 'max-w-md'})(id="form-stacked")
+        +dp-fitem('Part ID', {class: 'textbox', name: 'PART_ID', id: '~', placeholder: 'Enter part number'})
+        +dp-fitem('Description', {class: 'textbox', name: 'DESC', id: '~', placeholder: 'Part description'})
+        +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~', placeholder: 'Choose...', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
+        +dp-fitem('Quantity', {class: 'numberbox', name: 'QTY', id: '~', placeholder: '0'})
+        +dp-fitem('Notes', {class: 'multiline', name: 'NOTES', id: '~', placeholder: 'Additional notes...', rows: 3})
+        +dp-fitem('Active', {class: 'checkbox', name: 'ACTIVE', id: '~'})
+        +dp-fitem('Priority', {class: 'toggle', name: 'PRIORITY', id: '~'})
+
+    //- Tab 2: Inline (fixed label width)
+    +tab({name: 'form-tabs', label: 'Inline'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Inline Layout
+      p.text-sm.mb-4.opacity-70 Labels fixed at 8rem, right-aligned. Inputs fill remaining width.
+      +dp-form({class: 'inline max-w-lg'})(id="form-inline")
+        +dp-fitem('Part ID', {class: 'textbox', name: 'PART_ID', id: '~', placeholder: 'Enter part number'})
+        +dp-fitem('Description', {class: 'textbox', name: 'DESC', id: '~', placeholder: 'Part description'})
+        +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~', placeholder: 'Choose...', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
+        +dp-fitem('Quantity', {class: 'numberbox', name: 'QTY', id: '~', placeholder: '0'})
+        +dp-fitem('Notes', {class: 'multiline', name: 'NOTES', id: '~', placeholder: 'Additional notes...', rows: 3})
+        +dp-fitem('Active', {class: 'checkbox', name: 'ACTIVE', id: '~'})
+        +dp-fitem('Priority', {class: 'toggle', name: 'PRIORITY', id: '~'})
+
+    //- Tab 3: Custom label width
+    +tab({name: 'form-tabs', label: 'Wide Labels'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Custom Label Width (12rem)
+      p.text-sm.mb-4.opacity-70 Wider labels via --label-w CSS variable.
+      +dp-form({class: 'inline max-w-lg', labelWidth: '12rem'})(id="form-wide")
+        +dp-fitem('Part Number', {class: 'textbox', name: 'PART_ID', id: '~', placeholder: 'Enter part number'})
+        +dp-fitem('Full Description', {class: 'textbox', name: 'DESC', id: '~', placeholder: 'Part description'})
+        +dp-fitem('Current Status', {class: 'combobox', name: 'STATUS', id: '~', placeholder: 'Choose...', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
+        +dp-fitem('On Hand Qty', {class: 'numberbox', name: 'QTY', id: '~', placeholder: '0'})
+
+    //- Tab 4: With pre/post slots
+    +tab({name: 'form-tabs', label: 'Slots'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Inline with Pre/Post Slots
+      p.text-sm.mb-4.opacity-70 Pre/post icons and buttons work in inline mode.
+      +dp-form({class: 'inline max-w-lg'})(id="form-slots")
+        +dp-fitem('Search', {class: 'searchbox', name: 'Q', id: '~', pre: 'search', placeholder: 'Search parts...'})
+        +dp-fitem('Price', {class: 'numberbox', name: 'PRICE', id: '~', pre: {text: '$'}, placeholder: '0.00'})
+        +dp-fitem('Email', {class: 'textbox', name: 'EMAIL', id: '~', post: 'mail', placeholder: 'user@example.com'})
+
+    //- Tab 5: Responsive
+    +tab({name: 'form-tabs', label: 'Responsive'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Responsive Inline
+      p.text-sm.mb-4.opacity-70 Stacked on mobile, inline on desktop (640px+). Resize the browser to test.
+      +dp-form({class: 'inline-responsive max-w-lg'})(id="form-responsive")
+        +dp-fitem('Part ID', {class: 'textbox', name: 'PART_ID', id: '~', placeholder: 'Enter part number'})
+        +dp-fitem('Description', {class: 'textbox', name: 'DESC', id: '~', placeholder: 'Part description'})
+        +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~', placeholder: 'Choose...', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
+        +dp-fitem('Notes', {class: 'multiline', name: 'NOTES', id: '~', placeholder: 'Notes...', rows: 3})
+        +dp-fitem('Active', {class: 'checkbox', name: 'ACTIVE', id: '~'})
+
+    //- Tab 6: Two-column + inline
+    +tab({name: 'form-tabs', label: '2-Col Inline'})
+    +tab-content({class: 'p-6 border-base-300 bg-base-100 border-x border-b rounded-b-lg'})
+      h3.text-lg.font-semibold.mb-4 Two-Column Inline
+      p.text-sm.mb-4.opacity-70 Multi-column grid with inline fields inside each column.
+      +dp-form({class: 'two inline', labelWidth: '6rem'})(id="form-2col")
+        +dp-fitem('Part ID', {class: 'textbox', name: 'PART_ID', id: '~', placeholder: 'Part #'})
+        +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~', placeholder: 'Choose...', options: [{value: 'A', text: 'Active'}, {value: 'I', text: 'Inactive'}]})
+        +dp-fitem('Name', {class: 'textbox', name: 'NAME', id: '~', placeholder: 'Part name'})
+        +dp-fitem('Qty', {class: 'numberbox', name: 'QTY', id: '~', placeholder: '0'})
+        +dp-fitem('Desc', {class: 'textbox', name: 'DESC', id: '~', placeholder: 'Description'})
+        +dp-fitem('Price', {class: 'numberbox', name: 'PRICE', id: '~', placeholder: '0.00'})

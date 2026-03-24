@@ -14,7 +14,7 @@ base: dp-fitem
 | Class | Renders as |
 |-------|-----------|
 | `textbox` (default) | `<input type="text">` |
-| `combobox` | `<select>` |
+| `combobox` | `div.dp-combobox` (custom dropdown) |
 | `numberbox` | `<input type="number">` |
 | `numberspinner` | `<input type="number">` with step |
 | `datebox` | `<input type="date">` |
@@ -63,6 +63,36 @@ base: dp-fitem
 //- Post as action button
 +dp-fitem('Part', {class: 'textbox', name: 'PART', post: {action: true, icon: 'search', id: 'btn_lookup'}})
 ```
+
+### Inline Layout (label + input side by side)
+
+Add `.inline` to the form for horizontal label/input alignment. Labels get a fixed width, inputs fill the rest.
+
+```pug
+//- Basic inline — labels default to 8rem
++dp-form({class: 'inline'})(id="myform")
+  +dp-fitem('Part ID', {class: 'textbox', name: 'PART_ID', id: '~'})
+  +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~'})
+
+//- Custom label width via labelWidth prop
++dp-form({class: 'inline', labelWidth: '12rem'})(id="myform")
+  +dp-fitem('Full Description', {class: 'textbox', name: 'DESC', id: '~'})
+
+//- Responsive: stacked on mobile, inline on desktop (640px+)
++dp-form({class: 'inline-responsive'})(id="myform")
+  +dp-fitem('Name', {class: 'textbox', name: 'NAME', id: '~'})
+
+//- Two-column grid + inline labels
++dp-form({class: 'two inline', labelWidth: '6rem'})(id="myform")
+  +dp-fitem('Part ID', {class: 'textbox', name: 'PART_ID', id: '~'})
+  +dp-fitem('Status', {class: 'combobox', name: 'STATUS', id: '~'})
+```
+
+Notes:
+- Multiline/textarea fields keep label on top (aligned to start)
+- Checkbox/radio/toggle fields stay inline with their label
+- Pre/post slots work in inline mode
+- `.inline` and `.two`/`.three`/`.four` compose together
 
 ### Multi-column Forms
 

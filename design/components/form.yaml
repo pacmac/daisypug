@@ -59,6 +59,12 @@ dui:
 dp:
   class: DpForm
   status: partial
+  layout:
+    stacked: "default — label on top, input below (mobile-friendly)"
+    inline: ".dp-form.inline — label fixed width (--label-w, default 8rem), input fills rest"
+    inline-responsive: ".dp-form.inline-responsive — stacked on mobile, inline on ≥640px"
+    labelWidth: "opts.labelWidth on +dp-form sets --label-w CSS variable"
+    grid: ".two .three .four — multi-column grid, composes with .inline"
   done:
     - getData
     - setData
