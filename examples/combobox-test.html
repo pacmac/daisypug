@@ -9,6 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
     <style>/* DaisyPug Framework CSS */
 
+/* Root font-size: SSOT for page density — all components use rem, scale from here */
+:root { font-size: 0.9em; }
+
 /* Buttons: ensure vertical padding for wrapped text */
 .dp-btn { padding-top: 0.5em !important; padding-bottom: 0.5em !important; height: auto !important; min-height: 2em; }
 
@@ -3654,7 +3657,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
   };
 
   dp.registry = _cache;
-  dp.version = '2.6.9';
+  dp.version = '2.6.10';
 
   // Expose classes for instanceof checks
   dp.DpComponent = DpComponent;
