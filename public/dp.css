@@ -118,6 +118,9 @@
 /* Component font inheritance — set once on wrapper, children inherit */
 .dp-datatable, .dp-tabs, .dp-toolbar, .dp-form { font-size: inherit; }
 
+/* Labels match DaisyUI input font-size (0.875rem) for consistent sizing */
+.dp-fitem-label, .fieldset-label { font-size: 0.875rem; }
+
 /* Modal: suppress focus ring on close button in titlebar */
 dialog .btn-circle:focus,
 dialog .btn-circle:focus-visible { outline: none; box-shadow: none; }

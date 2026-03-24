@@ -127,6 +127,9 @@
 /* Component font inheritance — set once on wrapper, children inherit */
 .dp-datatable, .dp-tabs, .dp-toolbar, .dp-form { font-size: inherit; }
 
+/* Labels match DaisyUI input font-size (0.875rem) for consistent sizing */
+.dp-fitem-label, .fieldset-label { font-size: 0.875rem; }
+
 /* Modal: suppress focus ring on close button in titlebar */
 dialog .btn-circle:focus,
 dialog .btn-circle:focus-visible { outline: none; box-shadow: none; }
@@ -3657,7 +3660,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
   };
 
   dp.registry = _cache;
-  dp.version = '2.6.10';
+  dp.version = '2.6.11';
 
   // Expose classes for instanceof checks
   dp.DpComponent = DpComponent;
