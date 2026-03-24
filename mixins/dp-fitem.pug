@@ -62,7 +62,7 @@ mixin dp-fitem(label, input, fitemOpts)
               span.dp-fitem-post.join-item.flex.items-center.px-2.bg-base-200.border.border-base-300.cursor-pointer
                 +dp-icon(input.post, {size: 'sm'})
             else if input.post.action
-              button.dp-fitem-post.join-item.btn.btn-sm(type="button" id=input.post.id)
+              button.dp-fitem-post.join-item.btn(type="button" id=input.post.id)
                 if input.post.icon
                   +dp-icon(input.post.icon, {size: 'sm'})
                 if input.post.text

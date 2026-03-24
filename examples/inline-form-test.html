@@ -608,7 +608,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
       this._display = document.createElement('input');
       this._display.type = 'text';
       this._display.readOnly = true;
-      this._display.classList.add('dp-cb-display', 'input', 'input-bordered', 'input-sm', 'w-full');
+      this._display.classList.add('dp-cb-display', 'input', 'input-bordered', 'w-full');
       const selOpt = select.options?.[select.selectedIndex];
       if (selOpt && !selOpt.disabled) this._display.value = selOpt.text;
       const ph = select.querySelector('option[disabled][selected]');
@@ -3327,7 +3327,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
         let input;
         if (type === 'textarea') {
           input = document.createElement('textarea');
-          input.className = 'textarea textarea-bordered textarea-sm w-full';
+          input.className = 'textarea textarea-bordered w-full';
           if (ed.rows) input.rows = ed.rows;
         } else if (type === 'combobox') {
           input = document.createElement('div');
@@ -3336,7 +3336,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
           const cbDisplay = document.createElement('input');
           cbDisplay.type = 'text';
           cbDisplay.readOnly = true;
-          cbDisplay.classList.add('dp-cb-display', 'input', 'input-bordered', 'input-sm', 'w-full');
+          cbDisplay.classList.add('dp-cb-display', 'input', 'input-bordered', 'w-full');
           const cbHidden = document.createElement('input');
           cbHidden.type = 'hidden';
           const cbToggle = document.createElement('button');
@@ -3356,11 +3356,11 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
         } else if (type === 'datebox') {
           input = document.createElement('input');
           input.type = 'date';
-          input.className = 'input input-bordered input-sm w-full';
+          input.className = 'input input-bordered w-full';
         } else if (type === 'numberbox' || type === 'numberspinner') {
           input = document.createElement('input');
           input.type = 'number';
-          input.className = 'input input-bordered input-sm w-full';
+          input.className = 'input input-bordered w-full';
           if (ed.min !== undefined) input.min = ed.min;
           if (ed.max !== undefined) input.max = ed.max;
           if (ed.precision !== undefined) input.step = ed.precision === 0 ? '1' : (1 / Math.pow(10, ed.precision)).toString();
@@ -3368,7 +3368,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
           // textbox default
           input = document.createElement('input');
           input.type = 'text';
-          input.className = 'input input-bordered input-sm w-full';
+          input.className = 'input input-bordered w-full';
         }
 
         // For combobox, name goes on hidden input; others get name directly
@@ -3396,13 +3396,13 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
 
       const saveBtn = document.createElement('button');
       saveBtn.type = 'button';
-      saveBtn.className = 'btn btn-primary btn-sm';
+      saveBtn.className = 'btn btn-primary';
       saveBtn.textContent = 'Save';
       saveBtn.addEventListener('click', () => this._saveEditor());
 
       const cancelBtn = document.createElement('button');
       cancelBtn.type = 'button';
-      cancelBtn.className = 'btn btn-sm';
+      cancelBtn.className = 'btn';
       cancelBtn.textContent = 'Cancel';
       cancelBtn.addEventListener('click', () => dialog.close());
 
@@ -3410,7 +3410,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
       if (this._editorOpts.onDeleteRow) {
         const delBtn = document.createElement('button');
         delBtn.type = 'button';
-        delBtn.className = 'btn btn-error btn-outline btn-sm';
+        delBtn.className = 'btn btn-error btn-outline';
         delBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Delete';
         delBtn.addEventListener('click', () => {
           if (!confirm('Delete this row?')) return;
@@ -3654,7 +3654,7 @@ dialog:has(.dp-cb-open) .modal-box > * { overflow: visible !important; }
   };
 
   dp.registry = _cache;
-  dp.version = '2.6.8';
+  dp.version = '2.6.9';
 
   // Expose classes for instanceof checks
   dp.DpComponent = DpComponent;

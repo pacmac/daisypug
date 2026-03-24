@@ -6,9 +6,9 @@ mixin dp-toolbar(opts)
   - const asdpx = opts.asdpx || attributes.asdpx || ''
   - const title = opts.title || attributes.title || ''
   - const icon = opts.icon || attributes.icon || ''
-  - const size = opts.size || attributes.size || 'md'
-  - const btnSize = size === 'sm' ? 'xs' : size === 'lg' ? 'md' : 'sm'
-  - const pad = size === 'lg' ? 'py-1.5' : 'py-1'
+  - const size = opts.size || attributes.size || ''
+  - const btnSize = size
+  - const pad = 'py-1'
   - const cls = ['dp-toolbar', 'flex', 'items-center', 'gap-1', 'px-2', pad, 'bg-base-200', 'border-b', 'border-base-300', opts.class].filter(Boolean).join(' ')
   - const tbId = id ? id + '_toolbar' : undefined
   - const cleanAttrs = Object.assign({}, attributes); delete cleanAttrs.id; delete cleanAttrs.asdpx; delete cleanAttrs.title; delete cleanAttrs.icon; delete cleanAttrs.size;
@@ -19,7 +19,7 @@ mixin dp-toolbar(opts)
       div(class="flex items-center gap-1.5 shrink-0 mr-2")
         if icon
           +dp-icon(icon, {size: 'sm'})
-        span.font-semibold.text-sm= title
+        span.font-semibold= title
 
     //- Inputs section (flex-1) — filled by page or JSON config
     div.flex-1.flex.items-center.gap-2.dp-toolbar-inputs
